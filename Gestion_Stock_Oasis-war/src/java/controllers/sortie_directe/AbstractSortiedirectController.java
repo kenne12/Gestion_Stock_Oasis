@@ -1,5 +1,6 @@
 package controllers.sortie_directe;
 
+import entities.Client;
 import entities.Famille;
 import entities.Lignelivraisonclient;
 import entities.Livraisonclient;
@@ -14,6 +15,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.transaction.UserTransaction;
+import sessions.ClientFacadeLocal;
 import sessions.FamilleFacadeLocal;
 import sessions.LignelivraisonclientFacadeLocal;
 import sessions.LignemvtstockFacadeLocal;
@@ -46,6 +48,11 @@ public class AbstractSortiedirectController {
     protected LivraisonclientFacadeLocal livraisonclientFacadeLocal;
     protected Livraisonclient livraisonclient = new Livraisonclient();
     protected List<Livraisonclient> livraisonclients = new ArrayList();
+
+    @EJB
+    protected ClientFacadeLocal clientFacadeLocal;
+    protected Client client = new Client();
+    protected List<Client> clients = new ArrayList<>();
 
     @EJB
     protected LignelivraisonclientFacadeLocal lignelivraisonclientFacadeLocal;
@@ -135,7 +142,7 @@ public class AbstractSortiedirectController {
     }
 
     public void setLivraisonclient(Livraisonclient livraisonclient) {
-        this.modifier = (this.supprimer = this.detail = this.imprimer = Boolean.valueOf(livraisonclient == null));
+        this.modifier = this.supprimer = this.detail = this.imprimer = livraisonclient == null;
         this.livraisonclient = livraisonclient;
     }
 
@@ -285,10 +292,6 @@ public class AbstractSortiedirectController {
         return this.magasinlots;
     }
 
-    public void setMagasinlots(List<Magasinlot> magasinlots) {
-        this.magasinlots = magasinlots;
-    }
-
     public Magasinarticle getMagasinarticle() {
         return this.magasinarticle;
     }
@@ -299,10 +302,6 @@ public class AbstractSortiedirectController {
 
     public List<Magasinarticle> getMagasinarticles() {
         return this.magasinarticles;
-    }
-
-    public void setMagasinarticles(List<Magasinarticle> magasinarticles) {
-        this.magasinarticles = magasinarticles;
     }
 
     public Magasin getMagasin() {
@@ -318,10 +317,6 @@ public class AbstractSortiedirectController {
         return this.magasins;
     }
 
-    public void setMagasins(List<Magasin> magasins) {
-        this.magasins = magasins;
-    }
-
     public Unite getUnite() {
         return this.unite;
     }
@@ -335,7 +330,4 @@ public class AbstractSortiedirectController {
         return this.unites;
     }
 
-    public void setUnites(List<Unite> unites) {
-        this.unites = unites;
-    }
 }

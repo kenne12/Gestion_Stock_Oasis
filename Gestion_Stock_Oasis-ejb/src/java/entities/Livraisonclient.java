@@ -38,6 +38,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Livraisonclient.findByCode", query = "SELECT l FROM Livraisonclient l WHERE l.code = :code"),
     @NamedQuery(name = "Livraisonclient.findByDatelivraison", query = "SELECT l FROM Livraisonclient l WHERE l.datelivraison = :datelivraison")})
 public class Livraisonclient implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -64,6 +65,9 @@ public class Livraisonclient implements Serializable {
     private Personnel idpersonnel;
     @OneToMany(mappedBy = "idlivraisonclient", fetch = FetchType.LAZY)
     private List<Lignelivraisonclient> lignelivraisonclientList;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idclient", referencedColumnName = "idclient")
+    private Client client;
 
     public Livraisonclient() {
     }
@@ -144,6 +148,14 @@ public class Livraisonclient implements Serializable {
         this.idpersonnel = idpersonnel;
     }
 
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
     @XmlTransient
     public List<Lignelivraisonclient> getLignelivraisonclientList() {
         return lignelivraisonclientList;
@@ -177,5 +189,5 @@ public class Livraisonclient implements Serializable {
     public String toString() {
         return "entities.Livraisonclient[ idlivraisonclient=" + idlivraisonclient + " ]";
     }
-    
+
 }
