@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facture" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5985a231-aee7-4c98-97e4-855a5567fc1c">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="118"/>
+	<parameter name="idfacture" class="java.lang.Long"/>
+	<queryString>
+		<![CDATA[SELECT
+     facture_bailleur."date_facturation" AS facture_bailleur_date_facturation,
+     facture_bailleur."object" AS facture_bailleur_object,
+     facture_bailleur."code" AS facture_bailleur_code,
+     facture_bailleur."montant_total" AS facture_bailleur_montant_total,
+     facture_bailleur."pourcentage_dist" AS facture_bailleur_dist,
+     facture_bailleur."montant_taxee" AS facture_bailleur_montant_taxee,
+     facture_bailleur."destinataire" AS facture_bailleur_destinataire,
+     produit."nom" AS produit_nom,
+     annee."nom" AS annee_nom,
+     ligne_fact_bailleur."prix_unitaire" AS ligne_fact_bailleur_prix_unitaire,
+     ligne_fact_bailleur."quantite" AS ligne_fact_bailleur_quantite,
+     parametrage."nom_structure" AS parametrage_nom_structure,
+     parametrage."boite_postale" AS parametrage_boite_postale,
+     parametrage."contact_1" AS parametrage_contact_1,
+     parametrage."contact_2" AS parametrage_contact_2,
+     parametrage."contact_3" AS parametrage_contact_3,
+     parametrage."descriptif" AS parametrage_descriptif,
+     parametrage."fax" AS parametrage_fax,
+     parametrage."banque" AS parametrage_banque,
+     parametrage."numero_compte" AS parametrage_numero_compte,
+     facture_bailleur."somme_en_lettre" AS facture_bailleur_somme_en_lettre,
+     bailleur."nom" AS bailleur_nom,
+     facture_bailleur."pourcentage_stockage" AS facture_bailleur_pourcentage_stockage,
+     facture_bailleur."pourcentage_dist" AS facture_bailleur_pourcentage_dist,
+     facture_bailleur."montant_stock" AS facture_bailleur_montant_stock
+FROM
+     "public"."facture_bailleur" facture_bailleur INNER JOIN "public"."ligne_fact_bailleur" ligne_fact_bailleur ON facture_bailleur."id_facture_bailleur" = ligne_fact_bailleur."idfacture_bailleur"
+     INNER JOIN "public"."produit" produit ON ligne_fact_bailleur."idproduit" = produit."idproduit"
+     INNER JOIN "public"."annee_mois" annee_mois ON facture_bailleur."idmois" = annee_mois."id_annee_mois"
+     INNER JOIN "public"."bailleur" bailleur ON facture_bailleur."idbailleur" = bailleur."idbailleur"
+     INNER JOIN "public"."annee" annee ON annee_mois."idannee" = annee."idannee",
+     "public"."parametrage" parametrage
+WHERE
+     facture_bailleur.id_facture_bailleur = 1]]>
+	</queryString>
+	<field name="facture_bailleur_date_facturation" class="java.sql.Date"/>
+	<field name="facture_bailleur_object" class="java.lang.String"/>
+	<field name="facture_bailleur_code" class="java.lang.String"/>
+	<field name="facture_bailleur_montant_total" class="java.lang.Double"/>
+	<field name="facture_bailleur_dist" class="java.lang.Double"/>
+	<field name="facture_bailleur_montant_taxee" class="java.lang.Double"/>
+	<field name="facture_bailleur_destinataire" class="java.lang.String"/>
+	<field name="produit_nom" class="java.lang.String"/>
+	<field name="annee_nom" class="java.lang.String"/>
+	<field name="ligne_fact_bailleur_prix_unitaire" class="java.lang.Double"/>
+	<field name="ligne_fact_bailleur_quantite" class="java.lang.Double"/>
+	<field name="parametrage_nom_structure" class="java.lang.String"/>
+	<field name="parametrage_boite_postale" class="java.lang.String"/>
+	<field name="parametrage_contact_1" class="java.lang.String"/>
+	<field name="parametrage_contact_2" class="java.lang.String"/>
+	<field name="parametrage_contact_3" class="java.lang.String"/>
+	<field name="parametrage_descriptif" class="java.lang.String"/>
+	<field name="parametrage_fax" class="java.lang.String"/>
+	<field name="parametrage_banque" class="java.lang.String"/>
+	<field name="parametrage_numero_compte" class="java.lang.String"/>
+	<field name="facture_bailleur_somme_en_lettre" class="java.lang.String"/>
+	<field name="bailleur_nom" class="java.lang.String"/>
+	<field name="facture_bailleur_pourcentage_stockage" class="java.lang.Double"/>
+	<field name="facture_bailleur_pourcentage_dist" class="java.lang.Double"/>
+	<field name="facture_bailleur_montant_stock" class="java.lang.Double"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="247" splitType="Stretch">
+			<staticText>
+				<reportElement x="36" y="10" width="166" height="17" uuid="233c2342-8161-4514-9ded-b5301933afbb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[REPUBLIQUE DU CAMEROUN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="36" y="27" width="166" height="17" uuid="5347303f-a1d8-4cb2-a8a8-7a2d02439634"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Paix - Travail - Patrie]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="25" y="44" width="189" height="17" uuid="0e486460-3016-4b7e-89e2-f1f2f8d622e9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[MINISTERE DE LA SANTE PUBLIQUE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="36" y="61" width="166" height="17" uuid="0c94120e-fedd-4419-9901-fba23fae0740"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[SECRETARIAT GENERAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="25" y="78" width="189" height="17" uuid="45462f0d-0c7e-4945-bd51-6270064aa369"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[DELEGATION REGIONALE DU CENTRE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="601" y="78" width="189" height="17" uuid="b3214df6-51c4-4ec6-b74c-45f40e774a18"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[CENTER REGIONAL DELEGATION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="612" y="27" width="166" height="17" uuid="c0ed2995-e19d-40f9-9799-fa1c75c00a78"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Peace - Work - Fatherland]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="612" y="10" width="166" height="17" uuid="c227c9b1-f187-4ffb-92b4-be8e2d53b5cb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[REPUBLIC OF CAMEROON]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="612" y="61" width="166" height="17" uuid="8a3a305b-fae6-4425-acd7-b3b98791c838"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[SECRETARIAT GENERAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="601" y="44" width="189" height="17" uuid="57dc5187-4a60-401f-9260-bc6fda9739b3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[MINISTRY OF PUBLIC HEALTH]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="242" y="5" width="338" height="25" uuid="6823d7a2-b963-4c95-bfe8-0644a242d0d9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{parametrage_nom_structure}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="242" y="41" width="338" height="20" uuid="ea0039f8-0cd7-44bb-93d2-0a0ce094b063"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{parametrage_descriptif}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="214" y="75" width="387" height="20" uuid="7e644298-67d2-4311-ad1e-6931f24dfb75"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["B.P.:  " + $F{parametrage_boite_postale}+" Tél.:  "+ $F{parametrage_contact_1}+" Fax "+ $F{parametrage_fax}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="87" y="102" width="166" height="30" uuid="13d1b2a5-2f55-4cfb-a64f-86af044626eb"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FACTURE]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="25" y="141" width="338" height="20" uuid="c33f14cf-1029-49f1-9165-541e98624427"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["NUMERO FACTURE : "+$F{facture_bailleur_code}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="46" y="161" width="58" height="20" uuid="c1ff1a31-45e8-4670-94a2-f96555a7e762"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["OBJET : "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="104" y="165" width="259" height="46" uuid="0e571469-a877-4fc8-b182-60c423edf021"/>
+				<box leftPadding="2"/>
+				<textElement>
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{facture_bailleur_object}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="636" y="141" width="58" height="20" uuid="fdb3fb4b-4046-411c-a2c5-ea54767276ce"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["DOIT"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="537" y="161" width="252" height="52" uuid="bb86005d-54db-410d-aa0e-a6c47b02736c"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{facture_bailleur_destinataire}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="581" y="213" width="79" height="20" uuid="627bdfa3-6669-431e-a13a-adfec74d764f"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<text><![CDATA[YAOUNDE , LE  ]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="660" y="213" width="129" height="20" uuid="65130383-a34f-4158-8743-76ba8cedc13e"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{facture_bailleur_date_facturation}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement x="25" y="5" width="79" height="30" uuid="5003a32c-4ad7-4719-be14-60cd846172a5"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[DATE D'ENTREE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="104" y="5" width="75" height="30" uuid="4d02a225-bd68-4d48-9093-339431a0c1d5"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[N° FACTURE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="179" y="5" width="87" height="30" uuid="a850763d-6ab2-4f01-a7e6-338017281502"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[FOURNISSEUR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="266" y="5" width="314" height="30" uuid="491fc757-bcc9-4869-b581-9c5c92b8fbef"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[DESIGNATION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="580" y="5" width="56" height="30" uuid="9e8f0acd-1a72-436a-a3fd-25c7994eeec8"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[QUANTITE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="636" y="5" width="61" height="30" uuid="89ba2ba0-56c3-40bf-a51a-b98e5ce3fbc4"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[PRIX UNITAIRE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="697" y="5" width="92" height="30" uuid="5ae7f553-cddd-4722-82f3-12dbb2fe6ab2"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[MONTANT]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<textField pattern="#,##0">
+				<reportElement x="580" y="0" width="56" height="22" uuid="053e366a-9f1f-410f-bcb5-8a679058fe83"/>
+				<box rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ligne_fact_bailleur_quantite}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="636" y="0" width="61" height="22" uuid="75dfac62-9fd3-45c0-aef4-6f14ebccc549"/>
+				<box rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ligne_fact_bailleur_prix_unitaire}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="697" y="0" width="92" height="22" uuid="7762abc7-9774-4712-a748-422925a85e59"/>
+				<box rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{ligne_fact_bailleur_quantite} *$F{ligne_fact_bailleur_prix_unitaire}  )]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="104" y="0" width="75" height="22" uuid="9aa21a7d-7e03-49bc-9238-efa58cd5c0f9"/>
+				<box leftPadding="1">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="25" y="0" width="79" height="22" uuid="823bad2d-4b47-46f1-9455-bc0d84ae0ec0"/>
+				<box leftPadding="0" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{annee_nom}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="266" y="0" width="314" height="22" uuid="60086da6-eb36-4ef1-9f70-3d5171c834c2"/>
+				<box leftPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{produit_nom}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="179" y="0" width="87" height="22" uuid="796095fa-4679-4eee-9d2b-6dab52b55485"/>
+				<box leftPadding="2" rightPadding="0">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{bailleur_nom}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="175" splitType="Stretch">
+			<textField>
+				<reportElement x="25" y="0" width="241" height="20" uuid="ecfb8b02-08cf-467b-ba01-48b258c9c974"/>
+				<box leftPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["BANQUE : "+$F{parametrage_banque}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="25" y="40" width="241" height="20" uuid="49aad170-6132-4243-a80b-98822c4a4554"/>
+				<box leftPadding="2">
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["N° COMPTE : "+$F{parametrage_numero_compte}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="25" y="20" width="241" height="20" uuid="a2a17541-e8ff-48cb-9892-92889404ca92"/>
+				<box leftPadding="2">
+					<leftPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["NOM DU COMPTE : FRPSC CENTRE"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="266" y="0" width="431" height="20" uuid="22af1b53-b59f-4c17-896f-4de006f13470"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["VALEUR DES PRODUITS DISTRIBUES + VALEUR DES PRODUITS STOCKES  "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="266" y="20" width="431" height="20" uuid="84d87bed-1ab4-4ef9-b480-c338f24d1a06"/>
+				<box>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["POURCENTAGE  DISTRIBUTION + POURCENTAGE DE STOCKAGE"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="266" y="40" width="431" height="20" uuid="0db28c05-9202-4f54-95cc-fb5be555854f"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["FRAIS DE LIVRAISON + FRAIS DE STOCKAGE"]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="697" y="0" width="92" height="20" uuid="112fafb3-33ff-41f4-a44b-93c83eb8b5a5"/>
+				<box rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{facture_bailleur_montant_total} + $F{facture_bailleur_montant_stock})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="697" y="20" width="92" height="20" uuid="a2b81bcb-04a5-4ccc-8dd4-cf73dece8428"/>
+				<box rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{facture_bailleur_pourcentage_dist} + $F{facture_bailleur_pourcentage_stockage})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="697" y="40" width="92" height="20" uuid="612b5c99-3da1-4376-aadf-2ef6e8b7ec17"/>
+				<box rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{facture_bailleur_montant_taxee}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="25" y="60" width="764" height="20" uuid="518e218a-92dc-4a6d-acf1-151293f0f0cd"/>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ARRETEE LA PRESENTE FACTURE A LA SOMME DE : "+$F{facture_bailleur_somme_en_lettre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="426" y="132" width="154" height="20" uuid="a89420c0-4a71-4bfd-ab15-d8d5afd5d23c"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[L'ADMINISTRATEUR]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

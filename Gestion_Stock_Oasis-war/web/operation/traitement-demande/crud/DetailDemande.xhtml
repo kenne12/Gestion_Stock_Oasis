@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="DemandeDetailDlg" 
+                  widgetVar="DemandeDetailDialog" 
+                  modal="true" resizable="false"  
+                  appendTo="@(body)"
+                  width="70%"
+                  height="600"
+                  header="#{langue['Titre.Dlg.Detail']} : #{langue.demande_de_materiel_reactif}" closeOnEscape="true">
+
+            <h:form id="DemandeDetailForm">
+
+                <h:panelGroup id="display">
+
+                    <p:panelGrid columns="2">
+
+                        <h:outputLabel value="#{langue.date_commande}"/>
+                        <h:outputLabel value="#{traitementController.demande.datedemande}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputLabel>
+
+                        <h:outputLabel value="#{langue.personnel}"/>
+                        <h:outputLabel value="#{traitementController.demande.idpersonnel.nom} #{commandePersonnelController.demande.idpersonnel.prenom}"/>
+
+                        <h:outputLabel value="#{langue.valeur}"/>
+                        <h:outputLabel value="#{traitementController.demande.idprojet.nom}">
+                            <f:convertNumber/>
+                        </h:outputLabel>
+                        
+                        <h:outputLabel value="#{langue.personnel}"/>
+                        <h:outputLabel value="#{traitementController.demande.idpersonnel.nom}"/>
+                      
+                    </p:panelGrid>
+
+                    <p:separator/>
+
+                    <p:dataTable id="datalist"
+                                 value="#{traitementController.lignedemandes}"
+                                 var="item"
+                                 paginator="true"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50">
+
+                        <p:column filterBy="#{item.idmagasinarticle.idarticle.libelle}" width="30%">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.article}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idmagasinarticle.idarticle.libelle}"/>
+                        </p:column>
+                        
+                        <p:column filterBy="#{item.idmagasinarticle.idmagasin.nom}" width="40%">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.magasin}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idmagasinarticle.idmagasin.nom}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{item.idunite.libelle}" width="10%">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.unite}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idunite.libelle}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{item.unite}" width="7.5%">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.qte_par_unite}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.unite}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{item.quantitemultiple}" width="7.5%">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.qte_totale}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.quantitemultiple}"/>
+                        </p:column>
+
+                    </p:dataTable>
+                    <p:separator/>
+                    <center>
+                        <p:commandButton value="#{langue['Conv.Fermer']}" oncomplete="PF('DemandeDetailDialog').hide()" icon="ui-icon-close"/>
+                    </center>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

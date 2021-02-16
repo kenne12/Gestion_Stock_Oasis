@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+        <p:dialog id="InventaireCreateDlg" 
+                  widgetVar="InventaireCreateDialog" 
+                  modal="true" 
+                  resizable="true" 
+                  appendTo="@(body)"
+                  width="90%"
+                  height="600px"
+                  header="#{langue.inventaire_stock}">
+
+            <h:form id="InventaireCreateForm">
+
+                <h:panelGroup id="display">
+
+                    <center>
+                        <br/>
+
+                        <h:panelGrid columns="2">
+
+                            <p:outputLabel value="#{langue.magasin}" for="magasin" />
+                            <p:selectOneMenu disabled="#{!inventaireGlobalController.mode.equals('Create')}" id="magasin" value="#{inventaireGlobalController.magasin.idmagasin}" >
+                                <!--<f:selectItem itemLabel="#{langue.magasin_central}" itemValue="0" />-->
+                                <f:selectItem itemLabel="#{langue.choisir}" itemValue="" />
+                                <f:selectItems value="#{inventaireGlobalController.magasins}" var="mag" itemLabel="#{mag.nom}" itemValue="#{mag.idmagasin}"/>
+                                <p:ajax update="display,datalist1" listener="#{inventaireGlobalController.updateData()}"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="#{langue.code}" for="code"/>
+                            <p:inputText disabled="true" value="#{inventaireGlobalController.inventaire.code}" id="code">
+                                <p:ajax/>
+                            </p:inputText>
+
+                            <p:outputLabel value="#{langue.date}" for="date_inventaire"/>
+                            <p:calendar pattern="dd/MM/yyyy" disabled="false" required="true" id="date_inventaire" value="#{inventaireGlobalController.inventaire.dateinventaire}" navigator="true" requiredMessage="#{langue.valeur_obligatoire}">
+                                <p:ajax/>  
+                            </p:calendar>
+
+                            <p:outputLabel value="#{langue.libelle}" for="libelle"/>
+                            <p:inputTextarea style="width: 300px" rows="2" value="#{inventaireGlobalController.inventaire.libelle}" id="libelle">
+                                <p:ajax event="keyup"/>
+                            </p:inputTextarea>
+
+                            <p:outputLabel value="#{langue.tous_les_articles} ?" for="libelle"/>
+                            <h:selectBooleanCheckbox value="#{inventaireGlobalController.inventaire.allarticle}">
+                                <p:ajax update="add_btn,datalist,datalist1" listener="#{inventaireGlobalController.updateArticle()}"/>                                
+                            </h:selectBooleanCheckbox>
+
+                        </h:panelGrid>
+
+                    </center>
+
+                    <p:separator style="width: 98%;margin-left: 1%"/>
+
+                    <center>
+                        <p:commandButton id="add_btn" 
+                                         disabled="#{inventaireGlobalController.inventaire.allarticle.equals(true)}" 
+                                         icon="ui-icon-plus" value="#{langue.ajouter_articles}"
+                                         update=":ArticleCreateForm"
+                                         actionListener="#{inventaireGlobalController.prepareAddArticle()}"/>
+                    </center>
+
+                    <p:separator style="width: 98%;margin-left: 1%"/>
+
+                    <p:dataTable rendered="#{inventaireGlobalController.inventaire.central}" 
+                                 id="datalist" 
+                                 value="#{inventaireGlobalController.ligneinventaires}" 
+                                 var="item"                             
+                                 paginator="true"
+                                 rowKey="#{item.idligneinventaire}"
+                                 rows="#{inventaireGlobalController.ligneinventaires.size()}"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 style="width: 98%;margin-left: 1%"
+                                 rowIndexVar="index"
+                                 emptyMessage="#{langue.tableau_vide}"
+                                 widgetVar="fonctionTable"
+                                 draggableColumns="true"
+                                 resizableColumns="true">
+
+                        <f:facet name="header"> 
+                            <h:outputText value="#{langue.articles_inventaire}"/>
+                        </f:facet> 
+
+                        <p:column style="width: 27%" filterBy="#{item.idlot.idarticle.libelle}">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.article}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idlot.idarticle.libelle}"/>
+                        </p:column>
+
+                        <p:column style="width: 20%" filterBy="#{item.idlot.numero}" >
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.lot}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idlot.numero}"/>
+                        </p:column>
+
+                        <p:column style="width: 14%" filterBy="#{item.qtetheorique}" >
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.qte_theorique}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.qtetheorique}"/>
+                        </p:column>
+
+                        <p:column style="width: 10%" filterBy="#{item.ecart}" >
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.ecart}"/>
+                            </f:facet>
+                            <h:outputText id="ecart" value="#{item.ecart}"/>
+                        </p:column>
+
+                        <p:column style="width: 10%;text-align: center" >
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.action}"/>
+                            </f:facet>
+                            <p:commandButton disabled="true" icon="ui-icon-trash">
+                                <p:ajax event="click" listener="#{inventaireGlobalController.removeProduit(index)}" update="datalist"/>
+                            </p:commandButton>
+                        </p:column>
+
+                    </p:dataTable>
+
+                    <p:dataTable rendered="#{inventaireGlobalController.inventaire.central.equals(false)}" 
+                                 id="datalist1" 
+                                 value="#{inventaireGlobalController.ligneinventaires_1}" 
+                                 var="item"                             
+                                 paginator="true"
+                                 editable="true" 
+                                 rowKey="#{item.idligneinventaire}"
+                                 rows="#{inventaireGlobalController.ligneinventaires_1.size()}"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 style="width: 98%;margin-left: 1%"
+                                 rowIndexVar="index"
+                                 emptyMessage="#{langue.tableau_vide}"
+                                 widgetVar="fonctionTable"
+                                 draggableColumns="true"
+                                 resizableColumns="true"
+                                 editMode="cell"
+                                 rowStyleClass="#{inventaireGlobalController.checkPeremption(item.idmagasinlot.idlot).equals(true) ? 'rowColorRed' : null}">
+
+                        <f:facet name="header"> 
+                            <h:outputText value="#{langue.articles_inventaire}"/>
+                        </f:facet> 
+
+                        <p:column style="width: 35%" filterBy="#{item.idlot.idarticle.libelle}">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.article}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idlot.idarticle.libelle}"/>
+                        </p:column>
+
+                        <p:column style="width: 14%" filterBy="#{item.idlot.numero}" >
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.lot}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idlot.numero}"/>
+                        </p:column>
+
+                        <p:column style="width: 9%" filterBy="#{item.qtetheorique}" >
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.qte_theorique}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.qtetheorique}"/>
+                        </p:column>
+
+                        <p:column style="width: 9%;text-align: center" headerText="#{langue.qte_physique}">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{item.qtephysique}"/></f:facet>
+                                <f:facet  name="input">
+                                    <p:inputText required="true" disabled="#{inventaireGlobalController.editQuantite}" value="#{item.qtephysique}">                                             
+                                        <p:ajax event="keyup" listener="#{inventaireGlobalController.updateEcart(index)}" update="ecart"/>
+                                    </p:inputText>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column style="width: 8%" filterBy="#{item.ecart}" >
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.ecart}"/>
+                            </f:facet>
+                            <h:outputText id="ecart" value="#{item.ecart}"/>
+                        </p:column>
+
+                        <p:column style="width: 20%;" headerText="#{langue.justificatif}">
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <h:outputText value="#{item.observation}"/>
+                                </f:facet>
+                                <f:facet name="input">
+                                    <p:inputTextarea value="#{item.observation}">                                             
+                                        <p:ajax event="keyup" />
+                                    </p:inputTextarea>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column style="width: 5%;text-align: center" >
+                            <f:facet name="header">
+                                <h:outputText value=""/>
+                            </f:facet>
+                            <p:commandButton disabled="true" icon="ui-icon-trash">
+                                <p:ajax event="click" listener="#{inventaireGlobalController.removeProduit(index)}" update="datalist1"/>
+                            </p:commandButton>
+                        </p:column>
+
+                    </p:dataTable>
+
+                    <p:separator style="width: 98%;margin-left: 1%"/>
+
+                    <center>                        
+                        <p:commandButton style="color: red;" icon="ui-icon-close" value="#{langue.annuler}" oncomplete="PF('InventaireCreateDialog').hide()" partialSubmit="true"/>
+                        <p:commandButton actionListener="#{inventaireGlobalController.create()}" icon="ui-icon-check" value="#{inventaireGlobalController.valideBtn}" update="display,:InventaireListerForm:datalist,:notify1" onclick="PF('AjaxNotifyDialog').show()"/>                        
+                    </center>
+
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

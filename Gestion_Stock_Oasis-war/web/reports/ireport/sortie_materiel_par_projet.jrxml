@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="sortie_materiel_par_projet" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="29d8d78e-a616-4534-a135-7a21b4ebfdde">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT
+     livraisonclient."datelivraison" AS livraisonclient_datelivraison,
+     lignelivraisonclient."quantitemultiple" AS lignelivraisonclient_quantitemultiple,
+     projet."nom" AS projet_nom,
+     personnel."idpersonnel" AS personnel_idpersonnel,
+     personnel."nom" AS personnel_nom,
+     personnel."prenom" AS personnel_prenom,
+     projet."idprojet" AS projet_idprojet,
+     magasin."nom" AS magasin_nom,
+     article."libelle" AS article_libelle,
+     lot."numero" AS lot_numero
+FROM
+     "public"."livraisonclient" livraisonclient INNER JOIN "public"."lignelivraisonclient" lignelivraisonclient ON livraisonclient."idlivraisonclient" = lignelivraisonclient."idlivraisonclient"
+     INNER JOIN "public"."demande" demande ON livraisonclient."iddemande" = demande."iddemande"
+     INNER JOIN "public"."personnel" personnel ON livraisonclient."idpersonnel" = personnel."idpersonnel"
+     AND personnel."idpersonnel" = demande."idpersonnel"
+     INNER JOIN "public"."projet" projet ON demande."idprojet" = projet."idprojet"
+     INNER JOIN "public"."magasinlot" magasinlot ON lignelivraisonclient."idmagasinlot" = magasinlot."idmagasinlot"
+     INNER JOIN "public"."magasinarticle" magasinarticle ON magasinlot."idmagasinarticle" = magasinarticle."idmagasinarticle"
+     INNER JOIN "public"."lot" lot ON magasinlot."idlot" = lot."idlot"
+     INNER JOIN "public"."magasin" magasin ON magasinarticle."idmagasin" = magasin."idmagasin"
+     INNER JOIN "public"."article" article ON magasinarticle."idarticle" = article."idarticle"
+ORDER BY projet.nom, livraisonclient."datelivraison" DESC]]>
+	</queryString>
+	<field name="livraisonclient_datelivraison" class="java.sql.Date"/>
+	<field name="lignelivraisonclient_quantitemultiple" class="java.lang.Double"/>
+	<field name="projet_nom" class="java.lang.String"/>
+	<field name="personnel_idpersonnel" class="java.lang.Long"/>
+	<field name="personnel_nom" class="java.lang.String"/>
+	<field name="personnel_prenom" class="java.lang.String"/>
+	<field name="projet_idprojet" class="java.lang.Integer"/>
+	<field name="magasin_nom" class="java.lang.String"/>
+	<field name="article_libelle" class="java.lang.String"/>
+	<field name="lot_numero" class="java.lang.String"/>
+	<variable name="lignelivraisonclient_quantitemultiple_1" class="java.lang.Double" resetType="Group" resetGroup="projet_group" calculation="Sum">
+		<variableExpression><![CDATA[$F{lignelivraisonclient_quantitemultiple}]]></variableExpression>
+	</variable>
+	<variable name="lignelivraisonclient_quantitemultiple_2" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{lignelivraisonclient_quantitemultiple}]]></variableExpression>
+	</variable>
+	<group name="projet_group">
+		<groupExpression><![CDATA[$F{projet_idprojet}]]></groupExpression>
+		<groupHeader>
+			<band height="27">
+				<textField>
+					<reportElement mode="Opaque" x="0" y="0" width="555" height="27" backcolor="#CCCCCC" uuid="c430bb03-8f5d-4932-b7c6-f3e7f8cf5f60"/>
+					<box leftPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Projet : "+$F{projet_nom}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="22">
+				<textField pattern="#,##0;(#,##0)">
+					<reportElement mode="Opaque" x="238" y="0" width="50" height="22" backcolor="#CCCCCC" uuid="0bea4129-b54e-445d-8a67-15129936a5b8"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{lignelivraisonclient_quantitemultiple_1}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="0" y="0" width="248" height="22" backcolor="#CCCCCC" uuid="424a10ca-609b-4f8e-8ef9-ad80cc71d369"/>
+					<box leftPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<text><![CDATA[Sous Total]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="277" y="0" width="278" height="22" backcolor="#CCCCCC" uuid="d02efa5e-1619-4938-acdc-3565fdf49f0f"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="119" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="35" width="174" height="15" uuid="35c1066e-31fb-4acd-8ed8-89bd5475b98c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[* * * * * * * ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="381" y="0" width="174" height="20" uuid="1293572d-feaf-4658-9aa8-f948cf0247a0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[REPUBLIC OF CAMEROON]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="174" height="15" uuid="89da23fc-b975-4643-be81-6f0995617bf5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Paix - Travail - Patrie]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="174" height="20" uuid="70c506e3-56c3-41ef-b7f3-ecb671a894d2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[REPUBLIQUE DU CAMEROUN]]></text>
+			</staticText>
+			<image>
+				<reportElement x="53" y="55" width="436" height="58" uuid="5c8ee457-a8ee-4489-a0ce-dcfbb645d86e"/>
+				<imageExpression><![CDATA["baniere_.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="381" y="20" width="174" height="15" uuid="3f5d518a-af19-40c2-b617-cbab87ab3022"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Peace - Work - Fatherland]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="381" y="35" width="174" height="15" uuid="7e251eeb-bd05-4297-843c-62b3a1c623fc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[* * * * * * * ]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="555" height="24" backcolor="#33CCFF" uuid="818d6df9-f39d-4c75-b3eb-1b5f1116bd35"/>
+				<box>
+					<pen lineStyle="Dashed"/>
+					<topPen lineWidth="0.5" lineStyle="Dashed"/>
+					<leftPen lineWidth="0.5" lineStyle="Dashed"/>
+					<bottomPen lineWidth="0.5" lineStyle="Dashed"/>
+					<rightPen lineWidth="0.5" lineStyle="Dashed"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14"/>
+				</textElement>
+				<text><![CDATA[FICHE DE MOUVEMENT DE SORTIE DU MATERIEL PAR PROJET]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="31" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="189" height="31" backcolor="#33CCFF" uuid="52295f15-beac-4105-acca-815c0cba71de"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Produit + Lot]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="256" y="0" width="30" height="31" backcolor="#33CCFF" uuid="86680794-7fce-4353-8633-9dcb995bc3f6"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Qté]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="189" y="0" width="67" height="31" backcolor="#33CCFF" uuid="7f6a8c01-3791-4d34-ba5b-574a6ad31432"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="286" y="0" width="129" height="31" backcolor="#33CCFF" uuid="76e0a534-fe6b-4822-8c06-1a73f329622d"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[Personnel]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="415" y="0" width="140" height="31" backcolor="#33CCFF" uuid="b3e7df73-5e18-4422-9575-2929a1d1f9ff"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Service]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="46" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="189" height="46" uuid="5463a778-012f-441b-9508-b1aa4be5c9a8"/>
+				<box leftPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{article_libelle}+" - "+$F{lot_numero}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;(#,##0)">
+				<reportElement x="256" y="0" width="30" height="46" uuid="dd5ee23c-6d21-4547-ab20-0201449b94bc"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{lignelivraisonclient_quantitemultiple}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="189" y="0" width="67" height="46" uuid="c02cea35-694c-42de-aa92-7994e58eefbc"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{livraisonclient_datelivraison}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="286" y="0" width="128" height="46" uuid="2754e682-35bc-4298-8349-2001f438b993"/>
+				<box leftPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{personnel_nom}+" "+$F{personnel_prenom}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="415" y="0" width="140" height="46" uuid="83360719-48aa-4316-b787-7507a9a7c061"/>
+				<box leftPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{magasin_nom}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="30" splitType="Stretch">
+			<textField pattern="#,##0;-#,##0">
+				<reportElement mode="Opaque" x="226" y="0" width="81" height="30" backcolor="#33CCFF" uuid="46a81e2d-53d0-4e57-b8fe-555db4a970fd"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{lignelivraisonclient_quantitemultiple_2}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="226" height="30" backcolor="#33CCFF" uuid="8a485137-92e5-4e1d-8db0-58008163cd43"/>
+				<box leftPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="307" y="0" width="248" height="30" backcolor="#33CCFF" uuid="f52221a9-a5b9-4414-a5b9-e4e44246cd39"/>
+				<box leftPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

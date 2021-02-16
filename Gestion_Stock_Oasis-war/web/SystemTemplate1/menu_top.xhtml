@@ -1,0 +1,198 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#{request.contextPath}/index.html">Marco +</a>
+    </div>
+    <!-- .navbar-header -->
+    <ul class="nav navbar-top-links navbar-right">
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <i class="fa fa-envelope fa-fw"></i> <i class="fa fa-caret-down"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-messages">
+                <li>
+                    <a href="#">
+                        <div>
+                            <strong>John Smith</strong>
+                            <span class="pull-right text-muted">
+                                <em>Yesterday</em>
+                            </span>
+                        </div>
+                        <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
+                    </a>
+                </li>
+                <li class="divider"></li>
+
+                <li>
+                    <a class="text-center" href="#">
+                        <strong>Read All Messages</strong>
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                </li>
+            </ul>
+            <!-- /.dropdown-messages -->
+        </li>
+        <!-- /.dropdown -->
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <i class="fa fa-tasks fa-fw"></i> <i class="fa fa-caret-down"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-tasks">
+                <li>
+                    <a href="#">
+                        <div>
+                            <p>
+                                <strong>Task 1</strong>
+                                <span class="pull-right text-muted">40% Complete</span>
+                            </p>
+                            <div class="progress progress-striped active">
+                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                    <span class="sr-only">40% Complete (success)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                <li class="divider"></li>
+
+                <li>
+                    <a class="text-center" href="#">
+                        <strong>See All Tasks</strong>
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                </li>
+            </ul>
+            <!-- /.dropdown-tasks -->
+        </li>
+        <!-- /.dropdown -->
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <i class="fa fa-bell fa-fw"></i> <i class="fa fa-caret-down"></i>
+            </a>
+            <ul id="alerte" class="dropdown-menu dropdown-alerts">
+                <li>
+                    <a href="#" onclick="PF('AlerteCommandeClientDialog').show()">
+                        <div>
+                            <i class="fa fa-bell fa-fw"></i> #{alerteController.demandes.size()} #{langue.commandes_client_en_attente}
+                            <span class="pull-right text-muted small">4 min ago</span>
+                        </div>
+                    </a>
+                </li>
+
+                <li class="divider"></li>
+
+                <li>
+                    <a href="#" onclick="PF('AlerteQteDialog').show()">
+                        <div>
+                            <i class="fa fa-bell-slash fa-fw"></i>#{alerteController.magasinarticle_alert.size()} #{langue.alerte_quantite}
+                            <span class="pull-right text-muted small">4 min ago</span>
+                        </div>
+                    </a>
+                </li>
+
+                <li class="divider"></li>
+
+                <li>
+                    <a href="#" onclick="PF('AlertePeremptionDialog').show()">
+                        <div>
+                            <i class="fa fa-bell-slash fa-fw"></i> #{alerteController.magasinlot_peremps.size()} #{langue.alertes_peremption}
+                            <span class="pull-right text-muted small">4 min ago</span>
+                        </div>
+                    </a>
+                </li>
+
+                <li class="divider"></li>
+
+                <li>
+                    <a class="text-center" href="#">
+                        <strong>See All Alerts</strong>
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                </li>
+            </ul>
+            <!-- /.dropdown-alerts -->
+        </li>
+        <!-- /.dropdown -->
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <img src="#{request.contextPath}/photos/photo_personnels/#{loginBean.utilisateur.photo}" style="width:15px;height: 15px;border-radius: 25px 25px 25px 25px" />
+                <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-user">
+
+                <h:form>                    
+                    <li>
+                        <a href="#" onclick="PF('Modifier_compteDialog').show()" jsf:update=":modifier_compte">
+                            <i class="fa fa-user fa-fw"></i>#{langue.profil_utilisateur}
+                        </a>
+                    </li>
+
+                    <li class="divider"></li>
+                    <li>
+                        <a href="#{request.contextPath}/parametre/parametrage/parametrage.html">
+                            <i class="fa fa-gear fa-fw"></i>#{langue.parametrage}
+                        </a>
+                    </li>
+
+                    <li class="divider"></li>
+                    <li> 
+                        <a href="#" onclick="PF('DeconnectionDialog').show()" jsf:update=":DeconnexionForm">
+                            <i class="fa fa-sign-out fa-fw"></i>#{langue.deconnecter}
+                        </a>
+                    </li>
+
+                    <li class="divider"></li>
+                    <li>
+                        <a href="#" jsf:update=":hibernateDlg" jsf:actionListener="#{loginBean.hibbernate()}" jsf:onclick="PF('hibernateDialog').show()">
+                            <i class="fa fa-coffee fa-fw"></i>#{langue.veille}
+                        </a>
+                    </li>
+
+                    <li class="divider"></li>
+                    <li>
+                        <a href="#" onclick="PF('aboutDialog').show()">
+                            <i class="fa fa-question fa-fw"></i>#{langue.a_propos}
+                        </a>
+                    </li>
+
+
+                    <li class="divider"></li>
+                    <li>
+                        <h:form>
+                            <p:selectOneMenu  autoWidth="false" style="width: 150px" 
+                                              id="theme"
+                                              value="#{loginBean.utilisateur.theme}">
+                                <f:selectItems value="#{themes.themes}"
+                                               var="them"
+                                               itemLabel="#{them}"
+                                               itemValue="#{them}"/>
+                                <p:ajax listener="#{loginBean.update_theme()}" oncomplete="javascript:location.reload();" />
+                            </p:selectOneMenu>
+                        </h:form>
+                    </li>
+
+                </h:form>
+
+            </ul>
+            <!-- /.dropdown-user -->
+        </li>
+        <!-- /.dropdown -->
+    </ul>
+    <!-- /.navbar-top-links -->
+
+</ui:composition>
+
+
+
+

@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <f:view locale="#{localeManagedBean.locale}">
+
+        <h:head>
+            <ui:include src="/SystemTemplate1/entetes.xhtml" />
+        </h:head>
+
+        <body>
+            <ui:include src="/SystemTemplate/ajax_loader_bar.xhtml"/>
+            <ui:include src="/SystemTemplate/autres_popup.xhtml"/>
+            <ui:include src="/SystemTemplate/alertes.xhtml"/>
+            
+            <div id="wrapper">                  
+
+                <!-- Navigation -->
+                <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">        
+                    <ui:include src="/SystemTemplate1/menu_top.xhtml"/>
+                    <ui:include src="/SystemTemplate1/menu_left.xhtml"/>          
+                </nav>
+
+                <!-- Page Content -->
+
+                <div id="page-wrapper" style="">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-12">                                
+                                <ui:insert name="contenu">
+
+                                </ui:insert>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- /#page-wrapper -->
+
+            </div>
+            <!-- /#wrapper -->
+            <ui:include src="/SystemTemplate1/autres_include.xhtml"/>
+            <ui:include src="/includes/confirmation.xhtml"/>
+            <ui:insert name="scriptCollapse">
+                
+            </ui:insert>
+        </body>
+    </f:view>
+</html>

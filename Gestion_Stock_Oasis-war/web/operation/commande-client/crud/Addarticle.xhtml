@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="ArtcleCreateDlg" 
+                  widgetVar="ArticleCreateDialog" 
+                  modal="true" 
+                  closeOnEscape="true"
+                  width="90%"
+                  height="600px"
+                  resizable="true"
+                  appendTo="@(body)" 
+                  header="#{langue.ajouter_un_article}">
+            <h:form id="ArticleCreateForm">
+                <h:panelGroup id="display">
+
+                    <p:messages id="growl" closable="true">
+                        <p:effect type="pulsate" event="load" delay="50" />
+                    </p:messages>
+                    <p:growl id="msg"/>
+
+                    <div style="width: 100% ; height: 500px">
+
+                        <div style="width: 70%; float: left ; height: 100%">
+
+                            <p:panelGrid columns="3">
+
+                                <p:outputLabel value="#{langue.magasin}" for="magasin" />
+                                <p:selectOneMenu required="true" filter="true" id="magasin" value="#{commandePersonnelController.magasin.idmagasin}" requiredMessage="#{langue.valeur_obligatoire}">
+                                    <f:selectItem itemLabel="#{langue.choisir}" itemValue=""/>
+                                    <f:selectItems value="#{commandePersonnelController.magasins}" var="mag" itemLabel="#{mag.nom}" itemValue="#{mag.idmagasin}"/>                                                                             
+                                    <p:ajax update="datalist" listener="#{commandePersonnelController.filterProductByMagasin()}"/>
+                                </p:selectOneMenu>
+                                <p:inputText placeholder="#{langue.zone_de_recherche}" style="width: 200px" />
+                            </p:panelGrid>
+
+                            <p:separator />
+
+                            <p:dataTable id="datalist"
+                                         value="#{commandePersonnelController.magasinarticles}"
+                                         var="item"
+                                         rowKey="#{item.idmagasinarticle}"
+                                         paginator="true"
+                                         rows="10"
+                                         style=""
+                                         rowsPerPageTemplate="10,20,30,40,50"
+                                         selectionMode="single"
+                                         emptyMessage="#{langue.tableau_vide}"
+                                         selection="#{commandePersonnelController.magasinarticle}">
+
+                                <p:ajax event="rowSelect" update=":ArticleCreateForm" listener="#{commandePersonnelController.selectProduct()}"/>
+
+                                <p:column filterBy="#{item.idarticle.code}" width="10%" style="text-align: center;">
+                                    <f:facet name="header">
+                                        <h:outputText value="#{langue.code}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.idarticle.code}"/>
+                                </p:column>
+
+                                <p:column filterBy="#{item.idarticle.libelle}" style="width: 30%">
+                                    <f:facet name="header">
+                                        <h:outputText value="#{langue.libelle}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.idarticle.libelle}"/>
+                                </p:column>
+                                
+                                <p:column filterBy="#{item.idarticle.fabricant}" style="width: 15%">
+                                    <f:facet name="header">
+                                        <h:outputText value="#{langue.fabricant}"/>
+                                    </f:facet>
+                                     <h:outputText value="#{item.idarticle.fabricant}" />
+                                </p:column>
+                                
+
+                                <p:column filterBy="#{item.idmagasin.nom}" style="width: 30%">
+                                    <f:facet name="header">
+                                        <h:outputText value="#{langue.magasin}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.idmagasin.nom}" />
+                                </p:column>
+
+                                <p:column style="text-align: center;width: 7.5%">
+                                    <f:facet name="header">
+                                        <h:outputText value="#{langue.qte}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.quantitemultiple}"/>
+                                </p:column>
+
+                                <p:column style="text-align: center;width: 7.5%">
+                                    <f:facet name="header">
+                                        <h:outputText value="#{langue.qte_virtuelle}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.quantitemultiple - item.quantitevirtuelle}"/>
+                                </p:column>
+
+                            </p:dataTable>
+
+                        </div>
+
+                        <div style="width: 29%; float: right ; height: 100%">
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+
+                            <center>
+
+                                <h:panelGrid columns="3">
+
+                                    <p:outputLabel value="#{langue.article}"/>
+                                    <p:outputLabel value="#{commandePersonnelController.libelle_article}"/>
+                                    <p:outputLabel value=""/>
+
+                                    <p:outputLabel value="#{langue.stock_disponible}" for="sd" />
+                                    <p:inputText id="sd" disabled="true"  required="true" style="width: 70px;color: blue" value="#{commandePersonnelController.magasinarticle.quantitemultiple - commandePersonnelController.magasinarticle.quantitevirtuelle}">
+                                        <f:convertNumber/>
+                                    </p:inputText>
+                                    <p:message for="sd"/>
+
+                                    <p:outputLabel value="#{langue.unite}" for="unite"/>
+                                    <p:selectOneMenu required="true" id="unite" filter="true"  value="#{commandePersonnelController.unite}" converter="uniteConverter">
+                                        <f:selectItem itemLabel="#{langue.choisir}" itemValue="#{null}"/>
+                                        <f:selectItems value="#{commandePersonnelController.unites}" var="unit" itemLabel="#{unit.libelle}" itemValue="#{unit}"/>
+                                        <p:ajax />
+                                    </p:selectOneMenu>
+
+                                    <p:inputText id="qpu" required="true" style="width: 75px" value="#{commandePersonnelController.lignedemande.unite}">
+                                        <f:convertNumber/>
+                                        <p:ajax event="keyup" update="qt" listener="#{commandePersonnelController.updateQuantity()}"/>
+                                    </p:inputText>
+
+                                    <p:outputLabel value="#{langue.quantite}" for="quantite"/>
+                                    <p:inputText required="true" id="quantite" style="width: 100px" value="#{commandePersonnelController.lignedemande.quantite}">                                
+                                        <p:ajax event="keyup" update="qt" listener="#{commandePersonnelController.updateQuantity()}"/>
+                                    </p:inputText>
+                                    <p:message for="quantite"/>
+
+                                    <p:outputLabel value="#{langue.quantite_totale}" for="qt" />
+                                    <p:inputText id="qt"  required="true" style="width: 100px" value="#{commandePersonnelController.lignedemande.quantitemultiple}">
+                                        <f:convertNumber/>
+                                        <p:ajax event="keyup" />
+                                    </p:inputText>
+                                    <p:message for="qt"/>
+
+                                </h:panelGrid>
+                            </center>
+
+                            <p:separator/>
+
+                            <center>                        
+                                <p:commandButton partialSubmit="true" style="color: red;" icon="ui-icon-close" value="#{langue.fermer}" oncomplete="PF('ArticleCreateDialog').hide()"/>
+                                <p:commandButton actionListener="#{commandePersonnelController.addArticle()}" style="" icon="ui-icon-plus" value="#{langue.ajouter_a_la_demande}" update="display,:CommandeCreateForm:datalist,:CommandeCreateForm:info_1,:CommandeCreateForm:info_2,:DemandeListerForm:msg"/>                        
+                            </center>
+
+                        </div>
+
+                    </div>
+
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

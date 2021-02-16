@@ -1,0 +1,520 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="inventaire" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="693eb6d9-40d4-4e5f-a4e8-ec199f4999ac">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="idinventaire" class="java.lang.Long"/>
+	<queryString>
+		<![CDATA[SELECT
+     inventaire."code" AS inventaire_code,
+     inventaire."dateinventaire" AS inventaire_dateinventaire,
+     inventaire."etat" AS inventaire_etat,
+     inventaire."libelle" AS inventaire_libelle,
+     ligneinventaire."qtetheorique" AS ligneinventaire_qtetheorique,
+     ligneinventaire."qtephysique" AS ligneinventaire_qtephysique,
+     ligneinventaire."ecart" AS ligneinventaire_ecart,
+     ligneinventaire."observation" AS ligneinventaire_observation,
+     lot."numero" AS lot_numero,
+     lot."dateperemption" AS lot_dateperemption,
+     article."idarticle" AS article_idarticle,
+     article."code" AS article_code,
+     article."libelle" AS article_libelle,
+     magasin."nom" AS magasin_nom
+FROM
+     "public"."inventaire" inventaire INNER JOIN "public"."ligneinventaire" ligneinventaire ON inventaire."idinventaire" = ligneinventaire."idinventaire"
+     INNER JOIN "public"."lot" lot ON ligneinventaire."idlot" = lot."idlot"
+     INNER JOIN "public"."article" article ON lot."idarticle" = article."idarticle"
+     INNER JOIN "public"."magasin" magasin ON inventaire."idmagasin" = magasin."idmagasin"
+WHERE inventaire.idinventaire = $P{idinventaire}
+ORDER BY article.libelle , lot.dateperemption;]]>
+	</queryString>
+	<field name="inventaire_code" class="java.lang.String"/>
+	<field name="inventaire_dateinventaire" class="java.sql.Date"/>
+	<field name="inventaire_etat" class="java.lang.Boolean"/>
+	<field name="inventaire_libelle" class="java.lang.String"/>
+	<field name="ligneinventaire_qtetheorique" class="java.lang.Double"/>
+	<field name="ligneinventaire_qtephysique" class="java.lang.Double"/>
+	<field name="ligneinventaire_ecart" class="java.lang.Double"/>
+	<field name="ligneinventaire_observation" class="java.lang.String"/>
+	<field name="lot_numero" class="java.lang.String"/>
+	<field name="lot_dateperemption" class="java.sql.Date"/>
+	<field name="article_idarticle" class="java.lang.Long"/>
+	<field name="article_code" class="java.lang.String"/>
+	<field name="article_libelle" class="java.lang.String"/>
+	<field name="magasin_nom" class="java.lang.String"/>
+	<variable name="ligneinventaire_qtetheorique_1" class="java.lang.Double" resetType="Group" resetGroup="product_group" calculation="Sum">
+		<variableExpression><![CDATA[$F{ligneinventaire_qtetheorique}]]></variableExpression>
+	</variable>
+	<variable name="ligneinventaire_qtephysique_1" class="java.lang.Double" resetType="Group" resetGroup="product_group" calculation="Sum">
+		<variableExpression><![CDATA[$F{ligneinventaire_qtephysique}]]></variableExpression>
+	</variable>
+	<variable name="ligneinventaire_qtetheorique_2" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{ligneinventaire_qtetheorique}]]></variableExpression>
+	</variable>
+	<variable name="ligneinventaire_qtephysique_2" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{ligneinventaire_qtephysique}]]></variableExpression>
+	</variable>
+	<group name="product_group">
+		<groupExpression><![CDATA[$F{article_idarticle}]]></groupExpression>
+		<groupHeader>
+			<band height="56">
+				<textField>
+					<reportElement x="0" y="0" width="555" height="25" uuid="30e32955-3693-4386-8a4c-6d9012c98fa5"/>
+					<box leftPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{article_libelle}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="0" y="25" width="90" height="31" backcolor="#CCCCCC" uuid="71be4f41-ac21-4f18-84ec-6f3f27fbd1e7"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<text><![CDATA[Numero lot]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="90" y="25" width="90" height="31" backcolor="#CCCCCC" uuid="3a754719-f4a9-4cfb-9886-8081fd04a691"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<text><![CDATA[Date
+ peremption]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="180" y="25" width="60" height="31" backcolor="#CCCCCC" uuid="6eca10c8-1a6c-481d-ad98-69b90857e1d7"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<text><![CDATA[Qte
+Théorique]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="240" y="25" width="60" height="31" backcolor="#CCCCCC" uuid="fd58f263-94df-477a-897a-860ae11fa182"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<text><![CDATA[Qté
+physique]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="300" y="25" width="50" height="31" backcolor="#CCCCCC" uuid="e60e53ce-3401-482f-a6bb-f81b1294ae00"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<text><![CDATA[Ecart]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="350" y="25" width="205" height="31" backcolor="#CCCCCC" uuid="69eebe4d-dd16-43e8-ac9b-e91b4ff45b65"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<text><![CDATA[Justif]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="24">
+				<textField pattern="#,##0;-#,##0">
+					<reportElement mode="Opaque" x="180" y="0" width="60" height="24" backcolor="#CCCCCC" uuid="4a6b88ab-6cb5-4b58-ac46-db608d9e5a40"/>
+					<box leftPadding="0">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{ligneinventaire_qtetheorique_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0;-#,##0">
+					<reportElement mode="Opaque" x="240" y="0" width="60" height="24" backcolor="#CCCCCC" uuid="018842d4-c18d-4786-816c-35c8cad1e3e0"/>
+					<box leftPadding="0">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{ligneinventaire_qtephysique_1}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="300" y="0" width="255" height="24" backcolor="#CCCCCC" uuid="808735a8-a7d3-4320-b838-bcaf5f489c9e"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<textField>
+					<reportElement mode="Opaque" x="0" y="0" width="180" height="24" backcolor="#CCCCCC" uuid="14369d41-9494-4c54-9d86-198f2f8d603d"/>
+					<box leftPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Total : "+$F{article_libelle}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="119" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="174" height="20" uuid="341ae32a-cf1a-4d7e-8485-2e2c64d6c247"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[REPUBLIQUE DU CAMEROUN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="381" y="0" width="174" height="20" uuid="eb77b40c-8742-4e27-8246-f9d0af544555"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[REPUBLIC OF CAMEROON]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="381" y="35" width="174" height="15" uuid="a38688b2-45a4-4b7b-a405-8d56ee48d5fc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[* * * * * * * ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="174" height="15" uuid="e039799c-cade-4300-8463-e381c6084cdf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Paix - Travail - Patrie]]></text>
+			</staticText>
+			<image>
+				<reportElement x="53" y="55" width="436" height="58" uuid="bb145f40-ee54-4aeb-a277-b33a1abf15a0"/>
+				<imageExpression><![CDATA["baniere_.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="381" y="20" width="174" height="15" uuid="a9ace1cc-5000-4a10-b829-fff05f949a89"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Peace - Work - Fatherland]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="35" width="174" height="15" uuid="8f83d60d-7d0e-4ed1-84a6-3f57a1f49aad"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[* * * * * * * ]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="92" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="555" height="24" backcolor="#33CCFF" uuid="d57a2b36-1670-442b-9c43-5781e389038d"/>
+				<box>
+					<pen lineStyle="Dashed"/>
+					<topPen lineWidth="0.5" lineStyle="Dashed"/>
+					<leftPen lineWidth="0.5" lineStyle="Dashed"/>
+					<bottomPen lineWidth="0.5" lineStyle="Dashed"/>
+					<rightPen lineWidth="0.5" lineStyle="Dashed"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14"/>
+				</textElement>
+				<text><![CDATA[INVENTAIRE DU STOCK]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="132" y="24" width="284" height="21" uuid="757de875-eca1-4ae2-86e4-a8a9e0df1da9"/>
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Dashed"/>
+					<leftPen lineWidth="0.5" lineStyle="Dashed"/>
+					<bottomPen lineWidth="0.5" lineStyle="Dashed"/>
+					<rightPen lineWidth="0.5" lineStyle="Dashed"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inventaire_libelle}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="45" width="100" height="20" backcolor="#CCCCCC" uuid="aa0e0299-2d9d-4547-af3f-8628159b62b9"/>
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Numéro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="100" y="45" width="100" height="20" backcolor="#CCCCCC" uuid="a89b8def-6625-4196-ba6b-11881ebb8a61"/>
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="200" y="45" width="355" height="20" backcolor="#CCCCCC" uuid="62a8e843-de2a-418d-907d-0f872387d302"/>
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Service]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="65" width="100" height="21" uuid="be9bf144-2c06-434e-b7bc-554cec996a61"/>
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inventaire_code}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="100" y="65" width="100" height="21" uuid="a1183787-e0fd-4cbf-aaf4-92ad33befe30"/>
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inventaire_dateinventaire}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="65" width="355" height="21" uuid="24f6f790-f9cb-4cd7-9bd8-a35095885826"/>
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{magasin_nom}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="25" splitType="Stretch">
+			<textField pattern="#,##0;-#,##0">
+				<reportElement x="180" y="0" width="60" height="25" uuid="de9a7911-e9cf-4f8c-b457-d105c91c03f3"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ligneinventaire_qtetheorique}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;-#,##0">
+				<reportElement x="240" y="0" width="60" height="25" uuid="cce8ca97-1000-4653-aef7-b6b7a04f7e1b"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ligneinventaire_qtephysique}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;-#,##0">
+				<reportElement x="300" y="0" width="50" height="25" uuid="d88532df-e866-4e62-8998-c70c46088f36"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ligneinventaire_ecart}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="350" y="0" width="205" height="25" uuid="d6821299-ef43-485c-bbbf-a7edee255f0c"/>
+				<box leftPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ligneinventaire_observation}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="90" y="0" width="90" height="25" uuid="8ac5d2ad-b312-4f45-9e85-6fe58714ec1b"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{lot_dateperemption}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="90" height="25" uuid="b9ea06a7-1865-49b7-a685-fdd129e00dd3"/>
+				<box leftPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{lot_numero}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="30" splitType="Stretch">
+			<textField pattern="#,##0;-#,##0">
+				<reportElement x="180" y="0" width="60" height="30" uuid="6693301b-380c-432c-8f08-08739cc6dba6"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{ligneinventaire_qtetheorique_2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;-#,##0">
+				<reportElement mode="Opaque" x="240" y="0" width="60" height="30" backcolor="#33CCFF" uuid="07024e00-bb9e-4c0e-ab43-6b2d454661ba"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{ligneinventaire_qtephysique_2}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="300" y="0" width="255" height="30" backcolor="#33CCFF" uuid="eafa5c8e-19a1-4bdb-973d-b316803a1bf6"/>
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="240" height="30" backcolor="#33CCFF" uuid="04167b86-2cb5-456c-a088-af97d89e611a"/>
+				<box leftPadding="2">
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Totaux ]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="PersonnelCreerDlg" 
+                  widgetVar="PersonnelCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']} : #{langue.personnel}" 
+                  closeOnEscape="true">
+
+
+            <h:form id="PersonnelCreerForm">
+                <h:panelGroup id="display">
+                    <h:panelGrid columns="3" columnClasses ="column">
+
+                        <p:outputLabel value="#{langue.service}" for="service"/>
+                        <p:selectOneMenu id="service" value="#{personnelController.magasin.idmagasin}" required="true" requiredMessage="#{langue.valeur_obligatoire}">
+                            <f:selectItem itemLabel="#{langue.choisir}" itemValue=""/>
+                            <f:selectItems value="#{personnelController.magasins}" var="mag" itemLabel="#{mag.nom}" itemValue="#{mag.idmagasin}"/>
+                        </p:selectOneMenu>
+                        <p:message for="service" />
+
+                        <p:outputLabel value="#{langue.poste}" for="poste"/>
+                        <p:selectOneMenu id="poste" value="#{personnelController.qualite.idqualite}" required="true" requiredMessage="#{langue.valeur_obligatoire}">
+                            <f:selectItem itemLabel="#{langue.choisir}" itemValue=""/>
+                            <f:selectItems value="#{personnelController.qualites}" var="qlty" itemLabel="#{qlty.nom}" itemValue="#{qlty.idqualite}"/>
+                        </p:selectOneMenu>
+                        <p:message for="poste"/>
+
+                        <p:outputLabel value="#{langue.nom}" for="nom" />
+                        <p:inputText id="nom" value="#{personnelController.personnel.nom}" required="true" style="width: 350px"
+                                     requiredMessage="#{langue['Conv.Nom']}: #{langue['Conv.ValeurRequise']}">
+                            <p:ajax/>   
+                        </p:inputText>
+                        <p:message for="nom"/>
+
+                        <p:outputLabel value="#{langue.prenom}" for="prenom" />
+                        <p:inputText id="prenom" value="#{personnelController.personnel.prenom}" style="width: 350px" >                                    
+                            <p:ajax/>   
+                        </p:inputText>
+                        <p:message for="prenom"/>
+
+                        <p:outputLabel value="#{langue.matricule}" for="matricule" />
+                        <p:inputText id="matricule" value="#{personnelController.personnel.matricule}"  >                                    
+                            <p:ajax/>   
+                        </p:inputText>
+                        <p:message for="matricule"/>
+
+                        <p:outputLabel value="#{langue.adresse}" for="adresse" />
+                        <p:inputText id="adresse" value="#{personnelController.personnel.addresse}"  >                                    
+                            <p:ajax/>   
+                        </p:inputText>
+                        <p:message for="adresse"/>
+
+                        <p:outputLabel value="#{langue.telephone}" for="contact" />
+                        <p:inputText id="contact" value="#{personnelController.personnel.contact}" >
+                            <p:ajax/>   
+                        </p:inputText>
+                        <p:message for="contact"/>
+
+                        <p:outputLabel value="#{langue.date_recrutement}" for="date_recrutement" />
+                        <p:calendar navigator="true" id="date_recrutement" value="#{personnelController.personnel.dateembauche}" >
+                            <p:ajax event="dateSelect"/>   
+                        </p:calendar>
+                        <p:message for="date_recrutement"/>
+
+                    </h:panelGrid>
+                    <p:separator />
+
+                    <center>
+                        <p:commandButton value="#{langue.annuler}" onclick="PF('PersonnelCreerDialog').hide()"/>
+                        <p:commandButton actionListener="#{personnelController.create()}" value="#{langue['Conv.Enregistrer']}" 
+                                         update="display,:PersonnelListerForm:datalist,:notify1,:actionsForm"  />
+                    </center>
+
+                </h:panelGroup>  
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="PersonnelDetailDlg" 
+                  widgetVar="typeMatiereDetailDialog" 
+                  modal="true" resizable="false"  
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Detail']}: PERSONNEL" closeOnEscape="true">
+
+            <h:form id="PersonnelDetailForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="column" style="width: 100%;" >
+                        <h:outputText value="Identifiant"/>
+                        <h:outputText value="#{personnelController.personnel.idpersonnel}"/>
+
+                        <h:outputText value="#{langue.nom}"/>
+                        <h:outputText value="#{personnelController.personnel.nom}"/>
+
+                        <h:outputText value="#{langue.prenom}"/>
+                        <h:outputText value="#{personnelController.personnel.prenom}"/>
+
+                        <h:outputText value="#{langue.contact}"/>
+                        <h:outputText value="#{personnelController.personnel.contact}"/>
+
+                        <h:outputText value="#{langue.poste}"/>
+                        <h:outputText value="#{personnelController.personnel.idqualite.nom}"/>
+
+                        <h:outputText value="#{langue.service}"/>
+                        <h:outputText value="#{personnelController.personnel.idmagasin.nom}"/>
+
+                    </p:panelGrid>
+                    <p:commandButton value="#{langue['Conv.Fermer']}" onclick="PF('PersonnelDetailDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

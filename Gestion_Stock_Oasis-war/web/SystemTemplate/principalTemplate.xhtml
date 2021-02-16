@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <f:view locale="#{localeManagedBean.locale}">
+        <h:head>
+            <ui:include src="/templates/entetesTemplate.xhtml"/> 
+        </h:head>
+        <h:body class="fixed-top">
+
+            <ui:include src="/SystemTemplate/autres_popup.xhtml"/>
+            <ui:include src="/SystemTemplate/ajax_loader_bar.xhtml"/>
+            <ui:include src="/templates/headerTemplate.xhtml"/>
+
+            <!-- BEGIN CONTAINER -->
+            <div id="container" class="row-fluid">
+                <ui:include src="sideBarTemplate.xhtml" /> 
+                <!-- BEGIN PAGE -->  
+                <div id="main-content">
+                    <!-- BEGIN PAGE CONTAINER-->
+                    <div class="container-fluid">
+                        <!-- BEGIN PAGE HEADER-->   
+                        <div class="row-fluid">
+                            <div class="span12">
+
+
+                                <h3 class="page-title">
+
+                                </h3>
+
+
+                                <!-- END PAGE TITLE & BREADCRUMB-->
+                            </div>
+                        </div>
+                        <!-- END PAGE HEADER-->
+
+                        <!-- BEGIN PAGE CONTENT-->
+                        <ui:insert name="contenu">
+                            <h1>Contenu par défaut du template principal</h1>
+                        </ui:insert>
+
+
+                        <!-- END PAGE CONTENT-->         
+                    </div>
+                    <!-- END PAGE CONTAINER-->
+                </div>
+                <!-- END PAGE -->  
+            </div>
+            <!-- END CONTAINER -->
+
+            <ui:include src="/templates/footerTemplate.xhtml" />
+            <ui:include src="/includes/confirmation.xhtml"/>
+
+            <!--Script qui détermine lequel des menus reste ouvert-->
+            <ui:insert name="scriptCollapse"></ui:insert>
+        </h:body>
+    </f:view>
+</html>
+

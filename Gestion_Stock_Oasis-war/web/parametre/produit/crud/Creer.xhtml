@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="ArticleCreerDlg" 
+                  widgetVar="ArticleCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']} : #{langue.article}" 
+                  closeOnEscape="true"
+                  height="580px"
+                  width="70%">
+
+            <h:form id="ArticleCreerForm">
+                <h:panelGroup id="display">
+
+                    <div style="width: 100%; height: 500px">
+
+                        <div style="width: 55%; float: left ; height: 100%">
+                            <h:panelGrid columns="3" columnClasses ="column">
+
+                                <p:outputLabel value="#{langue.groupe}" for="famille"/>
+                                <p:selectOneMenu filter="true" id="famille" value="#{articleController.famille.idfamille}" rendered="true" required="#{langue.valeur_obligatoire}">
+                                    <f:selectItem itemLabel="#{langue.choisir}"/>
+                                    <f:selectItems value="#{articleController.familles}" var="f" itemLabel="#{f.nom}" itemValue="#{f.idfamille}" />
+                                    <p:ajax/>
+                                </p:selectOneMenu>
+                                <p:message for="famille"/>
+
+                                <p:outputLabel value="#{langue.nom}" for="nom" />
+                                <p:inputTextarea style="width: 350px" cols="100" rows="2" id="nom" value="#{articleController.article.libelle}" required="true" 
+                                                 requiredMessage="#{langue['Conv.Nom']}: #{langue['Conv.ValeurRequise']}"/>
+                                <p:message for="nom"/>
+
+                                <p:outputLabel value="#{langue.code} / #{langue.reference}" for="code" />
+                                <p:inputText id="code" value="#{articleController.article.code}" style="width: 200px" required="true" requiredMessage="#{langue.valeur_obligatoire}"/>
+                                <p:message for="code"/>
+
+                                <p:outputLabel value="#{langue.description}" for="description" />
+                                <p:inputTextarea style="width: 350px" cols="100" rows="2" id="description" value="#{articleController.article.description}" required="true" 
+                                                 requiredMessage="#{langue.description} : #{langue['Conv.ValeurRequise']}"/>
+                                <p:message for="description"/>
+
+                                <p:outputLabel value="#{langue.fabricant}" for="fabricant" />
+                                <p:inputText id="fabricant" value="#{articleController.article.fabricant}" style="width: 350px" required="true" requiredMessage="#{langue.valeur_obligatoire}"/>
+                                <p:message for="fabricant"/>
+
+                                <p:outputLabel value="#{langue.prix_achat}" for="prix_achat" />
+                                <p:inputText id="prix_achat" value="#{articleController.article.coutachat}" required="true"
+                                             style="width: 120px"
+                                             requiredMessage="#{langue.prix_achat} : #{langue['Conv.ValeurRequise']}"/>
+                                <p:message for="prix_achat"/>
+
+                                <p:outputLabel value="#{langue.prix_vente}" for="prix" />
+                                <p:inputText id="prix" value="#{articleController.article.prixunit}" required="true"
+                                             style="width: 120px"
+                                             requiredMessage="#{langue.prix} : #{langue['Conv.ValeurRequise']}"/>
+                                <p:message for="prix"/>  
+
+                                <p:outputLabel value="#{langue.stock_securite}" for="ss" />
+                                <p:inputText  id="ss" value="#{articleController.article.quantitesecurite}" required="true"
+                                              style="width: 85px"
+                                              requiredMessage="#{langue.stock_securite}: #{langue['Conv.ValeurRequise']}"/>
+                                <p:message for="ss"/>
+
+                                <p:outputLabel value="#{langue.stock_critic}" for="sct"/>
+                                <p:inputText  id="sct" value="#{articleController.article.quantitealerte}" required="true" 
+                                              style="width: 85px"
+                                              requiredMessage="#{langue.stock_critic}: #{langue['Conv.ValeurRequise']}"/>
+                                <p:message for="sct"/>
+
+                                <p:outputLabel value="Nbre jr d'alerte" for="nb_jr_alerte" />
+                                <p:inputText  id="nb_jr_alerte" value="#{articleController.article.nbjralerte}" required="true"
+                                              style="width: 85px"
+                                              requiredMessage="Nbre jr d'alerte : #{langue['Conv.ValeurRequise']}"/>
+                                <p:message for="nb_jr_alerte"/>
+
+                                <p:outputLabel value="#{langue.unite}" for="unite"/>
+                                <p:selectOneMenu filter="true" id="unite" value="#{articleController.unite.idunite}" required="#{langue.valeur_obligatoire}">
+                                    <f:selectItem itemLabel="#{langue.choisir}" itemValue="0"/>
+                                    <f:selectItems value="#{articleController.unites}" var="u" itemLabel="#{u.libelle}" itemValue="#{u.idunite}" />
+                                    <p:ajax/>
+                                </p:selectOneMenu>
+                                <p:message for="unite"/>
+
+                                <p:outputLabel value="#{langue.quantite_par_unite}" for="qpu" />
+                                <p:inputText  id="qpu" value="#{articleController.article.unite}" required="true" 
+                                              style="width: 75px"
+                                              requiredMessage="#{langue.quantite_par_unite} : #{langue['Conv.ValeurRequise']}"/>
+                                <p:message for="qpu"/>
+
+                                <p:outputLabel rendered="#{articleController.mode.equals('Edit')}" value="#{langue.etat}" for="etat"/>
+                                <h:selectBooleanCheckbox rendered="#{articleController.mode.equals('Edit')}" id="etat" value="#{articleController.article.etat}"/>
+                                <p:message rendered="#{articleController.mode.equals('Edit')}" for="etat"/>
+
+                                <p:outputLabel value="#{langue.produit_perissable_}" for="perissable"/>
+                                <h:selectBooleanCheckbox id="perissable" value="#{articleController.article.perissable}">
+                                    <p:ajax listener="#{articleController.updateLot()}" />     
+                                </h:selectBooleanCheckbox>
+                                <p:message for="perissable"/>
+
+                            </h:panelGrid>
+                        </div>
+
+                        <div style="width: 45%;float: right ; height: 100%">
+
+                            <center>
+                                <h3> Visibilité </h3>
+                            </center>
+
+                            <p:separator />
+
+                            <center>
+                                <p:selectManyCheckbox  id="grid" value="#{articleController.selectedMagasins}" layout="grid" columns="1" converter="magasinConverter" required="true">
+                                    <f:selectItems value="#{articleController.magasins}" var="item" itemLabel="#{item.nom}" itemValue="#{item}" />
+                                </p:selectManyCheckbox>
+                            </center>
+
+                        </div>
+                    </div>
+
+                    <p:separator/>
+
+                    <center>
+                        <p:commandButton value="#{langue.annuler}" oncomplete="PF('ArticleCreerDialog').hide()" icon="ui-icon-close"/>
+                        <p:commandButton actionListener="#{articleController.create()}" value="#{langue['Conv.Enregistrer']}" 
+                                         update="display,:ArticleListerForm:datalist,ArticleCreerForm,:actionsForm,notify1" 
+                                         icon="ui-icon-check" onclick="PF('AjaxNotifyDialog').show()"/>
+                    </center>
+
+                </h:panelGroup>  
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

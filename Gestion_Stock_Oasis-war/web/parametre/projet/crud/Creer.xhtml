@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="ProjetCreerDlg" 
+                  widgetVar="ProjetCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']}: #{langue.projet}" 
+                  closeOnEscape="true">
+
+            <h:form id="ProjetCreerForm">
+                <h:panelGroup id="display">
+                    <h:panelGrid columns="3" columnClasses ="column">
+
+                        <p:outputLabel value="#{langue.service}" for="service"/>
+                        <p:selectOneMenu filter="true" id="service" value="#{projetController.magasin.idmagasin}" rendered="true" required="#{langue.valeur_obligatoire}">
+                            <f:selectItem itemLabel="#{langue.choisir}"/>
+                            <f:selectItems value="#{projetController.magasins}" var="mag" itemLabel="#{mag.nom}" itemValue="#{mag.idmagasin}" />
+                        </p:selectOneMenu>
+                        <p:message for="service"/>
+
+                        <p:outputLabel value="#{langue.nom}" for="nom" />
+                        <p:inputTextarea style="width: 400px" cols="350" rows="3" id="nom" value="#{projetController.projet.nom}" required="true" 
+                                         requiredMessage="#{langue['Conv.Nom']}: #{langue['Conv.ValeurRequise']}"/>
+                        <p:message for="nom"/>
+
+                        <p:outputLabel value="#{langue.code}" for="code" />
+                        <p:inputText id="code" style="width: 150px" value="#{projetController.projet.code}" required="true" 
+                                     requiredMessage="#{langue.code} : #{langue['Conv.ValeurRequise']}"/>
+                        <p:message for="code"/>
+
+                    </h:panelGrid>
+
+                    <p:separator/>
+
+                    <p:commandButton style="float: right" actionListener="#{projetController.create()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:ProjetListerForm:datalist,:notify1,:actionsForm" />
+
+                    <p:commandButton style="float: left" value="#{langue.annuler}" oncomplete="PF('ProjetCreerDialog').hide()"/>
+                </h:panelGroup>  
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

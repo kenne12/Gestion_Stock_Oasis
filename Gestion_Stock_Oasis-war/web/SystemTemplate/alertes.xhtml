@@ -1,0 +1,277 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <p:dialog id="AlerteCommandeClientDlg" 
+              widgetVar="AlerteCommandeClientDialog" 
+              modal="true" 
+              closeOnEscape="true"
+              resizable="true" appendTo="@(body)" 
+              width="1100"
+              height="550"
+              header="#{langue.commandes_client_en_attente}">
+        <h:form id="AlerteCommandeClientForm">
+
+            <p:dataTable id="datalist"
+                         value="#{alerteController.demandes}"
+                         var="item"
+                         rowKey="#{item.iddemande}"
+                         paginator="true"
+                         rows="10"               
+                         style="width: 98%;margin-left: 1%"
+                         rowsPerPageTemplate="10,20,30,40,50">
+
+                <p:column filterBy="#{item.idpersonnel.nom} #{item.idpersonnel.prenom}" width="35%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.personnel}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idpersonnel.nom} #{item.idpersonnel.prenom}"/>
+                </p:column>
+
+                <p:column filterBy="#{item.code}" width="15%" style="text-align: center;">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.numero_commande}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.code}"/>
+                </p:column>  
+
+                <p:column style="width: 35%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.projet}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idprojet.nom}">
+                        <f:convertNumber/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column style="text-align: center;width: 15%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.date}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.datedemande}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>   
+                    </h:outputText>
+                </p:column>
+
+            </p:dataTable>
+
+            <p:separator/>
+
+            <center>
+                <p:commandButton icon="ui-icon-close" value="#{langue.fermer}" oncomplete="PF('AlerteCommandeClientDialog').hide()"/>
+            </center>
+
+        </h:form>
+    </p:dialog>
+
+    <p:dialog id="AlerteCommandeFournisseurDlg" 
+              widgetVar="AlerteCommandeFournisseurDialog" 
+              modal="true" 
+              closeOnEscape="true"
+              resizable="true" appendTo="@(body)" 
+              width="70%"
+              height="600px"
+              header="#{langue.commandes_fournisseur_en_attente}">
+        <h:form id="AlerteCommandeFournisseurForm">
+
+            <p:dataTable id="datalist"
+                         value="#{alerteController.commandefournisseurs}"
+                         var="item"
+                         rowKey="#{item.idcommandefournisseur}"
+                         paginator="true"
+                         rows="10"               
+                         style="width: 98%;margin-left: 1%"
+                         rowsPerPageTemplate="10,20,30,40,50">
+
+                <p:column filterBy="#{item.idfournisseur.nom}" width="30%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.fournisseur}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idfournisseur.nom}"/>
+                </p:column>
+
+                <p:column filterBy="#{item.code}" width="15%" style="text-align: center;">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.numero_commande}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.code}"/>
+                </p:column>  
+
+                <p:column filterBy="#{item.montant}" style="text-align: right;width: 14%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.montant_ttc}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.montant}">
+                        <f:convertNumber/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column style="text-align: center;width: 10%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.date}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.datecommande}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>   
+                    </h:outputText>
+                </p:column>
+
+            </p:dataTable>
+
+            <p:separator/>
+
+            <center>
+                <p:commandButton icon="ui-icon-close" value="#{langue.fermer}" oncomplete="PF('AlerteCommandeFournisseurDialog').hide()"/>
+            </center>
+
+        </h:form>
+    </p:dialog>
+
+    <p:dialog id="AlertePeremptionDlg" 
+              widgetVar="AlertePeremptionDialog" 
+              modal="true" 
+              closeOnEscape="true"
+              resizable="true" 
+              appendTo="@(body)" 
+              width="80%"
+              height="600px"
+              header="#{langue.alertes_peremption}">
+        <h:form id="AlertePeremptionForm">
+
+            <ui:repeat value="#{alerteController.magasins}" var="mag">
+
+                <h:outputLabel value="#{mag.nom}" style="color: blue ; font-size: 16px" />
+                <p:separator/>
+
+                <p:dataTable id="datalist"
+                             value="#{alerteController.filterLotByMagasin(mag)}"
+                             var="item"
+                             rowKey="#{item.idmagasinlot}"
+                             paginator="true"
+                             rows="10"
+                             rowsPerPageTemplate="10,20,30,40,50"
+                             style="width: 98%;margin-left: 1%">
+
+                    <p:column filterBy="#{item.idmagasinarticle.idarticle.libelle}" style="width: 25%">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.article}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idmagasinarticle.idarticle.libelle}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{item.idlot.numero}" style="width: 27%">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.numero_lot}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idlot.numero}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{item.idlot.dateperemption}" style="width: 15%;text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.date_peremption}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idlot.dateperemption}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column style="width: 8%;text-align: right">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.qte}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.quantitemultiple}">
+                            <f:convertNumber/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column style="width: 5%;text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.etat}"/>
+                        </f:facet>
+                        <h:selectBooleanCheckbox disabled="true" value="#{item.etat}"/>
+                    </p:column>
+
+                </p:dataTable>
+                <br/>
+            </ui:repeat>
+
+            <p:separator/>
+
+            <center>
+                <p:commandButton icon="ui-icon-close" value="#{langue.fermer}" oncomplete="PF('AlertePeremptionDialog').hide()"/>
+            </center>
+
+        </h:form>
+    </p:dialog>
+
+    <p:dialog id="AlerteQteDlg" 
+              widgetVar="AlerteQteDialog" 
+              modal="true" 
+              closeOnEscape="true"
+              resizable="true" 
+              appendTo="@(body)" 
+              width="70%"
+              height="600px"
+              header="#{langue.alerte_quantite}">
+        <h:form id="AlerteQteForm">
+
+            <ui:repeat value="#{alerteController.magasins_1}" var="mag">
+
+                <h:outputLabel value="#{mag.nom}" style="color: blue ; font-size: 16px" />
+                <p:separator/>
+
+                <p:dataTable id="datalist"
+                             value="#{alerteController.filterArticleByMagasin(mag)}"
+                             var="item"
+                             rowKey="#{item.idmagasinarticle}"
+                             paginator="true"
+                             rows="10"
+                             style="text-align: center;"
+                             rowsPerPageTemplate="10,20,30,40,50">
+
+                    <p:column style="width: 12%;text-align: left" filterBy="#{item.idarticle.idfamille.nom}">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.groupe}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idarticle.idfamille.nom}"/>
+                    </p:column>
+
+                    <p:column style="width: 25% ; text-align: left" filterBy="#{item.idarticle.libelle}">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.nom}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idarticle.libelle}"/>
+                    </p:column>
+
+                    <p:column style="width: 18% ; text-align: left" filterBy="#{item.idarticle.code}">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.code}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idarticle.code}"/>
+                    </p:column>
+
+                    <p:column style="width: 7% ;" filterBy="#{item.quantitemultiple}">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.quantite}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.quantitemultiple}">
+                            <f:convertNumber/>
+                        </h:outputText>
+                    </p:column>
+
+                </p:dataTable>
+                <br/>
+
+            </ui:repeat>
+
+            <p:separator/>
+
+            <center>
+                <p:commandButton icon="ui-icon-close" value="#{langue.fermer}" oncomplete="PF('AlerteQteDialog').hide()"/>
+            </center>
+
+        </h:form>
+    </p:dialog>
+
+</ui:composition>

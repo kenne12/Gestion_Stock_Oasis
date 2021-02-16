@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+        <p:dialog id="TransfertCreateDlg" 
+                  widgetVar="TransfertCreateDialog" 
+                  modal="true"
+                  responsive="true"
+                  resizable="true" 
+                  appendTo="@(body)"
+                  width="90%"
+                  height="600px"
+                  header="#{langue.transfert_st_mag_mag}">
+
+            <h:form id="TransfertCreateForm">
+
+                <h:panelGroup id="display">
+
+                    <br/>
+
+                    <div style="width: 100%;">
+                        <div style="width: 50%;float: left;">
+                            <center>
+                                <p:panelGrid columns="2">
+                                    <h:outputLabel value="#{langue.magasin_initital}" />
+                                    <p:selectOneMenu filter="true" value="#{transfertController.magasin.idmagasin}">
+                                        <f:selectItem itemLabel="#{langue.choisir}" />
+                                        <f:selectItems value="#{transfertController.magasins}" var="obj" itemLabel="#{obj.nom}" itemValue="#{obj.idmagasin}" />
+                                        <p:ajax />
+                                    </p:selectOneMenu>
+                                </p:panelGrid>
+                            </center>
+                        </div>
+
+                        <div style="width: 49.5%; float: left;">
+                            <center>
+                                <p:panelGrid columns="2">
+                                    <h:outputLabel value="#{langue.magasin_cible}" />
+                                    <p:selectOneMenu filter="true" value="#{transfertController.magasinCible.idmagasin}">
+                                        <f:selectItem itemLabel="#{langue.choisir}" />
+                                        <f:selectItems value="#{transfertController.magasins}" var="obj" itemLabel="#{obj.nom}" itemValue="#{obj.idmagasin}" />
+                                        <p:ajax />
+                                    </p:selectOneMenu>
+                                </p:panelGrid>
+                            </center>
+                        </div>
+                    </div>
+
+                    <br/>
+                    <p:separator style="width: 98%;margin-left: 1%"/>
+
+                    <center>
+                        <h:panelGrid columns="4">
+
+                            <p:outputLabel value="#{langue.date}" for="date_commande" />
+                            <p:calendar pattern="dd/MM/yyyy" id="date_commande" value="#{transfertController.transfert.datetransfert}" navigator="true" requiredMessage="#{langue.valeur_obligatoire}">
+                                <p:ajax/>  
+                            </p:calendar>
+
+                            <p:outputLabel value="-" />
+
+                            <p:commandButton icon="ui-icon-plus" 
+                                             value="#{langue.ajouter_les_articles}" 
+                                             update=":ArticleCreateForm,:notify1" 
+                                             actionListener="#{transfertController.prepareAddArticle()}"
+                                             disabled="#{transfertController.showSelectorCommand}"/>
+                        </h:panelGrid>
+                    </center>
+
+                    <p:separator style="width: 98%;margin-left: 1%"/>
+
+                    <div style="width: 100%">
+
+                        <p:dataTable id="datalist" 
+                                     value="#{transfertController.lignetransferts}" 
+                                     var="ltt"                             
+                                     paginator="true" 
+                                     rowKey="#{ltt.idlignetransfert}"
+                                     rows="15"
+                                     editable="true"
+                                     editMode="cell"
+                                     rowsPerPageTemplate="10,20,30,40,50"
+                                     style="width: 94%;margin-left: 3%"
+                                     rowIndexVar="index"
+                                     emptyMessage="#{langue.tableau_vide}"
+                                     widgetVar="fonctionTable"
+                                     draggableColumns="true"
+                                     resizableColumns="true">
+
+                            <f:facet name="header"> 
+                                <h:outputText value="#{langue.liste_des_lot_concernes}"/>
+                            </f:facet> 
+
+                            <p:column style="width: 47%" filterBy="#{ltt.idmagasinlot.idlot.idarticle.libelle}" >
+                                <f:facet name="header">
+                                    <h:outputText value="#{langue.article}"/>
+                                </f:facet>
+                                <h:outputText value="#{ltt.idmagasinlot.idlot.idarticle.libelle}"/>
+                            </p:column>
+
+                            <p:column style="width: 20%" filterBy="#{ltt.idmagasinlot.idlot.numero}" >
+                                <f:facet name="header">
+                                    <h:outputText value="#{langue.lot}"/>
+                                </f:facet>
+                                <h:outputText value="#{ltt.idmagasinlot.idlot.numero}"/>
+                            </p:column>
+
+                            <p:column style="width: 10%;text-align: center">
+                                <f:facet name="header">
+                                    <h:outputText value="#{langue.qte_physique}"/>
+                                </f:facet>
+                                <h:outputText value="#{ltt.idmagasinlot.quantitemultiple}">
+                                    <f:convertNumber/>
+                                </h:outputText>
+                            </p:column>
+                            
+                            <p:column style="width: 10%;text-align: center" >
+                                <f:facet name="header">
+                                    <h:outputText value="#{langue.qte_virtuelle}"/>
+                                </f:facet>
+                                <h:outputText value="#{ltt.idmagasinlot.quantite -ltt.idmagasinlot.idmagasinarticle.quantitevirtuelle }">
+                                    <f:convertNumber/>
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column style="width: 13%;text-align: center" headerText="Qté à Transf">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{ltt.quantite}"/>
+                                    </f:facet>
+                                    <f:facet  name="input">
+                                        <p:inputText required="true" value="#{ltt.quantite}">                                             
+                                            <p:ajax event="keyup" />
+                                        </p:inputText>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                        </p:dataTable>
+
+                    </div>
+
+                    <p:separator style="width: 98%;margin-left: 1%"/>
+
+                    <center>                       
+                        <p:commandButton style="color: red;" icon="ui-icon-close" value="#{langue.annuler}" oncomplete="PF('TransfertCreateDialog').hide()" partialSubmit="true"/>
+                        <p:commandButton actionListener="#{transfertController.create()}" icon="ui-icon-check" value="#{langue.valider}" update="display,:TransfertListerForm:datalist,:notify1" onclick="PF('AjaxNotifyDialog').show()"/>
+                    </center>
+
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

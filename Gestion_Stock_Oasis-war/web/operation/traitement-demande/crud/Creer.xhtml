@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+        <p:dialog id="LivraisonClientCreateDlg" 
+                  widgetVar="LivraisonClientCreateDialog" 
+                  modal="true"
+                  responsive="true"
+                  resizable="true" 
+                  appendTo="@(body)"
+                  width="90%"
+                  height="600px"
+                  header="#{langue.valider_une_demande}">
+
+            <h:form id="LivraisonClientCreateForm">
+
+                <h:panelGroup id="display">
+
+                    <br/>
+                    <center>
+                        <p:commandButton icon="ui-icon-plus" 
+                                         value="#{langue.select_demande}" 
+                                         update=":ArticleCreateForm" 
+                                         actionListener="#{traitementController.prepareCreateCommande()}"
+                                         disabled="#{traitementController.showSelectorCommand}"/>
+                    </center>
+
+                    <p:separator style="width: 98%;margin-left: 1%"/>
+
+                    <center>
+
+                        <h:panelGrid style="" columns="2">
+
+                            <p:outputLabel  value="#{langue.personnel}"/>
+                            <p:outputLabel  value="#{traitementController.personnel.nom}"/>
+
+                            <p:outputLabel value="#{langue.date_demande}" for="date_commande" />
+                            <p:calendar pattern="dd/MM/yyyy" disabled="true" id="date_commande" value="#{traitementController.demande.datedemande}" navigator="true" requiredMessage="#{langue.valeur_obligatoire}">
+                                <p:ajax/>  
+                            </p:calendar>
+
+                            <p:outputLabel value="#{langue.date_validation}" for="date_livraison_effect" />
+                            <p:calendar pattern="dd/MM/yyyy" disabled="false" id="date_livraison_effect" value="#{traitementController.demande.dateeffectlivraison}" navigator="true" requiredMessage="#{langue.valeur_obligatoire}">
+                                <p:ajax/>  
+                            </p:calendar>
+
+                        </h:panelGrid>
+
+                    </center>
+
+                    <p:separator style="width: 98%;margin-left: 1%"/>
+
+                    <div style="width: 100%">
+
+                        <div style="width: 39.5%;float: left">
+
+                            <p:dataTable id="datalist1" 
+                                         value="#{traitementController.lignedemandes}" 
+                                         var="lcc"                             
+                                         paginator="true"
+                                         editable="true" 
+                                         rowKey="#{lcc.idlignedemande}"
+                                         rows="15"
+                                         rowsPerPageTemplate="10,20,30,40,50"
+                                         style="width: 98%;margin-left: 1%"
+                                         rowIndexVar="index"
+                                         emptyMessage="#{langue.tableau_vide}"
+                                         widgetVar="fonctionTable"
+                                         draggableColumns="true"
+                                         resizableColumns="true">
+
+                                <f:facet name="header"> 
+                                    <h:outputText value="#{langue.besoin_initial}"/>
+                                </f:facet> 
+
+                                <p:column style="width: 45%" filterBy="#{lcc.idmagasinarticle.idarticle.libelle}" >
+                                    <f:facet name="header">
+                                        <h:outputText value="#{langue.article}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{lcc.idmagasinarticle.idarticle.libelle}"/>
+                                </p:column>
+
+                                <p:column style="width: 10%;text-align: center">
+                                    <f:facet name="header">
+                                        <h:outputText value="#{langue.qte}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{lcc.quantite}">
+                                        <f:convertNumber/>
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column style="width: 20%;text-align: center">
+                                    <f:facet name="header">
+                                        <h:outputText value="#{langue.unite}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{lcc.idunite.libelle}"/>
+                                </p:column>
+
+                                <p:column style="width: 10% ; text-align: center" >
+                                    <f:facet name="header">
+                                        <h:outputText value="Total"/>
+                                    </f:facet>
+                                    <h:outputText value="#{lcc.quantitemultiple}"/>
+                                </p:column>          
+
+                                <p:column style="width: 10%;text-align: center">
+                                    <f:facet name="header">
+                                        <h:outputText value="%"/>
+                                    </f:facet>
+                                    <h:outputText value="#{lcc.tauxsatisfaction}">
+                                        <f:convertNumber/>
+                                    </h:outputText>
+                                </p:column>
+
+                            </p:dataTable>
+
+                        </div>
+
+                        <div style="width: 60%; float: left">
+
+                            <p:dataTable id="datalist" 
+                                         value="#{traitementController.lignelivraisonclients}" 
+                                         var="item"                             
+                                         paginator="true"
+                                         editable="true" 
+                                         rowKey="#{item.idlignelivraisonclient}"
+                                         rows="15"
+                                         rowsPerPageTemplate="10,20,30,40,50"
+                                         style="width: 98%;margin-left: 1%"
+                                         rowIndexVar="index"
+                                         emptyMessage="#{langue.tableau_vide}"
+                                         widgetVar="fonctionTable"
+                                         draggableColumns="true"
+                                         resizableColumns="true"
+                                         editMode="cell"
+                                         rowStyleClass="#{traitementController.checkPeremption(item.idmagasinlot.idlot).equals(true) ? 'rowColorRed' : null}">
+
+                                <f:facet name="header"> 
+                                    <h:outputText value="#{langue.quantites_validees}"/>
+                                </f:facet> 
+
+                                <p:column style="width: 30%" filterBy="#{item.idmagasinlot.idmagasinarticle.idarticle.libelle}" >
+                                    <f:facet name="header">
+                                        <h:outputText value="#{langue.article} + #{langue.lot}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.idmagasinlot.idmagasinarticle.idarticle.libelle} - #{item.idmagasinlot.idlot.numero}"/>
+                                </p:column>
+
+                                <p:column style="width: 30%" filterBy="#{item.idmagasinlot.idmagasinarticle.idmagasin.nom}" >
+                                    <f:facet name="header">
+                                        <h:outputText value="#{langue.magasin}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.idmagasinlot.idmagasinarticle.idmagasin.nom}"/>
+                                </p:column>
+
+                                <p:column style="width: 10%;text-align: center" headerText="#{langue.qte}">
+                                    <p:cellEditor>
+                                        <f:facet name="output">
+                                            <h:outputText value="#{item.quantite}"/>
+                                        </f:facet>
+                                        <f:facet  name="input">
+                                            <p:inputText required="true" value="#{item.quantite}">                                             
+                                                <p:ajax event="keyup" listener="#{traitementController.updateTotal()}" update=""/>
+                                            </p:inputText>
+                                        </f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+
+                                <p:column style="width: 15%;text-align: center" headerText="#{langue.unite}">
+                                    <p:cellEditor>
+                                        <f:facet name="output">
+                                            <h:outputText value="#{item.idunite.libelle}"/>
+                                        </f:facet>
+                                        <f:facet name="input">
+                                            <p:selectOneMenu value="#{item.idunite}" converter="uniteConverter" >
+                                                <f:selectItems value="#{traitementController.unites}" var="unit" itemLabel="#{unit.libelle}" itemValue="#{unit}" />
+                                                <p:ajax />
+                                            </p:selectOneMenu>
+                                        </f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+
+                                <p:column style="width: 10%;text-align: center" >
+                                    <f:facet name="header">
+                                        <h:outputText value="#{langue.qte_totale}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.quantitemultiple}">
+                                        <f:convertNumber />
+                                    </h:outputText>  
+                                </p:column>
+
+                            </p:dataTable>
+
+                        </div>
+                    </div>
+
+                    <p:separator style="width: 98%;margin-left: 1%"/>
+
+                    <center>
+                        <p:commandButton style="color: red;" icon="ui-icon-close" value="#{langue.annuler}" oncomplete="PF('LivraisonClientCreateDialog').hide()" partialSubmit="true"/>
+                        <p:commandButton actionListener="#{traitementController.create()}" icon="ui-icon-check" value="#{langue.valider}" update="display,:LivraisonClientListerForm:datalist,:notify1,:LivraisonClientListerForm:msg" onclick="PF('AjaxNotifyDialog').show()"/>                        
+                    </center>
+
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

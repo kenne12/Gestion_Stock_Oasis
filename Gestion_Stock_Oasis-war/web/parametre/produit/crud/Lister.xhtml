@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="ArticleListerForm">
+
+        <p:messages id="growl" closable="true">
+            <p:effect type="pulsate" event="load" delay="50" />
+        </p:messages>
+
+        <p:panel header="#{langue['Conv.ListeDes']} : #{langue.articles}">
+            <p:contextMenu id="ArticleDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{langue['Conv.Creer']}" onclick="document.getElementById('actionsForm:creer').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{langue['Conv.Detail']}" onclick="document.getElementById('actionsForm:detail').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{langue['Conv.Modifier']}" onclick="document.getElementById('actionsForm:modifier').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{langue['Conv.Supprimer']}" onclick="document.getElementById('actionsForm:supprimer').click();" icon="ui-icon-trash"/>
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{articleController.articles}"
+                         var="item"
+                         rowKey="#{item.idarticle}"
+                         paginator="true"
+                         rows="10"
+                         style="text-align: center;"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{articleController.article}">
+
+                <p:ajax event="rowSelect"   update=":ArticleListerForm:ArticleDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowUnselect" update=":ArticleListerForm:ArticleDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('ArticleListerForm:viewButton').click();"/>
+
+                <p:column style="width: 17%;text-align: left;word-break: break-all" filterBy="#{item.idfamille.nom}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.categorie}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idfamille.nom}"/>
+                </p:column>
+
+                <p:column style="width: 22% ; text-align: left" filterBy="#{item.libelle}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.libelle}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.libelle}"/>
+                </p:column>
+
+                <p:column style="width: 17% ; text-align: left" filterBy="#{item.code}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.code}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.code}"/>
+                </p:column>
+
+                <p:column style="width: 8% ;" filterBy="#{item.coutachat}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.prix_achat}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.coutachat}">
+                        <f:convertNumber/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column style="width: 8% ;" filterBy="#{item.prixunit}">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.prix_vente}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.prixunit}">
+                        <f:convertNumber/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column style="width: 8% ;">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.quantite}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.quantitestock}">
+                        <f:convertNumber/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column style="width: 8% ;">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.stock_critic}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.quantitealerte}">
+                        <f:convertNumber/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column style="width: 6%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.etat}"/>
+                    </f:facet>
+                    <h:selectBooleanCheckbox disabled="true" value="#{item.etat}"/>
+                </p:column>
+
+            </p:dataTable>
+
+        </p:panel>
+    </h:form>
+
+    <!-- ****************************************Information************************************************************************************************************************************************************************************************************** -->
+
+    <p:dialog id="notify1" widgetVar="NotifyDialog1" height="300" width="600" resizable="true" modal="true" style="text-align: center; font-size: 14px; font-family: Cambria;">
+        <f:facet name="header">
+            <h:outputText style="font-family: Cambria; font-size: 14px;" value="#{articleController.routine.titleNotify}" />
+        </f:facet>
+        <h:form id="NotifyForm1">
+            <h:graphicImage id="nt_img" url="#{articleController.routine.iconMessage}" style="cursor:pointer" />
+
+            <hr size="3" style="background-color: cornflowerblue;"/>
+
+            <h:outputText id="nt_msg" value="#{articleController.routine.message}"/>
+
+            <hr size="3" style="background-color: cornflowerblue; margin-top: 5%;"/>
+
+            <p:commandButton style="font-family: Cambria; font-size: 14px;" value="#{langue.fermer}" onclick="PF('NotifyDialog1').hide()" type="button" immediate="true"/>
+
+            <hr size="3" style="background-color: cornflowerblue;"/>
+        </h:form>
+    </p:dialog>
+
+    <!-- ****************************************Information************************************************************************************************************************************************************************************************************** -->
+
+</ui:composition>

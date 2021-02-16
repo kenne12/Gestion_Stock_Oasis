@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="demande_report" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3f01e0aa-f224-4c38-b427-b9e9d9826826">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="iddemande" class="java.lang.Long"/>
+	<queryString>
+		<![CDATA[SELECT
+     demande."code" AS demande_code,
+     demande."datedemande" AS demande_datedemande,
+     demande."validee" AS demande_validee,
+     lignedemande."quantitemultiple" AS lignedemande_quantitemultiple,
+     magasinarticle."idmagasin" AS magasinarticle_idmagasin,
+     article."libelle" AS article_libelle,
+     projet."nom" AS projet_nom,
+     personnel."nom" AS personnel_nom,
+     personnel."prenom" AS personnel_prenom,
+     personnel."idmagasin" AS personnel_idmagasin,
+     magasin."nom" AS magasin_nom,
+     lignedemande."qtestock" AS lignedemande_qtestock,
+     article."code" AS article_code,
+     demande."motif" AS demande_motif
+FROM
+     "public"."demande" demande INNER JOIN "public"."lignedemande" lignedemande ON demande."iddemande" = lignedemande."iddemande"
+     INNER JOIN "public"."magasinarticle" magasinarticle ON lignedemande."idmagasinarticle" = magasinarticle."idmagasinarticle"
+     INNER JOIN "public"."article" article ON magasinarticle."idarticle" = article."idarticle"
+     INNER JOIN "public"."magasin" magasin ON magasinarticle."idmagasin" = magasin."idmagasin"
+     INNER JOIN "public"."projet" projet ON demande."idprojet" = projet."idprojet"
+     INNER JOIN "public"."personnel" personnel ON demande."idpersonnel" = personnel."idpersonnel"
+WHERE
+     demande.iddemande = $P{iddemande}]]>
+	</queryString>
+	<field name="demande_code" class="java.lang.String"/>
+	<field name="demande_datedemande" class="java.sql.Date"/>
+	<field name="demande_validee" class="java.lang.Boolean"/>
+	<field name="lignedemande_quantitemultiple" class="java.lang.Double"/>
+	<field name="magasinarticle_idmagasin" class="java.lang.Integer"/>
+	<field name="article_libelle" class="java.lang.String"/>
+	<field name="projet_nom" class="java.lang.String"/>
+	<field name="personnel_nom" class="java.lang.String"/>
+	<field name="personnel_prenom" class="java.lang.String"/>
+	<field name="personnel_idmagasin" class="java.lang.Integer"/>
+	<field name="magasin_nom" class="java.lang.String"/>
+	<field name="lignedemande_qtestock" class="java.lang.Double"/>
+	<field name="article_code" class="java.lang.String"/>
+	<field name="demande_motif" class="java.lang.String"/>
+	<variable name="lignedemande_quantitemultiple_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{lignedemande_quantitemultiple}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="119" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="35" width="174" height="15" uuid="0f60561f-021f-481f-8d75-681b2e6da359"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[* * * * * * * ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="381" y="0" width="174" height="20" uuid="44cbc8c8-ad42-4c54-96be-12ed479f6d4d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[REPUBLIC OF CAMEROON]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="174" height="15" uuid="32b888cd-f711-4ad9-bb9d-76efb5728ece"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Paix - Travail - Patrie]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="174" height="20" uuid="25a6d24c-4465-43f7-91dd-9a887666aac2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[REPUBLIQUE DU CAMEROUN]]></text>
+			</staticText>
+			<image>
+				<reportElement x="53" y="55" width="436" height="58" uuid="7b48a2a4-f897-402d-af29-cf33cbe64555"/>
+				<imageExpression><![CDATA["baniere_.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="381" y="20" width="174" height="15" uuid="b87f2960-70de-4de6-a8e5-691272df0f0c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Peace - Work - Fatherland]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="381" y="35" width="174" height="15" uuid="f14a2d3c-f55f-438e-8270-169029300639"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[* * * * * * * ]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="138" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="28" width="95" height="20" backcolor="#CCCCCC" uuid="0f49ccde-93a6-4e77-91d6-a4bad6c5eb36"/>
+				<box leftPadding="2">
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Personnel  ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="95" y="28" width="253" height="20" uuid="6969e6e8-5c12-4ff4-ac9b-8e5fa9d80a4b"/>
+				<box leftPadding="2">
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{personnel_nom}+" "+$F{personnel_prenom}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="48" width="95" height="20" backcolor="#CCCCCC" uuid="6138bb28-5753-4a46-b9a5-ee5b7c0435ac"/>
+				<box leftPadding="2">
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Date de demande  ]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="95" y="48" width="75" height="20" uuid="48d8a66c-1e70-41fb-8fc5-059e868b1314"/>
+				<box leftPadding="2">
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{demande_datedemande}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="68" width="95" height="35" backcolor="#CCCCCC" uuid="63fd3be7-7526-4ddd-978d-94024f4f0552"/>
+				<box leftPadding="2">
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Projet]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="95" y="68" width="451" height="35" uuid="166ffb2a-f2b4-4bf3-9d6a-1e7d9997f150"/>
+				<box leftPadding="2">
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{projet_nom}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="0" y="2" width="555" height="24" backcolor="#33CCFF" uuid="fa860fec-07e2-4650-9ab0-a52fd43b8700"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["FICHE DE DEMANDE DU MATERIEL N° " + $F{demande_code}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="103" width="546" height="20" uuid="099d81f3-cbdf-4887-83b6-8f029d2e27b0"/>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Motif : "+$F{demande_motif}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="31" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="58" y="0" width="153" height="31" backcolor="#CCCCCC" uuid="8d15675a-5f56-47a4-806d-acced50e21af"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Produit]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="211" y="0" width="194" height="31" backcolor="#CCCCCC" uuid="c5199fed-c82b-4879-8656-1e205eeb0cd5"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Service]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="405" y="0" width="50" height="31" backcolor="#CCCCCC" uuid="7f6cda9b-b336-4d74-9040-606c16ba8f20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Qté
+demandée]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="455" y="0" width="55" height="31" backcolor="#CCCCCC" uuid="fd501db6-3443-4d9d-bddf-fe3f08fffc30"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Qté
+en Stock]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="510" y="0" width="45" height="31" backcolor="#CCCCCC" uuid="8f8f197a-01dd-4c25-85bf-ac0d07b51c99"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Qté
+Servie]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="58" height="31" backcolor="#CCCCCC" uuid="cc7446d7-fd7c-461c-bae8-99b2ef869f26"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Code]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="39" splitType="Stretch">
+			<textField>
+				<reportElement x="58" y="0" width="153" height="39" uuid="7d90b0b0-c010-4a97-9978-c4d7d6a37f6a"/>
+				<box leftPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{article_libelle}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="211" y="0" width="194" height="39" uuid="18028736-3bf2-4d50-ab18-6d4364e3807d"/>
+				<box leftPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{magasin_nom}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;(#,##0)">
+				<reportElement x="405" y="0" width="50" height="39" uuid="c03b0352-519a-4274-98a9-bcb119b73c0a"/>
+				<box rightPadding="0">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{lignedemande_quantitemultiple}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;-#,##0">
+				<reportElement x="455" y="0" width="55" height="39" uuid="4c0140a7-cde1-438b-bd9e-0491e84b4077"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{lignedemande_qtestock}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="510" y="0" width="45" height="39" backcolor="#33CCFF" uuid="8842f64c-5627-4cdc-a7a8-4fc927f6ebed"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="0" width="58" height="39" uuid="c3d2eef0-90c0-44a7-aa26-03549379b35a"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{article_code}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="241" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="405" height="28" backcolor="#CCCCCC" uuid="4ae03528-eea8-4d49-936e-8e4c62005f91"/>
+				<box leftPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<textField pattern="#,##0;(#,##0)">
+				<reportElement mode="Opaque" x="405" y="0" width="50" height="28" backcolor="#CCCCCC" uuid="1193d8cd-5689-424e-9ef9-9013bfee227f"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{lignedemande_quantitemultiple_1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="67" width="107" height="20" uuid="23cb0ee3-4338-414b-a579-e6230408776f"/>
+				<box leftPadding="3"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Le major]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="139" y="67" width="119" height="20" uuid="2497cdf9-f213-4795-aca9-074a3c979fef"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Le magasinier]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="442" y="67" width="104" height="20" uuid="9fe2f16c-7cdc-46e3-9dcc-6cdfe771f915"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Le Directeur]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="313" y="67" width="104" height="20" uuid="3886dfdd-84c3-4d53-8271-6ea33f80ed92"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Chef du laboratoire]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="455" y="0" width="55" height="28" backcolor="#CCCCCC" uuid="1a66fe65-2a7a-4768-8300-08d791c9fbf8"/>
+				<box leftPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="510" y="0" width="45" height="28" backcolor="#CCCCCC" uuid="23361d49-3991-4a4e-a89d-9b338d2b94ba"/>
+				<box leftPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="211" y="195" width="76" height="20" uuid="648aaa92-03b5-42a5-a289-7dfde34aefaf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Acquité par : ]]></text>
+			</staticText>
+			<line>
+				<reportElement x="294" y="212" width="130" height="1" uuid="80f6c6fa-03e7-4613-b720-56ae4fa453da"/>
+			</line>
+			<staticText>
+				<reportElement x="432" y="193" width="23" height="20" uuid="460d8a96-78f6-4c99-b84c-f71199acb340"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Le]]></text>
+			</staticText>
+			<line>
+				<reportElement x="464" y="211" width="50" height="1" uuid="011d2ead-e6a8-4ceb-b246-dc4a3f68c882"/>
+			</line>
+		</band>
+	</summary>
+</jasperReport>

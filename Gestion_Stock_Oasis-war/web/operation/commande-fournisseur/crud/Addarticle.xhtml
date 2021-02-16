@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="ArtcleCreateDlg" 
+                  widgetVar="ArticleCreateDialog" 
+                  modal="true" 
+                  closeOnEscape="true"
+                  resizable="true" appendTo="@(body)" 
+                  header="#{langue.ajouter_un_article}">
+            <h:form id="ArticleCreateForm">
+                <h:panelGroup id="display">
+
+                    <p:messages id="growl" closable="true">
+                        <p:effect type="pulsate" event="load" delay="50" />
+                    </p:messages>
+                    <p:growl id="msg"/>
+
+                    <h:panelGrid columns="3">
+
+                        <p:outputLabel for="famille" value="#{langue.categorie_article}"/>
+                        <p:selectOneMenu id="famille" required="false" filter="true"  value="#{commandefournisseurController.famille.idfamille}">
+                            <f:selectItem itemLabel="#{langue.choisir}" itemValue="#{null}"/>
+                            <f:selectItems value="#{commandefournisseurController.familles}" var="fml" itemLabel="#{fml.nom}" itemValue="#{fml.idfamille}"/>
+                            <p:ajax update="produit" listener="#{commandefournisseurController.filterArticle()}"/>
+                        </p:selectOneMenu>
+                        <p:message for="famille"/>
+
+                        <p:outputLabel value="#{langue.articles}" for="produit"/>
+                        <p:selectOneMenu required="true" id="produit" filter="true"  value="#{commandefournisseurController.article}" converter="articleConverter">
+                            <f:selectItem itemLabel="#{langue.choisir}" itemValue="#{null}"/>
+                            <f:selectItems value="#{commandefournisseurController.articles}" var="art" itemLabel="#{art.libelle}" itemValue="#{art}"/>
+                            <p:ajax update="sr,cu,famille,qpu,unite,qt" listener="#{commandefournisseurController.updatedata()}"/>
+                        </p:selectOneMenu>
+                        <p:message for="produit"/>
+
+                        <p:outputLabel value="#{langue.stock_disponible}" for="sr" />
+                        <p:inputText id="sr" disabled="true"  required="true" style="width: 75px;color: blue" value="#{commandefournisseurController.article.quantitemultiple}">
+                            <f:convertNumber/>
+                        </p:inputText>
+                        <p:message for="sr"/>
+
+
+
+                        <p:outputLabel value="#{langue.unite}" for="unite"/>
+                        <p:selectOneMenu required="true" id="unite" filter="true" value="#{commandefournisseurController.unite}" converter="uniteConverter">
+                            <f:selectItem itemLabel="#{langue.choisir}" itemValue="#{null}"/>
+                            <f:selectItems value="#{commandefournisseurController.unites}" var="unit" itemLabel="#{unit.libelle}" itemValue="#{unit}"/>
+                            <p:ajax />
+                        </p:selectOneMenu>                        
+                        <p:inputText id="qpu"  required="true" style="width: 75px" value="#{commandefournisseurController.lignecommandefournisseur.unite}">
+                            <f:convertNumber/>
+                            <p:ajax event="keyup" update="quantite,mt,qt" listener="#{commandefournisseurController.updateTotaux()}"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="#{langue.quantite}" for="quantite"/>
+                        <p:inputText required="true" id="quantite" style="width: 75px" value="#{commandefournisseurController.lignecommandefournisseur.quantite}">                                
+                            <p:ajax event="keyup" update="mt,qt" listener="#{commandefournisseurController.updateTotaux()}"/>
+                        </p:inputText>
+                        <p:message for="quantite"/>
+
+                        <p:outputLabel value="#{langue.quantite_totale}" for="qt" />
+                        <p:inputText id="qt" disabled="true" required="true" style="width: 75px" value="#{commandefournisseurController.lignecommandefournisseur.quantitemultiple}">
+                            <f:convertNumber/>
+                            <p:ajax event="keyup" />
+                        </p:inputText>
+                        <p:message for="qt"/>
+
+                        <p:outputLabel value="#{langue.prix_unitaire}" for="cu" />
+                        <p:inputText id="cu" required="true" style="width: 100px" value="#{commandefournisseurController.lignecommandefournisseur.montant}">
+                            <f:convertNumber/>
+                            <p:ajax event="keyup" update="quantite,mt" listener="#{commandefournisseurController.updateTotaux()}"/>
+                        </p:inputText>
+                        <p:message for="cu"/>
+
+                        <p:outputLabel value="#{langue.montant_total}" for="mt" />
+                        <p:inputText id="mt"  required="true" style="width: 100px" value="#{commandefournisseurController.cout_quantite}">
+                            <f:convertNumber/>
+                            <p:ajax/>
+                        </p:inputText>
+                        <p:message for="mt"/>
+
+                    </h:panelGrid>
+
+                    <p:separator/>
+
+                    <center>        
+                        <p:commandButton partialSubmit="true" style="color: red;" icon="ui-icon-close" value="#{langue.fermer}" oncomplete="PF('ArticleCreateDialog').hide()"/>
+                        <p:commandButton actionListener="#{commandefournisseurController.addArticle()}" icon="ui-icon-plus" value="#{langue.ajouter}" update="display,:CommandeCreateForm:datalist,:CommandeCreateForm:info_1,:CommandeCreateForm:info_2,:FactureListerForm:msg,:notify1"/>
+                    </center>
+
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

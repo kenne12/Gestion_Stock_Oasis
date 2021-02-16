@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="PrivilegeDetailDlg" 
+                  widgetVar="PrivilegeDetailDialog" 
+                  modal="true" resizable="false"  
+                  appendTo="@(body)"                   
+                  header="#{langue['Titre.Dlg.Detail']}: #{langue.privilege}" 
+                  closeOnEscape="true"
+                  width="900">
+
+            <h:form id="PrivilegeDetailForm">
+
+                <h:panelGroup id="display">
+
+                    <h:panelGrid columns="2">
+                        <h:outputLabel style="font-family: cambria ; font-size: 25px;color: black" value="#{langue.utilisateur} : "/>
+                        <h:outputLabel style="font-family: cambria ; font-size: 25px;color: blueviolet" value="#{privilegeController.utilisateur.nom} #{privilegeController.utilisateur.prenom}"/>
+                    </h:panelGrid>
+
+                    <p:dataTable id="datalist"
+                                 value="#{privilegeController.privileges}"
+                                 var="item"
+                                 paginator="true"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50">
+
+                        <p:column filterBy="#{item.idmenu.nom}" width="50%">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.privilege}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idmenu.nom}"/>
+                        </p:column>
+
+                        <p:column sortBy="#{item.idmenu.ressource}" style="width: 50%">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.lien_acces}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idmenu.ressource}"/>
+                        </p:column>  
+
+                    </p:dataTable>
+
+                    <p:separator/>
+
+                    <center>
+                        <p:commandButton value="#{langue['Conv.Fermer']}" oncomplete="PF('PrivilegeDetailDialog').hide()" icon="ui-icon-close"/>
+                    </center>
+
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

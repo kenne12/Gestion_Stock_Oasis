@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="LogoDlg" 
+                  widgetVar="LogoDialog" 
+                  modal="true" resizable="false"
+                  appendTo="@(body)"
+                  height="250"
+                  header="#{langue.ajouter_photo}" 
+                  closeOnEscape="true">
+
+            <h:form id="LogoForm" enctype="multipart/form-data">
+                <p:growl id="messages" showDetail="true"/>
+                <h:panelGrid columns="3">
+
+                    <h:outputLabel style="font-family: Cambria; font-size: 14px;" value="#{langue.photo} " for="add_photo" />
+                    <p:fileUpload id="add_photo" fileUploadListener="#{parametrageController.handleFileUpload}" mode="advanced" dragDropSupport="false" accept=""  invalidSizeMessage="#{langue.taille_erreur}" cancelLabel="#{langue.fermer}" invalidFileMessage="#{langue.fichier_non_pris_en_charge}"  uploadLabel="#{langue.charger}"   
+                                  update="messages,add_photo_image,:ParametrageMatiereListerForm:photo" sizeLimit="10000000" fileLimit="3" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+                    <h:graphicImage id="add_photo_image" height="80" width="80" title="#{parametrageController.parametrage.nomStructure}" value="#{parametrageController.chemin_replicated_images}#{parametrageController.filename}"/>
+
+                </h:panelGrid>
+
+                <p:separator/>
+
+                <center>
+                    <p:commandButton value="#{langue.fermer}" oncomplete="PF('LogoDialog').hide()"/>
+                </center>
+
+            </h:form>
+
+        </p:dialog> 
+
+    </ui:composition>
+
+</html>

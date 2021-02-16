@@ -1,0 +1,23 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="principalTemplate.xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="scriptCollapse">
+        <script>
+            var el = document.getElementById("menuIndex");
+            el.setAttribute("class", "sub-menu active");
+        </script>
+    </ui:define>
+
+    <ui:define name="contenu">
+        <h:form>
+            <h:selectOneMenu value="#{localeManagedBean.language}" onchange="submit()"> 
+                <f:selectItems value="#{localeManagedBean.locales}" />
+            </h:selectOneMenu> 
+        </h:form> 
+    </ui:define>
+
+</ui:composition>

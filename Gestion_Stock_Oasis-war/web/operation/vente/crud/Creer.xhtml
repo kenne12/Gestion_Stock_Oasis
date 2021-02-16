@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+        <p:dialog id="SortieDirecteCreateDlg" 
+                  widgetVar="SortieDirecteCreateDialog" 
+                  modal="true" 
+                  resizable="true" 
+                  appendTo="@(body)"
+                  width="80%"
+                  height="600"
+                  header="#{langue.creer_modifier_sortie_directe}">
+
+            <h:form id="SortieDirecteCreateForm">
+
+                <h:panelGroup id="display">
+
+                    <center>
+                        <br/>
+
+                        <h:panelGrid style="" columns="2">
+
+                            <p:outputLabel value="#{langue.personnel}" for="client" />
+                            <p:selectOneMenu  filter="true" required="true" id="client" value="#{sortiedirectController.personnel.idpersonnel}" requiredMessage="#{langue.valeur_obligatoire}">
+                                <f:selectItem itemLabel="#{langue.choisir}" itemValue=""/>
+                                <f:selectItems value="#{sortiedirectController.personnels}" var="clt" itemLabel="#{clt.nom} #{clt.prenom}" itemValue="#{clt.idpersonnel}"/>                                                                             
+                                <p:ajax/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="#{langue.magasin}" for="magasin" />
+                            <p:selectOneMenu  filter="true" required="true" id="magasin" value="#{sortiedirectController.magasin.idmagasin}" requiredMessage="#{langue.valeur_obligatoire}">
+                                <f:selectItem itemLabel="#{langue.choisir}" itemValue=""/>
+                                <f:selectItems value="#{sortiedirectController.magasins}" var="mag" itemLabel="#{mag.nom}" itemValue="#{mag.idmagasin}"/>                                                                             
+                                <p:ajax />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="Date" for="date" />
+                            <p:calendar pattern="dd/MM/yyyy" disabled="true" required="true" id="date" value="#{sortiedirectController.livraisonclient.datelivraison}" navigator="true" requiredMessage="#{langue.valeur_obligatoire}">
+                                <p:ajax/>  
+                            </p:calendar>
+
+                        </h:panelGrid>
+
+                    </center>
+
+                    <p:separator style="width: 98%;margin-left: 1%"/>
+
+                    <center>
+                        <p:panelGrid id="info_1" columns="10">
+                            <p:commandButton icon="ui-icon-plus" value="#{langue.ajouter_article}" update=":ArticleCreateForm"  actionListener="#{sortiedirectController.prepareAddArticle()}"/>
+                        </p:panelGrid>
+                    </center>
+                    <br/>
+
+                    <p:dataTable id="datalist" 
+                                 value="#{sortiedirectController.lignelivraisonclients}" 
+                                 var="item"                             
+                                 paginator="true"
+                                 editable="true" 
+                                 rowKey="#{item.idlignelivraisonclient}"
+                                 rows="15"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 style="width: 98%;margin-left: 1%"
+                                 rowIndexVar="index"
+                                 emptyMessage="#{msg.Vide}"
+                                 widgetVar="fonctionTable"
+                                 draggableColumns="true"
+                                 resizableColumns="true">
+
+                        <f:facet name="header"> 
+                            <h:outputText value="#{langue.element_de_facture}"/>
+                        </f:facet> 
+
+                        <p:column style="width: 23%" filterBy="#{item.idmagasinlot.idmagasinarticle.idarticle.libelle}" >
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.article}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idmagasinlot.idmagasinarticle.idarticle.libelle}"/>
+                        </p:column>
+
+                        <p:column style="width: 20%" filterBy="#{item.idmagasinlot.idlot.numero}" >
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.lot}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idmagasinlot.idlot.numero}"/>
+                        </p:column>
+
+                        <p:column style="width: 8%;text-align: right" headerText="#{langue.pu}">
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <h:outputText value="#{item.montant}" >
+                                        <f:convertNumber />
+                                    </h:outputText>    
+                                </f:facet>
+                                <f:facet name="input">
+                                    <p:inputText required="true" value="#{item.montant}">
+                                        <f:convertNumber />
+                                        <p:ajax event="keyup" listener="#{sortiedirectController.updateTotal()}" update=":SortieDirecteCreateForm:info_1,:SortieDirecteCreateForm:info_2"/>
+                                    </p:inputText>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column style="width: 7%;text-align: center" headerText="#{langue.qte}">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{item.quantite}"/></f:facet>
+                                <f:facet  name="input">
+                                    <p:inputText required="true" value="#{item.quantite}">                                             
+                                        <p:ajax event="keyup" listener="#{sortiedirectController.updateTotal()}" update=":SortieDirecteCreateForm:info_1,:SortieDirecteCreateForm:info_2"/>
+                                    </p:inputText>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column style="width: 12%;text-align: center" headerText="#{langue.unite}">
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <h:outputText value="#{item.idunite.libelle}"/>
+                                </f:facet>
+                                <f:facet name="input">
+                                    <p:selectOneMenu value="#{item.idunite}" converter="uniteConverter" >
+                                        <f:selectItems value="#{sortiedirectController.unites}" var="unit" itemLabel="#{unit.libelle}" itemValue="#{unit}" />
+                                        <p:ajax />
+                                    </p:selectOneMenu>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column style="width: 5%;text-align: center" headerText="#{langue.qte_par_unite}">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{item.unite}"/></f:facet>
+                                <f:facet  name="input">
+                                    <p:inputText required="true" value="#{item.unite}">                                             
+                                        <p:ajax event="keyup" listener="#{sortiedirectController.updateTotal()}" update=":SortieDirecteCreateForm:info_1,:SortieDirecteCreateForm:info_2"/>
+                                    </p:inputText>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        
+                        <p:column style="width: 7%" >
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.q_t}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.quantitemultiple}"/>
+                        </p:column>
+
+                        <p:column style="width: 9%;text-align: right" >
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.m_t}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.montant * item.quantite}">
+                                <f:convertNumber />
+                            </h:outputText>  
+                        </p:column>
+
+                        <p:column headerText="" style="width: 3%;text-align: center">
+                            <p:rowEditor />
+                        </p:column>
+
+                        <p:column style="width: 5%;text-align: center" >
+                            <f:facet name="header">
+                                <h:outputText value=""/>
+                            </f:facet>
+                            <p:commandButton icon="ui-icon-trash">
+                                <p:ajax event="click" listener="#{sortiedirectController.removeArticle(index)}" update="datalist,:SortieDirecteCreateForm:info_1,:SortieDirecteCreateForm:info_2"/>
+                            </p:commandButton>
+                        </p:column>
+
+                    </p:dataTable>
+
+                    <p:separator style="width: 98%;margin-left: 1%"/>
+
+                    <center>
+                        <p:panelGrid id="info_2" style="" columns="10">
+                            <p:commandButton icon="ui-icon-plus" value="#{langue.ajouter_article}" update=":ArticleCreateForm"  actionListener="#{sortiedirectController.prepareAddArticle()}"/>
+                        </p:panelGrid>
+                    </center>
+                    <br/>
+
+                    <p:separator/>
+
+                    <center>
+                        <p:commandButton style="color: red;" icon="ui-icon-close" value="#{langue.annuler}" oncomplete="PF('SortieDirecteCreateDialog').hide()" partialSubmit="true"/>
+                        <p:commandButton actionListener="#{sortiedirectController.create()}" 
+                                         icon="ui-icon-check" value="#{langue.valider}" update="display,:SortieDirecteListerForm:datalist,:notify1" 
+                                         onclick="PF('AjaxNotifyDialog').show()"/>                        
+                    </center>
+
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

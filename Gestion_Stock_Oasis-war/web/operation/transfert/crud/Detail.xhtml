@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="TransfertDetailDlg" 
+                  widgetVar="TransfertDetailDialog" 
+                  modal="true" resizable="false"  
+                  appendTo="@(body)"
+                  width="70%"
+                  height="600"
+                  header="#{langue['Titre.Dlg.Detail']} : #{langue.transfert}" closeOnEscape="true">
+
+            <h:form id="TransfertDetailForm">
+
+                <h:panelGroup id="display">
+
+                    <p:panelGrid columns="2">
+
+                        <h:outputLabel value="#{langue.date}"/>
+                        <h:outputLabel value="#{transfertController.transfert.datetransfert}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputLabel>
+
+                        <h:outputLabel value="#{langue.code}"/>
+                        <h:outputLabel value="#{transfertController.transfert.code}"/>
+
+                        <h:outputLabel value="#{langue.montant_total}"/>
+                        <h:outputLabel value="#{transfertController.transfert.montanttotal}">
+                            <f:convertNumber/>
+                        </h:outputLabel>
+
+                        <h:outputLabel value="#{langue.magasin_initital}"/>
+                        <h:outputLabel value="#{transfertController.transfert.idmagasin.nom}">
+                            <f:convertNumber/>
+                        </h:outputLabel>
+
+                        <h:outputLabel value="#{langue.magasin_cible}"/>
+                        <h:outputLabel value="#{transfertController.findMagasin(transfertController.transfert.idmagasincible).nom}">
+                            <f:convertNumber/>
+                        </h:outputLabel>
+
+                    </p:panelGrid>
+
+                    <p:separator/>
+
+
+                    <p:dataTable
+                        value="#{transfertController.lignetransferts}"
+                        var="item"
+                        paginator="true"
+                        rows="10"
+                        rowsPerPageTemplate="10,20,30,40,50">
+
+                        <p:column filterBy="#{item.idmagasinlot.idmagasinarticle.idarticle.libelle}" width="40%">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.article}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idmagasinlot.idmagasinarticle.idarticle.libelle}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{item.idmagasinlot.idlot.numero}" width="40%">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.lot}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idmagasinlot.idlot.numero}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{item.quantite}" style="text-align: center;width: 20%">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.quantite}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.quantite}"/>
+                        </p:column>
+
+                    </p:dataTable>
+
+                    <p:separator/>
+
+                    <center>
+                        <p:commandButton value="#{langue['Conv.Fermer']}" oncomplete="PF('TransfertDetailDialog').hide()" icon="ui-icon-close"/>
+                    </center>
+
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="ArtcleCreateDlg" 
+                  widgetVar="ArticleCreateDialog" 
+                  modal="true" 
+                  closeOnEscape="true"
+                  resizable="true" appendTo="@(body)" 
+                  width="70%"
+                  height="500px"
+                  header="#{langue.liste_des_demandes_en_attente}">
+            <h:form id="ArticleCreateForm">
+                <h:panelGroup id="display">
+
+                    <p:dataTable id="datalist"
+                                 value="#{livraisonClientController.demandes}"
+                                 var="item"
+                                 rowKey="#{item.iddemande}"
+                                 paginator="true"
+                                 rows="10"               
+                                 style=""
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 selectionMode="single"
+                                 selection="#{livraisonClientController.demande}">
+
+                        <p:ajax event="rowSelect" update=":LivraisonClientCreateForm" listener="#{livraisonClientController.selectCommande()}"/>
+
+                        <p:column filterBy="#{item.idpersonnel.nom}" width="22%">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.personnel}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idpersonnel.nom} #{item.idpersonnel.prenom}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{item.code}" width="20%" style="text-align: center;">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.numero}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.code}"/>
+                        </p:column>  
+
+                        <p:column filterBy="#{item.montant}" style="text-align: right;width: 14%">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.valeur}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.montant}">
+                                <f:convertNumber/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column style="text-align: center;width: 10%">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.date}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.datedemande}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>   
+                            </h:outputText>
+                        </p:column>
+
+                    </p:dataTable>
+
+                    <p:separator/>
+
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

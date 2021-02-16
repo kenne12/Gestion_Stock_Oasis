@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="InventaireListerForm">
+
+        <p:messages id="growl" closable="true">
+            <p:effect type="pulsate" event="load" delay="50" />
+        </p:messages>
+
+        <p:growl id="msg"/>
+
+        <p:panel header="#{langue['Conv.ListeDes']} : #{langue.inventaires}">
+            <p:contextMenu id="InventaireDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{langue['Conv.Creer']}" onclick="document.getElementById('actionsForm:creer').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{langue['Conv.Detail']}" onclick="document.getElementById('actionsForm:detail').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{langue['Conv.Modifier']}" onclick="document.getElementById('actionsForm:modifier').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{langue['Conv.Supprimer']}" onclick="document.getElementById('actionsForm:supprimer').click();" icon="ui-icon-trash"/>
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{inventaireGlobalController.inventaires}"
+                         var="item"
+                         rowKey="#{item.idinventaire}"
+                         paginator="true"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         emptyMessage="#{langue.tableau_vide}"
+                         selection="#{inventaireGlobalController.inventaire}"
+                         rowStyleClass="#{item.etat.equals(false) ? 'rowColorYellow' : null}">
+
+                <p:ajax event="rowSelect" update=":InventaireListerForm:InventaireDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowUnselect" update=":InventaireListerForm:InventaireDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('InventaireListerForm:viewButton').click();"/>
+
+                <p:column filterBy="#{item.code}" width="10%" style="text-align: center;">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.numero}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.code}"/>
+                </p:column> 
+                
+                <p:column filterBy="#{item.idmagasin.nom}" style="width:25%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.service}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idmagasin.nom}"/>
+                </p:column>
+
+                <p:column filterBy="#{item.libelle}" style="width:30%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.libelle}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.libelle}"/>
+                </p:column>
+
+                <p:column style="text-align: center;width: 10%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.date}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.dateinventaire}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>   
+                    </h:outputText>
+                </p:column>
+
+                <p:column style="text-align: center;width: 6%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.validee} ?"/>
+                    </f:facet>
+                    <h:selectBooleanCheckbox disabled="true" value="#{item.etat}"/>                    
+                </p:column>
+
+                <p:column style="width: 15%;text-align: center" >
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.action}"/>
+                    </f:facet>
+                    <p:commandButton icon="ui-icon-print">
+                        <p:ajax event="click" listener="#{inventaireGlobalController.initPrinter(item)}" update="datalist,:InventaireImprimerDlg,:notify1"/>
+                    </p:commandButton>
+
+                    <p:commandButton disabled="#{item.etat}" icon="ui-icon-check">
+                        <p:ajax event="click" listener="#{inventaireGlobalController.initEdit(item)}" update="datalist,:InventaireCreateForm,:notify1"/>
+                    </p:commandButton>
+
+                    <p:commandButton icon="ui-icon-search">
+                        <p:ajax event="click" listener="#{inventaireGlobalController.initView(item)}" update="datalist,:InventaireDetailDlg,:notify1"/>                      
+                    </p:commandButton>
+
+                    <p:commandButton disabled="#{item.etat}" icon="ui-icon-trash">
+                        <p:ajax event="click" listener="#{inventaireGlobalController.initDelete(item)}" update="datalist,:InventaireListerForm,:actionsForm,:notify1"/>
+                        <p:confirm header="#{langue['Titre.Dlg.Confirm']}"
+                                   message="#{langue['Message.Confirm.Supprimer']}?"
+                                   icon="ui-icon-alert"/>
+                    </p:commandButton>
+                </p:column>
+
+            </p:dataTable>
+
+        </p:panel>
+    </h:form>
+
+    <!-- ****************************************Information************************************************************************************************************************************************************************************************************** -->
+
+    <p:dialog id="notify1" widgetVar="NotifyDialog1" height="400" width="600" resizable="true" modal="true" style="text-align: center; font-size: 14px; font-family: Cambria;">
+        <f:facet name="header">
+            <h:outputText style="font-family: Cambria; font-size: 14px;" value="#{inventaireGlobalController.routine.titleNotify}" />
+        </f:facet>
+        <h:form id="NotifyForm1">
+            <h:graphicImage id="nt_img" url="#{inventaireGlobalController.routine.iconMessage}" style="cursor:pointer" />
+
+            <hr size="3" style="background-color: cornflowerblue;"/>
+
+            <h:outputText id="nt_msg" value="#{inventaireGlobalController.routine.message}"/>
+
+            <hr size="3" style="background-color: cornflowerblue; margin-top: 5%;"/>
+
+            <p:commandButton style="font-family: Cambria; font-size: 14px;" value="#{langue.fermer}" onclick="PF('NotifyDialog1').hide()" type="button" immediate="true"/>
+
+            <hr size="3" style="background-color: cornflowerblue;"/>
+        </h:form>
+    </p:dialog>
+
+    <!-- ****************************************Information************************************************************************************************************************************************************************************************************** -->
+
+</ui:composition>

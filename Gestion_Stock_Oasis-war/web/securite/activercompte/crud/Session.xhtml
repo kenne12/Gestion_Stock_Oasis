@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="SessionCreerDlg" 
+                  widgetVar="SessionCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="PRIVILEGE ADMINISTRATEUR" 
+                  closeOnEscape="false"
+                  closable="false"
+                  visible="#{produitController.session}">
+
+            <h:form id="SessionCreerForm">
+
+                <p:messages id="growl" closable="true">
+                    <p:effect type="pulsate" event="load" delay="50" />
+                </p:messages>
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses ="column">
+
+                        <p:password required="true" id="code" value="#{produitController.sessionPassword}" requiredMessage="Veuillez saisir le mot de passe"/>
+                        <p:commandButton actionListener="#{produitController.checkSession()}" value="#{langue.valider}" 
+                                         update="display,:SessionCreerDlg,growl"/>
+
+
+                    </p:panelGrid>
+
+
+                </h:panelGroup>  
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

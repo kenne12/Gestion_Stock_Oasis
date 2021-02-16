@@ -1,0 +1,44 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="#{loginBean.utilisateur.template}">
+
+    <ui:define name="contenu">
+
+        <style>
+            .rowColorRed {
+                //background-color: red !important;
+                background-image: none !important;
+                //color: #000000 !important;
+                color: red !important;
+            }
+
+            .rowColorYellow {
+                //background-color: yellow !important;
+                background-image: none !important;
+                //color: #000000 !important;
+                color: red !important;
+            }
+        </style>
+
+        <h3 class="page-header">#{langue.inventaire_stock}</h3>
+        <ui:include src="crud/Action.xhtml"/>
+        <br/>
+        <ui:include src="crud/Lister.xhtml"/>
+        <ui:include src="crud/Creer.xhtml"/>
+        <ui:include src="crud/Detail.xhtml"/>
+        <ui:include src="crud/Imprimer.xhtml"/>
+        <ui:include src="crud/Addarticle.xhtml"/>
+    </ui:define>
+
+    <ui:define name="scriptCollapse">
+        <script>
+            var el = document.getElementById("traitement");
+            el.setAttribute("class", "sub-menu active");
+
+            var el1 = document.getElementById("traitement_inventaire");
+            el1.setAttribute("class", "sub-menu active");
+        </script>
+    </ui:define>
+
+</ui:composition>

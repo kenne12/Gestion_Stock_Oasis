@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="TypeMatiereListerForm">
+
+        <p:messages id="growl" closable="true">
+            <p:effect type="pulsate" event="load" delay="50" />
+        </p:messages>
+
+        <p:panelGrid columns="6">
+
+
+            <p:outputLabel value="Dare de debut"/>
+            <p:calendar value="#{rapportHebdomadaireController.dateDebut}" navigator="true">
+                <p:ajax event="dateSelect" update="datalist,print" listener="#{rapportHebdomadaireController.find()}"/>
+            </p:calendar>
+
+            <p:outputLabel value="Dare de fin"/>
+            <p:calendar value="#{rapportHebdomadaireController.dateFin}" navigator="true">
+                <p:ajax event="dateSelect" update="datalist,print" listener="#{rapportHebdomadaireController.find()}"/>
+            </p:calendar>
+
+            <p:commandButton  icon="ui-icon-search"   
+                              value="#{langue.rechercher}" 
+                              actionListener="#{rapportHebdomadaireController.find()}"
+                              update="datalist,datalist" 
+                              />
+
+            <p:commandButton id="print"  icon="ui-icon-print"   
+                             value="Imprimer" 
+                             disabled="#{rapportHebdomadaireController.showPrintButton}"
+                             actionListener="#{rapportHebdomadaireController.printReport()}"
+                             update=":TypeMatiereImprimerDlg,growl" 
+                             />
+
+        </p:panelGrid>
+
+        <p:panel header="#{langue['Conv.ListeDes']} : UTILISATEURS INACTIFS">
+
+            <p:dataTable id="datalist"
+                         value="#{rapportHebdomadaireController.soldes}"
+                         var="item"
+                         paginator="true"
+                         rows="10"
+                         style="text-align: center;"
+                         rowsPerPageTemplate="10,20,30,40,50">
+
+                <p:ajax event="rowSelect"   update="datalist"/>
+
+                <p:column sortBy="#{item.client.nom} #{item.client.prenom}" width="40%">
+                    <f:facet name="header">
+                        <h:outputText value="Client"/>
+                    </f:facet>
+                    <h:outputText value="#{item.client.nom} #{item.client.prenom}"/>
+                </p:column>
+
+
+                <p:column filterBy="#{item.montantVerse}">
+                    <f:facet name="header">
+                        <h:outputText value="Montant versé"/>
+                    </f:facet>
+                    <h:outputText value="#{item.montantVerse}"/>
+                </p:column>
+
+
+                <p:column filterBy="#{item.montantRetire}">
+                    <f:facet name="header">
+                        <h:outputText value="Montant Retiré"/>
+                    </f:facet>
+                    <h:outputText value="#{item.montantRetire}"/>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Solde"/>
+                    </f:facet>
+                    <h:outputText value="#{item.client.solde}"/>
+                </p:column>
+
+            </p:dataTable>
+
+        </p:panel>
+    </h:form>
+
+</ui:composition>

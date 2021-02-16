@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:form id="actionsForm">
+
+        <div class="footer-section">
+
+            <br/>
+            <center>
+
+                <h:panelGrid columns="8">
+                    
+                    <p:outputLabel value="#{langue.produit}"/>
+                    <p:selectOneMenu filter="true" value="#{mvtPrReportController.article.idarticle}">
+                        <f:selectItem itemLabel="#{langue.choisir}" itemValue="" />
+                        <f:selectItems value="#{mvtPrReportController.articles}" var="item" itemLabel="#{item.libelle}" itemValue="#{item.idarticle}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="#{langue.dateDebut}"/>
+                    <p:calendar value="#{mvtPrReportController.dateDebut}" navigator="true" pattern="dd/MM/yyyy" />
+
+                    <p:outputLabel value="#{langue.dateFin}"/>
+                    <p:calendar value="#{mvtPrReportController.dateFin}" navigator="true" pattern="dd/MM/yyyy" />
+                    
+                    <p:commandButton id="recherche"
+                                     value="#{langue.recherche}" actionListener="#{mvtPrReportController.search()}"
+                                     update=":StockListerForm" />
+
+                    <p:commandButton id="imprimer" icon="ui-icon-print"
+                                     ajax="false"
+                                     value="#{langue['Conv.Imprimer']}" actionListener="#{mvtPrReportController.printStock()}"
+                                     update=":StockImprimerForm" />
+
+                </h:panelGrid> 
+
+            </center>
+        </div>
+
+    </h:form>
+</ui:composition>

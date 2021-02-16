@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="FournisseurCreerDlg" 
+                  widgetVar="FournisseurCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']}: #{langue.fournisseur}" 
+                  closeOnEscape="true">
+
+            <h:form id="FournisseurCreerForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses ="column">
+
+                        <p:outputLabel value="#{langue.nom}" for="nom" />
+                        <p:inputTextarea id="nom" value="#{entreedirecteController.fournisseurToSave.nom}" required="true" 
+                                         requiredMessage="#{langue['Conv.Nom']}: #{langue['Conv.ValeurRequise']}"
+                                         cols="150" rows="3" style="width: 300px"/>
+
+                        <p:outputLabel value="#{langue.telephone}" for="tel" />
+                        <p:inputText id="tel" value="#{entreedirecteController.fournisseurToSave.contact}"/>
+
+                        <p:outputLabel value="#{langue.adresse}" for="adresse" />
+                        <p:inputText id="adresse" value="#{entreedirecteController.fournisseurToSave.adresse}"/>
+
+                        <p:outputLabel value="#{langue.email}" for="email" />
+                        <p:inputText id="email" value="#{entreedirecteController.fournisseurToSave.email}"/>
+
+                    </p:panelGrid>
+
+                    <p:separator/>
+
+                    <p:commandButton style="float: right" actionListener="#{entreedirecteController.createFournisseur()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update=":StockCreateForm:fournisseur" 
+                                     icon="ui-icon-check" />
+
+                    <p:commandButton style="float: left" value="#{langue.annuler}" oncomplete="PF('FournisseurCreerDialog').hide()" icon="ui-icon-close"/>
+                </h:panelGroup>  
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

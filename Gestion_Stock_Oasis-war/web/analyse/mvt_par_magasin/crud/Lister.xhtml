@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="StockListerForm">
+
+        <p:messages id="growl" closable="true">
+            <p:effect type="pulsate" event="load" delay="50" />
+        </p:messages>
+
+        <p:separator/>
+        <p:panel header="#{langue['Conv.ListeDes']} : #{langue.mouvement_stock}">
+
+            <p:dataTable
+                value="#{mvtMReportController.lignemvtstocks}"
+                var="item"
+                rowKey="#{item.idlignemvtstock}"
+                paginator="true"
+                rows="10"
+                rowsPerPageTemplate="10,20,30,40,50">
+
+                <p:column filterBy="#{item.idlot.idarticle.libelle} - #{item.idlot.numero}" style="width: 20%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.article} + #{langue.lot}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idlot.idarticle.libelle} - #{item.idlot.numero}"/>
+                </p:column>
+
+                <p:column filterBy="#{item.qteentree}" style="width: 10%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.qte_entree}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.qteentree}"/>
+                </p:column>
+
+                <p:column filterBy="#{item.qtesortie}" style="width: 10%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.qte_sortie}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.qtesortie}"/>
+                </p:column>
+
+                <p:column style="width: 10%;text-align: center">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.date}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idmvtstock.datemvt}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column style="width: 10%;">
+                    <f:facet name="header">
+                        <h:outputText value="S Entrée"/>
+                    </f:facet>
+                    <h:outputText value="#{item.fournisseur}"/>
+                </p:column>
+
+                <p:column style="width: 10%;">
+                    <f:facet name="header">
+                        <h:outputText value="S Sortie"/>
+                    </f:facet>
+                    <h:outputText value="#{item.client}"/>
+                </p:column>
+
+                <p:column style="width: 20%;">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.service}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idmagasinlot.idmagasinarticle.idmagasin.nom}"/>
+                </p:column>
+
+            </p:dataTable>
+
+        </p:panel>
+    </h:form>
+
+    <!-- ****************************************Information************************************************************************************************************************************************************************************************************** -->
+
+    <p:dialog id="notify1" widgetVar="NotifyDialog1" height="220" width="600" resizable="true" modal="true" style="text-align: center; font-size: 14px; font-family: Cambria;">
+        <f:facet name="header">
+            <h:outputText style="font-family: Cambria; font-size: 14px;" value="#{produitController.routine.titleNotify}" />
+        </f:facet>
+        <h:form id="NotifyForm1">
+            <h:graphicImage id="nt_img" url="#{produitController.routine.iconMessage}" style="cursor:pointer" />
+
+            <hr size="3" style="background-color: cornflowerblue;"/>
+
+            <h:outputText id="nt_msg" value="#{produitController.routine.message}"/>
+
+            <hr size="3" style="background-color: cornflowerblue; margin-top: 5%;"/>
+
+            <p:commandButton style="font-family: Cambria; font-size: 14px;" value="#{langue.valider}" onclick="PF('NotifyDialog1').hide()" type="button" immediate="true"/>
+
+            <hr size="3" style="background-color: cornflowerblue;"/>
+        </h:form>
+    </p:dialog>
+
+    <!-- ****************************************Information************************************************************************************************************************************************************************************************************** -->
+</ui:composition>

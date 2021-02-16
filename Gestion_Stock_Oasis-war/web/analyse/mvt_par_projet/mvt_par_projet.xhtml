@@ -1,0 +1,19 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="#{loginBean.utilisateur.template}">
+
+    <ui:define name="contenu">
+        <ui:include src="crud/Action.xhtml"/>
+        <ui:include src="crud/Lister.xhtml"/>
+        <ui:include src="crud/Imprimer.xhtml"/>
+    </ui:define>
+
+    <ui:define name="scriptCollapse">
+        <script>
+            var el = document.getElementById("analyse");
+            el.setAttribute("class", "sub-menu active");
+        </script>
+    </ui:define>
+
+</ui:composition>

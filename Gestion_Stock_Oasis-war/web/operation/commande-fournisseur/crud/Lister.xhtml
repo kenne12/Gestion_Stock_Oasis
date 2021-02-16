@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="FactureListerForm">
+
+        <p:messages id="growl" closable="true">
+            <p:effect type="pulsate" event="load" delay="50" />
+        </p:messages>
+
+        <p:growl id="msg"/>
+
+        <p:panel header="#{langue['Conv.ListeDes']} : #{langue.commande_fournisseurs}">
+            <p:contextMenu id="FactureDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{langue['Conv.Creer']}" onclick="document.getElementById('actionsForm:creer').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{langue['Conv.Detail']}" onclick="document.getElementById('actionsForm:detail').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{langue['Conv.Modifier']}" onclick="document.getElementById('actionsForm:modifier').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{langue['Conv.Supprimer']}" onclick="document.getElementById('actionsForm:supprimer').click();" icon="ui-icon-trash"/>
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{commandefournisseurController.commandefournisseurs}"
+                         var="item"
+                         rowKey="#{item.idcommandefournisseur}"
+                         paginator="true"
+                         rows="10"
+                         style=""
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         emptyMessage="#{langue.tableau_vide}"
+                         selectionMode="single"
+                         selection="#{commandefournisseurController.commandefournisseur}">
+
+                <p:ajax event="rowSelect" update=":FactureListerForm:FactureDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowUnselect" update=":FactureListerForm:FactureDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('FactureListerForm:viewButton').click();"/>
+
+                <p:column filterBy="#{item.idfournisseur.nom}" width="22%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.fournisseur}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idfournisseur.nom}"/>
+                </p:column>
+
+                <p:column filterBy="#{item.code}" width="20%" style="text-align: center;">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.numero_commande}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.code}"/>
+                </p:column>  
+
+                <p:column filterBy="#{item.montant}" style="text-align: right;width: 14%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.montant_ttc}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.montant}">
+                        <f:convertNumber/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column style="text-align: center;width: 10%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.date}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.datecommande}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>   
+                    </h:outputText>
+                </p:column>
+
+                <p:column style="width: 20%;text-align: center" >
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.action}"/>
+                    </f:facet>
+                    <p:commandButton icon="ui-icon-print">
+                        <p:ajax event="click" listener="#{commandefournisseurController.initPrinter(item)}" update=":FactureImprimerDlg,:notify1"/>
+                    </p:commandButton>
+
+                    <p:commandButton icon="ui-icon-pencil">
+                        <p:ajax event="click" listener="#{commandefournisseurController.initEdit(item)}" update=":CommandeCreateForm,:notify1"/>
+                    </p:commandButton>
+
+                    <p:commandButton icon="ui-icon-search">
+                        <p:ajax event="click" listener="#{commandefournisseurController.initView(item)}" update=":FactureDetailDlg,:notify1"/>                      
+                    </p:commandButton>
+
+                    <p:commandButton icon="ui-icon-trash">
+                        <p:ajax event="click" listener="#{commandefournisseurController.initDelete(item)}" update=":FactureListerForm,:actionsForm,:notify1"/>
+                        <p:confirm header="#{langue['Titre.Dlg.Confirm']}"
+                                   message="#{langue['Message.Confirm.Supprimer']}?"
+                                   icon="ui-icon-alert"/>
+                    </p:commandButton>
+                </p:column>
+
+            </p:dataTable>
+
+        </p:panel>
+    </h:form>
+
+    <!-- ****************************************Information************************************************************************************************************************************************************************************************************** -->
+
+    <p:dialog id="notify1" widgetVar="NotifyDialog1" height="400" width="600" resizable="true" modal="true" style="text-align: center; font-size: 14px; font-family: Cambria;">
+        <f:facet name="header">
+            <h:outputText style="font-family: Cambria; font-size: 14px;" value="#{commandefournisseurController.routine.titleNotify}" />
+        </f:facet>
+        <h:form id="NotifyForm1">
+            <h:graphicImage id="nt_img" url="#{commandefournisseurController.routine.iconMessage}" style="cursor:pointer" />
+
+            <hr size="3" style="background-color: cornflowerblue;"/>
+
+            <h:outputText id="nt_msg" value="#{commandefournisseurController.routine.message}"/>
+
+            <hr size="3" style="background-color: cornflowerblue; margin-top: 5%;"/>
+
+            <p:commandButton style="font-family: Cambria; font-size: 14px;" value="#{langue.fermer}" onclick="PF('NotifyDialog1').hide()" type="button" immediate="true"/>
+
+            <hr size="3" style="background-color: cornflowerblue;"/>
+        </h:form>
+    </p:dialog>
+
+    <!-- ****************************************Information************************************************************************************************************************************************************************************************************** -->
+
+</ui:composition>

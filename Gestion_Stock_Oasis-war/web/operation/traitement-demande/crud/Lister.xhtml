@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="LivraisonClientListerForm">
+
+        <p:messages id="growl" closable="true">
+            <p:effect type="pulsate" event="load" delay="50" />
+        </p:messages>
+
+        <p:growl id="msg"/>
+
+        <p:panel header="#{langue['Conv.ListeDes']} : #{langue.demandes}">
+
+            <p:contextMenu id="DemandeDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{langue['Conv.Creer']}" onclick="document.getElementById('actionsForm:creer').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{langue['Conv.Detail']}" onclick="document.getElementById('actionsForm:detail').click();" icon="ui-icon-search"/>                
+            </p:contextMenu>
+
+            <p:dataTable id="datalist"
+                         value="#{traitementController.demandes_1}"
+                         var="item"
+                         rowKey="#{item.iddemande}"
+                         paginator="true"
+                         rows="10"
+                         selectionMode="single"
+                         selection="#{traitementController.demande}"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         emptyMessage="#{langue.tableau_vide}"
+                         rowStyleClass="#{item.validee.equals(false) ? 'rowColorYellow' : null}">
+
+                <p:ajax event="rowSelect" update=":LivraisonClientListerForm:DemandeDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowUnselect" update=":LivraisonClientListerForm:DemandeDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('LivraisonClientListerForm:viewButton').click();"/>
+                
+                <p:column filterBy="#{item.code}" style="text-align: center;width: 10%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.code}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.code}"/>
+                </p:column>
+
+                <p:column filterBy="#{item.idpersonnel.nom} #{item.idpersonnel.prenom}" width="19%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.personnel}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idpersonnel.nom} #{item.idpersonnel.prenom}"/>
+                </p:column>
+                 
+                <p:column filterBy="#{item.idprojet.nom}" width="28%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.projet}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idprojet.nom}"/>
+                </p:column>
+
+                <p:column style="text-align: center;width: 9%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.date}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.datedemande}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>   
+                    </h:outputText>
+                </p:column>
+
+                <p:column style="text-align: center;width: 9%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.etat}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.validee.equals(false) ? 'En attente' : 'Validée'}"/>
+                </p:column>
+
+                <p:column style="width: 22%;text-align: center">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.action}"/>
+                    </f:facet>
+
+                    <p:commandButton value="D" icon="ui-icon-search">
+                        <p:ajax event="click" listener="#{traitementController.initViewD(item)}" update=":DemandeDetailDlg,:notify1"/>                      
+                    </p:commandButton>
+
+                    <p:commandButton value="V" disabled="#{item.validee.equals(false) ? true : false}" icon="ui-icon-search">
+                        <p:ajax event="click" listener="#{traitementController.initViewV(item)}" update=":LivraisonClientDetailForm,:notify1"/>                      
+                    </p:commandButton>
+
+                    <p:commandButton value="T" disabled="#{item.validee.equals(true) ? true : false}" icon="ui-icon-save">
+                        <p:ajax event="click" listener="#{traitementController.initTreatD(item)}" update=":LivraisonClientCreateForm,:notify1"/>                      
+                    </p:commandButton>    
+                </p:column>
+
+            </p:dataTable>
+
+        </p:panel>
+    </h:form>
+
+    <!-- ****************************************Information************************************************************************************************************************************************************************************************************** -->
+
+    <p:dialog id="notify1" widgetVar="NotifyDialog1" height="400" width="600" resizable="true" modal="true" style="text-align: center; font-size: 14px; font-family: Cambria;">
+        <f:facet name="header">
+            <h:outputText style="font-family: Cambria; font-size: 14px;" value="#{traitementController.routine.titleNotify}" />
+        </f:facet>
+        <h:form id="NotifyForm1">
+            <h:graphicImage id="nt_img" url="#{traitementController.routine.iconMessage}" style="cursor:pointer" />
+
+            <hr size="3" style="background-color: cornflowerblue;"/>
+
+            <h:outputText id="nt_msg" value="#{traitementController.routine.message}"/>
+
+            <hr size="3" style="background-color: cornflowerblue; margin-top: 5%;"/>
+
+            <p:commandButton style="font-family: Cambria; font-size: 14px;" value="#{langue.fermer}" onclick="PF('NotifyDialog1').hide()" type="button" immediate="true"/>
+
+            <hr size="3" style="background-color: cornflowerblue;"/>
+        </h:form>
+    </p:dialog>
+
+    <!-- ****************************************Information************************************************************************************************************************************************************************************************************** -->
+
+</ui:composition>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ArticleDetailDlg" 
+                  widgetVar="ArticleDetailDialog" 
+                  modal="true" resizable="false"  
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Detail']}: #{langue.article}" 
+                  closeOnEscape="true">
+
+            <h:form id="ArticleDetailForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="column" style="width: 100%;" >
+
+
+                        <h:outputText value="Code"/>
+                        <h:outputText value="#{articleController.article.code}"/>
+
+                        <h:outputText value="Nom"/>
+                        <h:outputText value="#{articleController.article.libelle}"/>
+
+                        <h:outputText value="Categorie"/>
+                        <h:outputText value="#{articleController.article.idfamille.nom}"/>
+
+
+                        <h:outputText value="Prix maximal"/>
+                        <h:outputText value="#{articleController.article.prixunit}"/>
+
+                        <h:outputText value="Quantité en stock"/>
+                        <h:outputText value="#{articleController.article.quantitestock}"/>
+
+                        <h:outputText value="Stock critique"/>
+                        <h:outputText value="#{articleController.article.quantitealerte}"/>
+
+                    </p:panelGrid>
+                    <p:commandButton value="#{langue['Conv.Fermer']}" onclick="PF('ArticleDetailDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

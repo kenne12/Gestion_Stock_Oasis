@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="TypeMatiereListerForm">
+
+        <p:messages id="growl" closable="true">
+            <p:effect type="pulsate" event="load" delay="50" />
+        </p:messages>
+
+        <br/>
+        <p:panel header="#{langue['Conv.ListeDes']} : OPERATIONS">
+
+            <p:dataTable id="datalist"
+                         value="#{mouchardController.mouchards}"
+                         var="item"
+                         rowKey="#{item.idmouchard}"
+                         paginator="true"
+                         rows="10"                        
+                         rowsPerPageTemplate="10,20,30,40,50">
+
+               
+                <p:column filterBy="#{item.idutilisateur.idpersonnel.nom} #{item.idutilisateur.idpersonnel.prenom}" style="width: 25%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.utilisateur}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idutilisateur.idpersonnel.nom} #{item.idutilisateur.idpersonnel.prenom}"/>
+                </p:column>
+
+                <p:column filterBy="#{item.action}" style="width: 55%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.action}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.action}"/>
+                </p:column>
+
+                <p:column filterBy="#{item.date}" style="width: 10%;text-align: center">
+                    <f:facet name="header">
+                        <h:outputText value="Date"/>
+                    </f:facet>
+                    <h:outputText value="#{item.date}">
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                </p:column>
+
+                <p:column filterBy="#{item.heure}" style="width: 10%;text-align: center">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.heure}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.heure}">
+                        <f:convertDateTime pattern="HH:mm:ss" />
+                    </h:outputText>
+                </p:column>
+
+            </p:dataTable>
+
+        </p:panel>
+    </h:form>
+
+</ui:composition>

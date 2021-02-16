@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="MagasinCreerDlg" 
+                  widgetVar="MagasinCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']}: #{langue.magasin}" 
+                  closeOnEscape="true">
+
+            <h:form id="MagasinCreerForm">
+                <h:panelGroup id="display">
+                    <h:panelGrid columns="3" columnClasses ="column">
+
+                        <p:outputLabel value="#{langue.nom}" for="nom" />
+                        <p:inputTextarea style="width: 300px" cols="250" rows="3" id="nom" value="#{magasinController.magasin.nom}" required="true" 
+                                         requiredMessage="#{langue['Conv.Nom']}: #{langue['Conv.ValeurRequise']}"/>
+                        <p:message for="nom"/>
+
+                        <p:outputLabel value="#{langue.code}" for="code" />
+                        <p:inputText id="code" style="width: 150px" value="#{magasinController.magasin.code}" required="true" 
+                                     requiredMessage="#{langue.code} : #{langue['Conv.ValeurRequise']}"/>
+                        <p:message for="code"/>
+
+                        <p:outputLabel value="#{langue.central} ?" for="central" />
+                        <h:selectBooleanCheckbox value="#{magasinController.magasin.central}" id="central" />
+                        <p:message for="central"/>
+
+                    </h:panelGrid>
+
+                    <p:separator/>
+
+                    <p:commandButton style="float: right" actionListener="#{magasinController.create()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:MagasinListerForm:datalist,:notify1,:actionsForm" />
+
+                    <p:commandButton style="float: left" value="#{langue.annuler}" oncomplete="PF('MagasinCreerDialog').hide()"/>
+                </h:panelGroup>  
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

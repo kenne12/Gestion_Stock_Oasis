@@ -1,0 +1,245 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <div class="navbar-default sidebar" role="navigation">
+        <div class="sidebar-nav navbar-collapse">
+            <ul class="nav" id="side-menu">
+                <li class="sidebar-search">
+                    <div class="input-group custom-search-form">
+                        <input type="text" class="form-control" placeholder="Search..."/>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                    <!-- /input-group -->
+                </li>
+
+                <!-- sécurité -->
+
+                <li>
+                    <a href="#{request.contextPath}/index.html"><i class="fa fa-home fa-fw"></i>#{langue.accueil}</a>
+                </li>
+                <li id="securite">
+                    <a href="#"><i class="fa fa-key"></i> #{langue.securite} <span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a href="#{request.contextPath}/securite/utilisateur/utilisateur.html"><i class="fa fa-user fa-fw"></i>#{langue.utilisateurs}</a>
+                        </li>
+                        <li>
+                            <a href="#{request.contextPath}/securite/privilege/privilege.html"><i class="fa fa-legal fa-fw"></i>#{langue.privileges}</a>
+                        </li>
+                        <li>
+                            <a href="#{request.contextPath}/securite/activercompte/activercompte.html"><i class="fa fa-unlock fa-fw"></i>#{langue.activer_compte_utilisateur}</a>
+                        </li>
+                        <li>
+                            <a href="#{request.contextPath}/securite/desactivercompte/desactivercompte.html"><i class="fa fa-lock fa-fw"></i>#{langue.desactiver_compte_utilisateur}</a>
+                        </li>
+                        <li>
+                            <a href="#{request.contextPath}/securite/reset-compte/reset-compte.html"><i class="fa fa-refresh fa-fw"></i>#{langue.reinitialiser_compte}</a>
+                        </li>
+                        <li>
+                            <a href="#{request.contextPath}/securite/mouchard/mouchard.html">
+                                <i class="fa fa-eye fa-fw"></i>
+                                #{langue.mouchard}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li id="parametrage">
+                    <a href="#"><i class="fa fa-wrench"></i> #{langue.parametrage} <span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a href="#{request.contextPath}/parametre/parametrage/parametrage.html"><i class="fa fa-institution fa-fw"></i>#{langue.structure}</a>
+                        </li>
+
+                        <li id="parametrage_art">
+                            <a href="#">#{langue.articles}<span class="fa arrow"></span></a>
+                            <ul class="nav nav-third-level">
+
+                                <li>
+                                    <a href="#{request.contextPath}/parametre/unite/unite.html">#{langue.unite}</a>
+                                </li>
+
+                                <li>
+                                    <a href="#{request.contextPath}/parametre/famille-produit/famille-produit.html">#{langue.categorie_article}</a>
+                                </li>                      
+
+                                <li>
+                                    <a href="#{request.contextPath}/parametre/fournisseur/fournisseur.html">#{langue.fournisseurs}</a>
+                                </li>
+
+                                <li>
+                                    <a href="#{request.contextPath}/parametre/produit/produit.html">#{langue.articles}</a>
+                                </li>
+
+                                <li>
+                                    <a href="#{request.contextPath}/parametre/lot/lot.html">#{langue.lots}</a>
+                                </li>
+
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="#{request.contextPath}/parametre/magasin/magasin.html">#{langue.magasin}</a>
+                        </li>
+
+                        <li>
+                            <a href="#{request.contextPath}/parametre/qualite_personnel/qualite_personnel.html">#{langue.qualite_personnel}</a>
+                        </li>
+
+                        <li>
+                            <a href="#{request.contextPath}/parametre/personnel/personnel.html">#{langue.personnel}</a>
+                        </li>
+
+                        <li>
+                            <a href="#{request.contextPath}/parametre/projet/projet.html">#{langue.projet}</a>
+                        </li>
+                        
+                    </ul>
+                </li>
+
+                <li id="traitement">
+                    <a href="#"><i class="fa fa-cogs"></i> #{langue.traitement} <span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+
+                        <li id="traitement_livraison">
+                            <a href="#">
+                                <i class="fa fa-exchange fa-fw"></i>
+                                #{langue.acquisitions}<span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-third-level">
+                                <!--<li>
+                                    <a href="#{request.contextPath}/operation/commande-fournisseur/commande-fournisseur.html">#{langue.commande}</a>
+                                </li>-->
+
+                                <!--<li>                   
+                                    <a href="#{request.contextPath}/operation/livraison-fournisseur/livraison-fournisseur.html">#{langue.livraison}</a>
+                                </li>-->
+
+                                <li>
+                                    <a href="#{request.contextPath}/operation/stock/stock.html">#{langue.entree_direct}</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li id="traitement_commande">
+                            <a href="#">
+                                <i class="fa fa-exchange fa-fw"></i>
+                                #{langue.demande_de_materiel}<span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-third-level">
+
+                                <li>
+                                    <a href="#{request.contextPath}/operation/commande-client/commande-client.html">#{langue.expression_des_besoins}</a>
+                                </li>
+
+                                <li>
+                                    <a href="#{request.contextPath}/operation/livraison-client/livraison-client.html">#{langue.validation_des_demandes}</a>
+                                </li>
+                                
+                                <li>
+                                    <a href="#{request.contextPath}/operation/traitement-demande/traitement-demande.html">#{langue.traitement_demandes}</a>
+                                </li>
+                                
+                                <li>
+                                    <a href="#{request.contextPath}/operation/vente/vente.html">#{langue.facturation}</a>
+                                </li>
+                            </ul>
+                        </li>    
+
+                        <li id="transfert">
+                            <a href="#">
+                                <i class="fa fa-exchange fa-fw"></i>
+                                #{langue.transfert_d_article}<span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-third-level">
+                                <!--<li>
+                                    <a href="#{request.contextPath}/operation/repartition_mc_ms/repartition_mc_ms.html">#{langue.central} -> #{langue.secondaire}</a>                                                      
+                                </li>-->
+                                <li>
+                                    <a href="#{request.contextPath}/operation/transfert/transfert.html">#{langue.magasin} -> #{langue.magasin}</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li id="traitement_inventaire">
+                            <a href="#">
+                                <i class="fa fa-exchange fa-fw"></i>
+                                #{langue.inventaires}<span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-third-level">
+                                <li>
+                                    <a href="#{request.contextPath}/operation/inventaire-global/inventaire-global.html">#{langue.inventaire_globale}</a>                            
+                                </li>
+                                <!--<li>
+                                    <a href="#{request.contextPath}/operation/vente/vente.html">#{langue.sortie_direct}</a>
+                                </li>-->
+                            </ul>
+                        </li>
+
+                    </ul>
+                </li>
+
+                <li id="analyse">
+                    <a href="#">
+                        <i class="fa fa-bar-chart-o fa-fw"></i>#{langue.analyse} <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level">
+
+                        <li>
+                            <a href="#{request.contextPath}/analyse/stock_par_magasin/stock_par_magasin.html">
+                                <i class="fa fa-file-pdf-o fa-fw"></i>
+                                #{langue.stock}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#{request.contextPath}/analyse/mvt_par_magasin/mvt_par_magasin.html">
+                                <i class="fa fa-file-pdf-o fa-fw"></i>
+                                #{langue.mouvement_par_magasin}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#{request.contextPath}/analyse/mvt_par_projet/mvt_par_projet.html">
+                                <i class="fa fa-file-pdf-o fa-fw"></i>
+                                #{langue.mouvement_par_projet}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#{request.contextPath}/analyse/mvt_par_produit/mvt_par_produit.html">
+                                <i class="fa fa-file-pdf-o fa-fw"></i>
+                                #{langue.mouvement_par_produit}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#{request.contextPath}/analyse/demande_par_personnel/demande_par_personnel.html">
+                                <i class="fa fa-file-pdf-o fa-fw"></i>
+                                #{langue.demande_par_personnel}
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="#{request.contextPath}/analyse/peremption/peremption.html">
+                                <i class="fa fa-file-pdf-o fa-fw"></i>
+                                Produits périmés
+                            </a>
+                        </li>
+                        
+                    </ul>
+
+                </li>
+            </ul>
+        </div>
+        <!-- /.sidebar-collapse -->
+    </div>
+
+</ui:composition>
+
+
+
+

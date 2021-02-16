@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="ArtcleCreateDlg" 
+                  widgetVar="ArticleCreateDialog" 
+                  modal="true" 
+                  closeOnEscape="true"
+                  resizable="true" appendTo="@(body)" 
+                  width="70%"
+                  height="600"
+                  header="#{langue.ajouter_un_article}">
+            <h:form id="ArticleCreateForm">
+                <h:panelGroup id="display">
+
+                    <h:panelGrid columns="3">
+
+                        <p:outputLabel for="famille" value="#{langue.categorie_article}"/>
+                        <p:selectOneMenu id="famille" required="false" filter="true"  value="#{transfertMagCentralController.famille.idfamille}">
+                            <f:selectItem itemLabel="#{langue.choisir}" itemValue="#{null}"/>
+                            <f:selectItems value="#{transfertMagCentralController.familles}" var="fml" itemLabel="#{fml.nom}" itemValue="#{fml.idfamille}"/>
+                            <p:ajax update="produit,lot" listener="#{transfertMagCentralController.filterArticle()}"/>
+                        </p:selectOneMenu>
+                        <p:message for="famille"/>
+
+                        <p:outputLabel value="#{langue.articles}" for="produit"/>
+                        <p:selectOneMenu required="true" id="produit" filter="true"  value="#{transfertMagCentralController.article}" converter="articleConverter">
+                            <f:selectItem itemLabel="#{langue.choisir}" itemValue="#{null}"/>
+                            <f:selectItems value="#{transfertMagCentralController.articles}" var="art" itemLabel="#{art.libelle}" itemValue="#{art}"/>
+                            <p:ajax update="sr,famille,lot" listener="#{transfertMagCentralController.updatedata()}"/>
+                        </p:selectOneMenu>
+                        <p:message for="produit"/>
+
+                        <p:outputLabel value="#{langue.lots}" for="lot"/>
+                        <p:selectOneMenu required="true" id="lot" filter="true"  value="#{transfertMagCentralController.lot}" converter="lotConverter">
+                            <f:selectItem itemLabel="#{langue.choisir}" itemValue="#{null}"/>
+                            <f:selectItems value="#{transfertMagCentralController.lots}" var="lot" itemLabel="#{lot.numero}" itemValue="#{lot}"/>
+                            <p:ajax update="sr,grid" listener="#{transfertMagCentralController.updateListMagasin()}"/>
+                        </p:selectOneMenu>
+                        <p:message for="lot"/>
+
+                        <p:outputLabel value="#{langue.stock_disponible}" for="sr" />
+                        <p:inputText id="sr" disabled="true"  required="true" style="width: 100px;color: blue" value="#{transfertMagCentralController.lot.quantite}">
+                            <f:convertNumber/>
+                        </p:inputText>
+                        <p:message for="sr"/>
+
+                    </h:panelGrid>
+
+                    <p:separator/>
+
+                    <center>
+                        <p:selectManyCheckbox id="grid" value="#{transfertMagCentralController.selectedMagasinlots}" layout="grid" columns="3" converter="magasinlotConverter" required="true">
+                            <f:selectItems value="#{transfertMagCentralController.magasinlots}" var="mag" itemLabel="#{mag.idmagasinarticle.idmagasin.nom}" itemValue="#{item}" />
+                        </p:selectManyCheckbox>
+                    </center>
+
+                    <p:separator/>
+
+                    <center>
+                        <p:commandButton partialSubmit="true" style="color: red;" icon="ui-icon-close" value="#{langue.fermer}" oncomplete="PF('ArticleCreateDialog').hide()"/>
+                        <p:commandButton actionListener="#{transfertMagCentralController.addProduit()}" icon="ui-icon-plus" value="#{langue.ajouter}" update="display,:TransfertCreateForm:datalist,:TransfertCreateForm:datalist1 , panel"/>               
+                    </center>
+
+                    <p:separator/>
+
+                    <p:panel id="panel" header="Liste des articles" style="width: 95% ; margin-left: 2.5%" >
+
+                        <p:panelGrid style="width: 100%" columns="6" >
+
+                            <h:outputText value="#{langue.article}" style="font-weight: bold ; width:25% "/>
+
+                            <h:outputText value="#{langue.numero_lot}" style="font-weight: bold;width:20%"/>
+
+                            <h:outputText value="#{langue.magasin}" style="font-weight: bold ; width: 20%"/>
+
+                            <h:outputText value="#{langue.quantite}" style="font-weight: bold ; width: 75px"/> 
+
+                            <h:outputText value="#{langue.unite}" style="font-weight: bold ; width: 20%"/>
+
+                            <h:outputText value="#{langue.qte_par_unite}" style="font-weight: bold ; width: 75px"/>
+
+                        </p:panelGrid>
+
+                        <ui:repeat  value="#{transfertMagCentralController.lignerepartitionarticles_1}" var="obj" >
+
+                            <p:panelGrid style="width: 100%" columns="6" >
+
+                                <h:outputText value="#{obj.idmagasinlot.idmagasinarticle.idarticle.libelle}" style="font-weight: bold;width: 25%"/>
+
+                                <h:outputText value="#{obj.idmagasinlot.idlot.numero}" style="font-weight: bold;width: 20%"/>
+
+                                <h:outputText value="#{obj.idmagasinlot.idmagasinarticle.idmagasin.nom}" style="font-weight: bold ; width: 20%"/>
+
+                                <p:inputText required="true" value="#{obj.quantite}" style="width: 75px" >                                             
+                                    <p:ajax event="keyup" />
+                                </p:inputText>
+
+                                <p:selectOneMenu value="#{obj.idunite}" converter="uniteConverter" autoWidth="true" style="width: 20%">
+                                    <f:selectItems value="#{transfertMagCentralController.unites}" var="unit" itemLabel="#{unit.libelle}" itemValue="#{unit}" />
+                                    <p:ajax />
+                                </p:selectOneMenu>
+
+                                <p:inputText required="true" value="#{obj.unite}" style="width: 75px">                                             
+                                    <p:ajax event="keyup" />
+                                </p:inputText>
+
+                            </p:panelGrid>
+
+                        </ui:repeat>
+
+                    </p:panel>
+
+                    <p:separator/>
+
+                    <center>
+                        <p:commandButton icon="ui-icon-check" value="#{langue.valider}" 
+                                         update=":TransfertCreateForm,:notify1" 
+                                         actionListener="#{transfertMagCentralController.validateData()}"/>
+                    </center>
+
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

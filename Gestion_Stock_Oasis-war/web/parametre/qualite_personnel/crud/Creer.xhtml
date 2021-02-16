@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="QualiteCreerDlg" 
+                  widgetVar="QualiteCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']}: #{langue.qualite_personnel}" 
+                  closeOnEscape="true">
+
+            <h:form id="QualiteCreerForm">
+                <h:panelGroup id="display">
+                    <h:panelGrid columns="3" columnClasses ="column">
+
+                        <p:outputLabel value="#{langue.nom}" for="nom" />
+                        <p:inputTextarea style="width: 250px" cols="200" rows="3" id="nom" value="#{qualitepersonnelController.qualite.nom}" required="true" 
+                                         requiredMessage="#{langue['Conv.Nom']}: #{langue['Conv.ValeurRequise']}"/>
+                        <p:message for="nom"/>
+
+                        <p:outputLabel value="#{langue.code}" for="code" />
+                        <p:inputText id="code" value="#{qualitepersonnelController.qualite.code}" required="true" 
+                                     requiredMessage="#{langue.code} : #{langue['Conv.ValeurRequise']}"/>
+                        <p:message for="code"/>
+
+                    </h:panelGrid>
+
+                    <p:separator/>
+
+                    <p:commandButton style="float: right" actionListener="#{qualitepersonnelController.create()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:QualiteListerForm:datalist,:notify1" />
+
+                    <p:commandButton style="float: left" value="#{langue.annuler}" oncomplete="PF('QualiteCreerDialog').hide()"/>
+                </h:panelGroup>  
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

@@ -1,0 +1,105 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <f:metadata>
+        <f:event type="preRenderView" listener="#{loginBean.watcher()}" />
+    </f:metadata> 
+
+    <!-- BEGIN SIDEBAR -->
+    <div class="sidebar-scroll">
+        <div id="sidebar" class="nav-collapse collapse">
+
+            <!-- BEGIN RESPONSIVE QUICK SEARCH FORM -->
+            <div class="navbar-inverse">
+                <form class="navbar-search visible-phone">
+                    <input type="text" class="search-query" placeholder="Search" />
+                </form>
+            </div>
+            <!-- END RESPONSIVE QUICK SEARCH FORM -->
+            <!-- BEGIN SIDEBAR MENU -->
+            <ul class="sidebar-menu">
+
+                <!--Accueil-->
+                <li class="sub-menu" id="menuIndex">
+                    <a class="" href="#{request.contextPath}/index.html">
+                        <i class="icon-home"></i>
+                        <span>#{langue.accueil}</span>
+                    </a>
+                </li>
+
+                <!--Securité-->
+                <li class="sub-menu" id="securite">
+                    <a href="javascript:;" class="">
+                        <i class="icon-legal"></i>
+                        <span>#{langue.securite}</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/securite/utilisateur/utilisateur.html">#{langue.utilisateurs}</a></li>
+                        <li><a class="" href="#{request.contextPath}/securite/privilege/privilege.html">#{langue.privileges}</a></li>
+                        <li><a class="" href="#{request.contextPath}/securite/activercompte/activercompte.html">#{langue.activer_compte_utilisateur}</a></li>
+                        <li><a class="" href="#{request.contextPath}/securite/desactivercompte/desactivercompte.html">#{langue.desactiver_compte_utilisateur}</a></li>
+                        <li><a class="" href="#{request.contextPath}/securite/mouchard/mouchard.html">#{langue.mouchard}</a></li>
+                    </ul>
+                </li>
+
+                <!--parametrage-->
+                <li class="sub-menu" id="parametrage">
+                    <a href="javascript:;" class="">
+                        <i class="icon-cogs"></i>
+                        <span>#{langue.parametrage}</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/parametre/parametrage/parametrage.html">#{langue.structure}</a></li>
+                        <li><a class="" href="#{request.contextPath}/parametre/exercice/exercice.html">#{langue.exercice}</a></li>
+                        <li><a class="" href="#{request.contextPath}/parametre/mois/mois.html">#{langue.mois}</a></li>
+                        <li><a class="" href="#{request.contextPath}/parametre/famille-produit/famille-produit.html">#{langue.categorie_article}</a></li>
+                        <li><a class="" href="#{request.contextPath}/parametre/fournisseur/fournisseur.html">#{langue.fournisseurs}</a></li>                       
+                        <li><a class="" href="#{request.contextPath}/parametre/produit/produit.html">#{langue.articles}</a></li>
+                        <li><a class="" href="#{request.contextPath}/parametre/client/client.html">#{langue.clients}</a></li>
+                        <li><a class="" href="#{request.contextPath}/parametre/personnel/personnel.html">Enregistrer personnel</a></li>
+                    </ul>
+                </li>
+
+                <!--Caisse-->
+                <li class="sub-menu" id="traitement">
+                    <a href="javascript:;" class="">
+                        <i class="icon-euro"></i>
+                        <span>#{langue.traitement}</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/operation/stock/stock.html">#{langue.stock_entrant}</a></li>
+                        <li><a class="" href="#{request.contextPath}/operation/vente/vente.html">#{langue.stock_sortant}</a></li>  
+                    </ul>
+                </li>
+
+                <!--Analyse-->
+                <li class="sub-menu" id="analyse">
+                    <a href="javascript:;" class="">
+                        <i class="icon-print"></i>
+                        <span>#{langue.analyse}</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub">
+                        <li><a class="" href="#{request.contextPath}/analyse/recherche/recherche.html">#{langue.recherche}</a></li>
+                        <li><a class="" href="#{request.contextPath}/analyse/rapportjournalier/rapportjournalier.html">#{langue.rapport_journalier_vente}</a></li>
+                        <li><a class="" href="#{request.contextPath}/analyse/rapportmensuel/rapportmensuel.html">#{langue.rapport_mensuel_vente}</a></li>
+                        <li><a class="" href="#{request.contextPath}/stat.html">#{langue.statistic}</a></li>
+                        <li><a class="" href="#{request.contextPath}/stat1.html">#{langue.statistic} 1</a></li>
+                        <li><a class="" href="#{request.contextPath}/analyse/ficheinventaire/ficheinventaire.html">#{langue.fiche_inventaire}</a></li>
+                        <li><a class="" href="#{request.contextPath}/analyse/rapport-stock-critic/stock.html">#{langue.fiche_stock_critc}</a></li>
+                        <li><a class="" href="#{request.contextPath}/analyse/rapport-stock/stock.html">#{langue.stock}</a></li>
+                        <!--<li><a class="" href="#{request.contextPath}/analyse/total_achat/capital.html">Total approvisonnement</a></li>-->                        
+                    </ul>
+                </li>
+
+            </ul>
+            <!-- END SIDEBAR MENU -->
+        </div>
+    </div>
+    <!-- END SIDEBAR -->
+
+</ui:composition>

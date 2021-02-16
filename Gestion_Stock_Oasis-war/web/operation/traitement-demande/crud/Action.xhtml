@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="actionsForm">
+
+        <div class="footer-section">
+
+            <!--<p:commandButton id="creer"  icon="ui-icon-plus"   
+                             value="Nouvelle Validation" 
+                             actionListener="#{traitementController.prepareCreate()}"
+                             update=":LivraisonClientCreateForm,:notify1"/>-->
+
+            <p:commandButton id="detail"   
+                             icon="ui-icon-search" 
+                             value="Afficher / Actualiser" 
+                             update=":LivraisonClientListerForm" 
+                             actionListener="#{traitementController.afficherDemande()}" /> 
+
+            <p:commandButton id="supprimer" 
+                             icon="ui-icon-trash"  
+                             value="#{langue.annuler}" 
+                             update=":LivraisonClientListerForm:datalist,actionsForm,:notify1"
+                             disabled="#{traitementController.imprimer}"
+                             actionListener="#{traitementController.delete()}">
+                <p:confirm header="#{langue['Titre.Dlg.Confirm']}"
+                           message="#{langue['Message.Confirm.Supprimer']}?"
+                           icon="ui-icon-alert"/>
+            </p:commandButton>
+
+            <p:commandButton id="imprimer" icon="ui-icon-print" 
+                             ajax="false"
+                             value="#{langue['Conv.Imprimer']} #{langue.demande}" 
+                             actionListener="#{traitementController.printDemande()}"
+                             disabled="#{traitementController.imprimer}"
+                             update=":notify1"/> 
+
+            <p:commandButton id="imprimer_2" icon="ui-icon-print"
+                             ajax="false"
+                             value="#{langue['Conv.Imprimer']} Bon de Sortie" 
+                             actionListener="#{traitementController.print()}"
+                             disabled="#{traitementController.imprimer2}"
+                             update=":notify1"/>
+        </div>
+
+    </h:form>
+</ui:composition>

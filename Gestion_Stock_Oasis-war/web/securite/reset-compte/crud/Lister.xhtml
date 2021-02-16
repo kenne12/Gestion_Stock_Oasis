@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="CompteUtilisateurListerForm">
+
+        <p:messages id="growl" closable="true">
+            <p:effect type="pulsate" event="load" delay="50" />
+        </p:messages>
+
+        <p:panel header="#{langue['Conv.ListeDes']} #{langue.utilisateurs}">
+            <p:contextMenu id="CompteUtilisateurDataTableContextMenu" for="datalist">  
+                
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{utilisateurController.utilisateurs}"
+                         var="item"
+                         rowKey="#{item.idutilisateur}"
+                         paginator="true"
+                         rows="30"                        
+                         rowsPerPageTemplate="10,20,30,40,50">
+                                                                  
+                <p:column filterBy="#{item.idpersonnel.nom} #{item.idpersonnel.prenom}" width="22%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.personnel}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idpersonnel.nom} #{item.idpersonnel.prenom}"/>
+                </p:column>
+
+                <p:column filterBy="#{item.login}" width="15%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.login}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.login}"/>
+                </p:column>
+
+                <p:column filterBy="#{item.password}" width="23%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.password}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.password}"/>
+                </p:column>
+
+                <p:column style="text-align: center;" width="10%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.etat}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.actif eq true ? langue.actif : langue.inactif}"/>
+                </p:column>
+                
+                <p:column style="text-align: center;" width="10%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.action}"/>
+                    </f:facet>
+                    <p:commandButton icon="ui-icon-refresh">
+                        <p:ajax listener="#{utilisateurController.reinitialiseAccount(item)}" update="datalist,notify1"/>
+                    </p:commandButton>
+                </p:column>
+
+            </p:dataTable>
+
+        </p:panel>
+    </h:form>
+
+    <!-- ****************************************Information************************************************************************************************************************************************************************************************************** -->
+
+    <p:dialog id="notify1" widgetVar="NotifyDialog1" height="400" width="600" resizable="true" responsive="true" modal="true" style="text-align: center; font-size: 14px; font-family: Cambria;">
+        <f:facet name="header">
+            <h:outputText style="font-family: Cambria; font-size: 14px;" value="#{utilisateurController.routine.titleNotify}" />
+        </f:facet>
+        <h:form id="NotifyForm1">
+            <h:graphicImage id="nt_img" url="#{utilisateurController.routine.iconMessage}" style="cursor:pointer" />
+
+            <hr size="3" style="background-color: cornflowerblue;"/>
+
+            <h:outputText id="nt_msg" value="#{utilisateurController.routine.message}"/>
+
+            <hr size="3" style="background-color: cornflowerblue; margin-top: 5%;"/>
+
+            <p:commandButton style="font-family: Cambria; font-size: 14px;" value="#{langue.valider}" onclick="PF('NotifyDialog1').hide()" type="button" immediate="true"/>
+
+            <hr size="3" style="background-color: cornflowerblue;"/>
+        </h:form>
+    </p:dialog>
+
+    <!-- ****************************************Information************************************************************************************************************************************************************************************************************** -->
+
+</ui:composition>

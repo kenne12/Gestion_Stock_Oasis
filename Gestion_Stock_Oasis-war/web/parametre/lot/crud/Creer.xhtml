@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="LotCreerDlg" 
+                  widgetVar="LotCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']} : #{langue.lot}" 
+                  closeOnEscape="true">
+
+            <h:form id="LotCreerForm">
+                <h:panelGroup id="display">
+                    <h:panelGrid columns="3" columnClasses ="column">
+
+                        <p:outputLabel value="#{langue.article}" for="produit"/>
+                        <p:selectOneMenu filter="true" id="produit" value="#{lotController.article.idarticle}" required="true" disabled="#{lotController.disableProduct}">
+                            <f:selectItem itemLabel="#{langue.choisir}" itemValue="0"/>
+                            <f:selectItems value="#{lotController.articles}" var="item" itemLabel="#{item.libelle}" itemValue="#{item.idarticle}"/>
+                            <p:ajax update="prix_achat,prix_vente" listener="#{lotController.updateData()}"/>
+                        </p:selectOneMenu>
+                        <p:message for="produit"/>
+
+                        <p:outputLabel value="#{langue.numero_lot}" for="numero_lot" />
+                        <p:inputText id="numero_lot" value="#{lotController.lot.numero}" required="true" style="width: 350px" >
+                            <p:ajax/>   
+                        </p:inputText>
+                        <p:message for="numero_lot"/>
+
+                        <p:outputLabel value="#{langue.prix_achat}" for="prix_achat"/>
+                        <p:inputText id="prix_achat" value="#{lotController.lot.prixachat}" required="true" requiredMessage="#{langue.valeur_obligatoire}">
+                            <p:ajax/>   
+                        </p:inputText>
+                        <p:message for="prix_achat"/>
+
+                        <p:outputLabel value="#{langue.prix_vente}" for="prix_vente" />
+                        <p:inputText id="prix_vente" value="#{lotController.lot.prixunitaire}" required="true" requiredMessage="#{langue.valeur_obligatoire}">
+                            <p:ajax/>   
+                        </p:inputText>
+                        <p:message for="prix_vente"/>
+
+                        <p:outputLabel value="#{langue.date_fabrication}" for="date_fab" />
+                        <p:calendar id="date_fab" value="#{lotController.lot.datefabrication}" style="width: 300px" >
+                            <p:ajax/>   
+                        </p:calendar>
+                        <p:message for="date_fab"/>
+
+                        <p:outputLabel value="#{langue.date_peremption}" for="date_peremp" />
+                        <p:calendar id="date_peremp" value="#{lotController.lot.dateperemption}" style="width: 300px" navigator="true" required="#{lotController.dateRequired}" >
+                            <p:ajax/>   
+                        </p:calendar>
+                        <p:message for="date_peremp"/>
+
+                        <p:outputLabel value="#{langue.etat}" for="etat" rendered="#{lotController.mode.equals('Edit')}"/>
+                        <h:selectBooleanCheckbox id="etat" value="#{lotController.lot.etat}" rendered="#{lotController.mode.equals('Edit')}"/>
+                        <p:message for="etat" rendered="#{lotController.mode.equals('Edit')}"/>
+
+                    </h:panelGrid>
+
+                    <p:separator/>
+
+                    <p:commandButton style="float: right" actionListener="#{lotController.create()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:LotListerForm:datalist,:notify1" 
+                                     onclick="PF('AjaxNotifyDialog').show()" icon="ui-icon-check"/>
+
+                    <p:commandButton style="float: left" value="#{langue.annuler}" oncomplete="PF('LotCreerDialog').hide()" icon="ui-icon-close"/>
+                </h:panelGroup>  
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="actionsForm">
+
+        <div class="footer-section">
+
+            <p:commandButton id="creer"  icon="ui-icon-plus"   
+                             value="#{langue['Conv.Creer']}" 
+                             actionListener="#{lotController.prepareCreate()}"
+                             update=":LotCreerForm,:notify1"/>                                  
+
+            <p:commandButton id="detail"   
+                             icon="ui-icon-search" 
+                             value="#{langue['Conv.Detail']}" 
+                             update=":LotDetailForm" 
+                             oncomplete="PF(':LotDetailDialog').show()" 
+                             disabled="#{lotController.detail}"/>
+
+            <p:commandButton id="modifier"   
+                             icon="ui-icon-pencil" 
+                             value="#{langue['Conv.Modifier']}" 
+                             actionListener="#{lotController.prepareEdit()}"
+                             update=":LotCreerForm,:notify1" 
+                             disabled="#{lotController.modifier}"/>
+
+            <p:commandButton id="supprimer" 
+                             icon="ui-icon-trash"  
+                             value="#{langue['Conv.Supprimer']}" 
+                             update=":LotListerForm:datalist,:actionsForm,:notify1"
+                             disabled="#{lotController.supprimer}"
+                             actionListener="#{lotController.delete()}">
+                <p:confirm header="#{langue['Titre.Dlg.Confirm']}"
+                           message="#{langue['Message.Confirm.Supprimer']}?"
+                           icon="ui-icon-alert"/>
+            </p:commandButton>
+
+            <p:commandButton id="imprimer" icon="ui-icon-print"  
+                             value="#{langue['Conv.Imprimer']}" actionListener="#{lotController.print()}"
+                             update=":LotImprimerForm,:notify1" disabled="#{lotController.imprimer}"/>
+
+        </div>
+
+    </h:form>
+</ui:composition>

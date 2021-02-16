@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:form id="ParametrageMatiereListerForm">
+
+        <p:messages id="growl" closable="true">
+            <p:effect type="pulsate" event="load" delay="50" />
+        </p:messages>
+
+        <center>
+
+            <h:outputLabel style="font-family: cambria ; font-size: 25px;color: red" value="#{langue.configuration_de_base}"/>
+
+            <p:separator/>
+
+            <p:panelGrid columns="2">
+
+                <p:panel header="#{langue.structure}">
+
+                    <h:panelGrid columns="2">
+
+                        <h:outputLabel value="#{langue.nom_structure}" for="nom"/>
+                        <p:inputTextarea id="nom" value="#{parametrageController.parametrage.nomStructure}" cols="100" rows="4" style="width: 350px"/>
+
+                        <h:outputLabel value="#{langue.description_activite}" for="description"/>
+                        <p:inputTextarea id="description" value="#{parametrageController.parametrage.descriptif}" cols="100" rows="4" style="width: 300px"/>
+
+                        <h:outputLabel value="#{langue.telephone_1}" for="contact_1"/>
+                        <p:inputText id="contact_1" value="#{parametrageController.parametrage.contact1}"/>
+
+                        <h:outputLabel value="#{langue.telephone_2}" for="contact_2"/>
+                        <p:inputText id="contact_2" value="#{parametrageController.parametrage.contact2}"/>
+                        
+                        <h:outputLabel value="#{langue.fax}" for="fax"/>
+                        <p:inputText id="fax" value="#{parametrageController.parametrage.fax}"/>
+
+                        <h:outputLabel value="#{langue.boite_postale}" for="boite_postale"/>
+                        <p:inputTextarea id="boite_postale" value="#{parametrageController.parametrage.boitePostale}" cols="100" rows="2" style="width: 300px"/>
+
+                        <h:outputLabel value="#{langue.numero_contribuable}" for="no_contrib"/>
+                        <p:inputText id="no_contrib" value="#{parametrageController.parametrage.noContrib}" style="width: 300px"/>
+
+                        <h:outputLabel value="#{langue.num_registre_commerce}" for="no_regist_commerce"/>
+                        <p:inputText id="no_regist_commerce" value="#{parametrageController.parametrage.rcm}" style="width: 300px"/>
+                        
+                        <h:outputLabel value="#{langue.banque}" for="banque"/>
+                        <p:inputText id="banque" value="#{parametrageController.parametrage.banque}" style="width: 300px"/>
+
+                        <h:outputLabel value="#{langue.no_compte}" for="no_compte"/>
+                        <p:inputText id="no_compte" value="#{parametrageController.parametrage.numeroCompte}" style="width: 300px"/>
+                
+                        <h:outputLabel value="#{langue.localisation}" for="localisation"/>
+                        <p:inputTextarea id="localisation" value="#{parametrageController.parametrage.localisation}" cols="100" rows="2" style="width: 300px"/>   
+
+                    </h:panelGrid>
+
+                </p:panel>
+                <p:panel header="#{langue.information_tehniques}">
+
+                    <center>
+                        <p:commandButton actionListener="#{parametrageController.prepareUpload()}" 
+                                         value="#{langue.charger_logo}" partialSubmit="true" 
+                                         update=":LogoForm,:notify1"
+                                         icon="ui-icon-plus"/>
+                        <br/>
+                        <p:separator/>
+
+                        <h:graphicImage id="photo" width="250" height="250"  url="/photos/#{parametrageController.filename}" style="cursor:pointer"/>
+                    </center>
+                    <p:separator/>
+                    <h:panelGrid columns="2">
+                        <h:outputLabel value="#{langue.repertoire_photo}" for="repertoire_photo"/>
+                        <p:inputTextarea id="repertoire_photo" value="#{parametrageController.parametrage.repertoireLogo}" cols="100" rows="2" style="width: 300px"/>
+
+                        <h:outputLabel value="#{langue.repertoire_sauvegarde}" for="repertoire_sauvegarde"/>
+                        <p:inputTextarea id="repertoire_sauvegarde" value="#{parametrageController.parametrage.repertoireSauvegardre}" cols="100" rows="2" style="width: 300px"/>
+
+                        <h:outputLabel value="#{langue.capital}" for="capital"/>
+                        <p:inputText id="capital" value="#{parametrageController.parametrage.capital}"/>
+
+                        <h:outputLabel value="#{langue.taux_tva} (%)" for="taux_tva"/>
+                        <p:inputText id="taux_tva" value="#{parametrageController.parametrage.tauxTva}"/>
+
+                        <h:outputLabel value="#{langue.taux_remise} (%)" for="taux_remise"/>
+                        <p:inputText id="taux_remise" value="#{parametrageController.parametrage.tauxRemise}"/>
+
+                        <h:outputLabel value="#{langue.calcul_tva} ?" for="calcul_tva"/>
+                        <h:selectBooleanCheckbox value="#{parametrageController.parametrage.calcultva}" id="calcul_tva" />
+                        
+                        <h:outputLabel value="#{langue.calcul_remise} ?" for="calcul_remise"/>
+                        <h:selectBooleanCheckbox value="#{parametrageController.parametrage.calculRemise}" id="calcul_remise" />
+                        
+                        <h:outputLabel value="#{langue.visibilite_quantite_dosage} ?" for="etat_quantite_dosage"/>
+                        <h:selectBooleanCheckbox value="#{parametrageController.parametrage.etatQuantiteDosage}" id="etat_quantite_dosage" />
+
+                        <h:outputLabel value="#{langue.visibilite_forme_stockage} ?" for="etat_forme_stockage"/>
+                        <h:selectBooleanCheckbox value="#{parametrageController.parametrage.etatFormeStockage}" id="etat_forme_stockage" />
+                          
+                        <h:outputLabel value="#{langue.visibilite_forme_produit} ?" for="etat_forme_produit"/>
+                        <h:selectBooleanCheckbox value="#{parametrageController.parametrage.etatFormeProduit}" id="etat_forme_produit" />
+                        
+                        <h:outputLabel value="Etat bailleur produit ?" for="etat_bailleur"/>
+                        <h:selectBooleanCheckbox value="#{parametrageController.parametrage.etatbailleur}" id="etat_bailleur" />
+                                                
+                        <h:outputLabel value="Utilisateur produit ?" for="etat_user_p"/>
+                        <h:selectBooleanCheckbox value="#{parametrageController.parametrage.etatuser}" id="etat_user_p" />
+                                                
+                        <h:outputLabel value="% Bailleur" for="pourcentage_bail"/>
+                        <p:inputText id="pourcentage_bail" value="#{parametrageController.parametrage.pourcentageBailleur}"/>
+                        
+                    </h:panelGrid>
+
+                </p:panel>
+
+            </p:panelGrid>
+
+            <p:separator/>
+            <center>
+                <p:commandButton value="#{langue.valider}" actionListener="#{parametrageController.save()}" update=":notify1,ParametrageMatiereListerForm"/>
+            </center>
+            <br/>
+        </center>
+
+    </h:form>
+
+    <!-- ****************************************Information************************************************************************************************************************************************************************************************************** -->
+
+    <p:dialog id="notify1" widgetVar="NotifyDialog1" height="220" width="600" resizable="true" modal="true" style="text-align: center; font-size: 14px; font-family: Cambria;">
+        <f:facet name="header">
+            <h:outputText style="font-family: Cambria; font-size: 14px;" value="#{parametrageController.routine.titleNotify}" />
+        </f:facet>
+        <h:form id="NotifyForm1">
+            <h:graphicImage id="nt_img" url="#{parametrageController.routine.iconMessage}" style="cursor:pointer" />
+
+            <hr size="3" style="background-color: cornflowerblue;"/>
+
+            <h:outputText id="nt_msg" value="#{parametrageController.routine.message}"/>
+
+            <hr size="3" style="background-color: cornflowerblue; margin-top: 5%;"/>
+
+            <p:commandButton style="font-family: Cambria; font-size: 14px;" value="#{langue.fermer}" onclick="PF('NotifyDialog1').hide()" type="button" immediate="true"/>
+
+            <hr size="3" style="background-color: cornflowerblue;"/>
+        </h:form>
+    </p:dialog>
+
+    <!-- ****************************************Information************************************************************************************************************************************************************************************************************** -->
+</ui:composition>

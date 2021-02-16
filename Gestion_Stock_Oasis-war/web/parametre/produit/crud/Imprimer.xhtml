@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+        <p:dialog 
+                  id="ArticleImprimerDlg"
+                  widgetVar="ArticleImprimerDialog"
+                  modal="true" resizable="false"  
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Impression']}: #{langue.articles}" closeOnEscape="true">
+
+            <h:form id="ArticleImprimerForm">
+
+                <object data="#{request.contextPath}/reports/produits/#{articleController.fileName}" type="application/pdf" title="cv" width="1200" height="550"></object>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+</html>

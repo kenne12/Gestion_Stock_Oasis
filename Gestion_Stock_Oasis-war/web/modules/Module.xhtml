@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+
+    <f:metadata>
+        <f:event type="preRenderView" listener="#{loginBean.watcher()}" />
+    </f:metadata> 
+
+    <h:form id="module" style="margin-top: 0.5%">
+   
+        <p:poll interval="10" listener="#{loginBean.setPriv()}" update="module"  /> 
+        <p:commandLink disabled="#{loginBean.parametrage}" id="setting" class="btn btn-primary"  action="/ParametrageTemplate/indexTemplate.html?faces-redirect=true" style="visibility: #{loginBean.parametrageVisible}" ajax="false">
+            <h:outputText value="#{langue.parametrageSysteme}"/>
+        </p:commandLink>
+
+        <p:commandLink disabled="#{loginBean.gestionInscription}" id="con" class="btn btn-primary"  action="/gestionFraisInscriptionTemplate/indexTemplate.html?faces-redirect=true" style="visibility: #{loginBean.gestionInscriptionVisible};margin-left:0.5%" ajax="false">
+            <h:outputText value="#{langue.inscription}"/>
+        </p:commandLink>
+
+        <p:commandLink disabled="#{loginBean.gestionPersonnel}" id="gestionPersonnel" class="btn btn-primary"  action="/gestionPersonnelTemplate/indexTemplate.html?faces-redirect=true"  style="visibility: #{loginBean.gestionPersonnelVisible};margin-left:0.5%"   ajax="false">
+            <h:outputText value="#{langue.gestionPersonnel}"/>
+        </p:commandLink>
+        
+        <p:commandLink  disabled="#{loginBean.gestionNote}" id="notes" class="btn btn-primary"  action="/SystemTemplate/indexTemplate.html?faces-redirect=true"  style="visibility: #{loginBean.gestionNoteVisible};margin-left:0.5%"  ajax="false">
+            <h:outputText value="#{langue.gestionEvaluation}"/>
+        </p:commandLink>
+
+        <p:commandLink disabled="#{loginBean.gestionDiscipline}" id="discipline" class="btn btn-primary"  action="/gestionDisciplineTemplate/indexTemplate.html?faces-redirect=true"  style="visibility: #{loginBean.gestionDisciplineVisible};margin-left:0.5%"   ajax="false">
+            <h:outputText value="#{langue.gestionDiscipline}"/>
+        </p:commandLink>
+         
+        <p:commandLink disabled="#{loginBean.bibliotheque}"  id="biblio" class="btn btn-primary"  action="/BibliothequeTemplate/indexTemplate.html?faces-redirect=true" style="visibility: #{loginBean.bibliothequeVisible};margin-left:0.5%" ajax="false">
+            <h:outputText value="#{langue.gestionBibliotheque}"/>
+        </p:commandLink> 
+
+        <p:commandLink disabled="#{loginBean.gestionEtat}" id="etat" class="btn btn-primary"  action="/gestionEtatTemplate/indexTemplate.html?faces-redirect=true"  style="visibility: #{loginBean.gestionEtatVisible};margin-left:0.5%" ajax="false"> 
+            <h:outputText value="#{langue.gestionEtat}"/>
+        </p:commandLink>
+
+        <p:commandLink disabled="#{loginBean.gestionPrivilege}" id="privilege" class="btn btn-primary"  action="/PrivilegeTemplate/indexTemplate.html?faces-redirect=true" style="visibility: #{loginBean.gestionPrivilegeVisible};margin-left:0.5%" ajax="false"> 
+            <h:outputText value="#{langue.gestionPrivilege}"/>
+        </p:commandLink>    
+
+    </h:form>
+</ui:composition>

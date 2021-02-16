@@ -1,0 +1,24 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="#{loginBean.utilisateur.template}"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+    <ui:define name="contenu">
+        
+        <script type="text/javascript" src="#{request.contextPath}/date_heure.js"></script>
+        <div style="min-height: 400px">
+            <center>
+                <strong>
+                    <span style="font-size: 40px;color: red">
+                        #{langue.acces_refuse}
+                    </span>
+                </strong>
+                <br/><br/>
+                <span id="date_heure" style="font-size: 100px;"></span>
+                <script type="text/javascript">window.onload = date_heure('date_heure');</script>
+            </center>
+        </div>
+    </ui:define>
+</ui:composition>

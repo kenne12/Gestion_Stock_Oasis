@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="actionsForm">
+
+        <div class="footer-section">
+
+            <p:commandButton id="creer"  icon="ui-icon-plus"   
+                             value="#{langue['Conv.Creer']}" 
+                             actionListener="#{transfertMagCentralController.prepareCreate()}"
+                             update=":TransfertCreateForm,:notify1"/>
+
+            <p:commandButton id="detail"   
+                             icon="ui-icon-search" 
+                             value="#{langue['Conv.Detail']}" 
+                             update=":TransfertDetailForm,:notify1" 
+                             oncomplete="PF('TransfertDetailDialog').show()" 
+                             actionListener="#{transfertMagCentralController.prepareview()}"
+                             disabled="#{transfertMagCentralController.detail}"/>
+
+            <p:commandButton id="supprimer" 
+                             icon="ui-icon-trash"  
+                             value="#{langue.annuler}" 
+                             update=":TransfertListerForm:datalist,actionsForm,:notify1"
+                             disabled="#{transfertMagCentralController.supprimer}"
+                             actionListener="#{transfertMagCentralController.delete()}">
+                <p:confirm header="#{langue['Titre.Dlg.Confirm']}"
+                           message="#{langue['Message.Confirm.Supprimer']}?"
+                           icon="ui-icon-alert"/>
+            </p:commandButton>
+
+            <p:commandButton id="imprimer" icon="ui-icon-print"  
+                             value="#{langue['Conv.Imprimer']}" 
+                             actionListener="#{transfertMagCentralController.print()}"
+                             disabled="#{transfertMagCentralController.imprimer}"
+                             update=":TransfertImprimerForm,:TransfertImprimerDlg,:notify1"/>  
+
+        </div>
+
+    </h:form>
+</ui:composition>

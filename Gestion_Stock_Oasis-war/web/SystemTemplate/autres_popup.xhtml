@@ -1,0 +1,173 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+
+    <!--************************************ boite de dialogue de deconnection *********************************-->
+    <p:dialog id="formeDeconnexion" widgetVar="DeconnectionDialog"   
+              modal="true"  draggable="true" height="200" width="500" 
+              style="text-align: center; font-size: 14px; font-family: Cambria;">
+        <f:facet name="header">
+            <h:outputText style="font-family: Cambria; font-size: 14px;" value="#{langue.deconnecter}" />
+        </f:facet>
+        <h:form id="DeconnexionForm">
+            <h:graphicImage  value="/resources/tool_images/sortie.png" style="cursor:pointer" />
+
+            <hr size="3" style="background-color: cornflowerblue;"/>
+
+            <h:outputText value="#{langue.confirmation_quitter}"/>
+
+            <hr size="3" style="background-color: cornflowerblue;"/>
+
+            <h:panelGrid style="margin: auto;" columns="2">
+                <p:commandButton  onclick="PF('DeconnectionDialog').hide()" style="margin-right: 75%; font-family: Cambria; font-size: 14px; color: red;" value="#{langue.annuler}" />
+                <p:commandButton actionListener="#{loginBean.deconnexion()}" style="font-family: Cambria; font-size: 14px;" value="#{langue.valider}" />
+            </h:panelGrid>
+
+            <hr size="3" style="background-color: cornflowerblue;"/>
+        </h:form>
+    </p:dialog>
+
+    <!--**************************************boite de dialogue de a propos ********************************-->
+
+    <p:dialog modal="true" widgetVar="aboutDialog"  
+              draggable="true" height="425" width="600" id="about"
+              style="text-align: center; font-size: 14px; font-family: Cambria;">
+        <f:facet name="header">
+            <h:outputText style="font-family: Cambria; font-size: 14px;" value="#{langue.a_propos}" />
+        </f:facet>
+        <f:facet name="controls">
+            <h:graphicImage  value="/resources/icon_images/delete.png" style="cursor:pointer" onclick="PF('aboutDialog').hide()" />
+        </f:facet>
+        <h:graphicImage  value="/resources/icon_images/sign.png" style="cursor:pointer" />
+
+        <hr size="3" style="background-color: cornflowerblue;"/>
+
+        <h:outputText value="My Stock Manager"/><br/>
+        <h:outputText value="Est un logiciel complet de Gestion de stock , flexible , developpé en java et tourant sur navigateur web" /><br/>
+        <hr size="3" style="background-color: cornflowerblue;"/>
+        <h:outputText style="text-align: justify;" value="Version : 3.0" /><br/>
+        <hr size="3" style="background-color: cornflowerblue;"/>
+        <h:outputText style="text-align: justify;" value="Auteur : Gervais Kenne"/><br/>
+        <hr size="3" style="background-color: cornflowerblue;"/>
+        <h:outputText style="text-align: justify;" value="Date : 2019" /><br/>
+        <hr size="3" style="background-color: cornflowerblue;"/>
+        <h:outputText style="text-align: justify;" value="Description : My Stock Manager est un logiciel qui permet de gérer plus efficacement le stock et aide dans la prise des décisions"/><br/>
+
+        <hr size="3" style="background-color: cornflowerblue;"/>
+    </p:dialog>
+
+    <!--************************************** La mise en veille ********************************-->
+
+    <p:dialog id="hibernateDlg" 
+              widgetVar="hibernateDialog" 
+              modal="true" 
+              resizable="false"
+              appendTo="@(body)"
+              width="500"
+              header="#{langue.system_pause}"
+              footer="#{langue.pause_cafe}"
+              closeOnEscape="false" closable="false" visible="#{loginBean.showHibernatePanel}">
+
+        <h:form id="hibernateForm">
+
+            <p:messages id="growl" closable="true">
+                <p:effect type="pulsate" event="load" delay="50" />
+            </p:messages>
+
+            <center>
+                <i class="fa fa-coffee"></i>
+            </center>
+
+            <h:panelGrid columns="2">
+
+                <p:outputLabel for="password" value="#{langue.password}"/>
+                <p:password id="password" value="#{loginBean.hibernatePassword}" required="true" requiredMessage="#{langue.valeur_obligatoire}"/>
+
+            </h:panelGrid>
+
+            <p:separator/>
+            <center>
+                <p:commandButton actionListener="#{loginBean.unHibbernate()}" value="#{langue.valider}" 
+                                 update=":hibernateDlg,growl"/>
+            </center>
+        </h:form>
+    </p:dialog>
+
+    <!--- ********************************************* boite de dialogue de modification de connexion  *********************************-->
+
+    <p:dialog id="modifier_compte" widgetVar="Modifier_compteDialog" draggable="true" modal="true" style="text-align: center; font-size: 14px; font-family: Cambria;">
+        <f:facet name="header">
+            <h:outputText style="font-family: Cambria; font-size: 14px;" value="#{langue.modifier_compte}" />
+        </f:facet>
+        <h:form id="CompteEditForm">
+
+            <p:messages id="growl" closable="true">
+                <p:effect type="pulsate" event="load" delay="50" />
+            </p:messages>
+
+            <h:panelGrid id="mo_cpte" style=" text-align: justify;" columns="3">
+
+                <p:outputLabel value="#{langue.template}" for="template"/>
+                <p:selectOneMenu id="template" value="#{loginBean.utilisateur.template}" required="true" requiredMessage="#{langue.valeur_obligatoire}" filter="true">
+                    <f:selectItems value="#{utilisateurController.templates}" var="item" itemLabel="#{item}" itemValue="#{item}"/>
+                </p:selectOneMenu>
+                <p:message for="template" id="msg_template"/>
+
+                <h:outputLabel style="font-family: Cambria; font-size: 14px;" value="#{langue.login} " for="modifier_login_compte" />
+                <h:inputText style="font-family: Cambria; font-size: 14px; width: 200px;" id="modifier_login_compte" value="#{loginBean.utilisateur.login}" title="#{langue.login}" required="true" requiredMessage="#{langue.valeur_obligatoire}" >
+                    <p:ajax event="blur" update="modifier_login_compteError" />
+                </h:inputText>
+                <p:message id="modifier_login_compteError" for="modifier_login_compte"/>
+
+                <h:outputLabel style="font-family: Cambria; font-size: 14px;" value="#{langue.password} " for="modifier_Mot_de_passe" />
+                <h:inputSecret style="font-family: Cambria; font-size: 14px; width: 200px;" id="modifier_Mot_de_passe" value="#{loginBean.utilisateur.password}" title="#{langue.password}" required="true" requiredMessage="#{langue.valeur_obligatoire}" >
+                    <p:ajax event="blur" update="modifier_Mot_de_passeError"/>
+                </h:inputSecret>
+                <p:message id="modifier_Mot_de_passeError" for="modifier_Mot_de_passe"/>
+
+                <h:outputLabel style="font-family: Cambria; font-size: 14px;" value="#{langue.confirmer_mot_de_passe} " for="modifier_Confirmer_mot_passe" />
+                <h:inputSecret style="font-family: Cambria; font-size: 14px; width: 200px;" id="modifier_Confirmer_mot_passe" value="#{loginBean.confirmPassword}" title="#{langue.confirmer_mot_de_passe}" required="true" requiredMessage="#{langue.valeur_obligatoire}" >
+                    <p:ajax event="blur" update="modifier_Confirmer_mot_passeError"/>
+                </h:inputSecret>
+                <p:message id="modifier_Confirmer_mot_passeError" for="modifier_Confirmer_mot_passe"/>
+
+            </h:panelGrid>
+
+            <hr size="3" style="background-color: cornflowerblue;"/>
+
+            <h:panelGrid style="margin: auto;" columns="2">
+                <p:commandButton style="font-family: Cambria; font-size: 14px; color: red; margin-right: 75%;" value="#{langue.annuler}" onclick="PF('Modifier_compteDialog').hide()" type="button" immediate="true" />
+                <p:commandButton style="font-family: Cambria; font-size: 14px;" actionListener="#{loginBean.updateCompte()}" value="#{langue.enregistrer}" update=":CompteEditForm,mo_cpte,growl,:notify" />
+            </h:panelGrid>
+
+            <hr size="3" style="background-color: cornflowerblue;"/>
+        </h:form>
+    </p:dialog>
+
+    <!-- ****************************************Information************************************************************************************************************************************************************************************************************** -->
+
+    <p:dialog id="notify" widgetVar="NotifyDialog" height="220" width="600" resizable="true" responsive="true" modal="true" style="text-align: center; font-size: 14px; font-family: Cambria;">
+        <f:facet name="header">
+            <h:outputText style="font-family: Cambria; font-size: 14px;" value="#{loginBean.routine.titleNotify}" />
+        </f:facet>
+        <h:form id="NotifyForm">
+            <h:graphicImage id="nt_img" url="#{loginBean.routine.iconMessage}" style="cursor:pointer" />
+
+            <hr size="3" style="background-color: cornflowerblue;"/>
+
+            <h:outputText id="nt_msg" value="#{loginBean.routine.message}"/>
+
+            <hr size="3" style="background-color: cornflowerblue; margin-top: 5%;"/>
+
+            <p:commandButton style="font-family: Cambria; font-size: 14px;" value="#{langue.valider}" onclick="PF('NotifyDialog').hide()" type="button" immediate="true"/>
+
+            <hr size="3" style="background-color: cornflowerblue;"/>
+        </h:form>
+    </p:dialog>
+
+    <!-- ****************************************Information************************************************************************************************************************************************************************************************************** -->
+
+</ui:composition>

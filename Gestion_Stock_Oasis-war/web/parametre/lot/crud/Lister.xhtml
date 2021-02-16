@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="LotListerForm">
+
+        <p:messages id="growl" closable="true">
+            <p:effect type="pulsate" event="load" delay="50" />
+        </p:messages>
+
+
+        <p:contextMenu id="LotDataTableContextMenu" for="datalist">  
+            <p:menuitem value="#{langue['Conv.Creer']}" onclick="document.getElementById('actionsForm:creer').click();" icon="ui-icon-plus"/>
+            <p:menuitem value="#{langue['Conv.Detail']}" onclick="document.getElementById('actionsForm:detail').click();" icon="ui-icon-search"/>
+            <p:menuitem value="#{langue['Conv.Modifier']}" onclick="document.getElementById('actionsForm:modifier').click();" icon="ui-icon-pencil"/>
+            <p:menuitem value="#{langue['Conv.Supprimer']}" onclick="document.getElementById('actionsForm:supprimer').click();" icon="ui-icon-trash"/>
+        </p:contextMenu>
+        <p:dataTable id="datalist"
+                     value="#{lotController.lots}"
+                     var="item"
+                     rowKey="#{item.idlot}"
+                     paginator="true"
+                     rows="10"
+                     rowsPerPageTemplate="10,20,30,40,50"
+                     selectionMode="single"
+                     selection="#{lotController.lot}">
+
+            <p:ajax event="rowSelect"   update=":LotListerForm:LotDataTableContextMenu, :actionsForm"/>
+            <p:ajax event="rowUnselect" update=":LotListerForm:LotDataTableContextMenu, :actionsForm"/>
+            <p:ajax event="rowDblselect" onsuccess="document.getElementById('LotListerForm:viewButton').click();"/>
+
+
+            <p:column filterBy="#{item.idarticle.libelle}" style="width: 25%">
+                <f:facet name="header">
+                    <h:outputText value="#{langue.article}"/>
+                </f:facet>
+                <h:outputText value="#{item.idarticle.libelle}"/>
+            </p:column>
+
+            <p:column filterBy="#{item.numero}" style="width: 27%">
+                <f:facet name="header">
+                    <h:outputText value="#{langue.numero_lot}"/>
+                </f:facet>
+                <h:outputText value="#{item.numero}"/>
+            </p:column>
+
+            <p:column filterBy="#{item.prixachat}" style="width: 10%;text-align: right">
+                <f:facet name="header">
+                    <h:outputText value="#{langue.prix_achat}"/>
+                </f:facet>
+                <h:outputText value="#{item.prixachat}">
+                    <f:convertNumber/>
+                </h:outputText>
+            </p:column>
+
+            <p:column filterBy="#{item.prixunitaire}" style="width: 10%;text-align: right">
+                <f:facet name="header">
+                    <h:outputText value="#{langue.prix_vente}"/>
+                </f:facet>
+                <h:outputText value="#{item.prixunitaire}">
+                    <f:convertNumber/>
+                </h:outputText>
+            </p:column>
+
+            <p:column filterBy="#{item.datefabrication}" style="width: 15%;text-align: center">
+                <f:facet name="header">
+                    <h:outputText value="#{langue.date_fabrication}"/>
+                </f:facet>
+                <h:outputText value="#{item.datefabrication}">
+                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                </h:outputText>
+            </p:column>
+
+            <p:column filterBy="#{item.dateperemption}" style="width: 15%;text-align: center">
+                <f:facet name="header">
+                    <h:outputText value="#{langue.date_peremption}"/>
+                </f:facet>
+                <h:outputText value="#{item.dateperemption}">
+                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                </h:outputText>
+            </p:column>
+            
+            <p:column filterBy="#{item.quantite}" style="width: 8%;text-align: right">
+                <f:facet name="header">
+                    <h:outputText value="#{langue.qte}"/>
+                </f:facet>
+                <h:outputText value="#{item.quantite}">
+                    <f:convertNumber/>
+                </h:outputText>
+            </p:column>
+
+            <p:column style="width: 5%;text-align: center">
+                <f:facet name="header">
+                    <h:outputText value="#{langue.etat}"/>
+                </f:facet>
+                <h:selectBooleanCheckbox disabled="true" value="#{item.etat}"/>
+            </p:column>
+
+        </p:dataTable>
+
+    </h:form>
+
+    <!-- ****************************************Information************************************************************************************************************************************************************************************************************** -->
+
+    <p:dialog id="notify1" widgetVar="NotifyDialog1" height="400" width="700" resizable="true" modal="true" style="text-align: center; font-size: 14px; font-family: Cambria;">
+        <f:facet name="header">
+            <h:outputText style="font-family: Cambria; font-size: 14px;" value="#{lotController.routine.titleNotify}" />
+        </f:facet>
+        <h:form id="NotifyForm1">
+            <h:graphicImage id="nt_img" url="#{lotController.routine.iconMessage}" style="cursor:pointer" />
+
+            <hr size="3" style="background-color: cornflowerblue;"/>
+
+            <h:outputText id="nt_msg" value="#{lotController.routine.message}"/>
+
+            <hr size="3" style="background-color: cornflowerblue; margin-top: 5%;"/>
+
+            <p:commandButton style="font-family: Cambria; font-size: 14px;" value="#{langue.fermer}" onclick="PF('NotifyDialog1').hide()" type="button" immediate="true"/>
+
+            <hr size="3" style="background-color: cornflowerblue;"/>
+        </h:form>
+    </p:dialog>
+
+    <!-- ****************************************Information************************************************************************************************************************************************************************************************************** -->
+
+</ui:composition>

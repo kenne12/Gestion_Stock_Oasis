@@ -1,0 +1,378 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="#{loginBean.utilisateur.template}"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="contenu">
+
+        <br/>
+        <h:form>
+            <h:selectOneMenu value="#{localeManagedBean.language}" onchange="submit()"> 
+                <f:selectItems value="#{localeManagedBean.locales}" />
+            </h:selectOneMenu> 
+        </h:form>
+
+        <h:form id="data">
+
+
+        </h:form>
+
+        <h:form style="margin-top: 200px ;">
+            <center>
+
+                <h:panelGrid columns="3">
+
+                    <p:commandLink update=":PeremptionViewForm_1" disabled="false" style="margin-left:0.5%;border-radius: 10%" actionListener="#{controlPeremptionController.openDialog()}" >
+                        <h:graphicImage url="/resources/alert_images/alerte.jpg" style="cursor:pointer;width: 250px;height: 200px" />
+                    </p:commandLink>
+
+                    <p:commandLink disabled="false" style="margin-left:20%;" update=":AlerteCommandeClientForm" actionListener="#{alerteController.openDemandeDialog()}">
+                        <h:graphicImage url="/resources/alert_images/alerte.jpg" style="cursor:pointer;width: 250px;height: 200px" />
+                    </p:commandLink>
+
+                    <p:commandLink disabled="false" style="margin-left:25%;" update=":AlertePeremptionForm" actionListener="#{alerteController.openAlertPeremptionDialog()}">
+                        <h:graphicImage url="/resources/alert_images/alerte.jpg" style="cursor:pointer;width: 250px;height: 200px" />
+                    </p:commandLink>
+
+                    <h:outputLabel value="#{langue.produit_perimes} (#{controlPeremptionController.magasinlots.size()})" style="font-size: 20px;color: red;margin-left:0.5%" />
+
+                    <h:outputLabel value="#{langue.demandes_en_attente} (#{alerteController.demandes.size()})" style="font-size: 20px;margin-left:20%;color: red" />
+
+                    <h:outputLabel value="#{langue.alertes_peremption} (#{alerteController.magasinlot_peremps.size()})" style="font-size: 20px;margin-left:20%;color: red" />
+                </h:panelGrid>
+
+            </center>
+        </h:form>
+
+
+
+        <p:dialog id="SessionCreerDlg" 
+                  widgetVar="MenuCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)"
+                  closable="false"
+                  visible="#{loginBean.showSessionPanel}"
+                  header="#{langue.donnee_session}">
+
+            <h:form id="SessionCreerForm">
+
+                <p:messages id="growl" closable="true">
+                    <p:effect type="pulsate" event="load" delay="50" />
+                </p:messages>
+
+                <h:panelGrid columns="2" columnClasses="column">
+
+
+                </h:panelGrid>
+
+                <p:separator/>
+
+                <center>
+                    <p:commandButton partialSubmit="true" actionListener="#{loginBean.initSession()}" value="#{langue.valider}" 
+                                     update="SessionCreerForm,:SessionCreerDlg,growl,:data" icon="ui-icon-check"/>
+                </center>
+
+            </h:form>
+
+        </p:dialog>
+
+        <p:dialog id="PeremptionViewDlg" 
+                  widgetVar="PeremptionViewDialog" 
+                  modal="true" 
+                  resizable="false" 
+                  appendTo="@(body)"
+                  closable="false"
+                  visible="#{controlPeremptionController.showSessionPanel}"
+                  width="70%"
+                  height="550px"
+                  header="#{langue.articles_perimes}">
+
+            <h:form id="PeremptionViewForm">
+
+                <p:messages id="growl" closable="true">
+                    <p:effect type="pulsate" event="load" delay="50" />
+                </p:messages>
+
+                <p:dataTable rendered="false" id="datalist"
+                             value="#{controlPeremptionController.lots}"
+                             var="item"
+                             rowKey="#{item.idlot}"
+                             paginator="true"
+                             rows="10"
+                             rowsPerPageTemplate="10,20,30,40,50">
+
+                    <p:column filterBy="#{item.idarticle.libelle}" style="width: 25%">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.article}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idarticle.libelle}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{item.numero}" style="width: 27%">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.numero_lot}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.numero}"/>
+                    </p:column>
+
+                    <p:column style="width: 15%;text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.date_peremption}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.dateperemption}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column filterBy="#{item.quantite}" style="width: 8%;text-align: right">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.qte}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.quantite}">
+                            <f:convertNumber/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column style="width: 5%;text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.etat}"/>
+                        </f:facet>
+                        <h:selectBooleanCheckbox disabled="true" value="#{item.etat}"/>
+                    </p:column>
+
+                </p:dataTable>
+
+                <ui:repeat value="#{controlPeremptionController.magasins}" var="mag">
+
+                    <h:outputLabel value="#{mag.nom}" style="color: blue ; font-size: 16px" />
+                    <p:separator/>
+
+                    <p:dataTable id="datalist"
+                                 value="#{controlPeremptionController.filterLotByMagasin(mag)}"
+                                 var="item"
+                                 rowKey="#{item.idmagasinlot}"
+                                 paginator="true"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50">
+
+                        <p:column filterBy="#{item.idmagasinarticle.idarticle.libelle}" style="width: 25%">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.article}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idmagasinarticle.idarticle.libelle}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{item.idlot.numero}" style="width: 27%">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.numero_lot}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idlot.numero}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{item.idlot.dateperemption}" style="width: 15%;text-align: center">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.date_peremption}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idlot.dateperemption}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column style="width: 8%;text-align: right">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.qte}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.quantitemultiple}">
+                                <f:convertNumber/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column style="width: 5%;text-align: center">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.etat}"/>
+                            </f:facet>
+                            <h:selectBooleanCheckbox disabled="true" value="#{item.etat}"/>
+                        </p:column>
+
+                    </p:dataTable>
+
+                </ui:repeat>
+
+                <br/>
+                <center>
+
+                    <p:commandButton partialSubmit="true" actionListener="#{controlPeremptionController.close()}"
+                                     value="#{langue.fermer}" 
+                                     update="PeremptionViewForm,:PeremptionViewDlg" icon="ui-icon-close"/>
+
+                    <p:commandButton partialSubmit="true" 
+                                     actionListener="#{controlPeremptionController.closePeremptionDialog()}"
+                                     value="#{langue.retirer_du_stock} Par Inventaire" 
+                                     update="PeremptionViewForm,:PeremptionViewDlg,growl,:data,:notify1" icon="ui-icon-check"/>                    
+
+                </center>
+
+            </h:form>
+
+        </p:dialog>
+
+        <p:dialog id="PeremptionViewDlg_1" 
+                  widgetVar="PeremptionViewDialog_1" 
+                  modal="true" 
+                  resizable="false" 
+                  appendTo="@(body)"
+                  closable="false"
+                  width="70%"
+                  height="550px"
+                  header="#{langue.articles_perimes}">
+
+            <h:form id="PeremptionViewForm_1">
+
+                <p:messages id="growl" closable="true">
+                    <p:effect type="pulsate" event="load" delay="50" />
+                </p:messages>
+
+                <p:dataTable id="datalist"
+                             value="#{controlPeremptionController.magasinlots}"
+                             var="item"
+                             rowKey="#{item.idmagasinlot}"
+                             paginator="true"
+                             rows="10"
+                             rowsPerPageTemplate="10,20,30,40,50">
+
+                    <p:column filterBy="#{item.idmagasinarticle.idarticle.libelle}" style="width: 27%">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.article}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idmagasinarticle.idarticle.libelle}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{item.idlot.numero}" style="width: 15%">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.numero_lot}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idlot.numero}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{item.idmagasinarticle.idmagasin.nom}" style="width: 33%">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.service}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idmagasinarticle.idmagasin.nom}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{item.idlot.dateperemption}" style="width: 10%;text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.date_peremption}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idlot.dateperemption}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column style="width: 10%;text-align: right">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.qte}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.quantitemultiple}">
+                            <f:convertNumber/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column style="width: 5%;text-align: center">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.etat}"/>
+                        </f:facet>
+                        <h:selectBooleanCheckbox disabled="true" value="#{item.etat}"/>
+                    </p:column>
+
+                </p:dataTable>
+
+                <p:separator />
+
+                <center>
+
+                    <p:commandButton partialSubmit="true" actionListener="#{controlPeremptionController.close()}"
+                                     value="#{langue.fermer}" 
+                                     update="PeremptionViewForm_1,:PeremptionViewDlg_1" icon="ui-icon-close"/>
+
+                    <p:commandButton partialSubmit="true"
+                                     actionListener="#{controlPeremptionController.closePeremptionDialog()}"
+                                     value="#{langue.retirer_du_stock} Par Inventaire" 
+                                     update="PeremptionViewForm_1,:PeremptionViewDlg_1,growl,:data,:notify1" icon="ui-icon-check"/> 
+
+                    <p:commandButton id="imprimer" icon="ui-icon-print" 
+                                     ajax="false"
+                                     value="#{langue['Conv.Imprimer']}" 
+                                     actionListener="#{controlPeremptionController.print()}" />
+
+                </center>
+
+            </h:form>
+
+        </p:dialog>
+
+        <p:dialog id="FermettureCreerDlg" 
+                  widgetVar="FermettureCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)"
+                  closable="false"
+                  width="1200"
+                  header="#{langue.etat_cloture_journee}">
+
+            <h:form id="FermettureCreerForm">
+
+                <p:messages id="growl" closable="true">
+                    <p:effect type="pulsate" event="load" delay="50" />
+                </p:messages>
+
+
+
+                <p:separator/>
+
+                <center>
+                    <p:commandButton oncomplete="PF('FermettureCreerDialog').hide()" 
+                                     partialSubmit="true" style="float: left"
+                                     value="#{langue.fermer}" 
+                                     update="FermettureCreerForm,:FermettureCreerDlg,growl,:data" 
+                                     icon="ui-icon-close"/>
+
+                    <p:commandButton oncomplete="PF('FermettureCreerDialog').hide()" 
+                                     partialSubmit="true" style="float: right" 
+                                     actionListener="#{loginBean.closeSession()}"
+                                     value="#{langue.valider}" 
+                                     update="FermettureCreerForm,:FermettureCreerDlg,:data,:notify1" icon="ui-icon-check"/>
+                </center>
+
+            </h:form>
+
+        </p:dialog>
+
+        <!-- ****************************************Information************************************************************************************************************************************************************************************************************** -->
+
+        <p:dialog id="notify1" widgetVar="NotifyDialog1" height="220" width="600" resizable="true" modal="true" style="text-align: center; font-size: 14px; font-family: Cambria;">
+            <f:facet name="header">
+                <h:outputText style="font-family: Cambria; font-size: 14px;" value="#{loginBean.routine.titleNotify}" />
+            </f:facet>
+            <h:form id="NotifyForm1">
+                <h:graphicImage id="nt_img" url="#{loginBean.routine.iconMessage}" style="cursor:pointer" />
+
+                <hr size="3" style="background-color: cornflowerblue;"/>
+
+                <h:outputText id="nt_msg" value="#{loginBean.routine.message}"/>
+
+                <hr size="3" style="background-color: cornflowerblue; margin-top: 5%;"/>
+
+                <p:commandButton style="font-family: Cambria; font-size: 14px;" value="#{langue.fermer}" onclick="PF('NotifyDialog1').hide()" type="button" immediate="true"/>
+
+                <hr size="3" style="background-color: cornflowerblue;"/>
+            </h:form>
+        </p:dialog>
+
+        <!-- ****************************************Information************************************************************************************************************************************************************************************************************** -->
+
+    </ui:define>
+</ui:composition>

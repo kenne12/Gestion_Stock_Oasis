@@ -1,0 +1,125 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:jsf="http://xmlns.jcp.org/jsf">
+    <f:loadBundle basename="langues.langue" var="langue"/>
+    <h:form> 
+        <div id="header" class="navbar navbar-inverse navbar-fixed-top">
+            <!-- BEGIN TOP NAVIGATION BAR -->
+            <div class="navbar-inner">
+                <div class="container-fluid">
+                    <!--BEGIN SIDEBAR TOGGLE-->
+                    <div class="sidebar-toggle-box hidden-phone">
+                        <div class="icon-reorder"></div>
+                    </div>
+                    <!--END SIDEBAR TOGGLE-->
+                    <!-- BEGIN LOGO -->
+                    <a class="brand" href="index.html">
+                        <img src="#{request.contextPath}/templates/ressources/img/logo.png" alt="ATLANTIS FOODS DISTRIBUTION SA" />
+                    </a>
+                    <!-- END LOGO -->
+                    <!-- BEGIN RESPONSIVE MENU TOGGLER -->
+                    <a class="btn btn-navbar collapsed" id="main_menu_trigger" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="arrow"></span>
+                    </a>
+                    <!-- END RESPONSIVE MENU TOGGLER -->
+                    <div id="top_menu" class="nav notify-row">
+                        <!-- BEGIN NOTIFICATION -->
+                        <ul class="nav top-menu">
+                            <!-- BEGIN SETTINGS -->                            
+                            <h3  style="text-align: center ; visibility: "> #{loginBean.param.nomStructure} / #{loginBean.annee.nom}</h3>
+                        </ul>
+                    </div>
+                    <!-- END  NOTIFICATION -->
+                    <div class="top-nav ">
+                        <ul class="nav pull-right top-menu" >
+                            <!-- BEGIN SUPPORT -->
+                            <li class="dropdown mtop5">
+                                <a class="dropdown-toggle element" data-placement="bottom" data-toggle="tooltip" href="#" data-original-title="Chat">
+                                    <i class="icon-comments-alt"></i>
+                                </a>
+                            </li>
+                            <li class="dropdown mtop5">
+                                <a class="dropdown-toggle element" data-placement="bottom" data-toggle="tooltip" href="#" data-original-title="Help">
+                                    <i class="icon-headphones"></i>
+                                </a>
+                            </li>
+                            <!-- END SUPPORT -->
+                            <!-- BEGIN USER LOGIN DROPDOWN -->
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <img src="#{request.contextPath}/photos/photo_personnels/#{loginBean.utilisateur.photo}" style="width:40px;height: 40px" alt="" />
+                                    <span class="username">#{loginBean.utilisateur.nom} #{loginBean.utilisateur.prenom}</span>
+                                    <b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu extended logout">
+                                    <li>
+                                        <a href="#" onclick="PF('Modifier_compteDialog').show()" jsf:update=":modifier_compte">
+                                            <i class="icon-user"></i>#{langue.monProfil}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#{request.contextPath}/parametre/parametrage/parametrage.html">
+                                            <i class="icon-cog"></i> #{langue.parametrage}
+                                        </a>
+                                    </li>
+
+                                    <li>  
+                                        <p:commandLink id="ajax" onclick="PF('DeconnectionDialog').show()" update=":DeconnexionForm">
+                                            <i class="icon-power-off"></i> 
+                                            <h:outputText value="#{langue.deconnecter}" />
+                                        </p:commandLink>
+                                    </li>
+
+                                    <li> 
+                                        <p:commandLink  actionListener="#{loginBean.hibbernate()}"  oncomplete="PF('hibernateDialog').show()" update=":hibernateDlg">
+                                            <i class="icon-coffee"></i> 
+                                            <h:outputText value="#{langue.veille}" />
+                                        </p:commandLink>
+                                    </li> 
+
+                                    <li>
+                                        <a href="#" onclick="PF('aboutDialog').show()">
+                                            <i class="icon-question"></i>#{langue.a_propos}
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="#" jsf:actionListener="#{loginBean.change_session()}">
+                                            <i class="fa fa-rotate-left fa-fw"></i>#{langue.changer_session}
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <h:form>
+                                            <p:selectOneMenu  autoWidth="false" style="width: 100px" 
+                                                              id="theme"
+                                                              value="#{loginBean.utilisateur.theme}">
+                                                <f:selectItems value="#{themes.themes}"
+                                                               var="them"
+                                                               itemLabel="#{them}"
+                                                               itemValue="#{them}"/>
+                                                <p:ajax listener="#{loginBean.update_theme()}" oncomplete="javascript:location.reload();" />
+                                            </p:selectOneMenu>
+                                        </h:form>
+                                    </li>
+
+                                </ul>
+                            </li>
+                            <!-- END USER LOGIN DROPDOWN -->
+                        </ul>
+                        <!-- END TOP NAVIGATION MENU -->
+                    </div>
+                </div>
+            </div>
+            <!-- END TOP NAVIGATION BAR -->
+        </div>
+    </h:form>
+
+
+</ui:composition>

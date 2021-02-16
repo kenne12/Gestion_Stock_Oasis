@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="InventaireDetailDlg" 
+                  widgetVar="InventaireDetailDialog" 
+                  modal="true" resizable="false"  
+                  appendTo="@(body)"
+                  width="70%"
+                  height="550"
+                  header="#{langue['Titre.Dlg.Detail']} : #{langue.inventaire}" closeOnEscape="true">
+
+            <h:form id="InventaireDetailForm">
+
+                <h:panelGroup id="display">
+
+                    <p:panelGrid columns="2">
+
+                        <h:outputLabel value="#{langue.date}"/>
+                        <h:outputLabel value="#{inventaireGlobalController.inventaire.dateinventaire}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputLabel>
+
+                        <h:outputLabel value="#{langue.code}"/>
+                        <h:outputLabel value="#{inventaireGlobalController.inventaire.code}"/>
+                        
+                        <h:outputLabel value="#{langue.service}"/>
+                        <h:outputLabel value="#{inventaireGlobalController.inventaire.idmagasin.nom}"/>
+
+                    </p:panelGrid>
+
+                    <p:separator/>
+
+                    <p:dataTable id="datalist"
+                                 value="#{inventaireGlobalController.ligneinventaires_1}"
+                                 var="item"
+                                 paginator="true"
+                                 rows="15"
+                                 rowsPerPageTemplate="10,20,30,40,50">
+
+                        <p:column filterBy="#{item.idlot.idarticle.libelle}" width="25%">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.article}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idlot.idarticle.libelle}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{item.idlot.numero}" width="20%">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.lot}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idlot.numero}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{item.idlot.prixunitaire}" style="text-align: right">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.prix}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idlot.prixunitaire}">
+                                <f:convertNumber/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column filterBy="#{item.qtetheorique}" style="text-align: center">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.qte_theorique}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.qtetheorique}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{item.qtephysique}" style="text-align: center">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.qte_physique}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.qtephysique}"/>
+                        </p:column>
+
+                        <p:column style="text-align: center">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.ecart}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.ecart}"/>
+                        </p:column>
+
+                    </p:dataTable>
+                    <p:separator/>
+
+                    <center>
+                        <p:commandButton value="#{langue['Conv.Fermer']}" oncomplete="PF('InventaireDetailDialog').hide()" icon="ui-icon-close"/>
+                    </center>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+        <p:dialog id="TransfertCreateDlg" 
+                  widgetVar="TransfertCreateDialog" 
+                  modal="true"
+                  responsive="true"
+                  resizable="true" 
+                  appendTo="@(body)"
+                  width="90%"
+                  height="600"
+                  header="#{langue.transfert_st_mag_cent_mag_sec}">
+
+            <h:form id="TransfertCreateForm">
+
+                <h:panelGroup id="display">
+
+                    <br/>
+                    <center>
+
+                        <h:panelGrid columns="4">
+
+                            <p:outputLabel value="#{langue.date}" for="date_commande" />
+                            <p:calendar pattern="dd/MM/yyyy" id="date_commande" value="#{transfertMagCentralController.repartitionarticle.date}" navigator="true" requiredMessage="#{langue.valeur_obligatoire}">
+                                <p:ajax/>  
+                            </p:calendar>
+
+                            <p:outputLabel value="-" />
+
+                            <p:commandButton icon="ui-icon-plus" 
+                                             value="#{langue.ajouter_les_articles}" 
+                                             update=":ArticleCreateForm" 
+                                             actionListener="#{transfertMagCentralController.prepareAddArticle()}"
+                                             disabled="#{transfertMagCentralController.showSelectorCommand}"/>
+                        </h:panelGrid>
+
+                    </center>
+
+                    <p:separator style="width: 98%;margin-left: 1%"/>
+
+                    <div style="width: 100%">
+
+                        <div style="width: 39.5%;float: left">
+
+                            <p:dataTable id="datalist1" 
+                                         value="#{transfertMagCentralController.lignerepartitiontemps}" 
+                                         var="lcc"                             
+                                         paginator="true" 
+                                         rowKey="#{lcc.idlignerepartitiontemp}"
+                                         rows="15"
+                                         rowsPerPageTemplate="10,20,30,40,50"
+                                         style="width: 98%;margin-left: 1%"
+                                         rowIndexVar="index"
+                                         emptyMessage="#{langue.tableau_vide}"
+                                         widgetVar="fonctionTable"
+                                         draggableColumns="true"
+                                         resizableColumns="true">
+
+                                <f:facet name="header"> 
+                                    <h:outputText value="#{langue.liste_des_lot_concernes}"/>
+                                </f:facet> 
+
+                                <p:column style="width: 25%" filterBy="#{lcc.idlot.idarticle.libelle}" >
+                                    <f:facet name="header">
+                                        <h:outputText value="#{langue.article}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{lcc.idlot.idarticle.libelle}"/>
+                                </p:column>
+
+                                <p:column style="width: 25%" filterBy="#{lcc.idlot.numero}" >
+                                    <f:facet name="header">
+                                        <h:outputText value="#{langue.lot}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{lcc.idlot.numero}"/>
+                                </p:column>
+
+                                <p:column style="width: 10%;text-align: center" filterBy="#{lcc.quantite}">
+                                    <f:facet name="header">
+                                        <h:outputText value="#{langue.qte_physique}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{lcc.idlot.quantite}">
+                                        <f:convertNumber/>
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column style="width: 10%;text-align: center">
+                                    <f:facet name="header">
+                                        <h:outputText value="Qté sol"/>
+                                    </f:facet>
+                                    <h:outputText value="#{lcc.quantite}">
+                                        <f:convertNumber/>
+                                    </h:outputText>
+                                </p:column>
+
+                            </p:dataTable>
+
+                        </div>
+
+                        <div style="width: 60%; float: left">
+
+                            <p:dataTable id="datalist" 
+                                         value="#{transfertMagCentralController.lignerepartitionarticles}" 
+                                         var="item"                             
+                                         paginator="true"
+                                         editable="true" 
+                                         rowKey="#{item.idlignerepartitionarticle}"
+                                         rows="15"
+                                         rowsPerPageTemplate="10,20,30,40,50"
+                                         style="width: 98%;margin-left: 1%"
+                                         rowIndexVar="index"
+                                         emptyMessage="#{langue.tableau_vide}"
+                                         widgetVar="fonctionTable"
+                                         draggableColumns="true"
+                                         resizableColumns="true"
+                                         editMode="cell">
+
+                                <f:facet name="header"> 
+                                    <h:outputText value="#{langue.liste_des_magasins_concernes}"/>
+                                </f:facet> 
+
+                                <p:column style="width: 25%" filterBy="#{item.idmagasinlot.idmagasinarticle.idarticle.libelle}" >
+                                    <f:facet name="header">
+                                        <h:outputText value="#{langue.article}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.idmagasinlot.idmagasinarticle.idarticle.libelle}"/>
+                                </p:column>
+
+                                <p:column style="width: 15%" filterBy="#{item.idmagasinlot.idlot.numero}" >
+                                    <f:facet name="header">
+                                        <h:outputText value="#{langue.lot}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.idmagasinlot.idlot.numero}"/>
+                                </p:column>
+
+                                <p:column style="width: 20%" filterBy="#{item.idmagasinlot.idmagasinarticle.idmagasin.nom}" >
+                                    <f:facet name="header">
+                                        <h:outputText value="#{langue.magasin}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.idmagasinlot.idmagasinarticle.idmagasin.nom}"/>
+                                </p:column>
+
+                                <p:column style="width: 10%;text-align: center" headerText="#{langue.qte}">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{item.quantite}"/></f:facet>
+                                        <f:facet  name="input">
+                                            <p:inputText required="true" value="#{item.quantite}">                                             
+                                                <p:ajax event="keyup" />
+                                            </p:inputText>
+                                        </f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+
+                                <p:column style="width: 15%;text-align: center" headerText="#{langue.unite}">
+                                    <p:cellEditor>
+                                        <f:facet name="output">
+                                            <h:outputText value="#{item.idunite.libelle}"/>
+                                        </f:facet>
+                                        <f:facet name="input">
+                                            <p:selectOneMenu value="#{item.idunite}" converter="uniteConverter" >
+                                                <f:selectItems value="#{transfertMagCentralController.unites}" var="unit" itemLabel="#{unit.libelle}" itemValue="#{unit}" />
+                                                <p:ajax />
+                                            </p:selectOneMenu>
+                                        </f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+
+                                <p:column style="width: 7.5%;text-align: center" headerText="#{langue.qte_par_unite}">
+                                    <p:cellEditor>
+                                        <f:facet name="output">
+                                            <h:outputText value="#{item.unite}"/>
+                                        </f:facet>
+                                        <f:facet  name="input">
+                                            <p:inputText required="true" value="#{item.unite}">                                             
+                                                <p:ajax event="keyup" />
+                                            </p:inputText>
+                                        </f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                
+                                <p:column style="width: 7.5%">
+                                    <f:facet name="header">
+                                        <h:outputText value="#{langue.q_t}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.quantitemultiple}"/>
+                                </p:column>
+
+                            </p:dataTable>
+
+                        </div>
+
+                    </div>
+
+                    <p:separator style="width: 98%;margin-left: 1%"/>
+
+                    <center>                       
+                        <p:commandButton style="color: red;" icon="ui-icon-close" value="#{langue.annuler}" oncomplete="PF('TransfertCreateDialog').hide()" partialSubmit="true"/>
+                        <p:commandButton actionListener="#{transfertMagCentralController.create()}" icon="ui-icon-check" value="#{langue.valider}" update="display,:TransfertListerForm:datalist,:notify1" onclick="PF('AjaxNotifyDialog').show()"/>
+                    </center>
+
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>
