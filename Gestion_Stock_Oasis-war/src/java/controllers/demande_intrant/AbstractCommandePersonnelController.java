@@ -1,6 +1,7 @@
 package controllers.demande_intrant;
 
 import entities.Article;
+import entities.Client;
 import entities.Demande;
 import entities.Famille;
 import entities.Lignedemande;
@@ -11,7 +12,6 @@ import entities.Magasin;
 import entities.Magasinarticle;
 import entities.Magasinlot;
 import entities.Personnel;
-import entities.Projet;
 import entities.Unite;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +19,7 @@ import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.transaction.UserTransaction;
 import sessions.ArticleFacadeLocal;
+import sessions.ClientFacadeLocal;
 import sessions.DemandeFacadeLocal;
 import sessions.FamilleFacadeLocal;
 import sessions.LignedemandeFacadeLocal;
@@ -30,7 +31,6 @@ import sessions.MagasinarticleFacadeLocal;
 import sessions.MagasinlotFacadeLocal;
 import sessions.MouchardFacadeLocal;
 import sessions.PersonnelFacadeLocal;
-import sessions.ProjetFacadeLocal;
 import sessions.UniteFacadeLocal;
 import sessions.UtilisateurmagasinFacadeLocal;
 import utils.Routine;
@@ -40,11 +40,6 @@ public class AbstractCommandePersonnelController {
 
     @Resource
     protected UserTransaction ut;
-
-    @EJB
-    protected ProjetFacadeLocal projetFacadeLocal;
-    protected Projet projet = new Projet();
-    protected List<Projet> projets = new ArrayList<>();
 
     @EJB
     protected DemandeFacadeLocal demandeFacadeLocal;
@@ -83,8 +78,7 @@ public class AbstractCommandePersonnelController {
 
     @EJB
     protected PersonnelFacadeLocal personnelFacadeLocal;
-    protected Personnel personnel = new Personnel();
-    protected List<Personnel> personnels = new ArrayList();
+    protected Personnel personnel = SessionMBean.getUserAccount().getIdpersonnel();
 
     @EJB
     protected LivraisonclientFacadeLocal livraisonclientFacadeLocal;
@@ -95,6 +89,11 @@ public class AbstractCommandePersonnelController {
     protected LignelivraisonclientFacadeLocal lignelivraisonclientFacadeLocal;
     protected Lignelivraisonclient lignelivraisonclient = new Lignelivraisonclient();
     protected List<Lignelivraisonclient> lignelivraisonclients = new ArrayList();
+
+    @EJB
+    protected ClientFacadeLocal clientFacadeLocal;
+    protected Client client = new Client();
+    protected List<Client> clients = new ArrayList<>();
 
     @EJB
     protected LotFacadeLocal lotFacadeLocal;
@@ -150,11 +149,6 @@ public class AbstractCommandePersonnelController {
 
     public void setPersonnel(Personnel personnel) {
         this.personnel = personnel;
-    }
-
-    public List<Personnel> getPersonnels() {
-        this.personnels = this.personnelFacadeLocal.findAllRange();
-        return this.personnels;
     }
 
     public Livraisonclient getLivraisonclient() {
@@ -259,18 +253,6 @@ public class AbstractCommandePersonnelController {
         return this.lots;
     }
 
-    public Projet getProjet() {
-        return this.projet;
-    }
-
-    public void setProjet(Projet projet) {
-        this.projet = projet;
-    }
-
-    public List<Projet> getProjets() {
-        return this.projets;
-    }
-
     public Lignedemande getLignedemande() {
         return this.lignedemande;
     }
@@ -293,7 +275,7 @@ public class AbstractCommandePersonnelController {
     }
 
     public List<Demande> getDemandes() {
-        this.demandes = this.demandeFacadeLocal.findAllRange(SessionMBean.getUserAccount().getIdpersonnel().getIdpersonnel());
+        this.demandes = this.demandeFacadeLocal.findAllRange();
         return this.demandes;
     }
 
@@ -369,4 +351,18 @@ public class AbstractCommandePersonnelController {
     public String getLibelle_article() {
         return this.libelle_article;
     }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public List<Client> getClients() {
+        clients = clientFacadeLocal.findAllRange(true);
+        return clients;
+    }
+
 }

@@ -36,12 +36,12 @@ public class LivraisonclientFacade extends AbstractFacade<Livraisonclient> imple
 
     @Override
     public List<Livraisonclient> findAllRange() {
-        return this.em.createQuery("SELECT l FROM Livraisonclient l ORDER BY l.datelivraison DESC").getResultList();
+        return this.em.createQuery("SELECT l FROM Livraisonclient l ORDER BY l.idlivraisonclient DESC").getResultList();
     }
 
     @Override
     public Livraisonclient findByIddemande(long iddemande) {
-        Query query = em.createQuery("SELECT l FROM Livraisonclient l WHERE l.iddemande.iddemande=:iddemande");
+        Query query = em.createQuery("SELECT l FROM Livraisonclient l WHERE l.iddemande.iddemande=:iddemande ORDER BY l.idlivraisonclient DESC");
         query.setParameter("iddemande", iddemande);
         List list = query.getResultList();
         if (!list.isEmpty()) {

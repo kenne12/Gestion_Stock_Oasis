@@ -28,16 +28,8 @@
                         </h:outputLabel>
 
                         <h:outputLabel value="#{langue.personnel}"/>
-                        <h:outputLabel value="#{commandePersonnelController.demande.idpersonnel.nom} #{commandePersonnelController.demande.idpersonnel.prenom}"/>
+                        <h:outputLabel value="#{commandePersonnelController.demande.client.nom} #{commandePersonnelController.demande.client.prenom}"/>
 
-                        <h:outputLabel value="#{langue.valeur}"/>
-                        <h:outputLabel value="#{commandePersonnelController.demande.idprojet.nom}">
-                            <f:convertNumber/>
-                        </h:outputLabel>
-                        
-                        <h:outputLabel value="#{langue.personnel}"/>
-                        <h:outputLabel value="#{commandePersonnelController.demande.idpersonnel.nom}"/>
-                      
                     </p:panelGrid>
 
                     <p:separator/>
@@ -55,7 +47,7 @@
                             </f:facet>
                             <h:outputText value="#{item.idmagasinarticle.idarticle.libelle}"/>
                         </p:column>
-                        
+
                         <p:column filterBy="#{item.idmagasinarticle.idmagasin.nom}" width="40%">
                             <f:facet name="header">
                                 <h:outputText value="#{langue.magasin}"/>

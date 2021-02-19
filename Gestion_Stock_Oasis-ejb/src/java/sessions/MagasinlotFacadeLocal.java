@@ -8,25 +8,25 @@ import javax.ejb.Local;
 @Local
 public interface MagasinlotFacadeLocal {
 
-    public void create(Magasinlot paramMagasinlot);
+    public void create(Magasinlot magasinlot);
 
-    public void edit(Magasinlot paramMagasinlot);
+    public void edit(Magasinlot magasinlot);
 
-    public void remove(Magasinlot paramMagasinlot);
+    public void remove(Magasinlot magasinlot);
 
-    public Magasinlot find(Object paramObject);
+    public Magasinlot find(Object id);
 
     public List<Magasinlot> findAll();
 
-    public List<Magasinlot> findRange(int[] paramArrayOfInt);
+    public List<Magasinlot> findRange(int[] range);
 
     public int count();
 
     public Long nextVal();
 
-    public List<Magasinlot> findByArticleIsavailable(int paramInt, long paramLong, boolean paramBoolean, Date paramDate) throws Exception;
+    public List<Magasinlot> findByArticleIsavailable(int idmagasin, long idarticle, boolean order, Date date) throws Exception;
 
-    public Magasinlot findByIdmagasinIdlot(int paramInt, long paramLong);
+    public Magasinlot findByIdmagasinIdlot(int idmagasin, long idlot);
 
     public List<Magasinlot> findByIdmagasinEtatIsTrue(int paramInt);
 
@@ -43,4 +43,6 @@ public interface MagasinlotFacadeLocal {
     public List<Magasinlot> findByArticleIsavailable(int idmagasin, long idarticle);
 
     public List<Magasinlot> findByIdmagasinQtyNotNull(int idmagasin);
+
+    List<Magasinlot> findByIdMagasinIdArticle(long idMagasinArticle);
 }

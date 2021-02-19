@@ -34,10 +34,10 @@
 
                     <center>
 
-                        <h:panelGrid style="" columns="6">
+                        <h:panelGrid columns="4">
 
-                            <p:outputLabel  value="#{langue.personnel} : "/>
-                            <p:outputLabel  value="#{livraisonClientController.personnel.nom}"/>
+                            <p:outputLabel  value="#{langue.client} : &nbsp;"/>
+                            <p:outputLabel  value="#{livraisonClientController.client.nom}"/>
 
                             <p:outputLabel value="#{langue.date_demande}" for="date_commande" />
                             <p:calendar pattern="dd/MM/yyyy" disabled="true" id="date_commande" value="#{livraisonClientController.demande.datedemande}" navigator="true" requiredMessage="#{langue.valeur_obligatoire}">
@@ -48,6 +48,12 @@
                             <p:calendar pattern="dd/MM/yyyy" disabled="false" id="date_livraison_effect" value="#{livraisonClientController.demande.dateeffectlivraison}" navigator="true" requiredMessage="#{langue.valeur_obligatoire}">
                                 <p:ajax/>  
                             </p:calendar>
+
+                            <p:outputLabel value="#{langue.taux_tva}" for="taux_tva" />
+                            <p:inputText id="taux_tva" value="#{livraisonClientController.livraisonclient.tauxTva}" disabled="true" />
+
+                            <p:outputLabel value="#{langue.taux_remise}" for="taux_remise" />
+                            <p:inputText id="taux_remise" value="#{livraisonClientController.livraisonclient.tauxRemise}" disabled="true" />
 
                         </h:panelGrid>
 
@@ -158,6 +164,15 @@
                                     <h:outputText value="#{item.idmagasinlot.idmagasinarticle.idmagasin.nom}"/>
                                 </p:column>
 
+                                <p:column style="width: 15%;text-align: center" >
+                                    <f:facet name="header">
+                                        <h:outputText value="#{langue.prix_unitaire}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.prixUnitaire}">
+                                        <f:convertNumber />
+                                    </h:outputText>  
+                                </p:column>
+
                                 <p:column style="width: 10%;text-align: center" headerText="#{langue.qte}">
                                     <p:cellEditor>
                                         <f:facet name="output">
@@ -171,25 +186,11 @@
                                     </p:cellEditor>
                                 </p:column>
 
-                                <p:column style="width: 15%;text-align: center" headerText="#{langue.unite}">
-                                    <p:cellEditor>
-                                        <f:facet name="output">
-                                            <h:outputText value="#{item.idunite.libelle}"/>
-                                        </f:facet>
-                                        <f:facet name="input">
-                                            <p:selectOneMenu value="#{item.idunite}" converter="uniteConverter" >
-                                                <f:selectItems value="#{livraisonClientController.unites}" var="unit" itemLabel="#{unit.libelle}" itemValue="#{unit}" />
-                                                <p:ajax />
-                                            </p:selectOneMenu>
-                                        </f:facet>
-                                    </p:cellEditor>
-                                </p:column>
-
-                                <p:column style="width: 10%;text-align: center" >
+                                <p:column style="width: 15%;text-align: center" >
                                     <f:facet name="header">
-                                        <h:outputText value="#{langue.qte_totale}"/>
+                                        <h:outputText value="#{langue.total}"/>
                                     </f:facet>
-                                    <h:outputText value="#{item.quantitemultiple}">
+                                    <h:outputText value="#{item.montant}">
                                         <f:convertNumber />
                                     </h:outputText>  
                                 </p:column>
@@ -199,6 +200,34 @@
                         </div>
                     </div>
 
+                    <p:separator style="width: 98%;margin-left: 1%"/>
+
+                    <center>
+                        <p:panelGrid id="info_2" style="" columns="10">
+
+                            <p:outputLabel for="total" value="#{langue.total_ht}"/>
+                            <p:outputLabel id="total" value="#{livraisonClientController.livraisonclient.montant}" style="color:red">                               
+                                <f:convertNumber/>
+                            </p:outputLabel>
+
+                            <p:outputLabel for="tva" value="#{langue.tva}"/>
+                            <p:outputLabel id="tva" value="#{livraisonClientController.livraisonclient.montantTva}" style="color:red">                               
+                                <f:convertNumber/>
+                            </p:outputLabel>
+
+                            <p:outputLabel for="remise" value="#{langue.remise}"/>
+                            <p:outputLabel id="remise" value="#{livraisonClientController.livraisonclient.montantRemise}" style="color:red">                               
+                                <f:convertNumber/>
+                            </p:outputLabel>
+
+                            <p:outputLabel for="montant_ttc" value="#{langue.total_ttc}"/>
+                            <p:outputLabel id="montant_ttc" value="#{livraisonClientController.livraisonclient.montantTtc}" style="color:red">                               
+                                <f:convertNumber/>
+                            </p:outputLabel>
+
+                            <p:commandButton value="#{langue.calculer}" icon="fa fa-calculator" actionListener="#{livraisonClientController.updateTotal()}" update="info_2"/>     
+                        </p:panelGrid>
+                    </center>
                     <p:separator style="width: 98%;margin-left: 1%"/>
 
                     <center>

@@ -7,6 +7,7 @@ package entities;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -36,6 +37,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Lignemvtstock.findByType", query = "SELECT l FROM Lignemvtstock l WHERE l.type = :type"),
     @NamedQuery(name = "Lignemvtstock.findByMagasin", query = "SELECT l FROM Lignemvtstock l WHERE l.magasin = :magasin")})
 public class Lignemvtstock implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -46,6 +48,8 @@ public class Lignemvtstock implements Serializable {
     private Double qtesortie;
     private Double unite;
     private Double reste;
+    @Column(name = "qteavant")
+    private Double qteAvant;
     @Size(max = 70)
     private String client;
     @Size(max = 70)
@@ -167,6 +171,14 @@ public class Lignemvtstock implements Serializable {
         this.idmvtstock = idmvtstock;
     }
 
+    public Double getQteAvant() {
+        return qteAvant;
+    }
+
+    public void setQteAvant(Double qteAvant) {
+        this.qteAvant = qteAvant;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -191,5 +203,5 @@ public class Lignemvtstock implements Serializable {
     public String toString() {
         return "entities.Lignemvtstock[ idlignemvtstock=" + idlignemvtstock + " ]";
     }
-    
+
 }

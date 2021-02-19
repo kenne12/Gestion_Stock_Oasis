@@ -8,9 +8,9 @@ import entities.Livraisonfournisseur;
 import entities.Lot;
 import entities.Magasin;
 import entities.Magasinarticle;
+import entities.Magasinlot;
 import entities.Mvtstock;
 import entities.Unite;
-import entities.Utilisateur;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Resource;
@@ -90,6 +90,8 @@ public class AbstractEntreedirecteController {
 
     @EJB
     protected MagasinlotFacadeLocal magasinlotFacadeLocal;
+    protected Magasinlot magasinlot = new Magasinlot();
+    protected List<Magasinlot> magasinlots = new ArrayList<>();
 
     @EJB
     protected MvtstockFacadeLocal mvtstockFacadeLocal;
@@ -242,97 +244,97 @@ public class AbstractEntreedirecteController {
     }
 
     public Double getCout_quantite() {
-        /* 254 */ return this.cout_quantite;
+        return this.cout_quantite;
     }
 
     public void setCout_quantite(Double cout_quantite) {
-        /* 258 */ this.cout_quantite = cout_quantite;
+        this.cout_quantite = cout_quantite;
     }
 
     public Double getTotal() {
-        /* 262 */ return this.total;
+        return this.total;
     }
 
     public void setTotal(Double total) {
-        /* 266 */ this.total = total;
+        this.total = total;
     }
 
     public String getFileName() {
-        /* 270 */ return this.fileName;
+        return this.fileName;
     }
 
     public Lot getLot() {
-        /* 274 */ return this.lot;
+        return this.lot;
     }
 
     public void setLot(Lot lot) {
-        /* 278 */ this.lot = lot;
+        this.lot = lot;
     }
 
     public List<Lot> getLots() {
-        /* 282 */ return this.lots;
+        return this.lots;
     }
 
     public Routine getRoutine() {
-        /* 286 */ return this.routine;
+        return this.routine;
     }
 
     public Unite getUnite() {
-        /* 290 */ return this.unite;
+        return this.unite;
     }
 
     public void setUnite(Unite unite) {
-        /* 294 */ this.unite = unite;
+        this.unite = unite;
     }
 
     public List<Unite> getUnites() {
-        /* 298 */ this.unites = this.uniteFacadeLocal.findAllRange();
-        /* 299 */ return this.unites;
+        this.unites = this.uniteFacadeLocal.findAllRange();
+        return this.unites;
     }
 
     public void setUnites(List<Unite> unites) {
-        /* 303 */ this.unites = unites;
+        this.unites = unites;
     }
 
     public Magasin getMagasin() {
-        /* 307 */ return this.magasin;
+        return this.magasin;
     }
 
     public void setMagasin(Magasin magasin) {
-        /* 311 */ this.magasin = magasin;
+        this.magasin = magasin;
     }
 
     public List<Magasin> getMagasins() {
-        /* 315 */ this.magasins = Utilitaires.returMagasinByUser(this.magasinFacadeLocal, this.utilisateurmagasinFacadeLocal, SessionMBean.getUserAccount().getIdpersonnel());
-        /* 316 */ return this.magasins;
+        this.magasins = Utilitaires.returMagasinByUser(this.magasinFacadeLocal, this.utilisateurmagasinFacadeLocal, SessionMBean.getUserAccount().getIdpersonnel());
+        return this.magasins;
     }
 
     public void setMagasins(List<Magasin> magasins) {
-        /* 320 */ this.magasins = magasins;
+        this.magasins = magasins;
     }
 
     public Magasinarticle getMagasinarticle() {
-        /* 324 */ return this.magasinarticle;
+        return this.magasinarticle;
     }
 
     public void setMagasinarticle(Magasinarticle magasinarticle) {
-        /* 328 */ this.magasinarticle = magasinarticle;
+        this.magasinarticle = magasinarticle;
     }
 
     public List<Magasinarticle> getMagasinarticles() {
-        /* 332 */ return this.magasinarticles;
+        return this.magasinarticles;
     }
 
     public void setMagasinarticles(List<Magasinarticle> magasinarticles) {
-        /* 336 */ this.magasinarticles = magasinarticles;
+        this.magasinarticles = magasinarticles;
     }
 
     public String getLibelle_article() {
-        /* 340 */ return this.libelle_article;
+        return this.libelle_article;
     }
 
     public void setLibelle_article(String libelle_article) {
-        /* 344 */ this.libelle_article = libelle_article;
+        this.libelle_article = libelle_article;
     }
 
     public Fournisseur getFournisseurToSave() {
@@ -341,6 +343,18 @@ public class AbstractEntreedirecteController {
 
     public void setFournisseurToSave(Fournisseur fournisseurToSave) {
         this.fournisseurToSave = fournisseurToSave;
+    }
+
+    public Magasinlot getMagasinlot() {
+        return magasinlot;
+    }
+
+    public void setMagasinlot(Magasinlot magasinlot) {
+        this.magasinlot = magasinlot;
+    }
+
+    public List<Magasinlot> getMagasinlots() {
+        return magasinlots;
     }
 
 }

@@ -69,20 +69,21 @@
                                     </f:facet>
                                     <h:outputText value="#{item.idarticle.libelle}"/>
                                 </p:column>
-                                
-                                <p:column filterBy="#{item.idarticle.fabricant}" style="width: 15%">
-                                    <f:facet name="header">
-                                        <h:outputText value="#{langue.fabricant}"/>
-                                    </f:facet>
-                                     <h:outputText value="#{item.idarticle.fabricant}" />
-                                </p:column>
-                                
 
                                 <p:column filterBy="#{item.idmagasin.nom}" style="width: 30%">
                                     <f:facet name="header">
                                         <h:outputText value="#{langue.magasin}"/>
                                     </f:facet>
                                     <h:outputText value="#{item.idmagasin.nom}" />
+                                </p:column>
+
+                                <p:column style="text-align: center;width: 15%">
+                                    <f:facet name="header">
+                                        <h:outputText value="#{langue.prix_unitaire}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.idarticle.prixunit}">
+                                        <f:convertNumber />
+                                    </h:outputText>
                                 </p:column>
 
                                 <p:column style="text-align: center;width: 7.5%">
@@ -131,10 +132,16 @@
                                         <p:ajax />
                                     </p:selectOneMenu>
 
-                                    <p:inputText id="qpu" required="true" style="width: 75px" value="#{commandePersonnelController.lignedemande.unite}">
+                                    <p:inputText disabled="true" id="qpu" required="true" style="width: 75px" value="#{commandePersonnelController.lignedemande.unite}">
                                         <f:convertNumber/>
                                         <p:ajax event="keyup" update="qt" listener="#{commandePersonnelController.updateQuantity()}"/>
                                     </p:inputText>
+
+                                    <p:outputLabel value="#{langue.prix_unitaire}" for="p_u"/>
+                                    <p:inputText required="true" id="p_u" style="width: 100px" value="#{commandePersonnelController.lignedemande.prixUnitaire}">                                
+                                        <p:ajax event="keyup" update="qt" />
+                                    </p:inputText>
+                                    <p:message for="p_u"/>
 
                                     <p:outputLabel value="#{langue.quantite}" for="quantite"/>
                                     <p:inputText required="true" id="quantite" style="width: 100px" value="#{commandePersonnelController.lignedemande.quantite}">                                
@@ -143,7 +150,7 @@
                                     <p:message for="quantite"/>
 
                                     <p:outputLabel value="#{langue.quantite_totale}" for="qt" />
-                                    <p:inputText id="qt"  required="true" style="width: 100px" value="#{commandePersonnelController.lignedemande.quantitemultiple}">
+                                    <p:inputText disabled="true" id="qt"  required="true" style="width: 100px" value="#{commandePersonnelController.lignedemande.quantitemultiple}">
                                         <f:convertNumber/>
                                         <p:ajax event="keyup" />
                                     </p:inputText>
@@ -156,7 +163,7 @@
 
                             <center>                        
                                 <p:commandButton partialSubmit="true" style="color: red;" icon="ui-icon-close" value="#{langue.fermer}" oncomplete="PF('ArticleCreateDialog').hide()"/>
-                                <p:commandButton actionListener="#{commandePersonnelController.addArticle()}" style="" icon="ui-icon-plus" value="#{langue.ajouter_a_la_demande}" update="display,:CommandeCreateForm:datalist,:CommandeCreateForm:info_1,:CommandeCreateForm:info_2,:DemandeListerForm:msg"/>                        
+                                <p:commandButton actionListener="#{commandePersonnelController.addArticle()}" icon="ui-icon-plus" value="#{langue.ajouter_a_la_demande}" update="display,:CommandeCreateForm:datalist,:CommandeCreateForm:info_1,:CommandeCreateForm:info_2,:DemandeListerForm:msg"/>                        
                             </center>
 
                         </div>

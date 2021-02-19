@@ -27,16 +27,8 @@
                             <f:convertDateTime pattern="dd/MM/yyyy"/>
                         </h:outputLabel>
 
-                        <h:outputLabel value="#{langue.personnel}"/>
-                        <h:outputLabel value="#{traitementController.demande.idpersonnel.nom} #{commandePersonnelController.demande.idpersonnel.prenom}"/>
-
-                        <h:outputLabel value="#{langue.valeur}"/>
-                        <h:outputLabel value="#{traitementController.demande.idprojet.nom}">
-                            <f:convertNumber/>
-                        </h:outputLabel>
-                        
-                        <h:outputLabel value="#{langue.personnel}"/>
-                        <h:outputLabel value="#{traitementController.demande.idpersonnel.nom}"/>
+                        <h:outputLabel value="#{langue.client}"/>
+                        <h:outputLabel value="#{traitementController.demande.client.nom} #{commandePersonnelController.demande.client.prenom}"/>
                       
                     </p:panelGrid>
 

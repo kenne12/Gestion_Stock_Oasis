@@ -34,4 +34,6 @@ public interface ClientFacadeLocal {
 
     public List<Client> findAllRange();
 
+    List<Client> findAllRange(boolean etat);
+
 }

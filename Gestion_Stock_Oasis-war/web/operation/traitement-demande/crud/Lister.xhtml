@@ -44,20 +44,13 @@
                     <h:outputText value="#{item.code}"/>
                 </p:column>
 
-                <p:column filterBy="#{item.idpersonnel.nom} #{item.idpersonnel.prenom}" width="19%">
+                <p:column filterBy="#{item.client.nom} #{item.client.prenom}" filterMatchMode="contains" width="19%">
                     <f:facet name="header">
-                        <h:outputText value="#{langue.personnel}"/>
+                        <h:outputText value="#{langue.client}"/>
                     </f:facet>
-                    <h:outputText value="#{item.idpersonnel.nom} #{item.idpersonnel.prenom}"/>
+                    <h:outputText value="#{item.client.nom} #{item.client.prenom}"/>
                 </p:column>
                  
-                <p:column filterBy="#{item.idprojet.nom}" width="28%">
-                    <f:facet name="header">
-                        <h:outputText value="#{langue.projet}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.idprojet.nom}"/>
-                </p:column>
-
                 <p:column style="text-align: center;width: 9%">
                     <f:facet name="header">
                         <h:outputText value="#{langue.date}"/>

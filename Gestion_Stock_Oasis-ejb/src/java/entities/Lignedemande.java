@@ -7,6 +7,7 @@ package entities;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -34,6 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Lignedemande.findByQuantitereduite", query = "SELECT l FROM Lignedemande l WHERE l.quantitereduite = :quantitereduite"),
     @NamedQuery(name = "Lignedemande.findByQtestock", query = "SELECT l FROM Lignedemande l WHERE l.qtestock = :qtestock")})
 public class Lignedemande implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -43,6 +45,8 @@ public class Lignedemande implements Serializable {
     private Double quantite;
     private Double quantitemultiple;
     private Double unite;
+    @Column(name = "prixunitaire")
+    private Double prixUnitaire;
     private Double montant;
     private Double tauxsatisfaction;
     private Double quantitereduite;
@@ -152,6 +156,14 @@ public class Lignedemande implements Serializable {
         this.idunite = idunite;
     }
 
+    public Double getPrixUnitaire() {
+        return prixUnitaire;
+    }
+
+    public void setPrixUnitaire(Double prixUnitaire) {
+        this.prixUnitaire = prixUnitaire;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -176,5 +188,5 @@ public class Lignedemande implements Serializable {
     public String toString() {
         return "entities.Lignedemande[ idlignedemande=" + idlignedemande + " ]";
     }
-    
+
 }

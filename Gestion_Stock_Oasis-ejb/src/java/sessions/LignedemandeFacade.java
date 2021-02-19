@@ -15,11 +15,11 @@ public class LignedemandeFacade extends AbstractFacade<Lignedemande> implements 
 
     @Override
     protected EntityManager getEntityManager() {
-        /* 27 */ return this.em;
+        return this.em;
     }
 
     public LignedemandeFacade() {
-        /* 31 */ super(Lignedemande.class);
+        super(Lignedemande.class);
     }
 
     @Override
@@ -35,16 +35,16 @@ public class LignedemandeFacade extends AbstractFacade<Lignedemande> implements 
     }
 
     @Override
-    public List<Lignedemande> findByIddemande(long iddemande) {
+    public List<Lignedemande> findByIddemande(long idDemande) {
         Query query = this.em.createQuery("SELECT l FROM Lignedemande l WHERE l.iddemande.iddemande=:iddemande ORDER BY l.idmagasinarticle.idarticle.libelle");
-        query.setParameter("iddemande", iddemande);
+        query.setParameter("iddemande", idDemande);
         return query.getResultList();
     }
 
     @Override
-    public List<Lignedemande> findByIdarticle(long idarticle) {
+    public List<Lignedemande> findByIdarticle(long idArticle) {
         Query query = this.em.createQuery("SELECT l FROM Lignedemande l WHERE l.idmagasinarticle.idarticle.idarticle=:idarticle");
-        query.setParameter("idarticle", idarticle);
+        query.setParameter("idarticle", idArticle);
         return query.getResultList();
     }
 }

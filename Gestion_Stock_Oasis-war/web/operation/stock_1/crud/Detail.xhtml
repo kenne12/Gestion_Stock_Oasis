@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="StockDetailDlg" 
+                  widgetVar="StockDetailDialog" 
+                  modal="true" resizable="false"  
+                  appendTo="@(body)"
+                  width="1200"
+                  height="540"
+                  header="#{langue['Titre.Dlg.Detail']} : APPROVIONNEMENT EN STOCK" 
+                  closeOnEscape="true">
+
+            <h:form id="StockDetailForm">
+
+                <h:panelGroup id="display">
+
+                    <p:dataTable id="datalist"
+                                 value="#{entreedirecteController.lignelivraisonfournisseurs}"
+                                 var="item"                                    
+                                 paginator="true"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50">
+
+                        <p:column filterBy="#{item.idlot.idarticle.libelle}" style="width: 35%">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.article}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idlot.idarticle.libelle}"/>
+                        </p:column>
+
+                        <p:column sortBy="#{item.prixachat}" style="text-align: right">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.prix_unitaire}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.prixachat}">
+                                <f:convertNumber/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column filterBy="#{item.quantite}" style="text-align: center">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.quantite}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.quantite}"/>
+                        </p:column>
+
+                        <p:column filterBy="#{Total}" style="text-align: right">
+                            <f:facet name="header">
+                                <h:outputText value="Total"/>
+                            </f:facet>
+                            <h:outputText value="#{item.prixachat * item.quantite}">
+                                <f:convertNumber/>
+                            </h:outputText>
+                        </p:column>
+
+                    </p:dataTable>
+
+                    <p:separator/>
+                    <center>
+                        <p:commandButton value="#{langue['Conv.Fermer']}" oncomplete="PF('StockDetailDialog').hide()" icon="ui-icon-close"/>
+                    </center>
+                    
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

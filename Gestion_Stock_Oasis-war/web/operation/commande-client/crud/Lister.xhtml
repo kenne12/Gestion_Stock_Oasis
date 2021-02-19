@@ -37,7 +37,7 @@
                 <p:ajax event="rowSelect" update=":DemandeListerForm:DemandeDataTableContextMenu, :actionsForm"/>
                 <p:ajax event="rowUnselect" update=":DemandeListerForm:DemandeDataTableContextMenu, :actionsForm"/>
                 <p:ajax event="rowDblselect" onsuccess="document.getElementById('DemandeListerForm:viewButton').click();"/>
-                               
+
                 <p:column filterBy="#{item.code}" style="text-align: center;width: 12%">
                     <f:facet name="header">
                         <h:outputText value="#{langue.code}"/>
@@ -45,18 +45,11 @@
                     <h:outputText value="#{item.code}"/>
                 </p:column>
 
-                <p:column filterBy="#{item.idpersonnel.nom} #{item.idpersonnel.prenom}" width="25%">
+                <p:column filterBy="#{item.client.nom} #{item.client.prenom}" width="25%">
                     <f:facet name="header">
                         <h:outputText value="#{langue.personnel}"/>
                     </f:facet>
-                    <h:outputText value="#{item.idpersonnel.nom} #{item.idpersonnel.prenom}"/>
-                </p:column>
-      
-                <p:column filterBy="#{item.idprojet.nom}" width="30%">
-                    <f:facet name="header">
-                        <h:outputText value="#{langue.projet}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.idprojet.nom}"/>
+                    <h:outputText value="#{item.client.nom} #{item.client.prenom}"/>
                 </p:column>
 
                 <p:column style="text-align: center;width: 12%">
@@ -79,7 +72,7 @@
                     <f:facet name="header">
                         <h:outputText value="#{langue.action}"/>
                     </f:facet>
-                    
+
                     <p:commandButton icon="ui-icon-pencil">
                         <p:ajax event="click" listener="#{commandePersonnelController.initEdit(item)}" update=":CommandeCreateForm,:notify1"/>
                     </p:commandButton>

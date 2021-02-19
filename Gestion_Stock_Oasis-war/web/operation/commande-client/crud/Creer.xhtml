@@ -25,13 +25,10 @@
 
                         <h:panelGrid columns="4">
 
-                            <p:outputLabel value="#{langue.personnel}  " />
-                            <p:outputLabel value=" #{commandePersonnelController.personnel.nom} #{commandePersonnelController.personnel.prenom}" />                            
-                            
-                            <p:outputLabel value="#{langue.projet}" for="projet" />
-                            <p:selectOneMenu autoWidth="false" style="width: 400px" filter="true" required="true" id="projet" value="#{commandePersonnelController.projet.idprojet}" requiredMessage="#{langue.valeur_obligatoire}">
-                                <f:selectItem itemLabel="#{langue.choisir}" itemValue=""/>
-                                <f:selectItems value="#{commandePersonnelController.projets}" var="prj" itemLabel="#{prj.nom}" itemValue="#{prj.idprojet}"/>                                                                             
+                            <p:outputLabel value="#{langue.client}" for="client" />
+                            <p:selectOneMenu autoWidth="false" style="width: 400px" filter="true" filterMatchMode="contains" required="true" id="client" value="#{commandePersonnelController.client.idclient}" requiredMessage="#{langue.valeur_obligatoire}">
+                                <f:selectItem itemLabel="#{langue.choisir}" itemValue="0"/>
+                                <f:selectItems value="#{commandePersonnelController.clients}" var="clt" itemLabel="#{clt.nom} #{clt.prenom}" itemValue="#{clt.idclient}"/>                                                                             
                                 <p:ajax />
                             </p:selectOneMenu> 
 
@@ -39,9 +36,16 @@
                             <p:calendar pattern="dd/MM/yyyy" disabled="false" required="true" id="date_commande" value="#{commandePersonnelController.demande.datedemande}" navigator="true" requiredMessage="#{langue.valeur_obligatoire}">
                                 <p:ajax/>  
                             </p:calendar>
-                            
-                            <p:outputLabel value="#{langue.motif}" for="motif" />
-                            <p:inputText id="motif" style="width: 400px" value="#{commandePersonnelController.demande.motif}" />
+
+                            <p:outputLabel value="Taux tva" for="taux_tva" />
+                            <p:inputText id="taux_tva" value="#{commandePersonnelController.demande.tauxTva}">
+                                <p:ajax event="keyup" update="info_2" listener="#{commandePersonnelController.updateTotal()}" />
+                            </p:inputText>
+
+                            <p:outputLabel value="Taux Rémise" for="taux_remise" />
+                            <p:inputText id="taux_remise" value="#{commandePersonnelController.demande.tauxRemise}">
+                                <p:ajax event="keyup" update="info_2" listener="#{commandePersonnelController.updateTotal()}" />
+                            </p:inputText>
 
                         </h:panelGrid>
 
@@ -76,18 +80,34 @@
                             <h:outputText value="#{langue.elements_de_la_demande}"/>
                         </f:facet> 
 
-                        <p:column style="width: 25%" filterBy="#{item.idmagasinarticle.idarticle.libelle}" >
+                        <p:column style="width: 32%" filterBy="#{item.idmagasinarticle.idarticle.libelle}" >
                             <f:facet name="header">
                                 <h:outputText value="#{langue.article}"/>
                             </f:facet>
                             <h:outputText value="#{item.idmagasinarticle.idarticle.libelle}"/>
                         </p:column>
-                        
-                        <p:column style="width: 28%" filterBy="#{item.idmagasinarticle.idmagasin.nom}" >
+
+                        <p:column style="width: 32%" filterBy="#{item.idmagasinarticle.idmagasin.nom}" >
                             <f:facet name="header">
                                 <h:outputText value="#{langue.magasin}"/>
                             </f:facet>
                             <h:outputText value="#{item.idmagasinarticle.idmagasin.nom}"/>
+                        </p:column>
+                        
+                        <p:column style="width: 10%;text-align: center" headerText="#{langue.prix_unitaire}">
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <h:outputText value="#{item.prixUnitaire}">
+                                        <f:convertNumber />
+                                    </h:outputText>
+                                </f:facet>
+                                <f:facet name="input">
+                                    <p:inputText required="true" value="#{item.prixUnitaire}">                                             
+                                        <f:convertNumber />
+                                        <p:ajax listener="#{commandePersonnelController.updateTotal()}" update="datalist,:CommandeCreateForm:info_1,:CommandeCreateForm:info_2"/>
+                                    </p:inputText>
+                                </f:facet>
+                            </p:cellEditor>
                         </p:column>
 
                         <p:column style="width: 8%;text-align: center" headerText="#{langue.quantite}">
@@ -97,49 +117,21 @@
                                 </f:facet>
                                 <f:facet  name="input">
                                     <p:inputText required="true" value="#{item.quantite}">                                             
-                                        <p:ajax event="keyup" listener="#{commandePersonnelController.updateTotal()}" update=":CommandeCreateForm:info_1,:CommandeCreateForm:info_2"/>
+                                        <p:ajax  listener="#{commandePersonnelController.updateTotal()}" update="datalist,:CommandeCreateForm:info_1,:CommandeCreateForm:info_2"/>
                                     </p:inputText>
                                 </f:facet>
                             </p:cellEditor>
                         </p:column>
-
-                        <p:column filterBy="#{item.unite}" style="width: 15%;text-align: center" headerText="#{langue.unite}">
-                            <p:cellEditor>
-                                <f:facet name="output">
-                                    <h:outputText value="#{item.idunite.libelle}" />  
-                                </f:facet>
-                                <f:facet name="input">
-                                    <p:selectOneMenu value="#{item.idunite}" converter="uniteConverter" >
-                                        <f:selectItems value="#{commandePersonnelController.unites}" var="unit" itemLabel="#{unit.libelle}" itemValue="#{unit}" />
-                                        <p:ajax />
-                                    </p:selectOneMenu>                                    
-                                </f:facet>
-                            </p:cellEditor>
-                        </p:column>
-
-                        <p:column filterBy="#{item.unite}" style="width: 8%;text-align: center" headerText="#{langue.qte_par_unite}">
-                            <p:cellEditor>
-                                <f:facet name="output">
-                                    <h:outputText value="#{item.unite}" >
-                                        <f:convertNumber />
-                                    </h:outputText>    
-                                </f:facet>
-                                <f:facet name="input">
-                                    <p:inputText required="true" value="#{item.unite}">
-                                        <f:convertNumber />
-                                        <p:ajax event="keyup" listener="#{commandePersonnelController.updateTotal()}" update=":CommandeCreateForm:info_1,:CommandeCreateForm:info_2"/>
-                                    </p:inputText>
-                                </f:facet>
-                            </p:cellEditor>
-                        </p:column>
-
-                        <p:column style="width: 8%;text-align: center" filterBy="#{item.quantitemultiple}" >
+                        
+                        <p:column style="width: 10%" filterBy="#{item.montant}" >
                             <f:facet name="header">
-                                <h:outputText value="#{langue.qte_totale}"/>
+                                <h:outputText value="#{langue.total}"/>
                             </f:facet>
-                            <h:outputText value="#{item.quantitemultiple}"/>
+                            <h:outputText value="#{item.montant}">
+                                <f:convertNumber />
+                            </h:outputText>
                         </p:column>
-
+                         
                         <p:column style="width: 8%;text-align: center" >
                             <f:facet name="header">
                                 <h:outputText value="#{langue.action}"/>
@@ -155,7 +147,30 @@
 
                     <center>
                         <p:panelGrid id="info_2" style="" columns="10">
+
+                            <p:outputLabel for="total" value="#{langue.total_ht}"/>
+                            <p:outputLabel id="total" value="#{commandePersonnelController.demande.montant}" style="color:red">                               
+                                <f:convertNumber/>
+                            </p:outputLabel>
+
+                            <p:outputLabel for="tva" value="#{langue.tva}"/>
+                            <p:outputLabel id="tva" value="#{commandePersonnelController.demande.montantTva}" style="color:red">                               
+                                <f:convertNumber/>
+                            </p:outputLabel>
+
+                            <p:outputLabel for="remise" value="#{langue.remise}"/>
+                            <p:outputLabel id="remise" value="#{commandePersonnelController.demande.montantRemise}" style="color:red">                               
+                                <f:convertNumber/>
+                            </p:outputLabel>
+
+                            <p:outputLabel for="montant_ttc" value="#{langue.total_ttc}"/>
+                            <p:outputLabel id="montant_ttc" value="#{commandePersonnelController.demande.montantTtc}" style="color:red">                               
+                                <f:convertNumber/>
+                            </p:outputLabel>
+
+                            <p:commandButton value="#{langue.calculer}" icon="fa fa-calculator" actionListener="#{commandePersonnelController.updateTotal()}" update="info_2,info_1"/>
                             <p:commandButton icon="ui-icon-plus" value="#{langue.ajouter_article}" update=":ArticleCreateForm"  actionListener="#{commandePersonnelController.prepareCreateCommande()}"/>
+
                         </p:panelGrid>
                     </center>
 

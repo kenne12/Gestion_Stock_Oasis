@@ -47,6 +47,12 @@ public class ClientFacade extends AbstractFacade<Client> implements ClientFacade
     public List<Client> findAllRange() {
         Query query = this.em.createQuery("SELECT c FROM Client c ORDER BY c.nom");
         return query.getResultList();
+    }
 
+    @Override
+    public List<Client> findAllRange(boolean etat) {
+        Query query = this.em.createQuery("SELECT c FROM Client c WHERE c.etat=:etat ORDER BY c.nom");
+        query.setParameter("etat", etat);
+        return query.getResultList();
     }
 }

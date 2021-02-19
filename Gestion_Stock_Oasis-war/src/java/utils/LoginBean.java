@@ -41,21 +41,21 @@ public class LoginBean extends AbstractLoginBean
         try {
             this.utilisateur = this.utilisateurFacadeLocal.login(this.utilisateur.getLogin(), new ShaHash().hash(this.utilisateur.getPassword()));
             if (this.utilisateur != null) {
-                if (this.utilisateur.getActif().booleanValue()) {
+                if (this.utilisateur.getActif()) {
                     HttpSession session = SessionMBean.getSession();
                     session.setAttribute("compte", this.utilisateur);
-                    session.setAttribute("session", Boolean.valueOf(false));
+                    session.setAttribute("session", false);
 
                     this.param = ((Parametrage) this.parametrageFacadeLocal.findAll().get(0));
 
                     session.setAttribute("parametre", this.param);
 
-                    List<Privilege> privilegesTemp = this.privilegeFacadeLocal.findByUser(this.utilisateur.getIdutilisateur().intValue());
+                    List<Privilege> privilegesTemp = this.privilegeFacadeLocal.findByUser(this.utilisateur.getIdutilisateur());
                     List accesses = new ArrayList();
                     List access = new ArrayList();
 
                     for (Privilege p : privilegesTemp) {
-                        accesses.add(Long.valueOf(p.getIdmenu().getIdmenu().longValue()));
+                        accesses.add(Long.valueOf(p.getIdmenu().getIdmenu()));
                         String[] menus = p.getIdmenu().getRessource().split(";");
                         for (String temp : menus) {
                             if (!access.contains(temp)) {
@@ -64,12 +64,12 @@ public class LoginBean extends AbstractLoginBean
                         }
                     }
 
-                    /*  86 */ session.setAttribute("accesses", accesses);
-                    /*  87 */ session.setAttribute("access", access);
+                    session.setAttribute("accesses", accesses);
+                    session.setAttribute("access", access);
 
-                    /*  89 */ this.showSessionPanel = false;
-                    /*  90 */ initSession();
-                    /*  91 */ FacesContext.getCurrentInstance().getExternalContext().redirect(this.sc + "/index.html");
+                    this.showSessionPanel = false;
+                    initSession();
+                    FacesContext.getCurrentInstance().getExternalContext().redirect(this.sc + "/index.html");
                 } else {
                     JsfUtil.addWarningMessage("Compte bloqué ! contactez l'administrateur");
                 }
@@ -86,15 +86,15 @@ public class LoginBean extends AbstractLoginBean
 
     public void initSession() {
         try {
-            /* 110 */ HttpSession session = SessionMBean.getSession();
+            HttpSession session = SessionMBean.getSession();
 
-            /* 112 */ List allAccess = new ArrayList();
+            List allAccess = new ArrayList();
 
-            /* 114 */ for (Menu m : this.menuFacadeLocal.findAll()) {
-                /* 115 */ String[] menus = m.getRessource().split(";");
-                /* 116 */ for (String temp : menus) {
-                    /* 117 */ if (!allAccess.contains(temp)) {
-                        /* 118 */ allAccess.add(temp);
+            for (Menu m : this.menuFacadeLocal.findAll()) {
+                String[] menus = m.getRessource().split(";");
+                for (String temp : menus) {
+                    if (!allAccess.contains(temp)) {
+                        allAccess.add(temp);
                     }
                 }
             }
@@ -267,8 +267,3 @@ public class LoginBean extends AbstractLoginBean
         this.utilisateur = ((Utilisateur) user);
     }
 }
-
-/* Location:           I:\GESTION_STOCK\GESTION_STOCK-war_war\WEB-INF\classes\
- * Qualified Name:     utils.LoginBean
- * JD-Core Version:    0.6.2
- */

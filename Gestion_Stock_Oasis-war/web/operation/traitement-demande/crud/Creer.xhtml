@@ -36,8 +36,8 @@
 
                         <h:panelGrid style="" columns="2">
 
-                            <p:outputLabel  value="#{langue.personnel}"/>
-                            <p:outputLabel  value="#{traitementController.personnel.nom}"/>
+                            <p:outputLabel  value="#{langue.client}"/>
+                            <p:outputLabel  value="#{traitementController.client.nom}"/>
 
                             <p:outputLabel value="#{langue.date_demande}" for="date_commande" />
                             <p:calendar pattern="dd/MM/yyyy" disabled="true" id="date_commande" value="#{traitementController.demande.datedemande}" navigator="true" requiredMessage="#{langue.valeur_obligatoire}">

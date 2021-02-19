@@ -32,30 +32,48 @@
 
                         <p:ajax event="rowSelect" update=":LivraisonClientCreateForm" listener="#{livraisonClientController.selectCommande()}"/>
 
-                        <p:column filterBy="#{item.idpersonnel.nom}" width="22%">
+                        <p:column filterBy="#{item.client.nom} #{item.client.prenom}" filterMatchMode="contains" width="25%">
                             <f:facet name="header">
-                                <h:outputText value="#{langue.personnel}"/>
+                                <h:outputText value="#{langue.client}"/>
                             </f:facet>
-                            <h:outputText value="#{item.idpersonnel.nom} #{item.idpersonnel.prenom}"/>
+                            <h:outputText value="#{item.client.nom} #{item.client.prenom}"/>
                         </p:column>
 
-                        <p:column filterBy="#{item.code}" width="20%" style="text-align: center;">
+                        <p:column filterBy="#{item.code}" filterMatchMode="contains" width="15%" style="text-align: center;">
                             <f:facet name="header">
                                 <h:outputText value="#{langue.numero}"/>
                             </f:facet>
                             <h:outputText value="#{item.code}"/>
                         </p:column>  
 
-                        <p:column filterBy="#{item.montant}" style="text-align: right;width: 14%">
+                        <p:column filterBy="#{item.montant}" style="text-align: right;width: 15%">
                             <f:facet name="header">
-                                <h:outputText value="#{langue.valeur}"/>
+                                <h:outputText value="#{langue.montant_ht}"/>
                             </f:facet>
-                            <h:outputText value="#{item.montant}">
+                            <h:outputText value="#{item.montantHt}">
+                                <f:convertNumber/>
+                            </h:outputText>
+                        </p:column>
+                        
+                        <p:column filterBy="#{item.montant}" style="text-align: right;width: 15%">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.montant_remise}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.montantRemise}">
+                                <f:convertNumber/>
+                            </h:outputText>
+                        </p:column>
+                        
+                        <p:column filterBy="#{item.montant}" style="text-align: right;width: 15%">
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.montant_ttc}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.montantTtc}">
                                 <f:convertNumber/>
                             </h:outputText>
                         </p:column>
 
-                        <p:column style="text-align: center;width: 10%">
+                        <p:column style="text-align: center;width: 15%">
                             <f:facet name="header">
                                 <h:outputText value="#{langue.date}"/>
                             </f:facet>

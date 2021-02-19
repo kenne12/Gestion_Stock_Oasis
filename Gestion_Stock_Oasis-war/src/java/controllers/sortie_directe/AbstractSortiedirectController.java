@@ -8,7 +8,6 @@ import entities.Magasin;
 import entities.Magasinarticle;
 import entities.Magasinlot;
 import entities.Mvtstock;
-import entities.Personnel;
 import entities.Unite;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +24,6 @@ import sessions.MagasinarticleFacadeLocal;
 import sessions.MagasinlotFacadeLocal;
 import sessions.MouchardFacadeLocal;
 import sessions.MvtstockFacadeLocal;
-import sessions.PersonnelFacadeLocal;
 import sessions.UniteFacadeLocal;
 import utils.Routine;
 
@@ -40,11 +38,6 @@ public class AbstractSortiedirectController {
     protected List<Famille> familles = new ArrayList();
 
     @EJB
-    protected PersonnelFacadeLocal personnelFacadeLocal;
-    protected Personnel personnel = new Personnel();
-    protected List<Personnel> personnels = new ArrayList();
-
-    @EJB
     protected LivraisonclientFacadeLocal livraisonclientFacadeLocal;
     protected Livraisonclient livraisonclient = new Livraisonclient();
     protected List<Livraisonclient> livraisonclients = new ArrayList();
@@ -52,6 +45,7 @@ public class AbstractSortiedirectController {
     @EJB
     protected ClientFacadeLocal clientFacadeLocal;
     protected Client client = new Client();
+    protected Client clientToSave = new Client();
     protected List<Client> clients = new ArrayList<>();
 
     @EJB
@@ -123,19 +117,6 @@ public class AbstractSortiedirectController {
     protected String mode = "";
 
     int conteur = 0;
-
-    public Personnel getPersonnel() {
-        return this.personnel;
-    }
-
-    public void setPersonnel(Personnel personnel) {
-        this.personnel = personnel;
-    }
-
-    public List<Personnel> getPersonnels() {
-        this.personnels = this.personnelFacadeLocal.findAllRange();
-        return this.personnels;
-    }
 
     public Livraisonclient getLivraisonclient() {
         return this.livraisonclient;
@@ -328,6 +309,27 @@ public class AbstractSortiedirectController {
     public List<Unite> getUnites() {
         this.unites = this.uniteFacadeLocal.findAllRange();
         return this.unites;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public List<Client> getClients() {
+        clients = clientFacadeLocal.findAllRange(true);
+        return clients;
+    }
+
+    public Client getClientToSave() {
+        return clientToSave;
+    }
+
+    public void setClientToSave(Client clientToSave) {
+        this.clientToSave = clientToSave;
     }
 
 }

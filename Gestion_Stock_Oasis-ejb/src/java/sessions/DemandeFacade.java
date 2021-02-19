@@ -49,16 +49,16 @@ public class DemandeFacade extends AbstractFacade<Demande> implements DemandeFac
     }
 
     @Override
-    public List<Demande> findByIdpersonnelIntervalDate(long idpersonnel, Date dateDebut, Date dateFin) {
-        Query query = this.em.createQuery("SELECT d FROM Demande d WHERE d.idpersonnel.idpersonnel=:idpersonnel AND d.datedemande BETWEEN :date_debut AND :date_fin ORDER BY d.datedemande");
-        query.setParameter("idpersonnel", idpersonnel).setParameter("date_debut", dateDebut).setParameter("date_fin", dateFin);
+    public List<Demande> findByIdpersonnelIntervalDate(int idclient, Date dateDebut, Date dateFin) {
+        Query query = this.em.createQuery("SELECT d FROM Demande d WHERE d.client.idclient=:idClient AND d.datedemande BETWEEN :date_debut AND :date_fin ORDER BY d.datedemande");
+        query.setParameter("idClient", idclient).setParameter("date_debut", dateDebut).setParameter("date_fin", dateFin);
         return query.getResultList();
     }
 
     @Override
-    public List<Demande> findAllRange(long idpersonnel) {
-        Query query = em.createQuery("SELECT d FROM Demande d WHERE d.idpersonnel.idpersonnel=:idpersonnel ORDER BY d.datedemande DESC");
-        query.setParameter("idpersonnel", idpersonnel);
+    public List<Demande> findAllRange(int idclient) {
+        Query query = em.createQuery("SELECT d FROM Demande d WHERE d.client.idclient=:idClient ORDER BY d.datedemande DESC");
+        query.setParameter("idClient", idclient);
         return query.getResultList();
     }
 }

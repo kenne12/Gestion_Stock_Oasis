@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -42,6 +43,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Demande.findByValidee", query = "SELECT d FROM Demande d WHERE d.validee = :validee"),
     @NamedQuery(name = "Demande.findByMotif", query = "SELECT d FROM Demande d WHERE d.motif = :motif")})
 public class Demande implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -61,16 +63,25 @@ public class Demande implements Serializable {
     private Boolean validee;
     @Size(max = 2147483647)
     private String motif;
-    @JoinColumn(name = "idpersonnel", referencedColumnName = "idpersonnel")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Personnel idpersonnel;
-    @JoinColumn(name = "idprojet", referencedColumnName = "idprojet")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Projet idprojet;
     @OneToMany(mappedBy = "iddemande", fetch = FetchType.LAZY)
     private List<Lignedemande> lignedemandeList;
     @OneToMany(mappedBy = "iddemande", fetch = FetchType.LAZY)
     private List<Livraisonclient> livraisonclientList;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idclient", referencedColumnName = "idclient")
+    private Client client;
+    @Column(name = "tauxtva")
+    private double tauxTva;
+    @Column(name = "montanttva")
+    private double montantTva;
+    @Column(name = "montantttc")
+    private double montantTtc;
+    @Column(name = "tauxremise")
+    private double tauxRemise;
+    @Column(name = "montantremise")
+    private double montantRemise;
+    @Column(name = "montantht")
+    private double montantHt;
 
     public Demande() {
     }
@@ -151,20 +162,60 @@ public class Demande implements Serializable {
         this.motif = motif;
     }
 
-    public Personnel getIdpersonnel() {
-        return idpersonnel;
+    public Client getClient() {
+        return client;
     }
 
-    public void setIdpersonnel(Personnel idpersonnel) {
-        this.idpersonnel = idpersonnel;
+    public void setClient(Client client) {
+        this.client = client;
     }
 
-    public Projet getIdprojet() {
-        return idprojet;
+    public double getTauxTva() {
+        return tauxTva;
     }
 
-    public void setIdprojet(Projet idprojet) {
-        this.idprojet = idprojet;
+    public void setTauxTva(double tauxTva) {
+        this.tauxTva = tauxTva;
+    }
+
+    public double getMontantTva() {
+        return montantTva;
+    }
+
+    public void setMontantTva(double montantTva) {
+        this.montantTva = montantTva;
+    }
+
+    public double getMontantTtc() {
+        return montantTtc;
+    }
+
+    public void setMontantTtc(double montantTtc) {
+        this.montantTtc = montantTtc;
+    }
+
+    public double getTauxRemise() {
+        return tauxRemise;
+    }
+
+    public void setTauxRemise(double tauxRemise) {
+        this.tauxRemise = tauxRemise;
+    }
+
+    public double getMontantRemise() {
+        return montantRemise;
+    }
+
+    public void setMontantRemise(double montantRemise) {
+        this.montantRemise = montantRemise;
+    }
+
+    public double getMontantHt() {
+        return montantHt;
+    }
+
+    public void setMontantHt(double montantHt) {
+        this.montantHt = montantHt;
     }
 
     @XmlTransient
@@ -209,5 +260,5 @@ public class Demande implements Serializable {
     public String toString() {
         return "entities.Demande[ iddemande=" + iddemande + " ]";
     }
-    
+
 }

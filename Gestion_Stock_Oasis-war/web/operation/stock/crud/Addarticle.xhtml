@@ -99,6 +99,13 @@
                                 <p:outputLabel value="#{langue.article}"/>
                                 <p:outputLabel value="#{entreedirecteController.libelle_article}"/>
                                 <p:outputLabel value=""/>
+                                
+                                <p:outputLabel for="magasin_lot_id" value="#{langue.lot}"/>
+                                <p:selectOneMenu id="magasin_lot_id" value="#{entreedirecteController.magasinlot.idmagasinlot}">
+                                    <f:selectItem itemLabel="#{langue.choisir}" itemValue="" />
+                                    <f:selectItems value="#{entreedirecteController.magasinlots}" var="ml" itemLabel="#{ml.idlot.numero}" itemValue="#{ml.idmagasinlot}" />
+                                </p:selectOneMenu>
+                                <p:message for="magasin_lot_id" />
 
                                 <p:outputLabel value="#{langue.numero_lot}" for="num_lot" />
                                 <h:panelGroup>

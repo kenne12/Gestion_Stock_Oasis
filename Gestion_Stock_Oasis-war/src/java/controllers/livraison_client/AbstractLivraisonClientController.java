@@ -1,6 +1,7 @@
 package controllers.livraison_client;
 
 import entities.Article;
+import entities.Client;
 import entities.Demande;
 import entities.Lignedemande;
 import entities.Lignelivraisonclient;
@@ -8,7 +9,6 @@ import entities.Lignemvtstock;
 import entities.Livraisonclient;
 import entities.Lot;
 import entities.Mvtstock;
-import entities.Personnel;
 import entities.Unite;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +16,7 @@ import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.transaction.UserTransaction;
 import sessions.ArticleFacadeLocal;
+import sessions.ClientFacadeLocal;
 import sessions.DemandeFacadeLocal;
 import sessions.LignedemandeFacadeLocal;
 import sessions.LignelivraisonclientFacadeLocal;
@@ -53,8 +54,10 @@ public class AbstractLivraisonClientController {
 
     @EJB
     protected PersonnelFacadeLocal personnelFacadeLocal;
-    protected Personnel personnel = new Personnel();
-    protected List<Personnel> personnels = new ArrayList();
+
+    @EJB
+    protected ClientFacadeLocal clientFacadeLocal;
+    protected Client client = new Client();
 
     @EJB
     protected LivraisonclientFacadeLocal livraisonclientFacadeLocal;
@@ -94,17 +97,17 @@ public class AbstractLivraisonClientController {
     protected MouchardFacadeLocal mouchardFacadeLocal;
     protected Routine routine = new Routine();
 
-    protected Double cout_quantite = (0.0D);
-    protected Double total = (0.0D);
+    protected Double cout_quantite = 0.0;
+    protected Double total = 0.0;
 
     protected Boolean showSelectorCommand = (true);
     protected boolean payement_credit = false;
 
-    protected Boolean detail = (true);
-    protected Boolean modifier = (true);
-    protected Boolean consulter = (true);
-    protected Boolean imprimer = (true);
-    protected Boolean supprimer = (true);
+    protected Boolean detail = true;
+    protected Boolean modifier = true;
+    protected Boolean consulter = true;
+    protected Boolean imprimer = true;
+    protected Boolean supprimer = true;
 
     protected String fileName = "";
     protected String printDialogTitle = "";
@@ -123,25 +126,13 @@ public class AbstractLivraisonClientController {
         return this.articles;
     }
 
-    public Personnel getPersonnel() {
-        return this.personnel;
-    }
-
-    public void setPersonnel(Personnel personnel) {
-        this.personnel = personnel;
-    }
-
-    public List<Personnel> getPersonnels() {
-        return this.personnels;
-    }
-
     public Livraisonclient getLivraisonclient() {
         return this.livraisonclient;
     }
 
     public void setLivraisonclient(Livraisonclient livraisonclient) {
         this.livraisonclient = livraisonclient;
-        this.modifier = (this.supprimer = this.detail = this.imprimer = (livraisonclient == null));
+        this.modifier = this.supprimer = this.detail = this.imprimer = (livraisonclient == null);
     }
 
     public List<Livraisonclient> getLivraisonclients() {
@@ -230,70 +221,79 @@ public class AbstractLivraisonClientController {
     }
 
     public void setDemande(Demande demande) {
-        /* 244 */ this.demande = demande;
+        this.demande = demande;
     }
 
     public List<Demande> getDemandes() {
-        /* 248 */ return this.demandes;
+        return this.demandes;
     }
 
     public Lignedemande getLignedemande() {
-        /* 252 */ return this.lignedemande;
+        return this.lignedemande;
     }
 
     public void setLignedemande(Lignedemande lignedemande) {
-        /* 256 */ this.lignedemande = lignedemande;
+        this.lignedemande = lignedemande;
     }
 
     public List<Lignedemande> getLignedemandes() {
-        /* 260 */ return this.lignedemandes;
+        return this.lignedemandes;
     }
 
     public boolean isPayement_credit() {
-        /* 264 */ return this.payement_credit;
+        return this.payement_credit;
     }
 
     public Mvtstock getMvtstock() {
-        /* 268 */ return this.mvtstock;
+        return this.mvtstock;
     }
 
     public void setMvtstock(Mvtstock mvtstock) {
-        /* 272 */ this.mvtstock = mvtstock;
+        this.mvtstock = mvtstock;
     }
 
     public List<Lignemvtstock> getLignemvtstocks() {
-        /* 276 */ return this.lignemvtstocks;
+        return this.lignemvtstocks;
     }
 
     public String getPrintDialogTitle() {
-        /* 280 */ return this.printDialogTitle;
+        return this.printDialogTitle;
     }
 
     public void setPrintDialogTitle(String printDialogTitle) {
-        /* 284 */ this.printDialogTitle = printDialogTitle;
+        this.printDialogTitle = printDialogTitle;
     }
 
     public Unite getUnite() {
-        /* 288 */ return this.unite;
+        return this.unite;
     }
 
     public void setUnite(Unite unite) {
-        /* 292 */ this.unite = unite;
+        this.unite = unite;
     }
 
     public List<Unite> getUnites() {
-        /* 296 */ return this.unites;
+        return this.unites;
     }
 
     public void setUnites(List<Unite> unites) {
-        /* 300 */ this.unites = unites;
+        this.unites = unites;
     }
 
     public List<Demande> getDemandes_1() {
-        /* 304 */ return this.demandes_1;
+        return this.demandes_1;
     }
 
     public void setDemandes_1(List<Demande> demandes_1) {
-        /* 308 */ this.demandes_1 = demandes_1;
+        this.demandes_1 = demandes_1;
     }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
 }

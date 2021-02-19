@@ -42,6 +42,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Personnel.findByPrenom", query = "SELECT p FROM Personnel p WHERE p.prenom = :prenom"),
     @NamedQuery(name = "Personnel.findByAddresse", query = "SELECT p FROM Personnel p WHERE p.addresse = :addresse")})
 public class Personnel implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -62,12 +63,9 @@ public class Personnel implements Serializable {
     private String prenom;
     @Size(max = 100)
     private String addresse;
-    @OneToMany(mappedBy = "idpersonnel", fetch = FetchType.LAZY)
-    private List<Demande> demandeList;
+
     @OneToMany(mappedBy = "idpersonnel", fetch = FetchType.LAZY)
     private List<Utilisateur> utilisateurList;
-    @OneToMany(mappedBy = "idpersonnel", fetch = FetchType.LAZY)
-    private List<Livraisonclient> livraisonclientList;
     @JoinColumn(name = "idmagasin", referencedColumnName = "idmagasin")
     @ManyToOne(fetch = FetchType.LAZY)
     private Magasin idmagasin;
@@ -155,30 +153,12 @@ public class Personnel implements Serializable {
     }
 
     @XmlTransient
-    public List<Demande> getDemandeList() {
-        return demandeList;
-    }
-
-    public void setDemandeList(List<Demande> demandeList) {
-        this.demandeList = demandeList;
-    }
-
-    @XmlTransient
     public List<Utilisateur> getUtilisateurList() {
         return utilisateurList;
     }
 
     public void setUtilisateurList(List<Utilisateur> utilisateurList) {
         this.utilisateurList = utilisateurList;
-    }
-
-    @XmlTransient
-    public List<Livraisonclient> getLivraisonclientList() {
-        return livraisonclientList;
-    }
-
-    public void setLivraisonclientList(List<Livraisonclient> livraisonclientList) {
-        this.livraisonclientList = livraisonclientList;
     }
 
     public Magasin getIdmagasin() {
@@ -221,5 +201,5 @@ public class Personnel implements Serializable {
     public String toString() {
         return "entities.Personnel[ idpersonnel=" + idpersonnel + " ]";
     }
-    
+
 }

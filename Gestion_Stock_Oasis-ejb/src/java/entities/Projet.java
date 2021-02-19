@@ -7,7 +7,6 @@ package entities;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,13 +15,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -38,6 +35,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Projet.findByDatecreation", query = "SELECT p FROM Projet p WHERE p.datecreation = :datecreation"),
     @NamedQuery(name = "Projet.findByCloturee", query = "SELECT p FROM Projet p WHERE p.cloturee = :cloturee")})
 public class Projet implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -50,8 +48,6 @@ public class Projet implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date datecreation;
     private Boolean cloturee;
-    @OneToMany(mappedBy = "idprojet", fetch = FetchType.LAZY)
-    private List<Demande> demandeList;
     @JoinColumn(name = "idmagasin", referencedColumnName = "idmagasin")
     @ManyToOne(fetch = FetchType.LAZY)
     private Magasin idmagasin;
@@ -103,15 +99,6 @@ public class Projet implements Serializable {
         this.cloturee = cloturee;
     }
 
-    @XmlTransient
-    public List<Demande> getDemandeList() {
-        return demandeList;
-    }
-
-    public void setDemandeList(List<Demande> demandeList) {
-        this.demandeList = demandeList;
-    }
-
     public Magasin getIdmagasin() {
         return idmagasin;
     }
@@ -144,5 +131,5 @@ public class Projet implements Serializable {
     public String toString() {
         return "entities.Projet[ idprojet=" + idprojet + " ]";
     }
-    
+
 }

@@ -29,17 +29,14 @@
                         <h:outputLabel value="#{livraisonClientController.livraisonclient.iddemande.datedemande}">
                             <f:convertDateTime pattern="dd/MM/yyyy"/>
                         </h:outputLabel>
-
-                        <h:outputLabel value="#{langue.projet}"/>
-                        <h:outputLabel value="#{livraisonClientController.livraisonclient.iddemande.idprojet.nom}"/>
-
+   
                         <h:outputLabel value="#{langue.date}"/>
                         <h:outputLabel value="#{livraisonClientController.livraisonclient.datelivraison}">
                             <f:convertDateTime pattern="dd/MM/yyyy"/>
                         </h:outputLabel>
 
                         <h:outputLabel value="#{langue.client}"/>
-                        <h:outputLabel value="#{livraisonClientController.livraisonclient.iddemande.idpersonnel.nom} : #{livraisonClientController.livraisonclient.iddemande.idpersonnel.prenom}"/>
+                        <h:outputLabel value="#{livraisonClientController.livraisonclient.iddemande.client.nom} : #{livraisonClientController.livraisonclient.iddemande.client.prenom}"/>
 
                         <h:outputLabel value="#{langue.montant_total}"/>
                         <h:outputLabel value="#{livraisonClientController.livraisonclient.montant}">

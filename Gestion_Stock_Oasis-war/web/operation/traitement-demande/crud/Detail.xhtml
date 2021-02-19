@@ -30,8 +30,6 @@
                             <f:convertDateTime pattern="dd/MM/yyyy"/>
                         </h:outputLabel>
 
-                        <h:outputLabel value="#{langue.projet}"/>
-                        <h:outputLabel value="#{traitementController.livraisonclient.iddemande.idprojet.nom}"/>
 
                         <h:outputLabel value="#{langue.date}"/>
                         <h:outputLabel value="#{traitementController.livraisonclient.datelivraison}">
@@ -39,7 +37,7 @@
                         </h:outputLabel>
 
                         <h:outputLabel value="#{langue.client}"/>
-                        <h:outputLabel value="#{traitementController.livraisonclient.iddemande.idpersonnel.nom} : #{traitementController.livraisonclient.iddemande.idpersonnel.prenom}"/>
+                        <h:outputLabel value="#{traitementController.livraisonclient.iddemande.client.nom} : #{traitementController.livraisonclient.iddemande.client.prenom}"/>
 
                         <h:outputLabel value="#{langue.montant_total}"/>
                         <h:outputLabel value="#{traitementController.livraisonclient.montant}">

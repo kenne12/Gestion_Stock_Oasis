@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -60,14 +61,23 @@ public class Livraisonclient implements Serializable {
     @JoinColumn(name = "idmvtstock", referencedColumnName = "idmvtstock")
     @ManyToOne(fetch = FetchType.LAZY)
     private Mvtstock idmvtstock;
-    @JoinColumn(name = "idpersonnel", referencedColumnName = "idpersonnel")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Personnel idpersonnel;
     @OneToMany(mappedBy = "idlivraisonclient", fetch = FetchType.LAZY)
     private List<Lignelivraisonclient> lignelivraisonclientList;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idclient", referencedColumnName = "idclient")
     private Client client;
+    @Column(name = "tauxtva")
+    private double tauxTva;
+    @Column(name = "montanttva")
+    private double montantTva;
+    @Column(name = "montantttc")
+    private double montantTtc;
+    @Column(name = "tauxremise")
+    private double tauxRemise;
+    @Column(name = "montantremise")
+    private double montantRemise;
+    @Column(name = "montantht")
+    private double montantHt;
 
     public Livraisonclient() {
     }
@@ -140,14 +150,6 @@ public class Livraisonclient implements Serializable {
         this.idmvtstock = idmvtstock;
     }
 
-    public Personnel getIdpersonnel() {
-        return idpersonnel;
-    }
-
-    public void setIdpersonnel(Personnel idpersonnel) {
-        this.idpersonnel = idpersonnel;
-    }
-
     public Client getClient() {
         return client;
     }
@@ -163,6 +165,54 @@ public class Livraisonclient implements Serializable {
 
     public void setLignelivraisonclientList(List<Lignelivraisonclient> lignelivraisonclientList) {
         this.lignelivraisonclientList = lignelivraisonclientList;
+    }
+
+    public double getTauxTva() {
+        return tauxTva;
+    }
+
+    public void setTauxTva(double tauxTva) {
+        this.tauxTva = tauxTva;
+    }
+
+    public double getMontantTva() {
+        return montantTva;
+    }
+
+    public void setMontantTva(double montantTva) {
+        this.montantTva = montantTva;
+    }
+
+    public double getMontantTtc() {
+        return montantTtc;
+    }
+
+    public void setMontantTtc(double montantTtc) {
+        this.montantTtc = montantTtc;
+    }
+
+    public double getTauxRemise() {
+        return tauxRemise;
+    }
+
+    public void setTauxRemise(double tauxRemise) {
+        this.tauxRemise = tauxRemise;
+    }
+
+    public double getMontantRemise() {
+        return montantRemise;
+    }
+
+    public void setMontantRemise(double montantRemise) {
+        this.montantRemise = montantRemise;
+    }
+
+    public double getMontantHt() {
+        return montantHt;
+    }
+
+    public void setMontantHt(double montantHt) {
+        this.montantHt = montantHt;
     }
 
     @Override

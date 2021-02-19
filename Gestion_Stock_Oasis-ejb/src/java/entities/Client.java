@@ -49,8 +49,11 @@ public class Client implements Serializable {
     private String code;
     @Size(max = 50)
     private String fax;
+    private boolean etat;
     @OneToMany(mappedBy = "client")
-    private List<Livraisonclient> Livraisonclients;
+    private List<Livraisonclient> livraisonclients;
+    @OneToMany(mappedBy = "client")
+    private List<Demande> listDemandes;
 
     public Client() {
     }
@@ -148,11 +151,27 @@ public class Client implements Serializable {
     }
 
     public List<Livraisonclient> getLivraisonclients() {
-        return Livraisonclients;
+        return livraisonclients;
     }
 
-    public void setLivraisonclients(List<Livraisonclient> Livraisonclients) {
-        this.Livraisonclients = Livraisonclients;
+    public void setLivraisonclients(List<Livraisonclient> livraisonclients) {
+        this.livraisonclients = livraisonclients;
+    }
+
+    public boolean isEtat() {
+        return etat;
+    }
+
+    public void setEtat(boolean etat) {
+        this.etat = etat;
+    }
+
+    public List<Demande> getListDemandes() {
+        return listDemandes;
+    }
+
+    public void setListDemandes(List<Demande> listDemandes) {
+        this.listDemandes = listDemandes;
     }
 
     @Override

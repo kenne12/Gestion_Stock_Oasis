@@ -7,6 +7,7 @@ package entities;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -33,6 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Lignelivraisonclient.findByMontant", query = "SELECT l FROM Lignelivraisonclient l WHERE l.montant = :montant"),
     @NamedQuery(name = "Lignelivraisonclient.findByQuantitereduite", query = "SELECT l FROM Lignelivraisonclient l WHERE l.quantitereduite = :quantitereduite")})
 public class Lignelivraisonclient implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -44,6 +46,8 @@ public class Lignelivraisonclient implements Serializable {
     private Double quantitemultiple;
     private Double unite;
     private Double montant;
+    @Column(name = "prixunitaire")
+    private Double prixUnitaire;
     private Double quantitereduite;
     @JoinColumn(name = "idlivraisonclient", referencedColumnName = "idlivraisonclient")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -153,6 +157,14 @@ public class Lignelivraisonclient implements Serializable {
         this.idunite = idunite;
     }
 
+    public Double getPrixUnitaire() {
+        return prixUnitaire;
+    }
+
+    public void setPrixUnitaire(Double prixUnitaire) {
+        this.prixUnitaire = prixUnitaire;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -177,5 +189,5 @@ public class Lignelivraisonclient implements Serializable {
     public String toString() {
         return "entities.Lignelivraisonclient[ idlignelivraisonclient=" + idlignelivraisonclient + " ]";
     }
-    
+
 }

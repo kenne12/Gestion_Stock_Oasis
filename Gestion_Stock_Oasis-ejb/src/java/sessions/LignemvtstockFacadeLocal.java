@@ -8,17 +8,17 @@ import javax.ejb.Local;
 @Local
 public interface LignemvtstockFacadeLocal {
 
-    public void create(Lignemvtstock paramLignemvtstock);
+    public void create(Lignemvtstock lignemvtstock);
 
-    public void edit(Lignemvtstock paramLignemvtstock);
+    public void edit(Lignemvtstock lignemvtstock);
 
-    public void remove(Lignemvtstock paramLignemvtstock);
+    public void remove(Lignemvtstock lignemvtstock);
 
-    public Lignemvtstock find(Object paramObject);
+    public Lignemvtstock find(Object id);
 
     public List<Lignemvtstock> findAll();
 
-    public List<Lignemvtstock> findRange(int[] paramArrayOfInt);
+    public List<Lignemvtstock> findRange(int[] range);
 
     public int count();
 

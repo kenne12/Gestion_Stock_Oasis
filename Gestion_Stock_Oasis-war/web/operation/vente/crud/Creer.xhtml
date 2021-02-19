@@ -15,6 +15,13 @@
                   width="80%"
                   height="600"
                   header="#{langue.creer_modifier_sortie_directe}">
+            
+            
+            <h:form id="client_btn">
+                <p:commandButton class="btn btn-primary" actionListener="#{sortiedirectController.prepareCreateClient()}" update=":ClientCreerForm" value="Nouveau Client" />
+                
+                <p:separator />
+            </h:form>
 
             <h:form id="SortieDirecteCreateForm">
 
@@ -25,25 +32,37 @@
 
                         <h:panelGrid style="" columns="2">
 
-                            <p:outputLabel value="#{langue.personnel}" for="client" />
-                            <p:selectOneMenu  filter="true" required="true" id="client" value="#{sortiedirectController.personnel.idpersonnel}" requiredMessage="#{langue.valeur_obligatoire}">
-                                <f:selectItem itemLabel="#{langue.choisir}" itemValue=""/>
-                                <f:selectItems value="#{sortiedirectController.personnels}" var="clt" itemLabel="#{clt.nom} #{clt.prenom}" itemValue="#{clt.idpersonnel}"/>                                                                             
-                                <p:ajax/>
-                            </p:selectOneMenu>
+                            <p:outputLabel value="#{langue.client}" for="client" />
+
+                            <h:panelGroup>
+                                <p:selectOneMenu  filter="true" filterMatchMode="contains" required="true" id="client" value="#{sortiedirectController.client.idclient}" requiredMessage="#{langue.valeur_obligatoire}">
+                                    <f:selectItem itemLabel="#{langue.choisir}" itemValue="-1"/>
+                                    <f:selectItems value="#{sortiedirectController.clients}" var="clt" itemLabel="#{clt.nom} #{clt.prenom}" itemValue="#{clt.idclient}"/>                                                                             
+                                    <p:ajax/>
+                                </p:selectOneMenu>    
+                            </h:panelGroup>
 
                             <p:outputLabel value="#{langue.magasin}" for="magasin" />
-                            <p:selectOneMenu  filter="true" required="true" id="magasin" value="#{sortiedirectController.magasin.idmagasin}" requiredMessage="#{langue.valeur_obligatoire}">
-                                <f:selectItem itemLabel="#{langue.choisir}" itemValue=""/>
+                            <p:selectOneMenu  filter="true" filterMatchMode="contains" required="true" id="magasin" value="#{sortiedirectController.magasin.idmagasin}" requiredMessage="#{langue.valeur_obligatoire}">
+                                <f:selectItem itemLabel="#{langue.choisir}" itemValue="-1"/>
                                 <f:selectItems value="#{sortiedirectController.magasins}" var="mag" itemLabel="#{mag.nom}" itemValue="#{mag.idmagasin}"/>                                                                             
                                 <p:ajax />
                             </p:selectOneMenu>
 
                             <p:outputLabel value="Date" for="date" />
-                            <p:calendar pattern="dd/MM/yyyy" disabled="true" required="true" id="date" value="#{sortiedirectController.livraisonclient.datelivraison}" navigator="true" requiredMessage="#{langue.valeur_obligatoire}">
+                            <p:calendar pattern="dd/MM/yyyy" required="true" id="date" value="#{sortiedirectController.livraisonclient.datelivraison}" navigator="true" requiredMessage="#{langue.valeur_obligatoire}">
                                 <p:ajax/>  
                             </p:calendar>
 
+                            <p:outputLabel value="Taux tva" for="date" />
+                            <p:inputText value="#{sortiedirectController.livraisonclient.tauxTva}">
+                                <p:ajax event="keyup" update="info_2" listener="#{sortiedirectController.updateTotal()}" />
+                            </p:inputText>
+
+                            <p:outputLabel value="Taux Rémise" for="date" />
+                            <p:inputText value="#{sortiedirectController.livraisonclient.tauxRemise}">
+                                <p:ajax event="keyup" update="info_2" listener="#{sortiedirectController.updateTotal()}" />
+                            </p:inputText>
                         </h:panelGrid>
 
                     </center>
@@ -134,14 +153,14 @@
                         <p:column style="width: 5%;text-align: center" headerText="#{langue.qte_par_unite}">
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputText value="#{item.unite}"/></f:facet>
-                                <f:facet  name="input">
+                                <f:facet name="input">
                                     <p:inputText required="true" value="#{item.unite}">                                             
                                         <p:ajax event="keyup" listener="#{sortiedirectController.updateTotal()}" update=":SortieDirecteCreateForm:info_1,:SortieDirecteCreateForm:info_2"/>
                                     </p:inputText>
                                 </f:facet>
                             </p:cellEditor>
                         </p:column>
-                        
+
                         <p:column style="width: 7%" >
                             <f:facet name="header">
                                 <h:outputText value="#{langue.q_t}"/>
@@ -177,10 +196,32 @@
 
                     <center>
                         <p:panelGrid id="info_2" style="" columns="10">
+
+                            <p:outputLabel for="total" value="#{langue.total_ht}"/>
+                            <p:outputLabel id="total" value="#{sortiedirectController.livraisonclient.montant}" style="color:red">                               
+                                <f:convertNumber/>
+                            </p:outputLabel>
+
+                            <p:outputLabel for="tva" value="#{langue.tva}"/>
+                            <p:outputLabel id="tva" value="#{sortiedirectController.livraisonclient.montantTva}" style="color:red">                               
+                                <f:convertNumber/>
+                            </p:outputLabel>
+
+                            <p:outputLabel for="remise" value="#{langue.remise}"/>
+                            <p:outputLabel id="remise" value="#{sortiedirectController.livraisonclient.montantRemise}" style="color:red">                               
+                                <f:convertNumber/>
+                            </p:outputLabel>
+
+                            <p:outputLabel for="montant_ttc" value="#{langue.total_ttc}"/>
+                            <p:outputLabel id="montant_ttc" value="#{sortiedirectController.livraisonclient.montantTtc}" style="color:red">                               
+                                <f:convertNumber/>
+                            </p:outputLabel>
+
+                            <p:commandButton value="#{langue.calculer}" icon="fa fa-calculator" actionListener="#{sortiedirectController.updateTotal()}" update="info_2,info_1"/>
                             <p:commandButton icon="ui-icon-plus" value="#{langue.ajouter_article}" update=":ArticleCreateForm"  actionListener="#{sortiedirectController.prepareAddArticle()}"/>
+
                         </p:panelGrid>
                     </center>
-                    <br/>
 
                     <p:separator/>
 

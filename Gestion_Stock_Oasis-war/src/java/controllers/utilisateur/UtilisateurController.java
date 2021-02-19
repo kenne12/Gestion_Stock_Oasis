@@ -195,17 +195,14 @@ public class UtilisateurController extends AbstractUtilisateurController
                     return;
 
                 }
-                List<Demande> listDemande = demandeFacadeLocal.findAllRange(utilisateur.getIdpersonnel().getIdpersonnel());
-                if (listDemande.isEmpty()) {
-                    mouchardFacadeLocal.deleteByIdutilisateur(utilisateur.getIdutilisateur());
-                    utilisateurmagasinFacadeLocal.deleteByIdutilisateur(utilisateur.getIdutilisateur());
-                    privilegeFacadeLocal.deleteByIdUtilisateur(utilisateur.getIdutilisateur());
-                    this.utilisateurFacadeLocal.remove(this.utilisateur);
-                    Utilitaires.saveOperation(this.mouchardFacadeLocal, "Suppresion de l'utilisateur : " + this.utilisateur.getNom() + " " + this.utilisateur.getPrenom(), SessionMBean.getUserAccount());
-                    signalSuccess();
-                } else {
-                    signalError("cet_utilisateur_associe_a_demandes");
-                }
+
+                mouchardFacadeLocal.deleteByIdutilisateur(utilisateur.getIdutilisateur());
+                utilisateurmagasinFacadeLocal.deleteByIdutilisateur(utilisateur.getIdutilisateur());
+                privilegeFacadeLocal.deleteByIdUtilisateur(utilisateur.getIdutilisateur());
+                this.utilisateurFacadeLocal.remove(this.utilisateur);
+                Utilitaires.saveOperation(this.mouchardFacadeLocal, "Suppresion de l'utilisateur : " + this.utilisateur.getNom() + " " + this.utilisateur.getPrenom(), SessionMBean.getUserAccount());
+                signalSuccess();
+
             } else {
                 signalError("not_row_selected");
             }

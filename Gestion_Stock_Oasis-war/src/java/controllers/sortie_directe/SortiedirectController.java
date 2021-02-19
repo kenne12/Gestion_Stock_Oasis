@@ -1,5 +1,6 @@
 package controllers.sortie_directe;
 
+import entities.Client;
 import entities.Famille;
 import entities.Lignelivraisonclient;
 import entities.Lignemvtstock;
@@ -8,7 +9,6 @@ import entities.Magasin;
 import entities.Magasinarticle;
 import entities.Magasinlot;
 import entities.Mvtstock;
-import entities.Personnel;
 import entities.Unite;
 import java.io.Serializable;
 import java.util.Date;
@@ -19,6 +19,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import org.primefaces.context.RequestContext;
 import utils.JsfUtil;
+import utils.PrintUtils;
 import utils.SessionMBean;
 import utils.Utilitaires;
 
@@ -50,20 +51,35 @@ public class SortiedirectController extends AbstractSortiedirectController imple
             this.mode = "Create";
             this.magasinarticle = new Magasinarticle();
             this.livraisonclient = new Livraisonclient();
-            this.personnel = new Personnel();
+            this.client = new Client();
             this.livraisonclient.setDatelivraison(new Date());
             this.magasin = new Magasin();
+            clientToSave = new Client();
 
-            this.livraisonclient.setMontant(0.0D);
+            this.livraisonclient.setMontant(0.0);
             this.lignelivraisonclients.clear();
             this.payement_credit = false;
             this.mvtstock = new Mvtstock();
-            this.total = 0.0D;
+            this.total = 0.0;
             this.conteur = 0;
+            this.livraisonclient.setTauxRemise(SessionMBean.getParametrage().getTauxRemise());
+            this.livraisonclient.setTauxTva(SessionMBean.getParametrage().getTauxTva());
         } catch (Exception e) {
             this.routine.catchException(e, this.routine.localizeMessage("echec_operation"));
             RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
         }
+    }
+
+    public void prepareCreateClient() {
+        System.err.println("click");
+        clientToSave = new Client();
+        clientToSave.setNom("-");
+        clientToSave.setCode("" + clientFacadeLocal.nextVal());
+        clientToSave.setContact("-");
+        clientToSave.setEmail("-");
+        clientToSave.setAdresse("-");
+        //onclick="PF('ClientCreerDialog').show()"
+        RequestContext.getCurrentInstance().execute("PF('ClientCreerDialog').show()");
     }
 
     public void prepareAddArticle() {
@@ -106,7 +122,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
 
                 if (this.livraisonclient != null) {
                     this.lignelivraisonclients = this.lignelivraisonclientFacadeLocal.findByIdlivraisonclient(this.livraisonclient.getIdlivraisonclient());
-                    this.personnel = this.livraisonclient.getIdpersonnel();
+                    this.client = this.livraisonclient.getClient();
                     this.total = this.livraisonclient.getMontant();
                     this.mvtstock = this.livraisonclient.getIdmvtstock();
                     this.magasin = this.livraisonclient.getIdmagasin();
@@ -123,7 +139,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
     public void prepareview() {
         try {
             if (this.livraisonclient != null) {
-                this.lignelivraisonclients = this.lignelivraisonclientFacadeLocal.findByIdlivraisonclient(this.livraisonclient.getIdlivraisonclient().longValue());
+                this.lignelivraisonclients = this.lignelivraisonclientFacadeLocal.findByIdlivraisonclient(this.livraisonclient.getIdlivraisonclient());
                 if (!this.lignelivraisonclients.isEmpty()) {
                     RequestContext.getCurrentInstance().execute("PF('SortieDirecteDetailDialog').show()");
                     return;
@@ -163,7 +179,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
 
                     this.ut.begin();
 
-                    this.personnel = this.personnelFacadeLocal.find(this.personnel.getIdpersonnel());
+                    this.client = this.clientFacadeLocal.find(this.client.getIdclient());
                     this.magasin = this.magasinFacadeLocal.find(this.magasin.getIdmagasin());
 
                     Long nextMvt = this.mvtstockFacadeLocal.nextVal();
@@ -185,7 +201,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
 
                     this.livraisonclient.setCode(code);
                     this.livraisonclient.setIdlivraisonclient(nextPayement);
-                    this.livraisonclient.setIdpersonnel(this.personnel);
+                    this.livraisonclient.setClient(this.client);
                     this.livraisonclient.setIdmagasin(this.magasin);
                     this.livraisonclient.setMontant(this.total);
                     this.livraisonclient.setLivraisondirecte(true);
@@ -197,9 +213,11 @@ public class SortiedirectController extends AbstractSortiedirectController imple
                         c.setIdlignelivraisonclient(this.lignelivraisonclientFacadeLocal.nextVal());
                         c.setIdlivraisonclient(this.livraisonclient);
                         c.setQuantitemultiple((c.getQuantite() * c.getUnite()));
+                        c.setIdlot(c.getIdmagasinlot().getIdlot());
                         this.lignelivraisonclientFacadeLocal.create(c);
 
                         c.setIdmagasinlot(this.magasinlotFacadeLocal.find(c.getIdmagasinlot().getIdmagasinlot()));
+                        double qteAvant = c.getIdmagasinlot().getQuantitemultiple();
                         c.getIdmagasinlot().setQuantite((c.getIdmagasinlot().getQuantite() - c.getQuantite()));
                         c.getIdmagasinlot().setQuantitemultiple((c.getIdmagasinlot().getQuantitemultiple() - c.getQuantitemultiple()));
                         c.getIdmagasinlot().setQuantitereduite((c.getIdmagasinlot().getQuantitereduite() - c.getQuantitereduite()));
@@ -215,13 +233,15 @@ public class SortiedirectController extends AbstractSortiedirectController imple
                         lmvts.setIdlignemvtstock(this.ligneMvtstockFacadeLocal.nextVal());
                         lmvts.setIdmvtstock(this.mvtstock);
                         lmvts.setIdlot(c.getIdmagasinlot().getIdlot());
+                        lmvts.setIdmagasinlot(c.getIdmagasinlot());
 
                         lmvts.setQteentree(0.0D);
+                        lmvts.setQteAvant(qteAvant);
                         lmvts.setQtesortie(c.getQuantitemultiple());
                         lmvts.setReste(c.getIdmagasinlot().getQuantitemultiple());
 
                         lmvts.setType("SORTIE");
-                        lmvts.setClient(this.personnel.getNom() + " " + this.personnel.getPrenom());
+                        lmvts.setClient(this.client.getNom() + " " + this.client.getPrenom());
                         lmvts.setFournisseur(this.magasin.getNom());
                         lmvts.setMagasin(this.magasin.getNom());
                         this.ligneMvtstockFacadeLocal.create(lmvts);
@@ -230,8 +250,8 @@ public class SortiedirectController extends AbstractSortiedirectController imple
                     Utilitaires.saveOperation(this.mouchardFacadeLocal, "Enregistrement de la sortie  : " + code, SessionMBean.getUserAccount());
 
                     this.ut.commit();
-                    this.livraisonclient = null;
-                    this.supprimer = (this.modifier = this.imprimer = (true));
+                    this.livraisonclient = new Livraisonclient();
+                    this.supprimer = this.modifier = this.imprimer = detail = true;
                     JsfUtil.addSuccessMessage(message);
 
                     notifySuccess();
@@ -243,8 +263,8 @@ public class SortiedirectController extends AbstractSortiedirectController imple
                 this.calculTotal();
                 this.ut.begin();
 
-                this.personnel = this.personnelFacadeLocal.find(this.personnel.getIdpersonnel());
-                this.livraisonclient.setIdpersonnel(this.personnel);
+                this.client = this.clientFacadeLocal.find(this.client.getIdclient());
+                this.livraisonclient.setClient(this.client);
                 this.livraisonclientFacadeLocal.edit(this.livraisonclient);
 
                 if (!this.lignelivraisonclients.isEmpty()) {
@@ -270,7 +290,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
                                 lmvts.setIdlot(llc.getIdmagasinlot().getIdlot());
                                 lmvts.setIdmagasinlot(llc.getIdmagasinlot());
 
-                                lmvts.setClient(this.personnel.getNom() + " " + this.personnel.getPrenom());
+                                lmvts.setClient(this.client.getNom() + " " + this.client.getPrenom());
                                 lmvts.setFournisseur(this.magasin.getNom());
                                 lmvts.setMagasin(this.magasin.getNom());
 
@@ -310,7 +330,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
                             lmvts.setQtesortie(llc.getQuantitemultiple());
                             lmvts.setReste(llc.getIdmagasinlot().getQuantitemultiple());
 
-                            lmvts.setClient(this.personnel.getNom() + " " + this.personnel.getPrenom());
+                            lmvts.setClient(this.client.getNom() + " " + this.client.getPrenom());
                             lmvts.setFournisseur(this.magasin.getNom());
                             lmvts.setMagasin(this.magasin.getNom());
 
@@ -321,7 +341,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
 
                 this.ut.commit();
                 this.livraisonclient = null;
-                this.supprimer = (this.modifier = this.imprimer = true);
+                this.supprimer = this.modifier = this.imprimer = this.detail = true;
 
                 notifySuccess();
                 RequestContext.getCurrentInstance().execute("PF('SortieDirecteCreateDialog').hide()");
@@ -333,13 +353,22 @@ public class SortiedirectController extends AbstractSortiedirectController imple
         }
     }
 
+    public void createClient() {
+        this.clientToSave.setIdclient(this.clientFacadeLocal.nextVal());
+        clientToSave.setEtat(true);
+        this.clientFacadeLocal.create(this.clientToSave);
+        Utilitaires.saveOperation(this.mouchardFacadeLocal, "Enregistrement du client : " + this.clientToSave.getNom(), SessionMBean.getUserAccount());
+        this.client = clientToSave;
+        RequestContext.getCurrentInstance().execute("PF('ClientCreerDialog').hide()");
+    }
+
     public void delete() {
         try {
             if (this.livraisonclient != null) {
                 if (this.livraisonclient.getLivraisondirecte()) {
-                    if (!Utilitaires.isAccess((25L))) {
+                    if (!Utilitaires.isAccess(25L)) {
                         notifyError("acces_refuse");
-                        this.supprimer = (this.modifier = this.imprimer = (true));
+                        this.supprimer = this.modifier = this.imprimer = true;
                         this.livraisonclient = null;
                         return;
                     }
@@ -349,7 +378,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
                     List<Lignelivraisonclient> temp = this.lignelivraisonclientFacadeLocal.findByIdlivraisonclient(this.livraisonclient.getIdlivraisonclient());
                     if (!temp.isEmpty()) {
                         for (Lignelivraisonclient c : temp) {
-                            c.getIdmagasinlot().setIdmagasinarticle(this.magasinarticleFacadeLocal.find(this.magasinarticleFacadeLocal.find(c.getIdmagasinlot().getIdmagasinarticle().getIdmagasinarticle())));
+                            c.getIdmagasinlot().setIdmagasinarticle(this.magasinarticleFacadeLocal.find(c.getIdmagasinlot().getIdmagasinarticle().getIdmagasinarticle()));
                             c.getIdmagasinlot().getIdmagasinarticle().setQuantite((c.getIdmagasinlot().getIdmagasinarticle().getQuantite() + c.getQuantite()));
                             c.getIdmagasinlot().getIdmagasinarticle().setQuantitemultiple((c.getIdmagasinlot().getIdmagasinarticle().getQuantitemultiple() - c.getQuantitemultiple()));
                             c.getIdmagasinlot().getIdmagasinarticle().setQuantitereduite((c.getIdmagasinlot().getIdmagasinarticle().getQuantitereduite() - c.getQuantitereduite()));
@@ -367,17 +396,13 @@ public class SortiedirectController extends AbstractSortiedirectController imple
                     this.livraisonclientFacadeLocal.remove(this.livraisonclient);
 
                     Mvtstock mTemp = this.livraisonclient.getIdmvtstock();
-
-                    List<Lignemvtstock> lmvt = this.ligneMvtstockFacadeLocal.findByIdmvt(mTemp.getIdmvtstock());
-                    for (Lignemvtstock l : lmvt) {
-                        this.ligneMvtstockFacadeLocal.remove(l);
-                    }
+                    ligneMvtstockFacadeLocal.deleteByIdmvt(mTemp.getIdmvtstock());
                     this.mvtstockFacadeLocal.remove(mTemp);
 
                     this.ut.commit();
-                    Utilitaires.saveOperation(this.mouchardFacadeLocal, "Annulation de la sortie : " + this.livraisonclient.getCode() + " Montant : " + this.livraisonclient.getMontant() + " Personnel : " + this.livraisonclient.getIdpersonnel().getNom(), SessionMBean.getUserAccount());
+                    Utilitaires.saveOperation(this.mouchardFacadeLocal, "Annulation de la sortie : " + this.livraisonclient.getCode() + " Montant : " + this.livraisonclient.getMontant() + " Client : " + this.livraisonclient.getClient().getNom() + " " + this.livraisonclient.getClient().getPrenom(), SessionMBean.getUserAccount());
                     this.livraisonclient = null;
-                    this.supprimer = (this.modifier = this.imprimer = true);
+                    this.supprimer = this.modifier = this.imprimer = true;
                     notifySuccess();
                 } else {
                     notifyError("vente_effectuee_par_lignelivraisonclient");
@@ -419,9 +444,9 @@ public class SortiedirectController extends AbstractSortiedirectController imple
             }
 
             if (this.livraisonclient != null) {
-                List c = this.lignelivraisonclientFacadeLocal.findByIdlivraisonclient(this.livraisonclient.getIdlivraisonclient().longValue());
-                this.livraisonclient.setLignelivraisonclientList(c);
-
+                List list = this.lignelivraisonclientFacadeLocal.findByIdlivraisonclient(this.livraisonclient.getIdlivraisonclient().longValue());
+                this.livraisonclient.setLignelivraisonclientList(list);
+                fileName = PrintUtils.printFacture(livraisonclient, SessionMBean.getParametrage());
                 RequestContext.getCurrentInstance().execute("PF('SortieDirecteImprimerDialog').show()");
             } else {
                 notifyError("not_row_selected");
@@ -445,7 +470,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
             this.magasinarticle = this.magasinarticleFacadeLocal.find(this.magasinarticle.getIdmagasinarticle());
             this.magasinlot = this.magasinlotFacadeLocal.find(this.magasinlot.getIdmagasinlot());
 
-            double q = 0.0D;
+            double q = 0.0;
             for (Lignelivraisonclient c1 : this.lignelivraisonclients) {
                 if (c1.getIdmagasinlot().equals(this.magasinlot)) {
                     q += c1.getQuantitemultiple();
@@ -510,9 +535,10 @@ public class SortiedirectController extends AbstractSortiedirectController imple
         Double resultat = 0.0D;
         int i = 0;
         for (Lignelivraisonclient llc : this.lignelivraisonclients) {
-            resultat += (llc.getMontant() * llc.getQuantite());
-            (this.lignelivraisonclients.get(i)).setQuantitemultiple((llc.getUnite() * llc.getQuantite()));
-            (this.lignelivraisonclients.get(i)).setQuantitereduite((((Lignelivraisonclient) this.lignelivraisonclients.get(i)).getQuantitemultiple() / llc.getIdmagasinlot().getIdlot().getIdarticle().getUnite()));
+            resultat += (llc.getPrixUnitaire() * llc.getQuantite());
+            this.lignelivraisonclients.get(i).setQuantitemultiple((llc.getUnite() * llc.getQuantite()));
+            this.lignelivraisonclients.get(i).setQuantitereduite((this.lignelivraisonclients.get(i)).getQuantitemultiple() / llc.getIdmagasinlot().getIdlot().getIdarticle().getUnite());
+            this.lignelivraisonclients.get(i).setMontant(llc.getPrixUnitaire() * this.lignelivraisonclients.get(i).getQuantitemultiple());
         }
         return resultat;
     }
@@ -521,6 +547,10 @@ public class SortiedirectController extends AbstractSortiedirectController imple
         try {
             this.total = calculTotal();
             this.livraisonclient.setMontant(this.total);
+            this.livraisonclient.setMontantRemise((total * livraisonclient.getTauxRemise()) / 100);
+            this.livraisonclient.setMontantHt((total - livraisonclient.getMontantRemise()));
+            this.livraisonclient.setMontantTva((livraisonclient.getMontantHt() * livraisonclient.getTauxTva()) / 100);
+            this.livraisonclient.setMontantTtc(this.livraisonclient.getMontantTva() + this.livraisonclient.getMontantHt());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -528,18 +558,17 @@ public class SortiedirectController extends AbstractSortiedirectController imple
 
     public void updateTotaux() {
         try {
-            this.cout_quantite = 0.0D;
-            if ((this.lignelivraisonclient.getQuantite() != null)
-                    && (this.lignelivraisonclient.getMontant() != null)) {
+            this.lignelivraisonclient.setMontant(0.0);
+            if ((this.lignelivraisonclient.getQuantite() != null) && (this.lignelivraisonclient.getMontant() != null)) {
                 if (this.lignelivraisonclient.getUnite() != null) {
                     this.lignelivraisonclient.setQuantitemultiple((this.lignelivraisonclient.getUnite() * this.lignelivraisonclient.getQuantite()));
                     this.lignelivraisonclient.setQuantitereduite((this.lignelivraisonclient.getQuantitemultiple() / this.magasinarticle.getIdarticle().getUnite()));
                 }
-                this.cout_quantite = (this.lignelivraisonclient.getMontant() * this.lignelivraisonclient.getQuantite());
+                this.lignelivraisonclient.setMontant(this.lignelivraisonclient.getPrixUnitaire() * this.lignelivraisonclient.getQuantite());
             }
         } catch (Exception e) {
             e.printStackTrace();
-            this.cout_quantite = 0.0D;
+            this.lignelivraisonclient.setMontant(0.0);
         }
     }
 
@@ -560,9 +589,12 @@ public class SortiedirectController extends AbstractSortiedirectController imple
                     return;
                 }
                 if (this.magasinlots.size() == 1) {
-                    this.magasinlot = ((Magasinlot) this.magasinlots.get(0));
+                    this.magasinlot = (this.magasinlots.get(0));
+                    this.lignelivraisonclient.setQuantite(1.0);
+                    this.lignelivraisonclient.setPrixUnitaire(this.magasinlot.getIdlot().getPrixunitaire());
                     this.lignelivraisonclient.setMontant(this.magasinlot.getIdlot().getPrixunitaire());
                     this.lignelivraisonclient.setUnite(this.magasinlot.getIdlot().getIdarticle().getUnite());
+                    this.lignelivraisonclient.setQuantitemultiple(1.0);
                     return;
                 }
             }
@@ -574,7 +606,9 @@ public class SortiedirectController extends AbstractSortiedirectController imple
     public void updatedataLot() {
         try {
             if (this.magasinlot != null) {
+                this.lignelivraisonclient.setPrixUnitaire(this.magasinlot.getIdlot().getPrixunitaire());
                 this.lignelivraisonclient.setMontant(this.magasinlot.getIdlot().getPrixunitaire());
+                this.lignelivraisonclient.setQuantite(1.0);
                 this.lignelivraisonclient.setUnite(this.magasinlot.getIdlot().getIdarticle().getUnite());
             }
         } catch (Exception e) {

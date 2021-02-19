@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="AddarticleCreateDlg" 
+                  widgetVar="AddarticleCreateDialog" 
+                  modal="true" resizable="true"
+                  appendTo="@(body)"
+                  width="90%"
+                  height="580"
+                  header="#{langue.ajouter_un_article}">
+            <h:form id="AddarticleCreateForm">
+
+                <h:panelGroup id="display">
+
+                    <div style="width: 100% ; height: 570px">
+
+                        <div style="width: 60%; float: left ; height: 100%">
+
+                            <p:panelGrid columns="3">
+
+                                <p:outputLabel value="#{langue.magasin}" for="magasin" />
+                                <p:selectOneMenu required="true" filter="true" id="magasin" value="#{entreedirecteController.magasin.idmagasin}" requiredMessage="#{langue.valeur_obligatoire}">
+                                    <f:selectItem itemLabel="#{langue.choisir}" itemValue=""/>
+                                    <f:selectItems value="#{entreedirecteController.magasins}" var="mag" itemLabel="#{mag.nom}" itemValue="#{mag.idmagasin}"/>                                                                             
+                                    <p:ajax update="datalist" listener="#{entreedirecteController.filterProductByMagasin()}"/>
+                                </p:selectOneMenu>
+
+                                <p:inputText placeholder="#{langue.zone_de_recherche}" style="width: 300px" />
+                            </p:panelGrid>
+
+                            <p:separator />
+
+                            <p:dataTable id="datalist"
+                                         value="#{entreedirecteController.magasinarticles}"
+                                         var="item"
+                                         rowKey="#{item.idmagasinarticle}"
+                                         paginator="true"
+                                         rows="8"
+                                         rowsPerPageTemplate="10,20,30,40,50"
+                                         selectionMode="single"
+                                         emptyMessage="#{langue.tableau_vide}"
+                                         selection="#{entreedirecteController.magasinarticle}">
+
+                                <p:ajax event="rowSelect" update=":AddarticleCreateForm" listener="#{entreedirecteController.selectProduct()}"/>
+
+                                <p:column filterBy="#{item.idmagasin.nom}" style="width: 30%">
+                                    <f:facet name="header">
+                                        <h:outputText value="#{langue.nom}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.idmagasin.nom}" />
+                                </p:column>
+
+                                <p:column filterBy="#{item.idarticle.code}" width="15%" style="text-align: center;">
+                                    <f:facet name="header">
+                                        <h:outputText value="#{langue.code}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.idarticle.code}"/>
+                                </p:column>
+
+                                <p:column filterBy="#{item.idarticle.libelle}" style="width: 30%">
+                                    <f:facet name="header">
+                                        <h:outputText value="#{langue.libelle}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.idarticle.libelle}"/>
+                                </p:column>
+
+                                <p:column filterBy="#{item.idarticle.fabricant}" style="width: 15%">
+                                    <f:facet name="header">
+                                        <h:outputText value="#{langue.fabricant}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.idarticle.fabricant}"/>
+                                </p:column>
+
+                                <p:column style="text-align: center;width: 10%">
+                                    <f:facet name="header">
+                                        <h:outputText value="#{langue.qte}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.quantite}"/>
+                                </p:column>
+
+                            </p:dataTable>
+                        </div>
+
+                        <div style="width: 39.5%; float: right ; height: 100%">
+
+                            <br/>
+                            <br/>
+                            <br/>
+
+                            <h:panelGrid columns="3">
+
+                                <p:outputLabel value="#{langue.article}"/>
+                                <p:outputLabel value="#{entreedirecteController.libelle_article}"/>
+                                <p:outputLabel value=""/>
+
+                                <p:outputLabel value="#{langue.numero_lot}" for="num_lot" />
+                                <h:panelGroup>
+                                    <p:inputText id="num_lot"  required="true" style="width: 150px;color: blue" value="#{entreedirecteController.lot.numero}">
+                                        <p:ajax event="keyup" />
+                                    </p:inputText>
+                                    <p:commandButton ignoreAutoUpdate="true" partialSubmit="true" value="Generer" actionListener="#{entreedirecteController.generateLotNumber()}" update="num_lot,date_peremption"/>
+                                </h:panelGroup>
+                                <p:message for="num_lot"/>
+                                
+                                <p:outputLabel value="#{langue.date_entree}" for="date_entree" />
+                                <p:calendar id="date_entree" required="true" value="#{entreedirecteController.lot.dateenregistrement}">
+                                    <p:ajax event="dateSelect" />
+                                </p:calendar>
+                                <p:message for="date_entree"/>
+
+                                <p:outputLabel value="#{langue.date_peremption}" for="date_peremption" />
+                                <p:calendar id="date_peremption" required="true" value="#{entreedirecteController.lot.dateperemption}">
+                                    <p:ajax event="dateSelect" />
+                                </p:calendar>
+                                <p:message for="date_peremption"/>
+
+                                <p:outputLabel value="#{langue.prix_unitaire}" for="cu" />
+                                <p:inputText id="cu" required="true" style="width: 100px" value="#{entreedirecteController.lignelivraisonfournisseur.prixachat}">
+                                    <f:convertNumber />
+                                    <p:ajax event="keyup" update="quantite,mt" listener="#{entreedirecteController.updateTotaux()}"/>
+                                </p:inputText>
+                                <p:message for="cu"/>
+
+                                <p:outputLabel value="#{langue.unite}" for="unite"/>
+                                <h:panelGroup>
+                                    <p:selectOneMenu required="true" id="unite" filter="true" value="#{entreedirecteController.unite}" converter="uniteConverter">
+                                        <f:selectItem itemLabel="#{langue.choisir}" itemValue="#{null}"/>
+                                        <f:selectItems value="#{entreedirecteController.unites}" var="unit" itemLabel="#{unit.libelle}" itemValue="#{unit}"/>
+                                        <p:ajax />
+                                    </p:selectOneMenu>
+                                    <p:inputText disabled="true" required="true" id="qpu" style="width: 75px" value="#{entreedirecteController.lignelivraisonfournisseur.unite}">                                
+                                        <p:ajax event="keyup" update="mt,qt" listener="#{entreedirecteController.updateTotaux()}"/>
+                                    </p:inputText>
+                                </h:panelGroup>
+                                <p:message for="unite"/>
+
+                                <p:outputLabel value="#{langue.quantite}" for="quantite"/>
+                                <p:inputText required="true" id="quantite" style="width: 75px" value="#{entreedirecteController.lignelivraisonfournisseur.quantite}">                                
+                                    <p:ajax event="keyup" update="mt,qt" listener="#{entreedirecteController.updateTotaux()}"/>
+                                </p:inputText>
+                                <p:message for="quantite"/>
+
+                                <p:outputLabel value="#{langue.quantite_totale}" for="qt" />
+                                <p:inputText id="qt" disabled="true" required="true" style="width: 75px" value="#{entreedirecteController.lignelivraisonfournisseur.quantitemultiple}">
+                                    <f:convertNumber/>
+                                    <p:ajax event="keyup" />
+                                </p:inputText>
+                                <p:message for="qt"/>
+
+                                <p:outputLabel value="#{langue.montant_total}" for="mt" />
+                                <p:inputText id="mt" disabled="true" required="true" style="width: 150px" value="#{entreedirecteController.cout_quantite}">
+                                    <f:convertNumber />
+                                    <p:ajax/>
+                                </p:inputText>
+                                <p:message for="mt"/>                                                           
+
+                            </h:panelGrid>
+
+                            <p:separator />
+
+                            <center>
+                                <p:commandButton style="color: red" icon="ui-icon-close" value="#{langue.annuler}" oncomplete="PF('AddarticleCreateDialog').hide()" partialSubmit="true"/>
+                                <p:commandButton actionListener="#{entreedirecteController.addProduit()}" icon="ui-icon-plus" value="#{langue.ajouter}" update="display,:StockCreateForm,:notify1,:StockListerForm:msg"/>                        
+                            </center>
+
+                        </div>
+
+                    </div>
+
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -7,23 +7,23 @@ import javax.ejb.Local;
 @Local
 public interface LignedemandeFacadeLocal {
 
-    public void create(Lignedemande paramLignedemande);
+    public void create(Lignedemande lignedemande);
 
-    public void edit(Lignedemande paramLignedemande);
+    public void edit(Lignedemande lignedemande);
 
-    public void remove(Lignedemande paramLignedemande);
+    public void remove(Lignedemande lignedemande);
 
-    public Lignedemande find(Object paramObject);
+    public Lignedemande find(Object id);
 
     public List<Lignedemande> findAll();
 
-    public List<Lignedemande> findRange(int[] paramArrayOfInt);
+    public List<Lignedemande> findRange(int[] range);
 
     public int count();
 
     public Long nextVal();
 
-    public List<Lignedemande> findByIddemande(long paramLong);
+    public List<Lignedemande> findByIddemande(long idDemande);
 
-    public List<Lignedemande> findByIdarticle(long paramLong);
+    public List<Lignedemande> findByIdarticle(long idArticle);
 }

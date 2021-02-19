@@ -119,4 +119,11 @@ public class MagasinlotFacade extends AbstractFacade<Magasinlot> implements Maga
         query.setParameter("idmagasin", idmagasin);
         return query.getResultList();
     }
+    
+    @Override
+    public List<Magasinlot> findByIdMagasinIdArticle(long idMagasinArticle) {
+        Query query = em.createQuery("SELECT ml FROM Magasinlot ml WHERE ml.idmagasinarticle.idmagasinarticle=:idMagasinArticle ORDER BY ml.idmagasinlot");
+        query.setParameter("idMagasinArticle", idMagasinArticle);
+        return query.getResultList();
+    }
 }

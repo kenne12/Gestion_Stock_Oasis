@@ -23,11 +23,11 @@
                          style="width: 98%;margin-left: 1%"
                          rowsPerPageTemplate="10,20,30,40,50">
 
-                <p:column filterBy="#{item.idpersonnel.nom} #{item.idpersonnel.prenom}" width="35%">
+                <p:column filterBy="#{item.client.nom} #{item.client.prenom}" width="35%">
                     <f:facet name="header">
                         <h:outputText value="#{langue.personnel}"/>
                     </f:facet>
-                    <h:outputText value="#{item.idpersonnel.nom} #{item.idpersonnel.prenom}"/>
+                    <h:outputText value="#{item.client.nom} #{item.client.prenom}"/>
                 </p:column>
 
                 <p:column filterBy="#{item.code}" width="15%" style="text-align: center;">
@@ -36,15 +36,6 @@
                     </f:facet>
                     <h:outputText value="#{item.code}"/>
                 </p:column>  
-
-                <p:column style="width: 35%">
-                    <f:facet name="header">
-                        <h:outputText value="#{langue.projet}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.idprojet.nom}">
-                        <f:convertNumber/>
-                    </h:outputText>
-                </p:column>
 
                 <p:column style="text-align: center;width: 15%">
                     <f:facet name="header">
