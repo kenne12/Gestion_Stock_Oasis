@@ -11,16 +11,13 @@ import entities.Magasinarticle;
 import entities.Magasinlot;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import org.primefaces.context.RequestContext;
 import utils.JsfUtil;
 import utils.PrintUtils;
-import utils.Printer;
 import utils.SessionMBean;
 import utils.Utilitaires;
 
