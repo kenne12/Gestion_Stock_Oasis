@@ -1,7 +1,12 @@
-package controllers.analyse.analys_recette;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package controllers.analyse.analyse_depense;
 
 import entities.AnneeMois;
-import entities.Lignelivraisonclient;
+import entities.Lignelivraisonfournisseur;
 import entities.Lot;
 import entities.Magasinlot;
 import java.io.Serializable;
@@ -17,12 +22,18 @@ import utils.JsfUtil;
 import utils.Printer;
 import utils.Utilitaires;
 
+/**
+ *
+ * @author USER
+ */
 @ManagedBean
 @ViewScoped
-public class AnalyseRecetteController extends AbstratAnalyseRecetteController implements Serializable {
+public class AnalyseDepenseController extends AbstractAnalyseDepenseController implements Serializable {
 
-    public AnalyseRecetteController() {
-
+    /**
+     * Creates a new instance of AnalyseDepenseController
+     */
+    public AnalyseDepenseController() {
     }
 
     @PostConstruct
@@ -35,10 +46,10 @@ public class AnalyseRecetteController extends AbstratAnalyseRecetteController im
         return Utilitaires.checkPeremption(lot);
     }
 
-    private double getLigneLivraison(List<Lignelivraisonclient> list) {
+    private double getLigneLivraison(List<Lignelivraisonfournisseur> list) {
         Double somme = 0.0;
-        for (Lignelivraisonclient llc : list) {
-            somme += llc.getMontant();
+        for (Lignelivraisonfournisseur llf : list) {
+            somme += llf.getPrixachat() * llf.getQuantitemultiple();
         }
         return somme;
     }
@@ -68,10 +79,11 @@ public class AnalyseRecetteController extends AbstratAnalyseRecetteController im
                 if (annee.getIdannee() != null && annee.getIdannee() != -1) {
                     annee = anneeFacadeLocal.find(annee.getIdannee());
                     magasin = magasinFacadeLocal.find(magasin.getIdmagasin());
-                    lignelivraisonclients = lignelivraisonclientFacadeLocal.findByIdMagasin(magasin.getIdmagasin(), annee.getDateDebut(), annee.getDateFin());
+
+                    lignelivraisonfournisseurs = lignelivraisonfournisseurFacadeLocal.findByIdMagasin(magasin.getIdmagasin(), annee.getDateDebut(), annee.getDateFin());
                     List<AnneeMois> listMois = anneeMoisFacadeLocal.findByAnnee(annee.getIdannee());
-                    if (!lignelivraisonclients.isEmpty()) {
-                        this.montantTotal = this.getLigneLivraison(lignelivraisonclients);
+                    if (!lignelivraisonfournisseurs.isEmpty()) {
+                        this.montantTotal = this.getLigneLivraison(lignelivraisonfournisseurs);
                         magasinlots = magasinlotFacadeLocal.findByIdMagasin(magasin.getIdmagasin());
 
                         for (Magasinlot ml : magasinlots) {
@@ -80,7 +92,7 @@ public class AnalyseRecetteController extends AbstratAnalyseRecetteController im
                             a.setMontantTotal(0);
                             a.setPourcentage(0);
 
-                            List<Lignelivraisonclient> llcLots = lignelivraisonclientFacadeLocal.findByIdLot(ml.getIdmagasinlot(), annee.getDateDebut(), annee.getDateFin());
+                            List<Lignelivraisonfournisseur> llcLots = lignelivraisonfournisseurFacadeLocal.findByIdLot(ml.getIdmagasinlot(), annee.getDateDebut(), annee.getDateFin());
                             if (!llcLots.isEmpty()) {
                                 Double totalLot = this.getLigneLivraison(llcLots);
                                 a.setMontantTotal(totalLot);
@@ -89,7 +101,7 @@ public class AnalyseRecetteController extends AbstratAnalyseRecetteController im
                             }
 
                             for (AnneeMois mois : listMois) {
-                                List<Lignelivraisonclient> llcLotsMois = lignelivraisonclientFacadeLocal.findByIdLot(ml.getIdmagasinlot(), mois.getDateDebut(), mois.getDateFin());
+                                List<Lignelivraisonfournisseur> llcLotsMois = lignelivraisonfournisseurFacadeLocal.findByIdLot(ml.getIdmagasinlot(), mois.getDateDebut(), mois.getDateFin());
                                 if (!listMois.isEmpty()) {
                                     Double totalMois = this.getLigneLivraison(llcLotsMois);
                                     switch (mois.getIdmois().getIdmois()) {
@@ -196,4 +208,5 @@ public class AnalyseRecetteController extends AbstratAnalyseRecetteController im
             e.printStackTrace();
         }
     }
+
 }

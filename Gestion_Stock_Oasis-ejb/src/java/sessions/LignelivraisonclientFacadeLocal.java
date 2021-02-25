@@ -24,7 +24,7 @@ public interface LignelivraisonclientFacadeLocal {
 
     public Long nextVal();
 
-    public List<Lignelivraisonclient> findByIdlivraisonclient(long paramLong);
+    public List<Lignelivraisonclient> findByIdlivraisonclient(long idLivraisonClient);
 
     public List<Lignelivraisonclient> findAllRange();
 

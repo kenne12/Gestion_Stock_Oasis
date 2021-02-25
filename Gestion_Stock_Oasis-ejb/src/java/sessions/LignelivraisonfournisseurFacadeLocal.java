@@ -1,29 +1,34 @@
 package sessions;
 
 import entities.Lignelivraisonfournisseur;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
 
 @Local
 public interface LignelivraisonfournisseurFacadeLocal {
 
-    public void create(Lignelivraisonfournisseur paramLignelivraisonfournisseur);
+    public void create(Lignelivraisonfournisseur lignelivraisonfournisseur);
 
-    public void edit(Lignelivraisonfournisseur paramLignelivraisonfournisseur);
+    public void edit(Lignelivraisonfournisseur lignelivraisonfournisseur);
 
-    public void remove(Lignelivraisonfournisseur paramLignelivraisonfournisseur);
+    public void remove(Lignelivraisonfournisseur lignelivraisonfournisseur);
 
-    public Lignelivraisonfournisseur find(Object paramObject);
+    public Lignelivraisonfournisseur find(Object id);
 
     public List<Lignelivraisonfournisseur> findAll();
 
-    public List<Lignelivraisonfournisseur> findRange(int[] paramArrayOfInt);
+    public List<Lignelivraisonfournisseur> findRange(int[] range);
 
     public int count();
 
     public Long nextVal();
 
-    public List<Lignelivraisonfournisseur> findByIdlivraison(long paramLong);
+    public List<Lignelivraisonfournisseur> findByIdlivraison(long idLivraison);
 
-    public List<Lignelivraisonfournisseur> findByIdarticle(long paramLong);
+    public List<Lignelivraisonfournisseur> findByIdarticle(long idArticle);
+
+    List<Lignelivraisonfournisseur> findByIdLot(long idMagasinLot, Date dateDebut, Date dateFin);
+
+    List<Lignelivraisonfournisseur> findByIdMagasin(int idMagasin, Date dateDebut, Date dateFin);
 }

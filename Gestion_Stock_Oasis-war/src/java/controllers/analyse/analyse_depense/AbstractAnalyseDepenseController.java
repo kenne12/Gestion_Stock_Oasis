@@ -1,7 +1,13 @@
-package controllers.analyse.analys_recette;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package controllers.analyse.analyse_depense;
 
 import entities.Annee;
 import entities.Lignelivraisonclient;
+import entities.Lignelivraisonfournisseur;
 import entities.Magasin;
 import entities.Magasinlot;
 import java.util.ArrayList;
@@ -10,6 +16,7 @@ import javax.ejb.EJB;
 import sessions.AnneeFacadeLocal;
 import sessions.AnneeMoisFacadeLocal;
 import sessions.LignelivraisonclientFacadeLocal;
+import sessions.LignelivraisonfournisseurFacadeLocal;
 import sessions.MagasinFacadeLocal;
 import sessions.MagasinlotFacadeLocal;
 import sessions.UtilisateurmagasinFacadeLocal;
@@ -17,14 +24,19 @@ import utils.AnalyseRD;
 import utils.SessionMBean;
 import utils.Utilitaires;
 
-public class AbstratAnalyseRecetteController {
+/**
+ *
+ * @author USER
+ */
+public class AbstractAnalyseDepenseController {
 
-    public AbstratAnalyseRecetteController() {
+    public AbstractAnalyseDepenseController() {
+
     }
 
     @EJB
-    protected LignelivraisonclientFacadeLocal lignelivraisonclientFacadeLocal;
-    protected List<Lignelivraisonclient> lignelivraisonclients = new ArrayList<>();
+    protected LignelivraisonfournisseurFacadeLocal lignelivraisonfournisseurFacadeLocal;
+    protected List<Lignelivraisonfournisseur> lignelivraisonfournisseurs = new ArrayList<>();
 
     @EJB
     protected MagasinFacadeLocal magasinFacadeLocal;
@@ -165,5 +177,5 @@ public class AbstratAnalyseRecetteController {
     public double getPourcentage() {
         return pourcentage;
     }
-    
+
 }

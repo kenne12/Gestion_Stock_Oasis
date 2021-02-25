@@ -23,8 +23,7 @@ import utils.Utilitaires;
 
 @ManagedBean
 @SessionScoped
-public class LivraisonFournisseurController extends AbstractLivraisonFournisseurController
-        implements Serializable {
+public class LivraisonFournisseurController extends AbstractLivraisonFournisseurController implements Serializable {
 
     @PostConstruct
     private void init() {
@@ -529,8 +528,3 @@ public class LivraisonFournisseurController extends AbstractLivraisonFournisseur
         /* 569 */ RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
     }
 }
-
-/* Location:           I:\GESTION_STOCK\GESTION_STOCK-war_war\WEB-INF\classes\
- * Qualified Name:     controllers.livraison_fournisseur.LivraisonFournisseurController
- * JD-Core Version:    0.6.2
- */

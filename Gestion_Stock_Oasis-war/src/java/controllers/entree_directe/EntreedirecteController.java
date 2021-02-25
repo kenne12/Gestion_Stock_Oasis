@@ -97,8 +97,8 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                 this.fournisseur = this.livraisonfournisseur.getIdfournisseur();
                 this.total = this.livraisonfournisseur.getMontant();
                 this.mvtstock = this.livraisonfournisseur.getIdmvtstock();
-                /* 115 */ RequestContext.getCurrentInstance().execute("PF('StockCreateDialog').show()");
-                /* 116 */ return;
+                RequestContext.getCurrentInstance().execute("PF('StockCreateDialog').show()");
+                return;
             }
             notifyError("not_row_selected");
         } catch (Exception e) {
@@ -405,8 +405,8 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                 return;
             }
             notifyError("not_row_selected");
-        } catch (Exception e) {
-            notifyFail(e);
+        } catch (Exception ex) {
+            notifyFail(ex);
         }
     }
 
@@ -674,14 +674,14 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
     }
 
     public void notifySuccess() {
-        /* 645 */ RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
-        /* 646 */ this.routine.feedBack("information", "/resources/tool_images/success.png", this.routine.localizeMessage("operation_reussie"));
-        /* 647 */ RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
+        RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
+        this.routine.feedBack("information", "/resources/tool_images/success.png", this.routine.localizeMessage("operation_reussie"));
+        RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
     }
 
     public void notifyFail(Exception e) {
-        /* 651 */ RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
-        /* 652 */ this.routine.catchException(e, this.routine.localizeMessage("echec_operation"));
-        /* 653 */ RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
+        RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
+        this.routine.catchException(e, this.routine.localizeMessage("echec_operation"));
+        RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
     }
 }

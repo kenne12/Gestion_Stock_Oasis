@@ -122,40 +122,40 @@ public class AbstractEntreedirecteController {
     protected String mode = "";
 
     public Article getArticle() {
-        /* 130 */ return this.article;
+        return this.article;
     }
 
     public void setArticle(Article article) {
-        /* 134 */ this.article = article;
+        this.article = article;
     }
 
     public List<Article> getArticles() {
-        /* 138 */ return this.articles;
+        return this.articles;
     }
 
     public void setArticles(List<Article> articles) {
-        /* 142 */ this.articles = articles;
+        this.articles = articles;
     }
 
     public Fournisseur getFournisseur() {
-        /* 146 */ return this.fournisseur;
+        return this.fournisseur;
     }
 
     public void setFournisseur(Fournisseur fournisseur) {
-        /* 150 */ this.fournisseur = fournisseur;
+        this.fournisseur = fournisseur;
     }
 
     public List<Fournisseur> getFournisseurs() {
-        /* 154 */ this.fournisseurs = this.fournisseurFacadeLocal.findAllRange();
-        /* 155 */ return this.fournisseurs;
+        this.fournisseurs = this.fournisseurFacadeLocal.findAllRange();
+        return this.fournisseurs;
     }
 
     public void setFournisseurs(List<Fournisseur> fournisseurs) {
-        /* 159 */ this.fournisseurs = fournisseurs;
+        this.fournisseurs = fournisseurs;
     }
 
     public Livraisonfournisseur getLivraisonfournisseur() {
-        /* 163 */ return this.livraisonfournisseur;
+        return this.livraisonfournisseur;
     }
 
     public void setLivraisonfournisseur(Livraisonfournisseur livraisonfournisseur) {
@@ -164,85 +164,85 @@ public class AbstractEntreedirecteController {
     }
 
     public List<Livraisonfournisseur> getLivraisonfournisseurs() {
-        /* 172 */ this.livraisonfournisseurs = this.livraisonfournisseurFacadeLocal.findAllRange(true);
-        /* 173 */ return this.livraisonfournisseurs;
+        this.livraisonfournisseurs = this.livraisonfournisseurFacadeLocal.findAllRange(true);
+        return this.livraisonfournisseurs;
     }
 
     public void setLivraisonfournisseurs(List<Livraisonfournisseur> livraisonfournisseurs) {
-        /* 177 */ this.livraisonfournisseurs = livraisonfournisseurs;
+        this.livraisonfournisseurs = livraisonfournisseurs;
     }
 
     public Lignelivraisonfournisseur getLignelivraisonfournisseur() {
-        /* 181 */ return this.lignelivraisonfournisseur;
+        return this.lignelivraisonfournisseur;
     }
 
     public void setLignelivraisonfournisseur(Lignelivraisonfournisseur lignelivraisonfournisseur) {
-        /* 185 */ this.lignelivraisonfournisseur = lignelivraisonfournisseur;
+        this.lignelivraisonfournisseur = lignelivraisonfournisseur;
     }
 
     public List<Lignelivraisonfournisseur> getLignelivraisonfournisseurs() {
-        /* 189 */ return this.lignelivraisonfournisseurs;
+        return this.lignelivraisonfournisseurs;
     }
 
     public void setLignelivraisonfournisseurs(List<Lignelivraisonfournisseur> lignelivraisonfournisseurs) {
-        /* 193 */ this.lignelivraisonfournisseurs = lignelivraisonfournisseurs;
+        this.lignelivraisonfournisseurs = lignelivraisonfournisseurs;
     }
 
     public Boolean getDetail() {
-        /* 197 */ return this.detail;
+        return this.detail;
     }
 
     public void setDetail(Boolean detail) {
-        /* 201 */ this.detail = detail;
+        this.detail = detail;
     }
 
     public Boolean getModifier() {
-        /* 205 */ return this.modifier;
+        return this.modifier;
     }
 
     public void setModifier(Boolean modifier) {
-        /* 209 */ this.modifier = modifier;
+        this.modifier = modifier;
     }
 
     public Boolean getConsulter() {
-        /* 213 */ return this.consulter;
+        return this.consulter;
     }
 
     public void setConsulter(Boolean consulter) {
-        /* 217 */ this.consulter = consulter;
+        this.consulter = consulter;
     }
 
     public Boolean getImprimer() {
-        /* 221 */ return this.imprimer;
+        return this.imprimer;
     }
 
     public void setImprimer(Boolean imprimer) {
-        /* 225 */ this.imprimer = imprimer;
+        this.imprimer = imprimer;
     }
 
     public Boolean getSupprimer() {
-        /* 229 */ return this.supprimer;
+        return this.supprimer;
     }
 
     public void setSupprimer(Boolean supprimer) {
-        /* 233 */ this.supprimer = supprimer;
+        this.supprimer = supprimer;
     }
 
     public Famille getFamille() {
-        /* 237 */ return this.famille;
+        return this.famille;
     }
 
     public void setFamille(Famille famille) {
-        /* 241 */ this.famille = famille;
+        this.famille = famille;
     }
 
     public List<Famille> getFamilles() {
-        /* 245 */ this.familles = this.familleFacadeLocal.findAllRange();
-        /* 246 */ return this.familles;
+        this.familles = this.familleFacadeLocal.findAllRange();
+        return this.familles;
     }
 
     public void setFamilles(List<Famille> familles) {
-        /* 250 */ this.familles = familles;
+        this.familles = familles;
     }
 
     public Double getCout_quantite() {

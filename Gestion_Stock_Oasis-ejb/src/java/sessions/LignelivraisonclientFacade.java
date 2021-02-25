@@ -36,9 +36,9 @@ public class LignelivraisonclientFacade extends AbstractFacade<Lignelivraisoncli
     }
 
     @Override
-    public List<Lignelivraisonclient> findByIdlivraisonclient(long idlivraisonclient) {
+    public List<Lignelivraisonclient> findByIdlivraisonclient(long idLivraisonClient) {
         Query query = this.em.createQuery("SELECT l FROM Lignelivraisonclient l WHERE l.idlivraisonclient.idlivraisonclient=:idlivraisonclient");
-        query.setParameter("idlivraisonclient", idlivraisonclient);
+        query.setParameter("idlivraisonclient", idLivraisonClient);
         return query.getResultList();
     }
 
