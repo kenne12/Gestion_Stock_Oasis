@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+        <p:dialog id="MoisModifierDlg" 
+                  widgetVar="MoisModifierDialog" modal="true" 
+                  resizable="false"
+                  appendTo="@(body)" header="#{langue['Titre.Dlg.Modification']}: #{langue.mois}" 
+                  closeOnEscape="true">
+
+            <h:form id="MoisModifierForm">
+
+                <h:panelGroup id="display">
+                    <h:panelGrid  columns="3" columnClasses="column" >
+                
+                        <p:outputLabel value="#{langue.annee}" for="annee" />
+                        <p:outputLabel id="annee" value="#{moisController.anneeMois.idannee.nom}"/>
+                        <p:message for="annee"/>
+                        
+                        <p:outputLabel value="#{langue.nom}" for="nom" />
+                        <p:outputLabel id="nom" value="#{moisController.anneeMois.idmois.nom}"/>
+                        <p:message for="nom"/>
+                        
+                        <p:outputLabel value="#{langue.dateDebut}" for="date_debut" />
+                        <p:calendar mindate="#{moisController.anneeMois.idannee.dateDebut}" maxdate="#{moisController.anneeMois.idannee.dateFin}" pattern="dd/MM/yyyy" id="date_debut" value="#{moisController.anneeMois.dateDebut}" navigator="true" required="true" requiredMessage="#{langue.valeur_obligatoire}"/>
+                        <p:message for="date_debut"/>
+                        
+                        <p:outputLabel value="#{langue.dateFin}" for="date_fin" />
+                        <p:calendar mindate="#{moisController.anneeMois.idannee.dateDebut}" maxdate="#{moisController.anneeMois.idannee.dateFin}" pattern="dd/MM/yyyy" id="date_fin" value="#{moisController.anneeMois.dateFin}" navigator="true" required="true" requiredMessage="#{langue.valeur_obligatoire}"/>
+                        <p:message for="date_fin"/>
+
+                        <p:outputLabel value="#{langue.etat}" for="etat" />
+                        <h:selectBooleanCheckbox id="etat" value="#{moisController.anneeMois.etat}"/>
+                        <p:message for="etat"/>
+
+                    </h:panelGrid>
+                    
+                    <p:separator/>
+                    <p:commandButton style="float: right" actionListener="#{moisController.modifier()}" value="#{langue['Conv.Modifier']}"
+                                     update="display,:MoisListerForm:datalist,:actionsForm,:notify1" icon="ui-icon-check">                                     
+                        <p:confirm header="#{langue['Titre.Dlg.Confirm']}" message="#{langue['Message.Confirm.Modifier']}"
+                                   icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    <p:commandButton style="float: left" value="#{langue['Conv.Annuler']}" oncomplete="PF('ModifierModifierDlg').hide()" icon="ui-icon-close"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="MoisListerForm">
+
+        <p:messages id="growl" closable="true">
+            <p:effect type="pulsate" event="load" delay="50" />
+        </p:messages>
+
+        <p:panel header="#{langue['Conv.ListeDes']} #{langue.mois}">
+            <p:contextMenu id="MoisDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{langue['Conv.Creer']}" onclick="document.getElementById('actionsForm:creer').click();" icon="ui-icon-plus"/>                
+                <p:menuitem value="#{langue['Conv.Supprimer']}" onclick="document.getElementById('actionsForm:supprimer').click();" icon="ui-icon-trash"/>
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{moisController.anneeMoises}"
+                         var="item"
+                         rowKey="#{item.idAnneeMois}"
+                         paginator="true"
+                         rows="12"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{moisController.anneeMois}">
+
+                <p:ajax event="rowSelect"   update=":MoisListerForm:MoisDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowUnselect" update=":MoisListerForm:MoisDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('AccesListerForm:viewButton').click();"/>
+
+                <p:column filterBy="#{item.idannee.nom}" style="text-align: center">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.exercice}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idannee.nom}"/>
+                </p:column> 
+
+                <p:column filterBy="#{item.idmois.nom}" style="text-align: left">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.nom}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idmois.nom}"/>
+                </p:column> 
+
+                <p:column filterBy="#{item.idmois.numero}" style="text-align: center">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.numero}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idmois.numero}"/>
+                </p:column>
+                
+                <p:column style="text-align: center">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.dateDebut}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.dateDebut}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column> 
+                
+                <p:column style="text-align: center">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.dateFin}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.dateFin}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column style="text-align: center">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.etat}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.etat eq true ? langue.actif : langue.inactif}"/>
+                </p:column> 
+
+            </p:dataTable>
+        </p:panel>
+    </h:form>
+
+    <!-- ****************************************Information************************************************************************************************************************************************************************************************************** -->
+
+    <p:dialog id="notify1" widgetVar="NotifyDialog1" height="220" width="600" resizable="true" modal="true" style="text-align: center; font-size: 14px; font-family: Cambria;">
+        <f:facet name="header">
+            <h:outputText style="font-family: Cambria; font-size: 14px;" value="#{moisController.routine.titleNotify}" />
+        </f:facet>
+        <h:form id="NotifyForm1">
+            <h:graphicImage id="nt_img" url="#{moisController.routine.iconMessage}" style="cursor:pointer" />
+
+            <hr size="3" style="background-color: cornflowerblue;"/>
+
+            <h:outputText id="nt_msg" value="#{moisController.routine.message}"/>
+
+            <hr size="3" style="background-color: cornflowerblue; margin-top: 5%;"/>
+
+            <p:commandButton style="font-family: Cambria; font-size: 14px;" value="#{langue.valider}" onclick="PF('NotifyDialog1').hide()" type="button" immediate="true"/>
+
+            <hr size="3" style="background-color: cornflowerblue;"/>
+        </h:form>
+    </p:dialog>
+
+    <!-- ****************************************Information************************************************************************************************************************************************************************************************************** -->
+
+</ui:composition>

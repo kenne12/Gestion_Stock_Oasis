@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="actionsForm">
+        <!--<p:fieldset legend="#{langue['Conv.Actions']}" toggleable="true" toggleSpeed="300">-->
+            <div class="footer-section">
+
+                <p:commandButton id="creer"  icon="ui-icon-plus"   
+                                 value="#{langue['Conv.Creer']}" 
+                                 update=":MoisCreerForm,:notify1" 
+                                 actionListener="#{moisController.prepareCreate()}"/>                
+                
+                <p:commandButton id="modifier"   
+                                 icon="ui-icon-pencil" 
+                                 value="#{langue['Conv.Modifier']}" 
+                                 update=":MoisModifierForm,:notify1"
+                                 actionListener="#{moisController.prepareEdit()}"
+                                 disabled="#{moisController.modifier}"/>
+
+                <p:commandButton id="supprimer" 
+                                 icon="ui-icon-trash"  
+                                 value="#{langue['Conv.Supprimer']}" 
+                                 update=":MoisListerForm:datalist,:actionsForm,:notify1"
+                                 disabled="#{moisController.supprimer}"
+                                 actionListener="#{moisController.supprimer()}">
+                    <p:confirm header="#{langue['Titre.Dlg.Confirm']}"
+                               message="#{langue['Message.Confirm.Supprimer']}?"
+                               icon="ui-icon-alert"/>
+                </p:commandButton>
+
+            </div>
+        <!--</p:fieldset>-->
+    </h:form>
+</ui:composition>
