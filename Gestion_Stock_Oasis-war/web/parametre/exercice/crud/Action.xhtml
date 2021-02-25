@@ -6,33 +6,32 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <h:form id="actionsForm">
-
+        <!--<p:fieldset legend="#{langue['Conv.Actions']}" toggleable="true" toggleSpeed="300">-->
         <div class="footer-section">
 
             <p:commandButton id="creer"  icon="ui-icon-plus"   
                              value="#{langue['Conv.Creer']}" 
-                             actionListener="#{familleController.prepareCreate()}"
-                             update=":FamilleCreerForm,:notify1" />
+                             update=":AnneeCreerForm,:notify1"
+                             actionListener="#{anneeController.prepareCreate()}"/>
 
             <p:commandButton id="modifier"   
                              icon="ui-icon-pencil" 
                              value="#{langue['Conv.Modifier']}" 
-                             actionListener="#{familleController.prepareEdit()}"
-                             update=":FamilleCreerForm,:notify1" 
-                             disabled="#{familleController.modifier}"/>
+                             update=":AnneeModifierForm,:notify1"
+                             actionListener="#{anneeController.prepareEdit()}"
+                             disabled="#{anneeController.modifier}"/>
 
             <p:commandButton id="supprimer" 
                              icon="ui-icon-trash"  
                              value="#{langue['Conv.Supprimer']}" 
-                             update=":FamilleListerForm:datalist,:actionsForm,:notify1"
-                             disabled="#{familleController.supprimer}"
-                             actionListener="#{familleController.delete()}">
+                             update=":AnneeListerForm:datalist,:actionsForm,:notify1"
+                             disabled="#{anneeController.supprimer}"
+                             actionListener="#{anneeController.supprimer()}">
                 <p:confirm header="#{langue['Titre.Dlg.Confirm']}"
                            message="#{langue['Message.Confirm.Supprimer']}?"
                            icon="ui-icon-alert"/>
-            </p:commandButton>               
-
+            </p:commandButton>             
         </div>
-
+        <!--</p:fieldset>-->
     </h:form>
 </ui:composition>

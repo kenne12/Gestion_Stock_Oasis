@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+        <p:dialog id="AnneeModifierDlg" 
+                  widgetVar="AnneeModifierDialog" modal="true" 
+                  resizable="false"
+                  appendTo="@(body)" header="#{langue['Titre.Dlg.Modification']}: #{langue.exercice}" 
+                  closeOnEscape="true">
+
+            <h:form id="AnneeModifierForm">
+
+                <h:panelGroup id="display">
+                    <h:panelGrid  columns="3" columnClasses="column" >
+
+                        <p:outputLabel value="#{langue.nom}" for="theme" />
+                        <p:inputText id="theme" value="#{anneeController.selectedAnnee.nom}" />
+                        <p:message for="theme"/>
+
+                        <p:outputLabel value="#{langue.active}" for="etat" />
+                        <h:selectBooleanCheckbox id="etat" value="#{anneeController.selectedAnnee.etat}"/>
+                        <p:message for="etat"/>
+
+                    </h:panelGrid>
+                    
+                    <p:separator/>
+                    <p:commandButton style="float: right" actionListener="#{anneeController.modifier()}" value="#{langue['Conv.Modifier']}"
+                                     update="display,:AnneeListerForm:datalist,:actionsForm,:notify1">                                     
+                        <p:confirm header="#{langue['Titre.Dlg.Confirm']}" message="#{langue['Message.Confirm.Modifier']}"
+                                   icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    <p:commandButton style="float: left" value="#{langue['Conv.Annuler']}" oncomplete="PF('AnneeModifierDlg').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>
