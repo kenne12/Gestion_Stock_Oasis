@@ -152,7 +152,7 @@ public class ArticleController extends AbstractArticleController implements Seri
                 }
 
                 this.article.setIdunite(this.unite);
-                this.article.setUnitesortie(1.0D);
+                this.article.setUnitesortie(1.0);
 
                 this.ut.begin();
 
@@ -162,15 +162,15 @@ public class ArticleController extends AbstractArticleController implements Seri
                 this.lot.setIdarticle(this.article);
                 this.lot.setPrixunitaire(this.article.getPrixunit());
                 this.lot.setPrixachat(this.article.getCoutachat());
-                this.lot.setUnitesortie(Double.valueOf(0.0D));
-                this.lot.setQuantite(Double.valueOf(0.0D));
-                this.lot.setQuantitemultiple(Double.valueOf(0.0D));
-                this.lot.setQuantite(Double.valueOf(0.0D));
-                this.lot.setQuantitereduite(Double.valueOf(0.0D));
+                this.lot.setUnitesortie(0.0);
+                this.lot.setQuantite(0.0);
+                this.lot.setQuantitemultiple(0.0);
+                this.lot.setQuantite(0.0);
+                this.lot.setQuantitereduite(0.0);
                 this.lot.setDateenregistrement(new Date());
-                this.lot.setUniteentree(Double.valueOf(1.0D));
+                this.lot.setUniteentree(1.0);
                 this.lot.setQuantitesecurite(this.article.getQuantitesecurite());
-                this.lot.setEtat(Boolean.valueOf(true));
+                this.lot.setEtat(true);
 
                 if (!this.showLot) {
                     this.lot.setDatefabrication(null);
@@ -187,10 +187,10 @@ public class ArticleController extends AbstractArticleController implements Seri
                     obj.setIdmagasin(m);
                     obj.setEtat(true);
                     obj.setUnite(this.article.getUnite());
-                    obj.setQuantite(0.0D);
-                    obj.setQuantitemultiple(0.0D);
+                    obj.setQuantite(0.0);
+                    obj.setQuantitemultiple(0.0);
                     obj.setQuantitereduite(0.0);
-                    obj.setQuantitevirtuelle(0.0D);
+                    obj.setQuantitevirtuelle(0.0);
                     obj.setQuantitesecurite(this.article.getQuantitesecurite());
                     this.magasinarticleFacadeLocal.create(obj);
 
@@ -199,11 +199,12 @@ public class ArticleController extends AbstractArticleController implements Seri
                         obj1.setIdmagasinlot(this.magasinlotFacadeLocal.nextVal());
                         obj1.setIdmagasinarticle(obj);
                         obj1.setIdlot(this.lot);
-                        obj1.setQuantite(0.0D);
+                        obj1.setQuantite(0.0);
                         obj1.setUnite(this.article.getUnite());
-                        obj1.setQuantitemultiple(0.0D);
-                        obj1.setQuantitereduite(0.0D);
-                        obj1.setQuantitevirtuelle(0.0D);
+                        obj1.setQuantitemultiple(0.0);
+                        obj1.setQuantitereduite(0.0);
+                        obj1.setQuantitevirtuelle(0.0);
+                        obj1.setQuantitesecurite(0.0);
                         obj1.setEtat(true);
                         obj1.setQuantitesecurite(this.article.getQuantitesecurite());
                         this.magasinlotFacadeLocal.create(obj1);
@@ -217,7 +218,7 @@ public class ArticleController extends AbstractArticleController implements Seri
                 this.famille = new Famille();
                 this.article = new Article();
 
-                this.modifier = (this.supprimer = this.detail = Boolean.valueOf(true));
+                this.modifier = (this.supprimer = this.detail = true);
 
                 RequestContext.getCurrentInstance().execute("PF('ArticleCreerDialog').hide()");
                 notifySuccess();
@@ -247,18 +248,18 @@ public class ArticleController extends AbstractArticleController implements Seri
                         ma.setIdmagasinarticle(this.magasinarticleFacadeLocal.nextVal());
                         ma.setIdmagasin(m);
                         ma.setIdarticle(this.article);
-                        ma.setEtat(Boolean.valueOf(true));
-                        ma.setQuantite(Double.valueOf(0.0D));
-                        ma.setQuantitemultiple(Double.valueOf(0.0D));
-                        ma.setQuantitereduite(Double.valueOf(0.0D));
-                        ma.setQuantitesecurite(Double.valueOf(0.0D));
-                        ma.setQuantitevirtuelle(Double.valueOf(0.0D));
+                        ma.setEtat(true);
+                        ma.setQuantite(0.0);
+                        ma.setQuantitemultiple(0.0);
+                        ma.setQuantitereduite(0.0);
+                        ma.setQuantitesecurite(0.0);
+                        ma.setQuantitevirtuelle(0.0);
                         ma.setUnite(this.article.getUnite());
                         this.magasinarticleFacadeLocal.create(ma);
                     }
                 }
 
-                this.modifier = (this.supprimer = this.detail = Boolean.valueOf(true));
+                this.modifier = (this.supprimer = this.detail = true);
                 this.article = new Article();
                 RequestContext.getCurrentInstance().execute("PF('ArticleCreerDialog').hide()");
                 notifySuccess();

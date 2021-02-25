@@ -25,7 +25,7 @@
                          rowKey="#{item.idfamille}"
                          paginator="true"
                          rows="10"
-                         style="width: 40%;"
+                         style="width: 60%;"
                          rowsPerPageTemplate="10,20,30,40,50"
                          selectionMode="single"
                          selection="#{familleController.famille}">
@@ -34,14 +34,14 @@
                 <p:ajax event="rowUnselect" update=":FamilleListerForm:FamilleDataTableContextMenu, :actionsForm"/>
                 <p:ajax event="rowDblselect" onsuccess="document.getElementById('FamilleListerForm:viewButton').click();"/>
                      
-                <p:column filterBy="#{item.code}" style="width: 30%">
+                <p:column filterBy="#{item.code}" style="width: 15%">
                     <f:facet name="header">
                         <h:outputText value="#{langue.code}"/>
                     </f:facet>
                     <h:outputText value="#{item.code}"/>
                 </p:column>
 
-                <p:column filterBy="#{item.nom}" style="width: 70%">
+                <p:column filterBy="#{item.nom}" style="width: 85%">
                     <f:facet name="header">
                         <h:outputText value="#{langue.nom}"/>
                     </f:facet>

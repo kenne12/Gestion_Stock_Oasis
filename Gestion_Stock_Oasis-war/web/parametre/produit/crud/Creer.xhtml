@@ -19,14 +19,15 @@
 
             <h:form id="ArticleCreerForm">
                 <h:panelGroup id="display">
-
-                    <div style="width: 100%; height: 500px">
-
-                        <div style="width: 55%; float: left ; height: 100%">
+                    
+                    <div class="row">
+                        
+                        <div class="col-md-6">
+                            
                             <h:panelGrid columns="3" columnClasses ="column">
 
                                 <p:outputLabel value="#{langue.groupe}" for="famille"/>
-                                <p:selectOneMenu filter="true" id="famille" value="#{articleController.famille.idfamille}" rendered="true" required="#{langue.valeur_obligatoire}">
+                                <p:selectOneMenu filter="true" filterMatchMode="contains" id="famille" value="#{articleController.famille.idfamille}" rendered="true" required="#{langue.valeur_obligatoire}">
                                     <f:selectItem itemLabel="#{langue.choisir}"/>
                                     <f:selectItems value="#{articleController.familles}" var="f" itemLabel="#{f.nom}" itemValue="#{f.idfamille}" />
                                     <p:ajax/>
@@ -82,7 +83,7 @@
                                 <p:message for="nb_jr_alerte"/>
 
                                 <p:outputLabel value="#{langue.unite}" for="unite"/>
-                                <p:selectOneMenu filter="true" id="unite" value="#{articleController.unite.idunite}" required="#{langue.valeur_obligatoire}">
+                                <p:selectOneMenu filter="true" filterMatchMode="contains" id="unite" value="#{articleController.unite.idunite}" required="#{langue.valeur_obligatoire}">
                                     <f:selectItem itemLabel="#{langue.choisir}" itemValue="0"/>
                                     <f:selectItems value="#{articleController.unites}" var="u" itemLabel="#{u.libelle}" itemValue="#{u.idunite}" />
                                     <p:ajax/>
@@ -106,25 +107,25 @@
                                 <p:message for="perissable"/>
 
                             </h:panelGrid>
+                            
                         </div>
-
-                        <div style="width: 45%;float: right ; height: 100%">
-
+                        
+                        <div class="col-md-4">
                             <center>
-                                <h3> Visibilité </h3>
+                                <h3> Agence / Fépot de visibilité </h3>
                             </center>
 
                             <p:separator />
 
                             <center>
-                                <p:selectManyCheckbox  id="grid" value="#{articleController.selectedMagasins}" layout="grid" columns="1" converter="magasinConverter" required="true">
+                                <p:selectManyCheckbox id="grid" value="#{articleController.selectedMagasins}" layout="grid" columns="1" converter="magasinConverter" required="true">
                                     <f:selectItems value="#{articleController.magasins}" var="item" itemLabel="#{item.nom}" itemValue="#{item}" />
                                 </p:selectManyCheckbox>
                             </center>
-
                         </div>
+                        
                     </div>
-
+                
                     <p:separator/>
 
                     <center>

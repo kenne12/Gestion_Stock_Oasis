@@ -323,12 +323,11 @@ public class Utilitaires {
         List<Magasin> listMagasin = new ArrayList();
         listMagasin.add(personnel.getIdmagasin());
         for (Magasin m : magasins) {
-
             if ((m.getCentral()) && (!listMagasin.contains(m))) {
                 listMagasin.add(m);
             }
         }
-        List<Utilisateurmagasin> listUtilisateurMagasin = umfl.findByIdutilisateur(SessionMBean.getUserAccount().getIdutilisateur().intValue());
+        List<Utilisateurmagasin> listUtilisateurMagasin = umfl.findByIdutilisateur(SessionMBean.getUserAccount().getIdutilisateur());
         if (!listUtilisateurMagasin.isEmpty()) {
             for (Utilisateurmagasin um : listUtilisateurMagasin) {
                 if (!listMagasin.contains(um.getIdmagasin())) {

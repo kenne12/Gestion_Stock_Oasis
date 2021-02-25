@@ -84,8 +84,8 @@ public class AbstractSortiedirectController {
     protected MouchardFacadeLocal mouchardFacadeLocal;
     protected Routine routine = new Routine();
 
-    protected Double cout_quantite = 0.0D;
-    protected Double total = 0.0D;
+    protected Double cout_quantite = 0.0;
+    protected Double total = 0.0;
 
     protected boolean nouveauPersonnel = true;
 

@@ -123,7 +123,7 @@
                                 <p:message for="date_entree"/>
 
                                 <p:outputLabel value="#{langue.date_peremption}" for="date_peremption" />
-                                <p:calendar id="date_peremption" required="true" value="#{entreedirecteController.lot.dateperemption}">
+                                <p:calendar id="date_peremption" required="#{entreedirecteController.perempted}" value="#{entreedirecteController.lot.dateperemption}">
                                     <p:ajax event="dateSelect" />
                                 </p:calendar>
                                 <p:message for="date_peremption"/>

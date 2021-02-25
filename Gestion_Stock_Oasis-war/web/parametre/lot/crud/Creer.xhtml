@@ -20,7 +20,7 @@
                     <h:panelGrid columns="3" columnClasses ="column">
 
                         <p:outputLabel value="#{langue.article}" for="produit"/>
-                        <p:selectOneMenu filter="true" id="produit" value="#{lotController.article.idarticle}" required="true" disabled="#{lotController.disableProduct}">
+                        <p:selectOneMenu filter="true" filterMatchMode="contains" id="produit" value="#{lotController.article.idarticle}" required="true" disabled="#{lotController.disableProduct}">
                             <f:selectItem itemLabel="#{langue.choisir}" itemValue="0"/>
                             <f:selectItems value="#{lotController.articles}" var="item" itemLabel="#{item.libelle}" itemValue="#{item.idarticle}"/>
                             <p:ajax update="prix_achat,prix_vente" listener="#{lotController.updateData()}"/>

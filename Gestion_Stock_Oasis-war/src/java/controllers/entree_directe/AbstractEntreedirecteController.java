@@ -106,8 +106,10 @@ public class AbstractEntreedirecteController {
 
     protected Routine routine = new Routine();
 
-    protected Double cout_quantite = 0.0D;
-    protected Double total = 0.0D;
+    protected Double cout_quantite = 0.0;
+    protected Double total = 0.0;
+
+    protected boolean perempted = false;
 
     protected Boolean detail = true;
     protected Boolean modifier = true;
@@ -309,10 +311,6 @@ public class AbstractEntreedirecteController {
         return this.magasins;
     }
 
-    public void setMagasins(List<Magasin> magasins) {
-        this.magasins = magasins;
-    }
-
     public Magasinarticle getMagasinarticle() {
         return this.magasinarticle;
     }
@@ -323,10 +321,6 @@ public class AbstractEntreedirecteController {
 
     public List<Magasinarticle> getMagasinarticles() {
         return this.magasinarticles;
-    }
-
-    public void setMagasinarticles(List<Magasinarticle> magasinarticles) {
-        this.magasinarticles = magasinarticles;
     }
 
     public String getLibelle_article() {
@@ -355,6 +349,10 @@ public class AbstractEntreedirecteController {
 
     public List<Magasinlot> getMagasinlots() {
         return magasinlots;
+    }
+
+    public boolean isPerempted() {
+        return perempted;
     }
 
 }
