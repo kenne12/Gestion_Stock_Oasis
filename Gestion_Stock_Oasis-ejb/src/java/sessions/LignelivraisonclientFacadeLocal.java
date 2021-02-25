@@ -8,17 +8,17 @@ import javax.ejb.Local;
 @Local
 public interface LignelivraisonclientFacadeLocal {
 
-    public void create(Lignelivraisonclient paramLignelivraisonclient);
+    public void create(Lignelivraisonclient lignelivraisonclient);
 
-    public void edit(Lignelivraisonclient paramLignelivraisonclient);
+    public void edit(Lignelivraisonclient lignelivraisonclient);
 
-    public void remove(Lignelivraisonclient paramLignelivraisonclient);
+    public void remove(Lignelivraisonclient lignelivraisonclient);
 
-    public Lignelivraisonclient find(Object paramObject);
+    public Lignelivraisonclient find(Object id);
 
     public List<Lignelivraisonclient> findAll();
 
-    public List<Lignelivraisonclient> findRange(int[] paramArrayOfInt);
+    public List<Lignelivraisonclient> findRange(int[] range);
 
     public int count();
 
@@ -28,7 +28,9 @@ public interface LignelivraisonclientFacadeLocal {
 
     public List<Lignelivraisonclient> findAllRange();
 
-    public List<Lignelivraisonclient> findByIdprojet(int idprojet, Date dateDebut, Date dateFin);
+    List<Lignelivraisonclient> findByIdMagasin(int idMagasin, Date dateDebut, Date dateFin);
 
     public List<Lignelivraisonclient> findByIdArticle(long idarticle);
+
+    List<Lignelivraisonclient> findByIdLot(long idMagasinLot, Date dateDebut, Date dateFin);
 }

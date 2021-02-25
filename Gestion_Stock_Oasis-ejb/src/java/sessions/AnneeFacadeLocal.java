@@ -7,25 +7,27 @@ import javax.ejb.Local;
 @Local
 public interface AnneeFacadeLocal {
 
-    void create(Annee paramAnnee);
+    void create(Annee annee);
 
-    void edit(Annee paramAnnee);
+    void edit(Annee annee);
 
-    void remove(Annee paramAnnee);
+    void remove(Annee annee);
 
-    Annee find(Object paramObject);
+    Annee find(Object id);
 
     List<Annee> findAll();
 
-    List<Annee> findRange(int[] paramArrayOfint);
+    List<Annee> findRange(int[] range);
 
     int count();
 
     Integer nextVal();
 
-    List<Annee> findByEtat(boolean paramBoolean) throws Exception;
+    List<Annee> findByEtat(boolean etat) throws Exception;
 
     List<Annee> findByRange();
 
-    Annee findByCode(String paramString);
+    Annee findByCode(String nom);
+
+    Annee findOneActive();
 }

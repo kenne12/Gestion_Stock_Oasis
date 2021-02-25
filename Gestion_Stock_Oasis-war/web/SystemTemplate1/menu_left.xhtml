@@ -179,10 +179,7 @@
                             <ul class="nav nav-third-level">
                                 <li>
                                     <a href="#{request.contextPath}/operation/inventaire-global/inventaire-global.html">#{langue.inventaire_globale}</a>                            
-                                </li>
-                                <!--<li>
-                                    <a href="#{request.contextPath}/operation/vente/vente.html">#{langue.sortie_direct}</a>
-                                </li>-->
+                                </li>   
                             </ul>
                         </li>
 
@@ -194,6 +191,13 @@
                         <i class="fa fa-bar-chart-o fa-fw"></i>#{langue.analyse} <span class="fa arrow"></span>
                     </a>
                     <ul class="nav nav-second-level">
+                        
+                        <li>
+                            <a href="#{request.contextPath}/analyse/analyse_recette/analyse_recette.html">
+                                <i class="fa fa-file-pdf-o fa-fw"></i>
+                                #{langue.analyse_recette}
+                            </a>
+                        </li>
 
                         <li>
                             <a href="#{request.contextPath}/analyse/stock_par_magasin/stock_par_magasin.html">

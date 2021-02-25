@@ -58,7 +58,7 @@ public class MoisController extends AbstractMoisCtrl implements MoisInterfaceCtr
         this.moises.clear();
         this.selectedMois.clear();
         try {
-            List<AnneeMois> temp = this.anneeMoisFacadeLocal.findByAnnee(this.annee);
+            List<AnneeMois> temp = this.anneeMoisFacadeLocal.findByAnnee(this.annee.getIdannee());
             
             if (temp.isEmpty()) {
                 this.moises = this.moisFacadeLocal.findAllRange();

@@ -26,24 +26,24 @@ public class JsfUtil {
     }
 
     public static void addErrorMessage(String msg) {
-        /*  29 */ FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg);
-        /*  30 */ FacesContext.getCurrentInstance().addMessage(null, facesMsg);
-        /*  31 */ FacesContext.getCurrentInstance().validationFailed();
+        FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg);
+        FacesContext.getCurrentInstance().addMessage(null, facesMsg);
+        FacesContext.getCurrentInstance().validationFailed();
     }
 
     public static void addSuccessMessage(String msg) {
-        /*  36 */ FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, msg, msg);
-        /*  37 */ FacesContext.getCurrentInstance().addMessage(null, facesMsg);
+        FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, msg, msg);
+        FacesContext.getCurrentInstance().addMessage(null, facesMsg);
     }
 
     public static void addWarningMessage(String msg) {
-        /*  41 */ FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_WARN, msg, msg);
-        /*  42 */ FacesContext.getCurrentInstance().addMessage(null, facesMsg);
+        FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_WARN, msg, msg);
+        FacesContext.getCurrentInstance().addMessage(null, facesMsg);
     }
 
     public static void addFatalErrorMessage(String msg) {
-        /*  46 */ FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_FATAL, msg, msg);
-        /*  47 */ FacesContext.getCurrentInstance().addMessage(null, facesMsg);
+        FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_FATAL, msg, msg);
+        FacesContext.getCurrentInstance().addMessage(null, facesMsg);
     }
 
     public static Throwable getRootCause(Throwable cause) {
@@ -78,109 +78,109 @@ public class JsfUtil {
     }
 
     public static String getComponentMessages(String clientComponent, String defaultMessage) {
-        /*  80 */ FacesContext fc = FacesContext.getCurrentInstance();
-        /*  81 */ UIComponent component = UIComponent.getCurrentComponent(fc).findComponent(clientComponent);
-        /*  82 */ if ((component instanceof UIInput)) {
-            /*  83 */ UIInput inputComponent = (UIInput) component;
-            /*  84 */ if (inputComponent.isValid()) {
-                /*  85 */ return defaultMessage;
+        FacesContext fc = FacesContext.getCurrentInstance();
+        UIComponent component = UIComponent.getCurrentComponent(fc).findComponent(clientComponent);
+        if ((component instanceof UIInput)) {
+            UIInput inputComponent = (UIInput) component;
+            if (inputComponent.isValid()) {
+                return defaultMessage;
             }
-            /*  87 */ Iterator iter = fc.getMessages(inputComponent.getClientId());
-            /*  88 */ if (iter.hasNext()) {
-                /*  89 */ return ((FacesMessage) iter.next()).getDetail();
+            Iterator iter = fc.getMessages(inputComponent.getClientId());
+            if (iter.hasNext()) {
+                return ((FacesMessage) iter.next()).getDetail();
             }
         }
 
-        /*  93 */ return "";
+        return "";
     }
 
     public static String formaterStringMoney(Long valeur) {
-        /*  97 */ String chaine = Long.toString(valeur.longValue());
-        /*  98 */ if (chaine == null) {
-            /*  99 */ return null;
+        String chaine = Long.toString(valeur.longValue());
+        if (chaine == null) {
+            return null;
         }
-        /* 101 */ int taille = chaine.length();
+        int taille = chaine.length();
         int j = taille;
-        /* 102 */ String result = "";
-        /* 103 */ int i = 0;
-        /* 104 */ while (i < taille) {
-            /* 105 */ result = result + chaine.charAt(i);
-            /* 106 */ i++;
-            /* 107 */ j--;
-            /* 108 */ if ((j > 0) && (j % 3 == 0)) {
-                /* 109 */ result = result + ' ';
+        String result = "";
+        int i = 0;
+        while (i < taille) {
+            result = result + chaine.charAt(i);
+            i++;
+            j--;
+            if ((j > 0) && (j % 3 == 0)) {
+                result = result + ' ';
             }
         }
 
-        /* 113 */ return result;
+        return result;
     }
 
     public static String formaterStringMoney(Integer valeur) {
-        /* 117 */ String chaine = Integer.toString(valeur.intValue());
-        /* 118 */ if (chaine == null) {
-            /* 119 */ return null;
+        String chaine = Integer.toString(valeur.intValue());
+        if (chaine == null) {
+            return null;
         }
-        /* 121 */ int taille = chaine.length();
+        int taille = chaine.length();
         int j = taille;
-        /* 122 */ String result = "";
-        /* 123 */ int i = 0;
-        /* 124 */ while (i < taille) {
-            /* 125 */ result = result + chaine.charAt(i);
-            /* 126 */ i++;
-            /* 127 */ j--;
-            /* 128 */ if ((j > 0) && (j % 3 == 0)) {
-                /* 129 */ result = result + ' ';
+        String result = "";
+        int i = 0;
+        while (i < taille) {
+            result = result + chaine.charAt(i);
+            i++;
+            j--;
+            if ((j > 0) && (j % 3 == 0)) {
+                result = result + ' ';
             }
         }
 
-        /* 133 */ return result;
+        return result;
     }
 
     public static String formaterStringMoney(String valeur) {
-        /* 137 */ String chaine = valeur;
-        /* 138 */ if (chaine == null) {
-            /* 139 */ return null;
+        String chaine = valeur;
+        if (chaine == null) {
+            return null;
         }
-        /* 141 */ int taille = chaine.length();
+        int taille = chaine.length();
         int j = taille;
-        /* 142 */ String result = "";
-        /* 143 */ int i = 0;
-        /* 144 */ while (i < taille) {
-            /* 145 */ result = result + chaine.charAt(i);
-            /* 146 */ i++;
-            /* 147 */ j--;
-            /* 148 */ if ((j > 0) && (j % 3 == 0)) {
-                /* 149 */ result = result + ' ';
+        String result = "";
+        int i = 0;
+        while (i < taille) {
+            result = result + chaine.charAt(i);
+            i++;
+            j--;
+            if ((j > 0) && (j % 3 == 0)) {
+                result = result + ' ';
             }
         }
 
-        /* 153 */ return result;
+        return result;
     }
 
     public static String formaterStringMoney(Double val) {
-        /* 157 */ String pEntiere = partieEntiere(val);
-        /* 158 */ String pDec = partieDecimale(val);
-        /* 159 */ String chaine = pEntiere;
-        /* 160 */ int taille = chaine.length();
+        String pEntiere = partieEntiere(val);
+        String pDec = partieDecimale(val);
+        String chaine = pEntiere;
+        int taille = chaine.length();
         int j = taille;
-        /* 161 */ String result = "";
-        /* 162 */ int i = 0;
-        /* 163 */ while (i < taille) {
-            /* 164 */ result = result + chaine.charAt(i);
-            /* 165 */ i++;
-            /* 166 */ j--;
-            /* 167 */ if ((j > 0) && (j % 3 == 0)) {
-                /* 168 */ result = result + ' ';
+        String result = "";
+        int i = 0;
+        while (i < taille) {
+            result = result + chaine.charAt(i);
+            i++;
+            j--;
+            if ((j > 0) && (j % 3 == 0)) {
+                result = result + ' ';
             }
         }
-        /* 171 */ if (pDec != null) {
-            /* 172 */ result = result + "." + pDec;
+        if (pDec != null) {
+            result = result + "." + pDec;
         }
-        /* 174 */ return result;
+        return result;
     }
 
     private static String partieDecimale(Double nombre) {
-        /* 178 */ return partieDecimale(nombre.toString());
+        return partieDecimale(nombre.toString());
     }
 
     private static String partieDecimale(String nombre) {

@@ -49,9 +49,9 @@ public class LignelivraisonclientFacade extends AbstractFacade<Lignelivraisoncli
     }
 
     @Override
-    public List<Lignelivraisonclient> findByIdprojet(int idprojet, Date dateDebut, Date dateFin) {
-        Query query = em.createQuery("SELECT l FROM Lignelivraisonclient l WHERE l.idlivraisonclient.iddemande.idprojet.idprojet=:idprojet AND l.idlivraisonclient.datelivraison BETWEEN :dateDebut AND :dateFin");
-        query.setParameter("idprojet", idprojet).setParameter("dateDebut", dateDebut).setParameter("dateFin", dateFin);
+    public List<Lignelivraisonclient> findByIdMagasin(int idMagasin, Date dateDebut, Date dateFin) {
+        Query query = em.createQuery("SELECT l FROM Lignelivraisonclient l WHERE l.idmagasinlot.idmagasinarticle.idmagasin.idmagasin=:idMagasin AND l.idlivraisonclient.datelivraison BETWEEN :dateDebut AND :dateFin");
+        query.setParameter("idMagasin", idMagasin).setParameter("dateDebut", dateDebut).setParameter("dateFin", dateFin);
         return query.getResultList();
     }
 
@@ -59,6 +59,13 @@ public class LignelivraisonclientFacade extends AbstractFacade<Lignelivraisoncli
     public List<Lignelivraisonclient> findByIdArticle(long idarticle) {
         Query query = em.createQuery("SELECT l FROM Lignelivraisonclient l WHERE l.idmagasinlot.idmagasinarticle.idarticle.idarticle=:idarticle");
         query.setParameter("idarticle", idarticle);
+        return query.getResultList();
+    }
+    
+    @Override
+    public List<Lignelivraisonclient> findByIdLot(long idMagasinLot, Date dateDebut, Date dateFin) {
+        Query query = em.createQuery("SELECT l FROM Lignelivraisonclient l WHERE l.idmagasinlot.idmagasinlot=:idLot AND l.idlivraisonclient.datelivraison BETWEEN :dateDebut AND :dateFin");
+        query.setParameter("idLot", idMagasinLot).setParameter("dateDebut", dateDebut).setParameter("dateFin", dateFin);
         return query.getResultList();
     }
 }

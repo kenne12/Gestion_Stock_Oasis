@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="StockListerForm">
+
+        <p:messages id="growl" closable="true">
+            <p:effect type="pulsate" event="load" delay="50" />
+        </p:messages>
+
+        <p:separator/>
+        <p:panel header="#{langue['Conv.ListeDes']} : Recettes par article">
+
+            <p:dataTable
+                value="#{analyseRecetteController.analyseRDs}"
+                var="item"
+                rowKey="#{item.magasinlot.idmagasinlot}"
+                paginator="true"
+                rows="15"
+                rowsPerPageTemplate="10,20,30,40,50"
+                style="font-size: 12px"
+                rowStyleClass="#{analyseRecetteController.checkPeremption(item.magasinlot.idlot).equals(true) ? 'rowColorRed' : null}">
+
+                <p:column filterBy="#{item.magasinlot.idmagasinarticle.idarticle.libelle}" filterMatchMode="contains" style="width: 12.5%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.article}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.magasinlot.idmagasinarticle.idarticle.libelle}"/>
+                </p:column>
+
+                <p:column filterBy="#{item.magasinlot.idlot.numero}" filterMatchMode="contains" style="width: 12.5%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.numero_lot}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.magasinlot.idlot.numero}"/>
+                </p:column>
+
+                <p:column style="width: 10%;text-align: right">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.total}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.montantTotal}">
+                        <f:convertNumber/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column style="width: 5%;text-align: right">
+                    <f:facet name="header">
+                        <h:outputText value="%"/>
+                    </f:facet>
+                    <h:outputText value="#{item.pourcentage}">
+                        <f:convertNumber/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column style="width: 5%;text-align: right">
+                    <f:facet name="header">
+                        <h:outputText value="M1"/>
+                    </f:facet>
+                    <h:outputText value="#{item.valeurJanv}">
+                        <f:convertNumber/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column style="width: 5%;text-align: right">
+                    <f:facet name="header">
+                        <h:outputText value="M2"/>
+                    </f:facet>
+                    <h:outputText value="#{item.valeurFev}">
+                        <f:convertNumber/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column style="width: 5%;text-align: right">
+                    <f:facet name="header">
+                        <h:outputText value="M3"/>
+                    </f:facet>
+                    <h:outputText value="#{item.valeurMars}">
+                        <f:convertNumber/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column style="width: 5%;text-align: right">
+                    <f:facet name="header">
+                        <h:outputText value="M4"/>
+                    </f:facet>
+                    <h:outputText value="#{item.valeurAvr}">
+                        <f:convertNumber/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column style="width: 5%;text-align: right">
+                    <f:facet name="header">
+                        <h:outputText value="M5"/>
+                    </f:facet>
+                    <h:outputText value="#{item.valeurMai}">
+                        <f:convertNumber/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column style="width: 5%;text-align: right">
+                    <f:facet name="header">
+                        <h:outputText value="M6"/>
+                    </f:facet>
+                    <h:outputText value="#{item.valeurJuin}">
+                        <f:convertNumber/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column style="width: 5%;text-align: right">
+                    <f:facet name="header">
+                        <h:outputText value="M7"/>
+                    </f:facet>
+                    <h:outputText value="#{item.valeurJuil}">
+                        <f:convertNumber/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column style="width: 5%;text-align: right">
+                    <f:facet name="header">
+                        <h:outputText value="M8"/>
+                    </f:facet>
+                    <h:outputText value="#{item.valeurAout}">
+                        <f:convertNumber/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column style="width: 5%;text-align: right">
+                    <f:facet name="header">
+                        <h:outputText value="M9"/>
+                    </f:facet>
+                    <h:outputText value="#{item.valeurSept}">
+                        <f:convertNumber/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column style="width: 5%;text-align: right">
+                    <f:facet name="header">
+                        <h:outputText value="M10"/>
+                    </f:facet>
+                    <h:outputText value="#{item.valeurOct}">
+                        <f:convertNumber/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column style="width: 5%;text-align: right">
+                    <f:facet name="header">
+                        <h:outputText value="M11"/>
+                    </f:facet>
+                    <h:outputText value="#{item.valeurNov}">
+                        <f:convertNumber/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column style="width: 5%;text-align: right">
+                    <f:facet name="header">
+                        <h:outputText value="M12"/>
+                    </f:facet>
+                    <h:outputText value="#{item.valeurDec}">
+                        <f:convertNumber/>
+                    </h:outputText>
+                </p:column>
+
+                <p:columnGroup type="footer">
+                    <p:row>
+                        <p:column colspan="2" style="text-align:right" footerText="Totaux" />        
+                        <p:column style="text-align: right" footerText="#{analyseRecetteController.formatMoney(analyseRecetteController.montantTotal)}"/>
+                        <p:column style="text-align: right" footerText="#{analyseRecetteController.formatMoney(analyseRecetteController.pourcentage)}"/>
+                        <p:column style="text-align: right" footerText="#{analyseRecetteController.formatMoney(analyseRecetteController.valeurJanv)}" />
+                        <p:column style="text-align: right" footerText="#{analyseRecetteController.formatMoney(analyseRecetteController.valeurFev)}" />
+                        <p:column style="text-align: right" footerText="#{analyseRecetteController.formatMoney(analyseRecetteController.valeurMars)}" />
+                        <p:column style="text-align: right" footerText="#{analyseRecetteController.formatMoney(analyseRecetteController.valeurAvr)}" />
+                        <p:column style="text-align: right" footerText="#{analyseRecetteController.formatMoney(analyseRecetteController.valeurMai)}" />
+                        <p:column style="text-align: right" footerText="#{analyseRecetteController.formatMoney(analyseRecetteController.valeurJuin)}" />
+                        <p:column style="text-align: right" footerText="#{analyseRecetteController.formatMoney(analyseRecetteController.valeurJuil)}" />
+                        <p:column style="text-align: right" footerText="#{analyseRecetteController.formatMoney(analyseRecetteController.valeurAout)}" />
+                        <p:column style="text-align: right" footerText="#{analyseRecetteController.formatMoney(analyseRecetteController.valeurSept)}" />
+                        <p:column style="text-align: right" footerText="#{analyseRecetteController.formatMoney(analyseRecetteController.valeurOct)}" />
+                        <p:column style="text-align: right" footerText="#{analyseRecetteController.formatMoney(analyseRecetteController.valeurNov)}" />
+                        <p:column style="text-align: right" footerText="#{analyseRecetteController.formatMoney(analyseRecetteController.valeurDec)}" />
+                    </p:row>
+                </p:columnGroup>
+
+            </p:dataTable>
+
+        </p:panel>
+    </h:form>
+
+    <!-- ****************************************Information************************************************************************************************************************************************************************************************************** -->
+
+    <p:dialog id="notify1" widgetVar="NotifyDialog1" height="220" width="600" resizable="true" modal="true" style="text-align: center; font-size: 14px; font-family: Cambria;">
+        <f:facet name="header">
+            <h:outputText style="font-family: Cambria; font-size: 14px;" value="#{produitController.routine.titleNotify}" />
+        </f:facet>
+        <h:form id="NotifyForm1">
+            <h:graphicImage id="nt_img" url="#{produitController.routine.iconMessage}" style="cursor:pointer" />
+
+            <hr size="3" style="background-color: cornflowerblue;"/>
+
+            <h:outputText id="nt_msg" value="#{produitController.routine.message}"/>
+
+            <hr size="3" style="background-color: cornflowerblue; margin-top: 5%;"/>
+
+            <p:commandButton style="font-family: Cambria; font-size: 14px;" value="#{langue.valider}" onclick="PF('NotifyDialog1').hide()" type="button" immediate="true"/>
+
+            <hr size="3" style="background-color: cornflowerblue;"/>
+        </h:form>
+    </p:dialog>
+
+    <!-- ****************************************Information************************************************************************************************************************************************************************************************************** -->
+</ui:composition>

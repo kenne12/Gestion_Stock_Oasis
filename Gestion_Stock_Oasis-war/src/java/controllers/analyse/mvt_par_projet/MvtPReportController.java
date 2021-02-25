@@ -19,7 +19,7 @@ public class MvtPReportController extends AbstratMvtPReportController implements
     public void search() {
         try {
             if (this.projet.getIdprojet() != null) {
-                this.lignelivraisonclients = this.lignelivraisonclientFacadeLocal.findByIdprojet(this.projet.getIdprojet(), this.dateDebut, this.dateFin);
+                //this.lignelivraisonclients = this.lignelivraisonclientFacadeLocal.findByIdprojet(this.projet.getIdprojet(), this.dateDebut, this.dateFin);
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -28,6 +28,8 @@ public interface MagasinlotFacadeLocal {
 
     public Magasinlot findByIdmagasinIdlot(int idmagasin, long idlot);
 
+    List<Magasinlot> findByIdMagasin(int idMagasin);
+
     public List<Magasinlot> findByIdmagasinEtatIsTrue(int paramInt);
 
     public List<Magasinlot> findByIdlot(long paramLong);

@@ -7,17 +7,17 @@ import javax.ejb.Local;
 @Local
 public interface MagasinFacadeLocal {
 
-    public void create(Magasin paramMagasin);
+    public void create(Magasin magasin);
 
-    public void edit(Magasin paramMagasin);
+    public void edit(Magasin magasin);
 
-    public void remove(Magasin paramMagasin);
+    public void remove(Magasin magasin);
 
-    public Magasin find(Object paramObject);
+    public Magasin find(Object id);
 
     public List<Magasin> findAll();
 
-    public List<Magasin> findRange(int[] paramArrayOfInt);
+    public List<Magasin> findRange(int[] range);
 
     public int count();
 

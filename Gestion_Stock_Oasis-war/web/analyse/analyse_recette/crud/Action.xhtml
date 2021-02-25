@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:form id="actionsForm">
+
+        <div class="footer-section">
+
+            <br/>
+            <center>
+
+                <h:panelGrid columns="6">
+
+                    <p:outputLabel for="magasin" value="#{langue.magasin}"/>
+                    <p:selectOneMenu id="magasin" filter="true" value="#{analyseRecetteController.magasin.idmagasin}">
+                        <f:selectItem itemLabel="#{langue.choisir}" itemValue="-1" />
+                        <f:selectItems value="#{analyseRecetteController.magasins}" var="item" itemLabel="#{item.nom}" itemValue="#{item.idmagasin}"/>
+                    </p:selectOneMenu>
+                    
+                    <p:outputLabel value="#{langue.exercice}" for="exercice"/>
+                    <p:selectOneMenu id="exercice" filter="true" value="#{analyseRecetteController.annee.idannee}">
+                        <f:selectItem itemLabel="#{langue.choisir}" itemValue="-1" />
+                        <f:selectItems value="#{analyseRecetteController.annees}" var="annee" itemLabel="#{annee.nom}" itemValue="#{annee.idannee}"/>
+                    </p:selectOneMenu>
+                    
+                    <p:commandButton id="recherche"
+                                     value="#{langue.recherche}" actionListener="#{analyseRecetteController.search()}"
+                                     update=":StockListerForm" 
+                                     onclick="PF('AjaxNotifyDialog').show()"/>
+
+                    <p:commandButton id="imprimer" icon="ui-icon-print"
+                                     value="#{langue['Conv.Imprimer']}" actionListener="#{analyseRecetteController.printStock()}"
+                                     update=":StockImprimerForm" />
+
+                </h:panelGrid>                              
+            </center>
+        </div>
+
+    </h:form>
+</ui:composition>

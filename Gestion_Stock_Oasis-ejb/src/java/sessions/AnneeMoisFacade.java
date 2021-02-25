@@ -1,6 +1,5 @@
 package sessions;
 
-import entities.Annee;
 import entities.AnneeMois;
 import java.util.Date;
 import java.util.List;
@@ -37,16 +36,16 @@ public class AnneeMoisFacade extends AbstractFacade<AnneeMois> implements AnneeM
     }
 
     @Override
-    public List<AnneeMois> findByAnneeEtat(Annee annee, boolean etat) throws Exception {
+    public List<AnneeMois> findByAnneeEtat(int idAnnee, boolean etat) throws Exception {
         Query query = this.em.createQuery("SELECT a FROM AnneeMois a WHERE a.idannee.idannee=:annee AND a.etat=:etat ORDER BY a.idmois.idmois");
-        query.setParameter("annee", annee.getIdannee()).setParameter("etat", (etat));
+        query.setParameter("annee", idAnnee).setParameter("etat", (etat));
         return query.getResultList();
     }
 
     @Override
-    public List<AnneeMois> findByAnnee(Annee annee) throws Exception {
+    public List<AnneeMois> findByAnnee(int idAnnee) throws Exception {
         Query query = this.em.createQuery("SELECT a FROM AnneeMois a WHERE a.idannee.idannee=:annee ORDER BY a.idmois.idmois");
-        query.setParameter("annee", annee.getIdannee());
+        query.setParameter("annee", idAnnee);
         return query.getResultList();
     }
 

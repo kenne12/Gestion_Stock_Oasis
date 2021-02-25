@@ -60,6 +60,13 @@ public class MagasinlotFacade extends AbstractFacade<Magasinlot> implements Maga
     }
 
     @Override
+    public List<Magasinlot> findByIdMagasin(int idMagasin) {
+        Query query = this.em.createQuery("SELECT m FROM Magasinlot m WHERE m.idmagasinarticle.idmagasin.idmagasin=:idmagasin");
+        query.setParameter("idmagasin", idMagasin);
+        return query.getResultList();
+    }
+
+    @Override
     public List<Magasinlot> findByIdmagasinEtatIsTrue(int idmagasin) {
         Query query = this.em.createQuery("SELECT m FROM Magasinlot m WHERE m.idmagasinarticle.idmagasin.idmagasin=:idmagasin AND m.etat=true ORDER BY m.idlot.idarticle.libelle , m.idlot.dateenregistrement DESC");
         query.setParameter("idmagasin", idmagasin);
@@ -119,7 +126,7 @@ public class MagasinlotFacade extends AbstractFacade<Magasinlot> implements Maga
         query.setParameter("idmagasin", idmagasin);
         return query.getResultList();
     }
-    
+
     @Override
     public List<Magasinlot> findByIdMagasinIdArticle(long idMagasinArticle) {
         Query query = em.createQuery("SELECT ml FROM Magasinlot ml WHERE ml.idmagasinarticle.idmagasinarticle=:idMagasinArticle ORDER BY ml.idmagasinlot");
