@@ -7,15 +7,15 @@
 
     <ui:composition>
         <p:dialog
-                  id="StockImprimerDlg"
-                  widgetVar="StockImprimerDialog"
+                  id="AnalyseDepenseImprimerDlg"
+                  widgetVar="AnalyseDepenseImprimerDialog"
                   modal="true" resizable="false"  
                   appendTo="@(body)" 
-                  header="#{langue['Titre.Dlg.Impression']}: ANALYSE DES DEPENSES" closeOnEscape="true">
+                  header="#{langue['Titre.Dlg.Impression']} : ANALYSE DES DEPENSES" closeOnEscape="true">
 
-            <h:form id="StockImprimerForm">
+            <h:form id="AnalyseDepenseImprimerForm">
 
-                <object data="#{request.contextPath}/reports/stock/#{analyseDepenseController.fileName}" type="application/pdf" title="cv" width="1200" height="600"></object>
+                <object data="#{request.contextPath}/reports/analyse_rd/#{analyseDepenseController.fileName}" type="application/pdf" title="etat" width="1200" height="600"></object>
 
             </h:form>
 

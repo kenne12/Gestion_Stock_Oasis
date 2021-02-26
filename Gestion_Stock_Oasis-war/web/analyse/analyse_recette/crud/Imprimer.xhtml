@@ -7,15 +7,15 @@
 
     <ui:composition>
         <p:dialog
-                  id="StockImprimerDlg"
-                  widgetVar="StockImprimerDialog"
+                  id="AnalyseRecetteImprimerDlg"
+                  widgetVar="AnalyseRecetteImprimerDialog"
                   modal="true" resizable="false"  
                   appendTo="@(body)" 
-                  header="#{langue['Titre.Dlg.Impression']}: STOCK EN MARCHANDISE" closeOnEscape="true">
+                  header="#{langue['Titre.Dlg.Impression']} : ANALYSE DES RECETTES" closeOnEscape="true">
 
-            <h:form id="StockImprimerForm">
+            <h:form id="AnalyseRecetteImprimerForm">
 
-                <object data="#{request.contextPath}/reports/stock/#{analyseRecetteController.fileName}" type="application/pdf" title="cv" width="1200" height="600"></object>
+                <object data="#{request.contextPath}/reports/analyse_rd/#{analyseRecetteController.fileName}" type="application/pdf" title="cv" width="1200" height="600"></object>
 
             </h:form>
 

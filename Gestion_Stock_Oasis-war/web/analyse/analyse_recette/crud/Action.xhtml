@@ -29,13 +29,13 @@
                     
                     <p:commandButton id="recherche"
                                      value="#{langue.recherche}" actionListener="#{analyseRecetteController.search()}"
-                                     update=":StockListerForm,imprimer" 
+                                     update=":AnalyseRecetteListerForm,imprimer" 
                                      onclick="PF('AjaxNotifyDialog').show()"/>
 
                     <p:commandButton id="imprimer" icon="ui-icon-print"
                                      disabled="#{analyseRecetteController.analyseRDs.size() eq 0 ? true : false}"
-                                     value="#{langue['Conv.Imprimer']}" actionListener="#{analyseRecetteController.printStock()}"
-                                     update=":StockImprimerForm" />
+                                     value="#{langue['Conv.Imprimer']}" actionListener="#{analyseRecetteController.print()}"
+                                     update=":AnalyseRecetteImprimerForm" />
 
                 </h:panelGrid>                              
             </center>

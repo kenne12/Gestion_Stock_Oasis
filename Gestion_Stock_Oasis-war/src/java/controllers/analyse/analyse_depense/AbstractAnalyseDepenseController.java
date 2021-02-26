@@ -6,7 +6,6 @@
 package controllers.analyse.analyse_depense;
 
 import entities.Annee;
-import entities.Lignelivraisonclient;
 import entities.Lignelivraisonfournisseur;
 import entities.Magasin;
 import entities.Magasinlot;
@@ -15,7 +14,6 @@ import java.util.List;
 import javax.ejb.EJB;
 import sessions.AnneeFacadeLocal;
 import sessions.AnneeMoisFacadeLocal;
-import sessions.LignelivraisonclientFacadeLocal;
 import sessions.LignelivraisonfournisseurFacadeLocal;
 import sessions.MagasinFacadeLocal;
 import sessions.MagasinlotFacadeLocal;

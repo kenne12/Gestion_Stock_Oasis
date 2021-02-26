@@ -5,6 +5,7 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -25,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -204,20 +206,20 @@ public class PrintUtils {
     }
 
     public static String printDailylyReport(Date date, List<Solde> soldes) {
-        /* 223 */ String fileName = "";
+        String fileName = "";
         try {
-            /* 225 */ SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-            /* 226 */ fileName = "Rapport_du_" + sdf.format(date) + ".pdf";
-            /* 227 */ Document rapport = new Document();
-            /* 228 */ PdfWriter.getInstance(rapport, new FileOutputStream(Utilitaires.path + "/reports/journalier/" + fileName));
-            /* 229 */ rapport.open();
-            /* 230 */ float[] widths = {0.6F, 3.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F};
-            /* 231 */ PdfPTable table = new PdfPTable(widths);
-            /* 232 */ table.setWidthPercentage(100.0F);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            fileName = "Rapport_du_" + sdf.format(date) + ".pdf";
+            Document rapport = new Document();
+            PdfWriter.getInstance(rapport, new FileOutputStream(Utilitaires.path + "/reports/journalier/" + fileName));
+            rapport.open();
+            float[] widths = {0.6F, 3.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F};
+            PdfPTable table = new PdfPTable(widths);
+            table.setWidthPercentage(100.0F);
 
-            /* 234 */ createEntete(rapport, SessionMBean.getParametrage());
+            createEntete(rapport, SessionMBean.getParametrage());
 
-            /* 236 */ rapport.add(new Paragraph(" "));
+            rapport.add(new Paragraph(" "));
 
             /* 238 */ Paragraph titre = new Paragraph("RAPPORT JOURNALIER D'ACTIVITES [VERSEMENTS / RETRAITS]", new Font(Font.FontFamily.TIMES_ROMAN, 14.0F, 5));
             /* 239 */ titre.setAlignment(1);
@@ -261,7 +263,7 @@ public class PrintUtils {
     }
 
     public static String printProductReport(List<Article> articles) {
-        /* 356 */ String fileName = "";
+        String fileName = "";
         try {
             /* 358 */ Date date = new Date();
             /* 359 */ SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
@@ -301,18 +303,18 @@ public class PrintUtils {
                 compteur++;
             }
 
-            /* 397 */ rapport.add(table);
-            /* 398 */ rapport.close();
+            rapport.add(table);
+            rapport.close();
         } catch (DocumentException ex) {
-            /* 401 */ Logger.getLogger(PrintUtils.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PrintUtils.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException ex) {
-            /* 403 */ Logger.getLogger(PrintUtils.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PrintUtils.class.getName()).log(Level.SEVERE, null, ex);
         }
-        /* 405 */ return fileName;
+        return fileName;
     }
 
     public static String printGeneralStockReport(List<Article> articles) {
-        /* 409 */ String fileName = "";
+        String fileName = "";
         try {
             /* 411 */ Date date = new Date();
             /* 412 */ SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
@@ -365,8 +367,8 @@ public class PrintUtils {
             Article localArticle;
             for (Iterator localIterator = articles.iterator(); localIterator.hasNext(); localArticle = (Article) localIterator.next());
             table.addCell(createPdfPCell("Totaux", 4, 2, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0)));
-            table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(Integer.valueOf(quantite)), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
-            table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(Utilitaires.arrondiNDecimales(total.doubleValue(), 1)), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
+            table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney((quantite)), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
+            table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(Utilitaires.arrondiNDecimales(total, 1)), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
             rapport.add(table);
             rapport.close();
         } catch (DocumentException ex) {
@@ -380,49 +382,49 @@ public class PrintUtils {
     public static String printCritickStockReport(List<Article> articles) {
         String fileName = "";
         try {
-            /* 489 */ Date date = new Date();
-            /* 490 */ SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-            /* 491 */ fileName = "Fiche_stock_critic" + sdf.format(date) + ".pdf";
-            /* 492 */ Document rapport = new Document();
-            /* 493 */ PdfWriter.getInstance(rapport, new FileOutputStream(Utilitaires.path + "/reports/stock/" + fileName));
-            /* 494 */ rapport.open();
-            /* 495 */ float[] widths = {0.5F, 1.5F, 2.9F, 1.0F, 0.8F, 1.2F};
-            /* 496 */ PdfPTable table = new PdfPTable(widths);
-            /* 497 */ table.setWidthPercentage(100.0F);
+            Date date = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            fileName = "Fiche_stock_critic" + sdf.format(date) + ".pdf";
+            Document rapport = new Document();
+            PdfWriter.getInstance(rapport, new FileOutputStream(Utilitaires.path + "/reports/stock/" + fileName));
+            rapport.open();
+            float[] widths = {0.5F, 1.5F, 2.9F, 1.0F, 0.8F, 1.2F};
+            PdfPTable table = new PdfPTable(widths);
+            table.setWidthPercentage(100.0F);
 
-            /* 499 */ createEntete(rapport, SessionMBean.getParametrage());
+            createEntete(rapport, SessionMBean.getParametrage());
 
-            /* 501 */ rapport.add(new Paragraph(" "));
+            rapport.add(new Paragraph(" "));
 
-            /* 503 */ Paragraph titre = new Paragraph("FICHE DES PRODUITS EN SOUS-STOCKAGE", new Font(Font.FontFamily.TIMES_ROMAN, 14.0F, 5));
-            /* 504 */ titre.setAlignment(1);
-            /* 505 */ rapport.add(titre);
+            Paragraph titre = new Paragraph("FICHE DES PRODUITS EN SOUS-STOCKAGE", new Font(Font.FontFamily.TIMES_ROMAN, 14.0F, 5));
+            titre.setAlignment(1);
+            rapport.add(titre);
 
-            /* 507 */ Paragraph periode = new Paragraph("Imprimé le : " + sdf.format(date), new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 2));
-            /* 508 */ periode.setAlignment(1);
-            /* 509 */ rapport.add(periode);
+            Paragraph periode = new Paragraph("Imprimé le : " + sdf.format(date), new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 2));
+            periode.setAlignment(1);
+            rapport.add(periode);
 
-            /* 511 */ rapport.add(new Paragraph(" "));
+            rapport.add(new Paragraph(" "));
 
-            /* 513 */ table.addCell(createPdfPCell("N°", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
-            /* 514 */ table.addCell(createPdfPCell("FAMILLE", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
-            /* 515 */ table.addCell(createPdfPCell("Produit", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
-            /* 516 */ table.addCell(createPdfPCell("Prix", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
-            /* 517 */ table.addCell(createPdfPCell("Qté", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
-            /* 518 */ table.addCell(createPdfPCell("Total", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
+            table.addCell(createPdfPCell("N°", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
+            table.addCell(createPdfPCell("FAMILLE", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
+            table.addCell(createPdfPCell("Produit", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
+            table.addCell(createPdfPCell("Prix", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
+            table.addCell(createPdfPCell("Qté", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
+            table.addCell(createPdfPCell("Total", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
 
-            /* 520 */ Double total = Double.valueOf(0.0D);
-            /* 521 */ int quantite = 0;
-            /* 522 */ int compteur = 1;
+            Double total = 0.0;
+            int quantite = 0;
+            int compteur = 1;
 
-            /* 543 */ rapport.add(table);
-            /* 544 */ rapport.close();
+            rapport.add(table);
+            rapport.close();
         } catch (DocumentException ex) {
-            /* 547 */ Logger.getLogger(PrintUtils.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PrintUtils.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException ex) {
-            /* 549 */ Logger.getLogger(PrintUtils.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PrintUtils.class.getName()).log(Level.SEVERE, null, ex);
         }
-        /* 551 */ return fileName;
+        return fileName;
     }
 
     public static void createEntete(Document document, Parametrage parametrage) throws DocumentException {
@@ -448,76 +450,99 @@ public class PrintUtils {
         }
     }
 
+    public static void createEntetePaysage(Document document, Parametrage parametrage) throws DocumentException {
+        try {
+            Paragraph entreprise = new Paragraph(parametrage.getNomStructure(), new Font(Font.FontFamily.TIMES_ROMAN, 16.0F, 1));
+            entreprise.setAlignment(1);
+            document.add(entreprise);
+
+            Paragraph entreprise1 = new Paragraph("" + parametrage.getDescriptif(), new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 1));
+            entreprise1.setAlignment(1);
+            document.add(entreprise1);
+
+            Paragraph entreprise2 = new Paragraph("" + parametrage.getLocalisation(), new Font(Font.FontFamily.TIMES_ROMAN, 9.0F, 1));
+            entreprise2.setAlignment(0);
+
+            Paragraph adresse2 = new Paragraph("B.P.: " + parametrage.getBoitePostale() + "   Tél.: " + parametrage.getContact1() + " / " + parametrage.getContact2() + "   Fax : " + parametrage.getFax(), new Font(Font.FontFamily.TIMES_ROMAN, 9.0F, 2));
+            adresse2.setAlignment(1);
+            document.add(adresse2);
+
+            Paragraph ligne = new Paragraph("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------", new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 2));
+            document.add(ligne);
+        } catch (Exception localException) {
+        }
+    }
+
     public static void createLine(Document document) throws DocumentException {
-        Paragraph ligne = new Paragraph("----------------------------------------------------------------------------------------------------------------------------------------------", new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 2));
+        Paragraph ligne = new Paragraph("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------", new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 2));
         document.add(ligne);
     }
 
     public static void createSignatureZone(Document document) throws DocumentException {
-        /* 786 */ Paragraph signature1 = new Paragraph("                                                                                        --------------Comptable------------------------Directeur-------------", new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 2));
-        /* 787 */ document.add(signature1);
+        Paragraph signature1 = new Paragraph("                                                                                        --------------Comptable------------------------Directeur-------------", new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 2));
+        document.add(signature1);
 
-        /* 789 */ Paragraph signature2 = new Paragraph("                                                                                        *                                                 *                                              *", new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 2));
-        /* 790 */ document.add(signature2);
+        Paragraph signature2 = new Paragraph("                                                                                        *                                                 *                                              *", new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 2));
+        document.add(signature2);
 
-        /* 792 */ Paragraph signature4 = new Paragraph("                                                                                        *                                                 *                                              *", new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 2));
-        /* 793 */ document.add(signature4);
+        Paragraph signature4 = new Paragraph("                                                                                        *                                                 *                                              *", new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 2));
+        document.add(signature4);
 
-        /* 795 */ Paragraph signature5 = new Paragraph("                                                                                        *                                                 *                                              *", new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 2));
-        /* 796 */ document.add(signature5);
+        Paragraph signature5 = new Paragraph("                                                                                        *                                                 *                                              *", new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 2));
+        document.add(signature5);
 
-        /* 798 */ Paragraph signature6 = new Paragraph("                                                                                        *                                                 *                                              *", new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 2));
-        /* 799 */ document.add(signature6);
+        Paragraph signature6 = new Paragraph("                                                                                        *                                                 *                                              *", new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 2));
+        document.add(signature6);
 
-        /* 801 */ Paragraph signature7 = new Paragraph("                                                                                        *                                                 *                                              *", new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 2));
-        /* 802 */ document.add(signature7);
+        Paragraph signature7 = new Paragraph("                                                                                        *                                                 *                                              *", new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 2));
+        document.add(signature7);
 
-        /* 804 */ Paragraph signature3 = new Paragraph("                                                                                        ----------------------------------------------------------------------------", new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 2));
-        /* 805 */ document.add(signature3);
+        Paragraph signature3 = new Paragraph("                                                                                        ----------------------------------------------------------------------------", new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 2));
+        document.add(signature3);
     }
 
     public static String printInventoryReport(List<Article> produits) {
         String fileName = "";
         try {
-            /* 811 */ Date date = new Date();
-            /* 812 */ SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-            /* 813 */ fileName = "Fiche_inventaire_stock" + sdf.format(date) + ".pdf";
-            /* 814 */ Document rapport = new Document();
-            /* 815 */ PdfWriter.getInstance(rapport, new FileOutputStream(Utilitaires.path + "/reports/stock/" + fileName));
-            /* 816 */ rapport.open();
-            /* 817 */ float[] widths = {0.5F, 1.5F, 2.9F, 1.0F, 0.8F, 1.0F, 1.0F};
-            /* 818 */ PdfPTable table = new PdfPTable(widths);
-            /* 819 */ table.setWidthPercentage(100.0F);
+            Date date = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            fileName = "Fiche_inventaire_stock" + sdf.format(date) + ".pdf";
+            Document rapport = new Document();
+            PdfWriter.getInstance(rapport, new FileOutputStream(Utilitaires.path + "/reports/stock/" + fileName));
+            rapport.open();
+            float[] widths = {0.5F, 1.5F, 2.9F, 1.0F, 0.8F, 1.0F, 1.0F};
+            PdfPTable table = new PdfPTable(widths);
+            table.setWidthPercentage(100.0F);
 
-            /* 821 */ createEntete(rapport, SessionMBean.getParametrage());
+            createEntete(rapport, SessionMBean.getParametrage());
 
-            /* 823 */ rapport.add(new Paragraph(" "));
+            rapport.add(new Paragraph(" "));
 
-            /* 825 */ Paragraph titre = new Paragraph("FICHE D'INVENTAIRE DU STOCK", new Font(Font.FontFamily.TIMES_ROMAN, 14.0F, 5));
-            /* 826 */ titre.setAlignment(1);
-            /* 827 */ rapport.add(titre);
+            Paragraph titre = new Paragraph("FICHE D'INVENTAIRE DU STOCK", new Font(Font.FontFamily.TIMES_ROMAN, 14.0F, 5));
+            titre.setAlignment(1);
+            rapport.add(titre);
 
-            /* 829 */ Paragraph periode = new Paragraph("Imprimé le : " + sdf.format(date), new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 2));
-            /* 830 */ periode.setAlignment(1);
-            /* 831 */ rapport.add(periode);
+            Paragraph periode = new Paragraph("Imprimé le : " + sdf.format(date), new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 2));
+            periode.setAlignment(1);
+            rapport.add(periode);
 
-            /* 833 */ rapport.add(new Paragraph(" "));
+            rapport.add(new Paragraph(" "));
 
-            /* 835 */ table.addCell(createPdfPCell("N°", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
-            /* 836 */ table.addCell(createPdfPCell("FAMILLE", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
-            /* 837 */ table.addCell(createPdfPCell("Produit", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
-            /* 838 */ table.addCell(createPdfPCell("Prix", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
-            /* 839 */ table.addCell(createPdfPCell("Qté", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
-            /* 840 */ table.addCell(createPdfPCell("Total", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
-            /* 841 */ table.addCell(createPdfPCell("Quantité\n physique", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
+            table.addCell(createPdfPCell("N°", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
+            table.addCell(createPdfPCell("FAMILLE", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
+            table.addCell(createPdfPCell("Produit", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
+            table.addCell(createPdfPCell("Prix", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
+            table.addCell(createPdfPCell("Qté", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
+            table.addCell(createPdfPCell("Total", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
+            table.addCell(createPdfPCell("Quantité\n physique", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
 
             Double total = 0.0;
             int quantite = 0;
             int compteur = 1;
 
             table.addCell(createPdfPCell("Totaux", 4, 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0)));
-            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(Integer.valueOf(quantite)), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
-            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(Utilitaires.arrondiNDecimales(total.doubleValue(), 1)), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(quantite), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(Utilitaires.arrondiNDecimales(total, 1)), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
             table.addCell(createPdfPCell(" ", 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
             rapport.add(table);
             rapport.close();
@@ -813,17 +838,17 @@ public class PrintUtils {
         return fileName;
     }
 
-    public static String printAnalyseRDAnnuel(String option, Annee annee, Magasin magasin, List<AnalyseRD> list, Parametrage parametrage) {
+    public static String printAnalyseRDAnnuel(String option, Annee annee, Magasin magasin, Map map, List<AnalyseRD> list, Parametrage parametrage) {
         String fileName = "";
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
             SimpleDateFormat sdf1 = new SimpleDateFormat("HH:mm:ss");
             fileName = "Analyse_RD_" + magasin.getNom() + "_" + annee.getNom() + "_" + sdf.format(new Date()) + ".pdf";
-            Document rapport = new Document();
+            Document rapport = new Document(PageSize.A4.rotate());
             PdfWriter.getInstance(rapport, new FileOutputStream(Utilitaires.path + "/reports/analyse_rd/" + fileName));
             rapport.open();
 
-            createEntete(rapport, parametrage);
+            createEntetePaysage(rapport, parametrage);
 
             float[] width_entete = {2.0F, 2.3F, 1.8F, 3.8F, 1.0F, 1.0F};
             PdfPTable entete_1 = new PdfPTable(width_entete);
@@ -846,7 +871,7 @@ public class PrintUtils {
             rapport.add(entete_1);
             rapport.add(new Paragraph(" ", new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
 
-            float[] widths = {1.4F, 3.2F, 0.8F, 1.3F, 0.8F, 1.1F};
+            float[] widths = {3.0F, 2.5F, 1.5F, 1.2F, 1.2F, 1.2F, 1.2F, 1.2F, 1.2F, 1.2F, 1.2F, 1.2F, 1.2F, 1.2F, 1.2F, 1.2F};
             PdfPTable table = new PdfPTable(widths);
             table.setWidthPercentage(100.0F);
 
@@ -860,33 +885,64 @@ public class PrintUtils {
             titre.setAlignment(1);
             rapport.add(titre);
 
-            Paragraph ligne = new Paragraph("----------------------------------------------------------------------------------------------------------------------------------------------", new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 2));
+            Paragraph ligne = new Paragraph("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------", new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 2));
             rapport.add(ligne);
 
             rapport.add(new Paragraph(" "));
 
-            table.addCell(createPdfPCell("Ref", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
-            table.addCell(createPdfPCell("Désignation", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
-            table.addCell(createPdfPCell("Quantité", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
-            table.addCell(createPdfPCell("Présentation", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
-            table.addCell(createPdfPCell("P.U", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
-            table.addCell(createPdfPCell("Prix total", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell("Article", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell("N° Lot", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell("Montant", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell("%", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell("Jan", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell("Fev", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell("Mar", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell("Avr", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell("Mai", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell("Juin", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell("Juil", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell("Aaou", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell("Sept", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell("Oct", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell("Nov", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell("Déc", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
 
-            Double quantite = 0.0;
             for (AnalyseRD a : list) {
-                /*quantite += l.getQuantite();
-                table.addCell(createPdfPCell(" " + l.getIdmagasinarticle().getIdarticle().getCode(), 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
-                table.addCell(createPdfPCell(" " + Utilitaires.formatPrenomMaj(l.getIdmagasinarticle().getIdarticle().getLibelle()), 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
-                table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(l.getQuantite()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
-                table.addCell(createPdfPCell(" " + Utilitaires.formatPrenomMaj(l.getIdmagasinarticle().getIdarticle().getIdunite().getLibelle()), 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
-                table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(l.getPrixUnitaire().intValue()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
-                table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney((l.getPrixUnitaire().intValue() * l.getQuantite().intValue())), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));*/
+                table.addCell(createPdfPCell(" " + a.getMagasinlot().getIdmagasinarticle().getIdarticle().getLibelle(), 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell(" " + Utilitaires.formatPrenomMaj(a.getMagasinlot().getIdlot().getNumero()), 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+
+                table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(a.getMontantTotal()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(Utilitaires.arrondiNDecimales(a.getPourcentage(), 3)), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(a.getValeurJanv()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(a.getValeurFev()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(a.getValeurMars()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(a.getValeurAvr()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(a.getValeurMai()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(a.getValeurJuin()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(a.getValeurJuil()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(a.getValeurAout()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(a.getValeurSept()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(a.getValeurOct()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(a.getValeurNov()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney((a.getValeurDec())), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
             }
 
             table.addCell(createPdfPCell("Totaux ", 2, 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
-            table.addCell(createPdfPCell(" " + quantite.intValue(), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
-            table.addCell(createPdfPCell(" ", 3, 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
-
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(((double) map.get("total"))), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney((Utilitaires.arrondiNDecimales((double) map.get("perc"), 3))), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(((double) map.get("jan"))), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(((double) map.get("fev"))), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(((double) map.get("mar"))), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(((double) map.get("avr"))), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(((double) map.get("mai"))), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(((double) map.get("jui"))), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(((double) map.get("juil"))), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(((double) map.get("aou"))), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(((double) map.get("sep"))), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(((double) map.get("oct"))), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(((double) map.get("nov"))), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(((double) map.get("dec"))), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            rapport.add(table);
             rapport.close();
         } catch (DocumentException ex) {
             Logger.getLogger(utils.PrintUtils.class.getName()).log(Level.SEVERE, (String) null, (Throwable) ex);

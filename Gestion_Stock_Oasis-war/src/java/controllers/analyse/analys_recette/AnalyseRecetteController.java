@@ -14,7 +14,8 @@ import javax.faces.bean.ViewScoped;
 import org.primefaces.context.RequestContext;
 import utils.AnalyseRD;
 import utils.JsfUtil;
-import utils.Printer;
+import utils.PrintUtils;
+import utils.SessionMBean;
 import utils.Utilitaires;
 
 @ManagedBean
@@ -185,15 +186,30 @@ public class AnalyseRecetteController extends AbstratAnalyseRecetteController im
         return JsfUtil.formaterStringMoney(montant);
     }
 
-    public void printStock() {
+    public void print() {
         try {
-            if (this.magasin.getIdmagasin() != null) {
-                Map map = new HashMap();
-                map.put("idmagasin", this.magasin.getIdmagasin());
-                Printer.print("/reports/ireport/stock_par_magasin.jasper", map);
-            }
+            Map m = new HashMap();
+            m.put("perc", pourcentage);
+            m.put("total", montantTotal);
+            m.put("jan", valeurJanv);
+            m.put("fev", valeurFev);
+            m.put("mar", valeurMars);
+            m.put("avr", valeurAvr);
+            m.put("mai", valeurMai);
+            m.put("jui", valeurJuin);
+            m.put("juil", valeurJuil);
+            m.put("aou", valeurAout);
+            m.put("sep", valeurSept);
+            m.put("oct", valeurOct);
+            m.put("nov", valeurNov);
+            m.put("dec", valeurDec);
+
+            fileName = PrintUtils.printAnalyseRDAnnuel("R", annee, magasin, m, analyseRDs, SessionMBean.getParametrage());
+            RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
+            RequestContext.getCurrentInstance().execute("PF('AnalyseRecetteImprimerDialog').show()");
         } catch (Exception e) {
             e.printStackTrace();
+            RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
         }
     }
 }

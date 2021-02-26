@@ -20,21 +20,23 @@
                         <f:selectItem itemLabel="#{langue.choisir}" itemValue="-1" />
                         <f:selectItems value="#{analyseDepenseController.magasins}" var="item" itemLabel="#{item.nom}" itemValue="#{item.idmagasin}"/>
                     </p:selectOneMenu>
-                    
+
                     <p:outputLabel value="#{langue.exercice}" for="exercice"/>
                     <p:selectOneMenu id="exercice" filter="true" value="#{analyseDepenseController.annee.idannee}">
                         <f:selectItem itemLabel="#{langue.choisir}" itemValue="-1" />
                         <f:selectItems value="#{analyseDepenseController.annees}" var="annee" itemLabel="#{annee.nom}" itemValue="#{annee.idannee}"/>
                     </p:selectOneMenu>
-                    
+
                     <p:commandButton id="recherche"
                                      value="#{langue.recherche}" actionListener="#{analyseDepenseController.search()}"
-                                     update=":StockListerForm" 
+                                     update=":AnalyseDepenseListerForm,imprimer" 
                                      onclick="PF('AjaxNotifyDialog').show()"/>
 
                     <p:commandButton id="imprimer" icon="ui-icon-print"
-                                     value="#{langue['Conv.Imprimer']}" actionListener="#{analyseDepenseController.printStock()}"
-                                     update=":StockImprimerForm" />
+                                     disabled="#{analyseDepenseController.analyseRDs.size() eq 0 ? true : false}"
+                                     value="#{langue['Conv.Imprimer']}" actionListener="#{analyseDepenseController.print()}"
+                                     update=":AnalyseDepenseImprimerForm" 
+                                     onclick="PF('AjaxNotifyDialog').show()"/>
 
                 </h:panelGrid>                              
             </center>
