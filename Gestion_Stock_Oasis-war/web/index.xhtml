@@ -47,8 +47,6 @@
             </center>
         </h:form>
 
-
-
         <p:dialog id="SessionCreerDlg" 
                   widgetVar="MenuCreerDialog" 
                   modal="true" resizable="false" 
@@ -64,14 +62,23 @@
                 </p:messages>
 
                 <h:panelGrid columns="2" columnClasses="column">
+                    <p:outputLabel rendered="#{loginBean.magasins.size()>1 ? true : false}" value="#{langue.magasin}"/>
+                    <p:selectOneMenu rendered="#{loginBean.magasins.size()>1 ? true : false}" value="#{loginBean.magasin.idmagasin}" filter="true" filterMatchMode="contains">
+                        <f:selectItem itemLabel="#{langue.choisir}" itemValue="0" />
+                        <f:selectItems value="#{loginBean.magasins}" var="mg" itemLabel="#{mg.nom}" itemValue="#{mg.idmagasin}" />
+                    </p:selectOneMenu>
 
-
+                    <p:outputLabel rendered="#{loginBean.annees.size()>1 ? true : false}" value="#{langue.exercice}"/>
+                    <p:selectOneMenu rendered="#{loginBean.annees.size()>1 ? true : false}" value="#{loginBean.annee.idannee}" filter="true" filterMatchMode="contains">
+                        <f:selectItem itemLabel="#{langue.choisir}" itemValue="0" />
+                        <f:selectItems value="#{loginBean.annees}" var="an" itemLabel="#{an.nom}" itemValue="#{an.idannee}" />
+                    </p:selectOneMenu>
                 </h:panelGrid>
 
                 <p:separator/>
 
                 <center>
-                    <p:commandButton partialSubmit="true" actionListener="#{loginBean.initSession()}" value="#{langue.valider}" 
+                    <p:commandButton partialSubmit="true" actionListener="#{loginBean.finalizeSession()}" value="#{langue.valider}" 
                                      update="SessionCreerForm,:SessionCreerDlg,growl,:data" icon="ui-icon-check"/>
                 </center>
 
@@ -309,42 +316,6 @@
                                      value="#{langue['Conv.Imprimer']}" 
                                      actionListener="#{controlPeremptionController.print()}" />
 
-                </center>
-
-            </h:form>
-
-        </p:dialog>
-
-        <p:dialog id="FermettureCreerDlg" 
-                  widgetVar="FermettureCreerDialog" 
-                  modal="true" resizable="false" 
-                  appendTo="@(body)"
-                  closable="false"
-                  width="1200"
-                  header="#{langue.etat_cloture_journee}">
-
-            <h:form id="FermettureCreerForm">
-
-                <p:messages id="growl" closable="true">
-                    <p:effect type="pulsate" event="load" delay="50" />
-                </p:messages>
-
-
-
-                <p:separator/>
-
-                <center>
-                    <p:commandButton oncomplete="PF('FermettureCreerDialog').hide()" 
-                                     partialSubmit="true" style="float: left"
-                                     value="#{langue.fermer}" 
-                                     update="FermettureCreerForm,:FermettureCreerDlg,growl,:data" 
-                                     icon="ui-icon-close"/>
-
-                    <p:commandButton oncomplete="PF('FermettureCreerDialog').hide()" 
-                                     partialSubmit="true" style="float: right" 
-                                     actionListener="#{loginBean.closeSession()}"
-                                     value="#{langue.valider}" 
-                                     update="FermettureCreerForm,:FermettureCreerDlg,:data,:notify1" icon="ui-icon-check"/>
                 </center>
 
             </h:form>

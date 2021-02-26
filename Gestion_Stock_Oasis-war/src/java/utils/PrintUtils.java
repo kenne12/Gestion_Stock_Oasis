@@ -901,7 +901,7 @@ public class PrintUtils {
             table.addCell(createPdfPCell("Mai", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
             table.addCell(createPdfPCell("Juin", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
             table.addCell(createPdfPCell("Juil", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
-            table.addCell(createPdfPCell("Aaou", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell("Aao", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
             table.addCell(createPdfPCell("Sept", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
             table.addCell(createPdfPCell("Oct", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
             table.addCell(createPdfPCell("Nov", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));

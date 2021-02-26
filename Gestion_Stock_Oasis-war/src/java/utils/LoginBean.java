@@ -2,13 +2,13 @@ package utils;
 
 import entities.Menu;
 import entities.Mouchard;
-import entities.Parametrage;
 import entities.Privilege;
 import entities.Utilisateur;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -22,19 +22,17 @@ import sessions.UtilisateurFacadeLocal;
 
 @ManagedBean(name = "loginBean")
 @SessionScoped
-public class LoginBean extends AbstractLoginBean
-        implements Serializable {
+public class LoginBean extends AbstractLoginBean implements Serializable {
 
     @EJB
     private UtilisateurFacadeLocal utilisateurFacadeLocal;
-    /*  42 */    private Utilisateur utilisateur = new Utilisateur();
-    private Utilisateur utilisateurConnected;
-    /*  45 */    String sc = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+    private Utilisateur utilisateur = new Utilisateur();
+    String sc = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
 
     @PostConstruct
     public void init() {
-        /*  49 */ this.utilisateur = new Utilisateur();
-        /*  50 */ this.utilisateur.setTheme("bootstrap");
+        this.utilisateur = new Utilisateur();
+        this.utilisateur.setTheme("bootstrap");
     }
 
     public void login() {
@@ -42,11 +40,12 @@ public class LoginBean extends AbstractLoginBean
             this.utilisateur = this.utilisateurFacadeLocal.login(this.utilisateur.getLogin(), new ShaHash().hash(this.utilisateur.getPassword()));
             if (this.utilisateur != null) {
                 if (this.utilisateur.getActif()) {
+                    this.showSessionPanel = true;
                     HttpSession session = SessionMBean.getSession();
                     session.setAttribute("compte", this.utilisateur);
                     session.setAttribute("session", false);
 
-                    this.param = ((Parametrage) this.parametrageFacadeLocal.findAll().get(0));
+                    this.param = this.parametrageFacadeLocal.findAll().get(0);
 
                     session.setAttribute("parametre", this.param);
 
@@ -67,8 +66,25 @@ public class LoginBean extends AbstractLoginBean
                     session.setAttribute("accesses", accesses);
                     session.setAttribute("access", access);
 
-                    this.showSessionPanel = false;
-                    initSession();
+                    this.magasins = Utilitaires.returMagasinByUser(magasinFacadeLocal, utilisateurmagasinFacadeLocal, utilisateur.getIdpersonnel());
+                    if (Objects.equals(this.magasins.size(), 1)) {
+                        this.magasin = this.magasins.get(0);
+                        session.setAttribute("magasin", magasin);
+                        session.setAttribute("magasins", magasin);
+                    }
+
+                    this.annees = anneeFacadeLocal.findByEtat(true);
+
+                    if (Objects.equals(this.annees.size(), 1)) {
+                        this.annee = this.annees.get(0);
+                        session.setAttribute("annee", annee);
+                        session.setAttribute("annees", annee);
+                    }
+
+                    if (Objects.equals(this.magasins.size(), 1) && Objects.equals(this.annees.size(), 1)) {
+                        this.showSessionPanel = false;
+                        initSession();
+                    }
                     FacesContext.getCurrentInstance().getExternalContext().redirect(this.sc + "/index.html");
                 } else {
                     JsfUtil.addWarningMessage("Compte bloqué ! contactez l'administrateur");
@@ -85,27 +101,45 @@ public class LoginBean extends AbstractLoginBean
     }
 
     public void initSession() {
-        try {
-            HttpSession session = SessionMBean.getSession();
-
-            List allAccess = new ArrayList();
-
-            for (Menu m : this.menuFacadeLocal.findAll()) {
-                String[] menus = m.getRessource().split(";");
-                for (String temp : menus) {
-                    if (!allAccess.contains(temp)) {
-                        allAccess.add(temp);
-                    }
+        HttpSession session = SessionMBean.getSession();
+        List allAccess = new ArrayList();
+        for (Menu m : this.menuFacadeLocal.findAll()) {
+            String[] menus = m.getRessource().split(";");
+            for (String temp : menus) {
+                if (!allAccess.contains(temp)) {
+                    allAccess.add(temp);
                 }
             }
-
-            session.setAttribute("allAccess", allAccess);
-
-            Utilitaires.saveOperation(this.mouchardFacadeLocal, "Connexion", this.utilisateur);
-        } catch (Exception e) {
-            e.printStackTrace();
-            JsfUtil.addErrorMessage("Echec");
         }
+        session.setAttribute("allAccess", allAccess);
+        Utilitaires.saveOperation(this.mouchardFacadeLocal, "Connexion", this.utilisateur);
+    }
+
+    public void finalizeSession() {
+        if (magasin.getIdmagasin().equals(0)) {
+            return;
+        }
+
+        if (annee.getIdannee().equals(0)) {
+            return;
+        }
+
+        HttpSession session = SessionMBean.getSession();
+
+        if (annees.size() > 1) {
+            session.setAttribute("annees", annees);
+            annee = anneeFacadeLocal.find(annee.getIdannee());
+            session.setAttribute("annee", annee);
+        }
+
+        if (magasins.size() > 1) {
+            session.setAttribute("magasins", annees);
+            magasin = magasinFacadeLocal.find(magasin.getIdmagasin());
+            session.setAttribute("magasin", magasin);
+        }
+
+        initSession();
+        this.showSessionPanel = false;
     }
 
     public void closeSession() {
@@ -120,61 +154,61 @@ public class LoginBean extends AbstractLoginBean
 
     public void updateFermetture() {
         try {
-            /* 155 */ if (Utilitaires.isAccess(Long.valueOf(40L))) {
-                /* 156 */ RequestContext.getCurrentInstance().execute("PF('FermettureCreerDialog').show()");
+            if (Utilitaires.isAccess(40L)) {
+                RequestContext.getCurrentInstance().execute("PF('FermettureCreerDialog').show()");
             } else {
-                /* 158 */ this.routine.feedBack("information", "/resources/tool_images/error.png", this.routine.localizeMessage("acces_refuse"));
-                /* 159 */ RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
-                /* 160 */ return;
+                this.routine.feedBack("information", "/resources/tool_images/error.png", this.routine.localizeMessage("acces_refuse"));
+                RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
+                return;
             }
         } catch (Exception e) {
-            /* 164 */ this.routine.catchException(e, this.routine.localizeMessage("echec_operation"));
-            /* 165 */ RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
+            this.routine.catchException(e, this.routine.localizeMessage("echec_operation"));
+            RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
         }
     }
 
     public void deconnexion() {
-        /* 171 */ this.traceur = new Mouchard();
-        /* 172 */ Utilisateur user = SessionMBean.getUserAccount();
-        /* 173 */ Utilitaires.saveOperation(this.mouchardFacadeLocal, "Déconnexion", user);
+        Mouchard traceur = new Mouchard();
+        Utilisateur user = SessionMBean.getUserAccount();
+        Utilitaires.saveOperation(this.mouchardFacadeLocal, "Déconnexion", user);
         try {
-            /* 175 */ FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-            /* 176 */ FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-            /* 177 */ String sc = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+            FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+            FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+            String sc = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
 
-            /* 179 */ UtilitaireSession.getInstance().setuser(null);
-            /* 180 */ FacesContext.getCurrentInstance().getExternalContext().redirect(sc + "/login.html");
+            UtilitaireSession.getInstance().setuser(null);
+            FacesContext.getCurrentInstance().getExternalContext().redirect(sc + "/login.html");
         } catch (IOException ex) {
-            /* 183 */ Logger.getLogger(LoginBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LoginBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     public void change_session() {
         try {
-            /* 190 */ this.showSessionPanel = true;
-            /* 191 */ String sc = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            /* 192 */ FacesContext.getCurrentInstance().getExternalContext().redirect(sc + "/index.html?faces-redirect=true");
+            this.showSessionPanel = true;
+            String sc = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+            FacesContext.getCurrentInstance().getExternalContext().redirect(sc + "/index.html?faces-redirect=true");
         } catch (IOException ex) {
-            /* 194 */ Logger.getLogger(LoginBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LoginBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     public void update_theme() {
         try {
-            /* 200 */ this.utilisateurFacadeLocal.edit(this.utilisateur);
+            this.utilisateurFacadeLocal.edit(this.utilisateur);
         } catch (Exception e) {
-            /* 202 */ e.printStackTrace();
-            /* 203 */ this.utilisateur.setTheme("bootstrap");
-            /* 204 */ this.utilisateurFacadeLocal.edit(this.utilisateur);
+            e.printStackTrace();
+            this.utilisateur.setTheme("bootstrap");
+            this.utilisateurFacadeLocal.edit(this.utilisateur);
         }
     }
 
     public void hibbernate() {
         try {
-            /* 211 */ this.showHibernatePanel = true;
-            /* 212 */ this.hibernatePassword = "";
+            this.showHibernatePanel = true;
+            this.hibernatePassword = "";
         } catch (Exception e) {
-            /* 214 */ e.getMessage();
+            e.getMessage();
         }
     }
 
@@ -190,20 +224,6 @@ public class LoginBean extends AbstractLoginBean
             e.getMessage();
             JsfUtil.addErrorMessage(this.routine.localizeMessage("erreur"));
         }
-    }
-
-    public Utilisateur getUserconnected() {
-        this.utilisateurConnected = UtilitaireSession.getInstance().getuser();
-        String sc = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-        if (this.utilisateurConnected == null) {
-            try {
-                FacesContext.getCurrentInstance().getExternalContext().redirect(sc + "/login.html");
-            } catch (IOException ex) {
-                Logger.getLogger(LoginBean.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            System.out.println("Uitlisateur déconnecté +++++++++++++++++++ ");
-        }
-        return this.utilisateurConnected;
     }
 
     public void setPriv() {
