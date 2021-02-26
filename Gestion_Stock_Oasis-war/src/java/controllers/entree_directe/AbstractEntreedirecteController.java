@@ -32,7 +32,6 @@ import sessions.UniteFacadeLocal;
 import sessions.UtilisateurmagasinFacadeLocal;
 import utils.Routine;
 import utils.SessionMBean;
-import utils.Utilitaires;
 
 public class AbstractEntreedirecteController {
 
@@ -72,7 +71,7 @@ public class AbstractEntreedirecteController {
 
     @EJB
     protected MagasinFacadeLocal magasinFacadeLocal;
-    protected Magasin magasin = new Magasin();
+    protected Magasin magasin = SessionMBean.getMagasin();
     protected List<Magasin> magasins = new ArrayList();
 
     @EJB
@@ -307,7 +306,6 @@ public class AbstractEntreedirecteController {
     }
 
     public List<Magasin> getMagasins() {
-        this.magasins = Utilitaires.returMagasinByUser(this.magasinFacadeLocal, this.utilisateurmagasinFacadeLocal, SessionMBean.getUserAccount().getIdpersonnel());
         return this.magasins;
     }
 
