@@ -83,11 +83,27 @@ public class SessionMBean {
         }
         return null;
     }
-    
+
     public static Magasin getMagasin() {
         HttpSession session = getSession();
         if (session != null) {
             return (Magasin) session.getAttribute("magasin");
+        }
+        return null;
+    }
+
+    public static List<Annee> getAnnees() {
+        HttpSession session = getSession();
+        if (session != null) {
+            return (List<Annee>) session.getAttribute("annees");
+        }
+        return null;
+    }
+
+    public static List<Magasin> getMagasins() {
+        HttpSession session = getSession();
+        if (session != null) {
+            return (List<Magasin>) session.getAttribute("magasins");
         }
         return null;
     }
