@@ -20,7 +20,6 @@ import sessions.MagasinlotFacadeLocal;
 import sessions.UtilisateurmagasinFacadeLocal;
 import utils.AnalyseRD;
 import utils.SessionMBean;
-import utils.Utilitaires;
 
 /**
  *
@@ -38,12 +37,12 @@ public class AbstractAnalyseDepenseController {
 
     @EJB
     protected MagasinFacadeLocal magasinFacadeLocal;
-    protected Magasin magasin = new Magasin();
-    protected List<Magasin> magasins = new ArrayList();
+    protected Magasin magasin = SessionMBean.getMagasin();
+    protected List<Magasin> magasins = new ArrayList<>();
 
     @EJB
     protected AnneeFacadeLocal anneeFacadeLocal;
-    protected Annee annee = new Annee();
+    protected Annee annee = SessionMBean.getAnnee();
     protected List<Annee> annees = new ArrayList<>();
 
     @EJB
@@ -76,7 +75,7 @@ public class AbstractAnalyseDepenseController {
     protected UtilisateurmagasinFacadeLocal utilisateurmagasinFacadeLocal;
 
     public List<Magasin> getMagasins() {
-        this.magasins = Utilitaires.returMagasinByUser(this.magasinFacadeLocal, this.utilisateurmagasinFacadeLocal, SessionMBean.getUserAccount().getIdpersonnel());
+        this.magasins = SessionMBean.getMagasins();
         return this.magasins;
     }
 
@@ -101,10 +100,7 @@ public class AbstractAnalyseDepenseController {
     }
 
     public List<Annee> getAnnees() {
-        try {
-            annees = anneeFacadeLocal.findByEtat(true);
-        } catch (Exception e) {
-        }
+        annees = SessionMBean.getAnnees();
         return annees;
     }
 

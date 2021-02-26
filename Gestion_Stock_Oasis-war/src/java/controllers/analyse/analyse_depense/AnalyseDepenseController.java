@@ -39,8 +39,8 @@ public class AnalyseDepenseController extends AbstractAnalyseDepenseController i
 
     @PostConstruct
     private void init() {
-        this.magasin = this.getMagasins().get(0);
-        annee = anneeFacadeLocal.findOneActive();
+        this.magasin = SessionMBean.getMagasin();
+        annee = SessionMBean.getAnnee();
     }
 
     public Boolean checkPeremption(Lot lot) {

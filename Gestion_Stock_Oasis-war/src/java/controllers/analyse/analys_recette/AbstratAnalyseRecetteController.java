@@ -15,7 +15,6 @@ import sessions.MagasinlotFacadeLocal;
 import sessions.UtilisateurmagasinFacadeLocal;
 import utils.AnalyseRD;
 import utils.SessionMBean;
-import utils.Utilitaires;
 
 public class AbstratAnalyseRecetteController {
 
@@ -28,12 +27,12 @@ public class AbstratAnalyseRecetteController {
 
     @EJB
     protected MagasinFacadeLocal magasinFacadeLocal;
-    protected Magasin magasin = new Magasin();
-    protected List<Magasin> magasins = new ArrayList();
+    protected Magasin magasin = SessionMBean.getMagasin();
+    protected List<Magasin> magasins = new ArrayList<>();
 
     @EJB
     protected AnneeFacadeLocal anneeFacadeLocal;
-    protected Annee annee = new Annee();
+    protected Annee annee = SessionMBean.getAnnee();
     protected List<Annee> annees = new ArrayList<>();
 
     @EJB
@@ -66,7 +65,7 @@ public class AbstratAnalyseRecetteController {
     protected UtilisateurmagasinFacadeLocal utilisateurmagasinFacadeLocal;
 
     public List<Magasin> getMagasins() {
-        this.magasins = Utilitaires.returMagasinByUser(this.magasinFacadeLocal, this.utilisateurmagasinFacadeLocal, SessionMBean.getUserAccount().getIdpersonnel());
+        this.magasins = SessionMBean.getMagasins();
         return this.magasins;
     }
 
@@ -92,7 +91,7 @@ public class AbstratAnalyseRecetteController {
 
     public List<Annee> getAnnees() {
         try {
-            annees = anneeFacadeLocal.findByEtat(true);
+            annees = SessionMBean.getAnnees();
         } catch (Exception e) {
         }
         return annees;
@@ -165,5 +164,5 @@ public class AbstratAnalyseRecetteController {
     public double getPourcentage() {
         return pourcentage;
     }
-    
+
 }

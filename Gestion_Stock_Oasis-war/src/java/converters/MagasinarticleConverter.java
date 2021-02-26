@@ -40,8 +40,8 @@ public class MagasinarticleConverter implements Converter {
             return null;
         }
         if ((object instanceof Magasinarticle)) {
-            Magasinarticle a = (Magasinarticle) object;
-            return getStringKey(a.getIdmagasinarticle());
+            Magasinarticle m = (Magasinarticle) object;
+            return getStringKey(m.getIdmagasinarticle());
         }
         Logger.getLogger(getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Magasinarticle.class.getName()});
         return null;

@@ -1,5 +1,7 @@
 package utils;
 
+import entities.Annee;
+import entities.Magasin;
 import entities.Menu;
 import entities.Mouchard;
 import entities.Privilege;
@@ -70,15 +72,18 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
                     if (Objects.equals(this.magasins.size(), 1)) {
                         this.magasin = this.magasins.get(0);
                         session.setAttribute("magasin", magasin);
-                        session.setAttribute("magasins", magasin);
+                        List<Magasin> list = new ArrayList<>();
+                        list.add(magasin);
+                        session.setAttribute("magasins", list);
                     }
 
                     this.annees = anneeFacadeLocal.findByEtat(true);
-
                     if (Objects.equals(this.annees.size(), 1)) {
                         this.annee = this.annees.get(0);
                         session.setAttribute("annee", annee);
-                        session.setAttribute("annees", annee);
+                        List<Annee> list = new ArrayList<>();
+                        list.add(annee);
+                        session.setAttribute("annees", list);
                     }
 
                     if (Objects.equals(this.magasins.size(), 1) && Objects.equals(this.annees.size(), 1)) {
@@ -117,23 +122,25 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
 
     public void finalizeSession() {
         if (magasin.getIdmagasin().equals(0)) {
+            JsfUtil.addWarningMessage("Sélectionner le Dépot ou Magasin");
             return;
         }
 
         if (annee.getIdannee().equals(0)) {
+            JsfUtil.addWarningMessage("Sélectionner l'exercice");
             return;
         }
 
         HttpSession session = SessionMBean.getSession();
 
         if (annees.size() > 1) {
-            session.setAttribute("annees", annees);
             annee = anneeFacadeLocal.find(annee.getIdannee());
             session.setAttribute("annee", annee);
+            session.setAttribute("annees", annees);
         }
 
         if (magasins.size() > 1) {
-            session.setAttribute("magasins", annees);
+            session.setAttribute("magasins", magasins);
             magasin = magasinFacadeLocal.find(magasin.getIdmagasin());
             session.setAttribute("magasin", magasin);
         }

@@ -27,15 +27,14 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Annee.findByEtat", query = "SELECT a FROM Annee a WHERE a.etat = :etat"),
     @NamedQuery(name = "Annee.findByDateDebut", query = "SELECT a FROM Annee a WHERE a.dateDebut = :dateDebut"),
     @NamedQuery(name = "Annee.findByDateFin", query = "SELECT a FROM Annee a WHERE a.dateFin = :dateFin")})
-public class Annee
-        implements Serializable {
+public class Annee implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     private Integer idannee;
-    @Size(max = 2147483647)
+    @Size(max = 20)
     private String nom;
     private Boolean etat;
     @Column(name = "date_debut")

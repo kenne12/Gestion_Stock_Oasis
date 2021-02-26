@@ -40,8 +40,8 @@ public class menuConverter implements Converter {
             return null;
         }
         if ((object instanceof Menu)) {
-            Menu o = (Menu) object;
-            return getStringKey(o.getIdmenu());
+            Menu m = (Menu) object;
+            return getStringKey(m.getIdmenu());
         }
         Logger.getLogger(getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Menu.class.getName()});
         return null;
