@@ -18,8 +18,7 @@
             
             
             <h:form id="client_btn">
-                <p:commandButton class="btn btn-primary" actionListener="#{sortiedirectController.prepareCreateClient()}" update=":ClientCreerForm" value="Nouveau Client" />
-                
+                <p:commandButton icon="ui-icon-plus" class="btn btn-sm btn-outline-info" actionListener="#{sortiedirectController.prepareCreateClient()}" update=":ClientCreerForm" value="Nouveau Client" />      
                 <p:separator />
             </h:form>
 
@@ -43,9 +42,8 @@
                             </h:panelGroup>
 
                             <p:outputLabel value="#{langue.magasin}" for="magasin" />
-                            <p:selectOneMenu  filter="true" filterMatchMode="contains" required="true" id="magasin" value="#{sortiedirectController.magasin.idmagasin}" requiredMessage="#{langue.valeur_obligatoire}">
-                                <f:selectItem itemLabel="#{langue.choisir}" itemValue="-1"/>
-                                <f:selectItems value="#{sortiedirectController.magasins}" var="mag" itemLabel="#{mag.nom}" itemValue="#{mag.idmagasin}"/>                                                                             
+                            <p:selectOneMenu  filter="true" filterMatchMode="contains" required="true" id="magasin" value="#{sortiedirectController.magasin}" converter="magasinConverter" requiredMessage="#{langue.valeur_obligatoire}">
+                                <f:selectItems value="#{sortiedirectController.magasins}" var="mag" itemLabel="#{mag.nom}" itemValue="#{mag}"/>                                                                             
                                 <p:ajax />
                             </p:selectOneMenu>
 

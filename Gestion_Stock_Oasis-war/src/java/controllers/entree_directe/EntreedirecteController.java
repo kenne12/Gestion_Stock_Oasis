@@ -60,7 +60,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
         this.lot = new Lot(0l);
         magasinlot = new Magasinlot(0l);
         this.magasinarticle = new Magasinarticle();
-        this.cout_quantite = 0.0D;
+        this.cout_quantite = 0.0;
         this.lignelivraisonfournisseur.setPrixachat(0.0);
         this.lignelivraisonfournisseur.setPrixachat(0.0);
         this.libelle_article = "-";

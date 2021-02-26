@@ -26,6 +26,7 @@ import sessions.MouchardFacadeLocal;
 import sessions.MvtstockFacadeLocal;
 import sessions.UniteFacadeLocal;
 import utils.Routine;
+import utils.SessionMBean;
 
 public class AbstractSortiedirectController {
 
@@ -72,7 +73,7 @@ public class AbstractSortiedirectController {
 
     @EJB
     protected MagasinFacadeLocal magasinFacadeLocal;
-    protected Magasin magasin = new Magasin();
+    protected Magasin magasin = SessionMBean.getMagasin();
     protected List<Magasin> magasins = new ArrayList();
 
     @EJB
@@ -87,12 +88,6 @@ public class AbstractSortiedirectController {
     protected Double cout_quantite = 0.0;
     protected Double total = 0.0;
 
-    protected boolean nouveauPersonnel = true;
-
-    protected Boolean saisiePersonnel = true;
-
-    protected Boolean selectPersonnel = true;
-
     protected Boolean showSelector = true;
 
     protected Boolean detail = true;
@@ -101,19 +96,10 @@ public class AbstractSortiedirectController {
     protected Boolean imprimer = true;
     protected Boolean supprimer = true;
 
-    protected Boolean showEditSolde = true;
-
     protected boolean buttonActif = false;
     protected boolean buttonInactif = true;
 
-    protected boolean showPersonnelSolde = false;
-
-    protected boolean payement_espece_compte = true;
-
-    protected boolean payement_credit = false;
-
     protected String fileName = "";
-
     protected String mode = "";
 
     int conteur = 0;
@@ -168,10 +154,6 @@ public class AbstractSortiedirectController {
         return this.supprimer;
     }
 
-    public Boolean getShowEditSolde() {
-        return this.showEditSolde;
-    }
-
     public boolean isButtonActif() {
         return this.buttonActif;
     }
@@ -217,40 +199,8 @@ public class AbstractSortiedirectController {
         this.total = total;
     }
 
-    public boolean isShowPersonnelSolde() {
-        return this.showPersonnelSolde;
-    }
-
-    public boolean isPayement_espece_compte() {
-        return this.payement_espece_compte;
-    }
-
-    public boolean isPayement_credit() {
-        return this.payement_credit;
-    }
-
-    public void setPayement_credit(boolean payement_credit) {
-        this.payement_credit = payement_credit;
-    }
-
     public String getFileName() {
         return this.fileName;
-    }
-
-    public boolean isNouveauPersonnel() {
-        return this.nouveauPersonnel;
-    }
-
-    public void setNouveauPersonnel(boolean nouveauPersonnel) {
-        this.nouveauPersonnel = nouveauPersonnel;
-    }
-
-    public Boolean getSaisiePersonnel() {
-        return this.saisiePersonnel;
-    }
-
-    public Boolean getSelectPersonnel() {
-        return this.selectPersonnel;
     }
 
     public Boolean getShowSelector() {
@@ -294,7 +244,6 @@ public class AbstractSortiedirectController {
     }
 
     public List<Magasin> getMagasins() {
-        this.magasins = this.magasinFacadeLocal.findAllRange();
         return this.magasins;
     }
 
