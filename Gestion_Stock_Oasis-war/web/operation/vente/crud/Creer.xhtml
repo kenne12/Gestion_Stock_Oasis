@@ -48,7 +48,8 @@
                             </p:selectOneMenu>
 
                             <p:outputLabel value="Date" for="date" />
-                            <p:calendar pattern="dd/MM/yyyy" required="true" id="date" value="#{sortiedirectController.livraisonclient.datelivraison}" navigator="true" requiredMessage="#{langue.valeur_obligatoire}">
+                            <p:calendar pattern="dd/MM/yyyy" required="true" id="date" mindate="#{sortiedirectController.annee.dateDebut}" maxdate="#{sortiedirectController.annee.dateFin}" 
+                                        value="#{sortiedirectController.livraisonclient.datelivraison}" navigator="true" requiredMessage="#{langue.valeur_obligatoire}">
                                 <p:ajax/>  
                             </p:calendar>
 
@@ -93,29 +94,29 @@
                             <h:outputText value="#{langue.element_de_facture}"/>
                         </f:facet> 
 
-                        <p:column style="width: 23%" filterBy="#{item.idmagasinlot.idmagasinarticle.idarticle.libelle}" >
+                        <p:column style="width: 33%" filterBy="#{item.idmagasinlot.idmagasinarticle.idarticle.libelle}" >
                             <f:facet name="header">
                                 <h:outputText value="#{langue.article}"/>
                             </f:facet>
                             <h:outputText value="#{item.idmagasinlot.idmagasinarticle.idarticle.libelle}"/>
                         </p:column>
 
-                        <p:column style="width: 20%" filterBy="#{item.idmagasinlot.idlot.numero}" >
+                        <p:column style="width: 31%" filterBy="#{item.idmagasinlot.idlot.numero}" >
                             <f:facet name="header">
                                 <h:outputText value="#{langue.lot}"/>
                             </f:facet>
                             <h:outputText value="#{item.idmagasinlot.idlot.numero}"/>
                         </p:column>
 
-                        <p:column style="width: 8%;text-align: right" headerText="#{langue.pu}">
+                        <p:column style="width: 10%;text-align: right" headerText="#{langue.pu}">
                             <p:cellEditor>
                                 <f:facet name="output">
-                                    <h:outputText value="#{item.montant}" >
+                                    <h:outputText value="#{item.prixUnitaire}" >
                                         <f:convertNumber />
                                     </h:outputText>    
                                 </f:facet>
                                 <f:facet name="input">
-                                    <p:inputText required="true" value="#{item.montant}">
+                                    <p:inputText required="true" value="#{item.prixUnitaire}">
                                         <f:convertNumber />
                                         <p:ajax event="keyup" listener="#{sortiedirectController.updateTotal()}" update=":SortieDirecteCreateForm:info_1,:SortieDirecteCreateForm:info_2"/>
                                     </p:inputText>
@@ -133,44 +134,12 @@
                                 </f:facet>
                             </p:cellEditor>
                         </p:column>
-
-                        <p:column style="width: 12%;text-align: center" headerText="#{langue.unite}">
-                            <p:cellEditor>
-                                <f:facet name="output">
-                                    <h:outputText value="#{item.idunite.libelle}"/>
-                                </f:facet>
-                                <f:facet name="input">
-                                    <p:selectOneMenu value="#{item.idunite}" converter="uniteConverter" >
-                                        <f:selectItems value="#{sortiedirectController.unites}" var="unit" itemLabel="#{unit.libelle}" itemValue="#{unit}" />
-                                        <p:ajax />
-                                    </p:selectOneMenu>
-                                </f:facet>
-                            </p:cellEditor>
-                        </p:column>
-
-                        <p:column style="width: 5%;text-align: center" headerText="#{langue.qte_par_unite}">
-                            <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{item.unite}"/></f:facet>
-                                <f:facet name="input">
-                                    <p:inputText required="true" value="#{item.unite}">                                             
-                                        <p:ajax event="keyup" listener="#{sortiedirectController.updateTotal()}" update=":SortieDirecteCreateForm:info_1,:SortieDirecteCreateForm:info_2"/>
-                                    </p:inputText>
-                                </f:facet>
-                            </p:cellEditor>
-                        </p:column>
-
-                        <p:column style="width: 7%" >
-                            <f:facet name="header">
-                                <h:outputText value="#{langue.q_t}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.quantitemultiple}"/>
-                        </p:column>
-
-                        <p:column style="width: 9%;text-align: right" >
+                        
+                        <p:column style="width: 10%;text-align: right" >
                             <f:facet name="header">
                                 <h:outputText value="#{langue.m_t}"/>
                             </f:facet>
-                            <h:outputText value="#{item.montant * item.quantite}">
+                            <h:outputText value="#{item.montant}">
                                 <f:convertNumber />
                             </h:outputText>  
                         </p:column>

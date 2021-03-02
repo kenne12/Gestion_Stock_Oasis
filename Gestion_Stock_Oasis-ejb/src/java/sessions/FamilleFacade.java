@@ -36,6 +36,6 @@ public class FamilleFacade extends AbstractFacade<Famille> implements FamilleFac
 
     @Override
     public List<Famille> findAllRange() {
-        return this.em.createQuery("SELECT f FROM Famille f ORDER BY f.nom").getResultList();
+        return this.em.createQuery("SELECT f FROM Famille f ORDER BY f.code").getResultList();
     }
 }

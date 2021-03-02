@@ -1,5 +1,6 @@
 package controllers.sortie_directe;
 
+import entities.Annee;
 import entities.Client;
 import entities.Famille;
 import entities.Lignelivraisonclient;
@@ -81,14 +82,13 @@ public class AbstractSortiedirectController {
     protected Unite unite = new Unite();
     protected List<Unite> unites = new ArrayList();
 
+    protected Annee annee = SessionMBean.getAnnee();
+
     @EJB
     protected MouchardFacadeLocal mouchardFacadeLocal;
     protected Routine routine = new Routine();
 
-    protected Double cout_quantite = 0.0;
     protected Double total = 0.0;
-
-    protected Boolean showSelector = true;
 
     protected Boolean detail = true;
     protected Boolean modifier = true;
@@ -96,14 +96,10 @@ public class AbstractSortiedirectController {
     protected Boolean imprimer = true;
     protected Boolean supprimer = true;
 
-    protected boolean buttonActif = false;
-    protected boolean buttonInactif = true;
-
     protected String fileName = "";
     protected String mode = "";
 
-    int conteur = 0;
-
+    //int conteur = 0;
     public Livraisonclient getLivraisonclient() {
         return this.livraisonclient;
     }
@@ -154,22 +150,6 @@ public class AbstractSortiedirectController {
         return this.supprimer;
     }
 
-    public boolean isButtonActif() {
-        return this.buttonActif;
-    }
-
-    public void setButtonActif(boolean buttonActif) {
-        this.buttonActif = buttonActif;
-    }
-
-    public boolean isButtonInactif() {
-        return this.buttonInactif;
-    }
-
-    public void setButtonInactif(boolean buttonInactif) {
-        this.buttonInactif = buttonInactif;
-    }
-
     public Famille getFamille() {
         return this.famille;
     }
@@ -183,14 +163,6 @@ public class AbstractSortiedirectController {
         return this.familles;
     }
 
-    public Double getCout_quantite() {
-        return this.cout_quantite;
-    }
-
-    public void setCout_quantite(Double cout_quantite) {
-        this.cout_quantite = cout_quantite;
-    }
-
     public Double getTotal() {
         return this.total;
     }
@@ -201,10 +173,6 @@ public class AbstractSortiedirectController {
 
     public String getFileName() {
         return this.fileName;
-    }
-
-    public Boolean getShowSelector() {
-        return this.showSelector;
     }
 
     public Routine getRoutine() {
@@ -279,6 +247,10 @@ public class AbstractSortiedirectController {
 
     public void setClientToSave(Client clientToSave) {
         this.clientToSave = clientToSave;
+    }
+
+    public Annee getAnnee() {
+        return annee;
     }
 
 }

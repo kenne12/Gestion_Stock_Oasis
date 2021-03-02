@@ -62,4 +62,15 @@ public class LignemvtstockFacade extends AbstractFacade<Lignemvtstock> implement
         query.setParameter("idmagasin", idmagasin).setParameter("date_debut", dateDebut).setParameter("date_fin", dateFin);
         return query.getResultList();
     }
+
+    @Override
+    public Lignemvtstock findByIdmvtIdLot(long idMvt, long idLot) {
+        Query query = this.em.createQuery("SELECT l FROM Lignemvtstock l WHERE l.idmvtstock.idmvtstock=:idMvt AND l.idlot.idlot=:idLot");
+        query.setParameter("idMvt", idMvt).setParameter("idLot", idLot);
+        List list = query.getResultList();
+        if (!list.isEmpty()) {
+            return (Lignemvtstock) list.get(0);
+        }
+        return null;
+    }
 }

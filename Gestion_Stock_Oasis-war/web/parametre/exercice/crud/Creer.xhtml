@@ -23,11 +23,11 @@
                         <p:message for="nom"/>
                         
                         <p:outputLabel value="#{langue.date_debut}" for="date_debut" />
-                        <p:calendar id="date_debut" value="#{anneeController.annee.dateDebut}" />
+                        <p:calendar required="true" navigator="true" id="date_debut" value="#{anneeController.annee.dateDebut}" />
                         <p:message for="date_debut"/>
                         
                         <p:outputLabel value="#{langue.date_fin}" for="date_fin" />
-                        <p:calendar id="date_fin" value="#{anneeController.annee.dateFin}" />
+                        <p:calendar required="true" navigator="true" id="date_fin" value="#{anneeController.annee.dateFin}" />
                         <p:message for="date_fin"/>
                         
                         <p:outputLabel value="#{langue.active}" for="etat" />

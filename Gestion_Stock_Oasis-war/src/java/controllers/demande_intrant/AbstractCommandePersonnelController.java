@@ -114,8 +114,7 @@ public class AbstractCommandePersonnelController {
 
     protected String libelle_article = "-";
 
-    protected Double cout_quantite = 0.0D;
-    protected Double total = 0.0D;
+    protected Double total = 0.0;
 
     protected Boolean showSelector = true;
 
@@ -211,14 +210,6 @@ public class AbstractCommandePersonnelController {
     public List<Famille> getFamilles() {
         this.familles = this.familleFacadeLocal.findAllRange();
         return this.familles;
-    }
-
-    public Double getCout_quantite() {
-        return this.cout_quantite;
-    }
-
-    public void setCout_quantite(Double cout_quantite) {
-        this.cout_quantite = cout_quantite;
     }
 
     public Double getTotal() {

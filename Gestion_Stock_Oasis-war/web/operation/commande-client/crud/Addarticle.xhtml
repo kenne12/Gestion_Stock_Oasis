@@ -24,13 +24,10 @@
                         <p:effect type="pulsate" event="load" delay="50" />
                     </p:messages>
                     <p:growl id="msg"/>
-
-                    <div style="width: 100% ; height: 500px">
-
-                        <div style="width: 70%; float: left ; height: 100%">
-
+                    
+                    <div class="row">      
+                        <div class="col-md-8">
                             <p:panelGrid columns="3">
-
                                 <p:outputLabel value="#{langue.magasin}" for="magasin" />
                                 <p:selectOneMenu required="true" filter="true" id="magasin" value="#{commandePersonnelController.magasin.idmagasin}" requiredMessage="#{langue.valeur_obligatoire}">
                                     <f:selectItem itemLabel="#{langue.choisir}" itemValue=""/>
@@ -101,16 +98,9 @@
                                 </p:column>
 
                             </p:dataTable>
-
                         </div>
-
-                        <div style="width: 29%; float: right ; height: 100%">
-                            <br/>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <br/>
-
+                        
+                        <div class="col-md-4">
                             <center>
 
                                 <h:panelGrid columns="3">
@@ -125,36 +115,22 @@
                                     </p:inputText>
                                     <p:message for="sd"/>
 
-                                    <p:outputLabel value="#{langue.unite}" for="unite"/>
-                                    <p:selectOneMenu required="true" id="unite" filter="true"  value="#{commandePersonnelController.unite}" converter="uniteConverter">
-                                        <f:selectItem itemLabel="#{langue.choisir}" itemValue="#{null}"/>
-                                        <f:selectItems value="#{commandePersonnelController.unites}" var="unit" itemLabel="#{unit.libelle}" itemValue="#{unit}"/>
-                                        <p:ajax />
-                                    </p:selectOneMenu>
-
-                                    <p:inputText disabled="true" id="qpu" required="true" style="width: 75px" value="#{commandePersonnelController.lignedemande.unite}">
-                                        <f:convertNumber/>
-                                        <p:ajax event="keyup" update="qt" listener="#{commandePersonnelController.updateQuantity()}"/>
-                                    </p:inputText>
-
                                     <p:outputLabel value="#{langue.prix_unitaire}" for="p_u"/>
                                     <p:inputText required="true" id="p_u" style="width: 100px" value="#{commandePersonnelController.lignedemande.prixUnitaire}">                                
-                                        <p:ajax event="keyup" update="qt" />
+                                        <p:ajax event="keyup" update="total_" listener="#{commandePersonnelController.updateTotaux()}"/>
                                     </p:inputText>
                                     <p:message for="p_u"/>
 
                                     <p:outputLabel value="#{langue.quantite}" for="quantite"/>
                                     <p:inputText required="true" id="quantite" style="width: 100px" value="#{commandePersonnelController.lignedemande.quantite}">                                
-                                        <p:ajax event="keyup" update="qt" listener="#{commandePersonnelController.updateQuantity()}"/>
+                                        <p:ajax event="keyup" update="total_" listener="#{commandePersonnelController.updateTotaux()}"/>
                                     </p:inputText>
                                     <p:message for="quantite"/>
 
-                                    <p:outputLabel value="#{langue.quantite_totale}" for="qt" />
-                                    <p:inputText disabled="true" id="qt"  required="true" style="width: 100px" value="#{commandePersonnelController.lignedemande.quantitemultiple}">
+                                    <p:outputLabel value="#{langue.total}" for="total_" />
+                                    <p:inputText disabled="true" id="total_"  required="true" style="width: 100px" value="#{commandePersonnelController.lignedemande.montant}">
                                         <f:convertNumber/>
-                                        <p:ajax event="keyup" />
                                     </p:inputText>
-                                    <p:message for="qt"/>
 
                                 </h:panelGrid>
                             </center>
@@ -163,16 +139,12 @@
 
                             <center>                        
                                 <p:commandButton partialSubmit="true" style="color: red;" icon="ui-icon-close" value="#{langue.fermer}" oncomplete="PF('ArticleCreateDialog').hide()"/>
-                                <p:commandButton actionListener="#{commandePersonnelController.addArticle()}" icon="ui-icon-plus" value="#{langue.ajouter_a_la_demande}" update="display,:CommandeCreateForm:datalist,:CommandeCreateForm:info_1,:CommandeCreateForm:info_2,:DemandeListerForm:msg"/>                        
+                                <p:commandButton actionListener="#{commandePersonnelController.addArticle()}" icon="ui-icon-plus" value="#{langue.ajouter}" update="display,:CommandeCreateForm:datalist,:CommandeCreateForm:info_1,:CommandeCreateForm:info_2,:DemandeListerForm:msg"/>                        
                             </center>
-
-                        </div>
-
-                    </div>
-
+                        </div>           
+                    </div> 
                 </h:panelGroup>
             </h:form>
         </p:dialog>
-
     </ui:composition>
 </html>

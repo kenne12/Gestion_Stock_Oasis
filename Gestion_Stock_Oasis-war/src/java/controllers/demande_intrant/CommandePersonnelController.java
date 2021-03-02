@@ -6,13 +6,10 @@ import entities.Famille;
 import entities.Lignedemande;
 import entities.Magasin;
 import entities.Magasinarticle;
-import entities.Projet;
 import entities.Unite;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -20,7 +17,6 @@ import javax.faces.bean.SessionScoped;
 import org.primefaces.context.RequestContext;
 import utils.JsfUtil;
 import utils.PrintUtils;
-import utils.Printer;
 import utils.SessionMBean;
 import utils.Utilitaires;
 
@@ -58,14 +54,14 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
             this.demande.setTauxTva(SessionMBean.getParametrage().getTauxTva());
 
             this.demande.setValidee(false);
-            this.demande.setMontant(0.0D);
+            this.demande.setMontant(0.0);
             this.demande.setMotif("-");
             this.demande.setDatedemande(new Date());
             this.demande.setDateprevlivraison(new Date());
             this.magasinarticles.clear();
 
             this.magasins = Utilitaires.returMagasinByUser(this.magasinFacadeLocal, this.utilisateurmagasinFacadeLocal, this.personnel);
-            this.total = 0.0D;
+            this.total = 0.0;
             this.conteur = 0;
         } catch (Exception e) {
             this.routine.catchException(e, this.routine.localizeMessage("echec_operation"));
@@ -79,8 +75,8 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
         this.unite = new Unite();
         this.magasinarticle = new Magasinarticle();
         this.lignedemande = new Lignedemande();
-        this.lignedemande.setUnite(1.0D);
-        this.cout_quantite = 0.0D;
+        this.lignedemande.setUnite(1.0);
+        this.lignedemande.setMontant(1.0);
         this.libelle_article = "-";
         RequestContext.getCurrentInstance().execute("PF('ArticleCreateDialog').show()");
     }
@@ -159,12 +155,15 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
         if (this.magasinarticle != null) {
             this.unite = this.magasinarticle.getIdarticle().getIdunite();
             this.lignedemande.setIdunite(this.magasinarticle.getIdarticle().getIdunite());
-            this.lignedemande.setPrixUnitaire(this.magasinarticle.getIdarticle().getCoutachat());
-            this.lignedemande.setMontant(this.magasinarticle.getIdarticle().getCoutachat());
+            this.lignedemande.setPrixUnitaire(this.magasinarticle.getIdarticle().getPrixunit());
+            this.lignedemande.setMontant(this.magasinarticle.getIdarticle().getPrixunit());
             this.lignedemande.setQuantite(1.0);
             this.lignedemande.setQuantitemultiple(1.0);
             this.magasin = this.magasinarticle.getIdmagasin();
             this.libelle_article = this.magasinarticle.getIdarticle().getLibelle();
+            this.lignedemande.setMarge(0);
+            this.lignedemande.setPrixAchat(this.magasinarticle.getIdarticle().getCoutachat());
+            this.lignedemande.setPrixVente(this.magasinarticle.getIdarticle().getPrixunit());
         }
     }
 
@@ -179,7 +178,7 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
 
                     this.demande.setIddemande(this.demandeFacadeLocal.nextVal());
                     this.demande.setClient(this.client);
-                    this.demande.setTauxsatisfaction(0.0D);
+                    this.demande.setTauxsatisfaction(0.0);
                     this.demande.setCode("D" + Utilitaires.genererCodeDemande("", this.demande.getIddemande()));
                     this.demandeFacadeLocal.create(this.demande);
                     Utilitaires.saveOperation(this.mouchardFacadeLocal, "Enregistrement de la commande : " + this.client.getNom() + " ; Code : " + this.demande.getCode(), SessionMBean.getUserAccount());
@@ -202,7 +201,7 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
                     this.ut.commit();
                     this.demande = null;
                     this.lignedemandes.clear();
-                    this.detail = (this.supprimer = this.modifier = this.imprimer = true);
+                    this.detail = this.supprimer = this.modifier = this.imprimer = true;
                     JsfUtil.addSuccessMessage(message);
 
                     notifySuccess();
@@ -257,7 +256,7 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
                 this.ut.commit();
                 this.demande = new Demande();
                 this.lignedemandes.clear();
-                this.detail = this.supprimer = this.modifier = this.imprimer = true;
+                this.detail = this.supprimer = this.modifier = this.imprimer = detail = true;
 
                 notifySuccess();
                 RequestContext.getCurrentInstance().execute("PF('CommandeCreateDialog').hide()");
@@ -300,7 +299,7 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
                 this.ut.commit();
                 Utilitaires.saveOperation(this.mouchardFacadeLocal, "Suppresion de la commande : " + this.demande.getCode() + " ; Personnel : " + this.demande.getClient().getNom(), SessionMBean.getUserAccount());
                 this.client = new Client();
-                this.supprimer = (this.modifier = this.imprimer = true);
+                this.supprimer = this.modifier = this.imprimer = detail = true;
                 notifySuccess();
             } else {
                 notifyError("not_row_selected");
@@ -355,7 +354,7 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
             Lignedemande l = this.lignedemande;
             l.setIdlignedemande(0L);
 
-            if (this.magasinarticle.getQuantitemultiple() < 1.0D) {
+            if (this.magasinarticle.getQuantitemultiple() < 1.0) {
                 JsfUtil.addWarningMessage(this.routine.localizeMessage("defaut_de_quantite"));
                 return;
             }
@@ -368,7 +367,6 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
             Unite u = this.unite;
             l.setIdmagasinarticle(this.magasinarticle);
             l.setIdunite(u);
-            l.setMontant(l.getPrixUnitaire() * l.getQuantitemultiple());
 
             boolean drapeau = false;
             int i = 0;
@@ -403,7 +401,7 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
             boolean trouve = false;
             this.ut.begin();
 
-            Lignedemande lcc = (Lignedemande) this.lignedemandes.get(index);
+            Lignedemande lcc = this.lignedemandes.get(index);
             if (lcc.getIdlignedemande() != 0L) {
                 trouve = true;
                 this.lignedemandeFacadeLocal.remove(lcc);
@@ -427,16 +425,24 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
     }
 
     public Double calculTotal() {
-        Double resultat = 0.0;
+        Double resultatTotal = 0.0;
+        Double marge = 0.0;
         int i = 0;
         for (Lignedemande lcc : this.lignedemandes) {
-            resultat += (lcc.getPrixUnitaire() * lcc.getQuantite());
             this.lignedemandes.get(i).setQuantitemultiple((lcc.getQuantite() * lcc.getUnite()));
-            this.lignedemandes.get(i).setMontant((this.lignedemandes.get(i)).getQuantitemultiple() * lcc.getPrixUnitaire());
             this.lignedemandes.get(i).setQuantitereduite((this.lignedemandes.get(i).getQuantitemultiple() / lcc.getIdmagasinarticle().getIdarticle().getUnite()));
+            Double somme = (lcc.getPrixUnitaire() * this.lignedemandes.get(i).getQuantitemultiple());
+            resultatTotal += somme;
+            this.lignedemandes.get(i).setMontant(somme);
+            lignedemandes.get(i).setMarge(((lcc.getPrixUnitaire() - lcc.getPrixAchat()) * lignedemandes.get(i).getQuantitemultiple()));
+            if (lignedemandes.get(i).getMarge() < 0d) {
+                lignedemandes.get(i).setMarge(0d);
+            }
+            marge += lignedemandes.get(i).getMarge();
             i++;
         }
-        return resultat;
+        demande.setMarge(marge);
+        return resultatTotal;
     }
 
     public void updateTotal() {
@@ -447,6 +453,7 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
             this.demande.setMontantHt((total - demande.getMontantRemise()));
             this.demande.setMontantTva((demande.getMontantHt() * demande.getTauxTva()) / 100);
             this.demande.setMontantTtc(this.demande.getMontantTva() + this.demande.getMontantHt());
+            this.demande.setMarge(demande.getMarge() - ((demande.getMarge() * demande.getTauxRemise()) / 100));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -454,13 +461,13 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
 
     public void updateTotaux() {
         try {
-            this.cout_quantite = 0.0D;
-            if ((this.lignedemande.getQuantite() != null) && (this.lignedemande.getMontant() != null)) {
-                this.cout_quantite = (this.lignedemande.getMontant() * this.lignedemande.getQuantite());
+            this.lignedemande.setMontant(0.0);
+            if ((this.lignedemande.getQuantite() != null) && (this.lignedemande.getPrixUnitaire() != null)) {
+                this.lignedemande.setMontant((this.lignedemande.getPrixUnitaire() * this.lignedemande.getQuantite()));
             }
         } catch (Exception e) {
             e.printStackTrace();
-            this.cout_quantite = 0.0D;
+            this.lignedemande.setMontant(0.0);
         }
     }
 
@@ -468,20 +475,10 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
         try {
             if (this.magasinarticle != null) {
                 this.famille = this.magasinarticle.getIdarticle().getIdfamille();
-                this.lignedemande.setMontant(this.magasinarticle.getIdarticle().getPrixunit());
+                this.lignedemande.setPrixUnitaire(this.magasinarticle.getIdarticle().getPrixunit());
                 this.lignedemande.setUnite(this.magasinarticle.getUnite());
                 this.unite = this.magasinarticle.getIdarticle().getIdunite();
                 this.lignedemande.setUnite(this.magasinarticle.getIdarticle().getUnite());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void updateQuantity() {
-        try {
-            if (this.unite != null) {
-                this.lignedemande.setQuantitemultiple((this.lignedemande.getQuantite() * this.lignedemande.getUnite()));
             }
         } catch (Exception e) {
             e.printStackTrace();

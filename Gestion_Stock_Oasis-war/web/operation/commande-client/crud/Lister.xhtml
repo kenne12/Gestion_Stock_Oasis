@@ -38,21 +38,30 @@
                 <p:ajax event="rowUnselect" update=":DemandeListerForm:DemandeDataTableContextMenu, :actionsForm"/>
                 <p:ajax event="rowDblselect" onsuccess="document.getElementById('DemandeListerForm:viewButton').click();"/>
 
-                <p:column filterBy="#{item.code}" style="text-align: center;width: 12%">
+                <p:column filterBy="#{item.code}" filterMatchMode="contains" style="text-align: center;width: 15%">
                     <f:facet name="header">
                         <h:outputText value="#{langue.code}"/>
                     </f:facet>
                     <h:outputText value="#{item.code}"/>
                 </p:column>
 
-                <p:column filterBy="#{item.client.nom} #{item.client.prenom}" width="25%">
+                <p:column filterBy="#{item.client.nom} #{item.client.prenom}" filterMatchMode="contains" width="35%">
                     <f:facet name="header">
-                        <h:outputText value="#{langue.personnel}"/>
+                        <h:outputText value="#{langue.client}"/>
                     </f:facet>
                     <h:outputText value="#{item.client.nom} #{item.client.prenom}"/>
                 </p:column>
+                
+                <p:column style="text-align: center;width: 10%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.montant_ttc}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.montantTtc}">
+                        <f:convertNumber />
+                    </h:outputText>
+                </p:column>
 
-                <p:column style="text-align: center;width: 12%">
+                <p:column style="text-align: center;width: 10%">
                     <f:facet name="header">
                         <h:outputText value="#{langue.date}"/>
                     </f:facet>
@@ -61,7 +70,7 @@
                     </h:outputText>
                 </p:column>
 
-                <p:column style="text-align: center;width: 6%">
+                <p:column style="text-align: center;width: 5%">
                     <f:facet name="header">
                         <h:outputText value="#{langue.etat}"/>
                     </f:facet>

@@ -40,7 +40,7 @@ public class LivraisonClientController extends AbstractLivraisonClientController
 
     public void prepareCreate() {
         try {
-            if (!Utilitaires.isAccess((41L))) {
+            if (!Utilitaires.isAccess(41L)) {
                 notifyError("acces_refuse");
                 return;
             }
@@ -51,15 +51,13 @@ public class LivraisonClientController extends AbstractLivraisonClientController
             this.client = new Client();
 
             this.livraisonclient.setMontant(0.0);
-
             this.lignelivraisonclients.clear();
-            this.payement_credit = false;
 
             this.demande = new Demande();
             this.lignedemandes.clear();
-            this.showSelectorCommand = (false);
+            this.showSelectorCommand = false;
 
-            this.total = 0.0D;
+            this.total = 0.0;
         } catch (Exception e) {
             this.routine.catchException(e, this.routine.localizeMessage("echec_operation"));
             RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
@@ -169,6 +167,9 @@ public class LivraisonClientController extends AbstractLivraisonClientController
                     Double qteDemandee = lcc.getQuantitemultiple();
                     Double qteReste = lcc.getQuantitemultiple();
 
+                    double prixVente = lcc.getPrixVente();
+                    double prixAchat = lcc.getPrixAchat();
+
                     List<Magasinlot> lotTemp = this.magasinlotFacadeLocal.findByArticleIsavailable(lcc.getIdmagasinarticle().getIdmagasin().getIdmagasin(), lcc.getIdmagasinarticle().getIdarticle().getIdarticle());
 
                     Double sommeQte = 0.0;
@@ -177,15 +178,18 @@ public class LivraisonClientController extends AbstractLivraisonClientController
                         if (lSearch != null) {
                             if (lSearch.getQuantitemultiple() > 0d) {
                                 Lignelivraisonclient c = new Lignelivraisonclient();
-                                c.setIdlignelivraisonclient((0L));
+                                c.setIdlignelivraisonclient(0L);
+                                c.setPrixUnitaire(lcc.getPrixUnitaire());
+                                c.setPrixAchat(prixAchat);
+                                c.setPrixVente(prixVente);
+
                                 c.setIdmagasinlot(lSearch);
                                 c.setIdlot(lSearch.getIdlot());
                                 c.setIdunite(lcc.getIdunite());
-                                c.setPrixUnitaire(lcc.getPrixUnitaire());
                                 c.setUnite(lcc.getUnite());
                                 if (lSearch.getQuantitemultiple() >= lcc.getQuantitemultiple()) {
                                     c.setQuantite(lcc.getQuantite());
-                                    c.setQuantitemultiple((c.getQuantite() * lcc.getUnite()));
+                                    c.setQuantitemultiple(c.getQuantite() * lcc.getUnite());
                                     c.setQuantitereduite((c.getQuantitemultiple() / c.getIdmagasinlot().getIdlot().getIdarticle().getUnite()));
                                     c.setMontant(lcc.getMontant());
                                     this.lignelivraisonclients.add(c);
@@ -202,6 +206,7 @@ public class LivraisonClientController extends AbstractLivraisonClientController
                                     sommeQte = (sommeQte + lSearch.getQuantitemultiple());
                                     suffisant = false;
                                 }
+                                c.setMarge((c.getPrixUnitaire() - c.getPrixAchat()) * c.getQuantitemultiple());
                             } else {
                                 suffisant = false;
                             }
@@ -210,12 +215,14 @@ public class LivraisonClientController extends AbstractLivraisonClientController
                         if (!suffisant) {
                             for (Magasinlot l : lotTemp) {
                                 if (!l.getIdlot().equals(lotTemp)) {
-                                    if (l.getQuantitemultiple() > 0.0D) {
+                                    if (l.getQuantitemultiple() > 0.0) {
                                         Lignelivraisonclient c = new Lignelivraisonclient();
-                                        c.setIdlignelivraisonclient((0L));
+                                        c.setIdlignelivraisonclient(0L);
+                                        c.setPrixUnitaire(lcc.getPrixUnitaire());
+                                        c.setPrixAchat(prixAchat);
+                                        c.setPrixVente(prixVente);
                                         c.setIdmagasinlot(l);
                                         c.setIdlot(l.getIdlot());
-                                        c.setPrixUnitaire(lcc.getPrixUnitaire());
                                         c.setIdunite(lcc.getIdunite());
                                         c.setUnite(lcc.getUnite());
                                         if (l.getQuantitemultiple() >= qteReste) {
@@ -233,8 +240,9 @@ public class LivraisonClientController extends AbstractLivraisonClientController
                                         c.setQuantite((l.getQuantitemultiple() / l.getUnite()));
                                         c.setQuantitereduite((l.getQuantitemultiple() / l.getIdlot().getIdarticle().getUnite()));
                                         this.lignelivraisonclients.add(c);
-                                        sommeQte = (sommeQte + l.getQuantitemultiple());
+                                        sommeQte += l.getQuantitemultiple();
                                         suffisant = false;
+                                        c.setMarge((c.getPrixUnitaire() - c.getPrixAchat()) * c.getQuantitemultiple());
                                     } else {
                                         suffisant = false;
                                     }
@@ -587,15 +595,23 @@ public class LivraisonClientController extends AbstractLivraisonClientController
     }
 
     public Double calculTotal(List<Lignelivraisonclient> lignelivraisonclients) {
-        Double resultat = 0.0D;
+        Double resultatTotal = 0.0;
+        double marge = 0;
         int i = 0;
         for (Lignelivraisonclient llc : lignelivraisonclients) {
-            resultat += (llc.getPrixUnitaire() * llc.getQuantite());
             lignelivraisonclients.get(i).setQuantitemultiple((llc.getQuantite() * llc.getIdlot().getIdarticle().getUnite()));
-            lignelivraisonclients.get(i).setMontant((llc.getPrixUnitaire() * lignelivraisonclients.get(i).getQuantitemultiple()));
+            Double somme = (llc.getPrixUnitaire() * lignelivraisonclients.get(i).getQuantite());
+            resultatTotal += somme;
+            lignelivraisonclients.get(i).setMontant(somme);
+            lignelivraisonclients.get(i).setMarge((llc.getPrixUnitaire() - llc.getPrixAchat()) * lignelivraisonclients.get(i).getQuantitemultiple());
+            if (lignelivraisonclients.get(i).getMarge() < 0) {
+                lignelivraisonclients.get(i).setMarge(0);
+            }
+            marge += lignelivraisonclients.get(i).getMarge();
             i++;
         }
-        return resultat;
+        livraisonclient.setMarge(marge);
+        return resultatTotal;
     }
 
     public void updateTotal() {
@@ -606,20 +622,9 @@ public class LivraisonClientController extends AbstractLivraisonClientController
             this.livraisonclient.setMontantHt((total - livraisonclient.getMontantRemise()));
             this.livraisonclient.setMontantTva((livraisonclient.getMontantHt() * livraisonclient.getTauxTva()) / 100);
             this.livraisonclient.setMontantTtc(this.livraisonclient.getMontantTva() + this.livraisonclient.getMontantHt());
+            this.livraisonclient.setMarge(livraisonclient.getMarge() - ((livraisonclient.getMarge() * livraisonclient.getTauxRemise()) / 100));
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    public void updateTotaux() {
-        try {
-            this.cout_quantite = 0.0D;
-            if ((this.lignedemande.getQuantite() != null) && (this.lignedemande.getMontant() != null)) {
-                this.cout_quantite = (this.lignedemande.getMontant() * this.lignedemande.getQuantite());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            this.cout_quantite = (0.0D);
         }
     }
 

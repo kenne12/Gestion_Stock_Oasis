@@ -18,8 +18,16 @@
                     <h:panelGrid  columns="3" columnClasses="column" >
 
                         <p:outputLabel value="#{langue.nom}" for="theme" />
-                        <p:inputText id="theme" value="#{anneeController.selectedAnnee.nom}" />
+                        <p:inputText required="true" id="theme" value="#{anneeController.selectedAnnee.nom}" />
                         <p:message for="theme"/>
+                        
+                        <p:outputLabel value="#{langue.date_debut}" for="date_debut" />
+                        <p:calendar required="true" navigator="true" id="date_debut" value="#{anneeController.selectedAnnee.dateDebut}" />
+                        <p:message for="date_debut"/>
+                        
+                        <p:outputLabel value="#{langue.date_fin}" for="date_fin" />
+                        <p:calendar required="true" navigator="true" id="date_fin" value="#{anneeController.selectedAnnee.dateFin}" />
+                        <p:message for="date_fin"/>
 
                         <p:outputLabel value="#{langue.active}" for="etat" />
                         <h:selectBooleanCheckbox id="etat" value="#{anneeController.selectedAnnee.etat}"/>

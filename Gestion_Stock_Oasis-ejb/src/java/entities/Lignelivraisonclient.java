@@ -49,6 +49,11 @@ public class Lignelivraisonclient implements Serializable {
     @Column(name = "prixunitaire")
     private Double prixUnitaire;
     private Double quantitereduite;
+    private double marge;
+    @Column(name = "prixachat")
+    private double prixAchat;
+    @Column(name = "prixvente")
+    private double prixVente;
     @JoinColumn(name = "idlivraisonclient", referencedColumnName = "idlivraisonclient")
     @ManyToOne(fetch = FetchType.LAZY)
     private Livraisonclient idlivraisonclient;
@@ -163,6 +168,30 @@ public class Lignelivraisonclient implements Serializable {
 
     public void setPrixUnitaire(Double prixUnitaire) {
         this.prixUnitaire = prixUnitaire;
+    }
+
+    public double getMarge() {
+        return marge;
+    }
+
+    public void setMarge(double marge) {
+        this.marge = marge;
+    }
+
+    public double getPrixAchat() {
+        return prixAchat;
+    }
+
+    public void setPrixAchat(double prixAchat) {
+        this.prixAchat = prixAchat;
+    }
+
+    public double getPrixVente() {
+        return prixVente;
+    }
+
+    public void setPrixVente(double prixVente) {
+        this.prixVente = prixVente;
     }
 
     @Override

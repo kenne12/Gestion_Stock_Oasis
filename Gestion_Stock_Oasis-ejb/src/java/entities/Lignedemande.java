@@ -51,6 +51,11 @@ public class Lignedemande implements Serializable {
     private Double tauxsatisfaction;
     private Double quantitereduite;
     private Double qtestock;
+    private double marge;
+    @Column(name = "prixachat")
+    private double prixAchat;
+    @Column(name = "prixvente")
+    private double prixVente;
     @JoinColumn(name = "iddemande", referencedColumnName = "iddemande")
     @ManyToOne(fetch = FetchType.LAZY)
     private Demande iddemande;
@@ -130,6 +135,30 @@ public class Lignedemande implements Serializable {
 
     public void setQtestock(Double qtestock) {
         this.qtestock = qtestock;
+    }
+
+    public double getMarge() {
+        return marge;
+    }
+
+    public void setMarge(double marge) {
+        this.marge = marge;
+    }
+
+    public double getPrixAchat() {
+        return prixAchat;
+    }
+
+    public void setPrixAchat(double prixAchat) {
+        this.prixAchat = prixAchat;
+    }
+
+    public double getPrixVente() {
+        return prixVente;
+    }
+
+    public void setPrixVente(double prixVente) {
+        this.prixVente = prixVente;
     }
 
     public Demande getIddemande() {

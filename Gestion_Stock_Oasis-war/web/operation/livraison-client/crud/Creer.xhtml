@@ -84,37 +84,21 @@
                                     <h:outputText value="#{langue.besoin_initial}"/>
                                 </f:facet> 
 
-                                <p:column style="width: 45%" filterBy="#{lcc.idmagasinarticle.idarticle.libelle}" >
+                                <p:column style="width: 70%" filterBy="#{lcc.idmagasinarticle.idarticle.libelle}" >
                                     <f:facet name="header">
                                         <h:outputText value="#{langue.article}"/>
                                     </f:facet>
                                     <h:outputText value="#{lcc.idmagasinarticle.idarticle.libelle}"/>
                                 </p:column>
 
-                                <p:column style="width: 10%;text-align: center">
+                                <p:column style="width: 15% ; text-align: center" >
                                     <f:facet name="header">
-                                        <h:outputText value="#{langue.qte}"/>
-                                    </f:facet>
-                                    <h:outputText value="#{lcc.quantite}">
-                                        <f:convertNumber/>
-                                    </h:outputText>
-                                </p:column>
-
-                                <p:column style="width: 20%;text-align: center">
-                                    <f:facet name="header">
-                                        <h:outputText value="#{langue.unite}"/>
-                                    </f:facet>
-                                    <h:outputText value="#{lcc.idunite.libelle}"/>
-                                </p:column>
-
-                                <p:column style="width: 10% ; text-align: center" >
-                                    <f:facet name="header">
-                                        <h:outputText value="Total"/>
+                                        <h:outputText value="#{langue.quantite}"/>
                                     </f:facet>
                                     <h:outputText value="#{lcc.quantitemultiple}"/>
                                 </p:column>          
 
-                                <p:column style="width: 10%;text-align: center">
+                                <p:column style="width: 15%;text-align: center">
                                     <f:facet name="header">
                                         <h:outputText value="%"/>
                                     </f:facet>

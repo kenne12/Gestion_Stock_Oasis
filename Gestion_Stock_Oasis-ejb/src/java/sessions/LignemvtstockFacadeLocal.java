@@ -32,4 +32,6 @@ public interface LignemvtstockFacadeLocal {
 
     public List<Lignemvtstock> findByIdmagasinIntevalDate(int idmagasin, Date dateDebut, Date dateFin);
 
+    Lignemvtstock findByIdmvtIdLot(long idMvt, long idLot);
+
 }

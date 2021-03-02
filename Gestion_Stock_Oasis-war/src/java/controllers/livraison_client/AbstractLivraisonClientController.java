@@ -97,11 +97,9 @@ public class AbstractLivraisonClientController {
     protected MouchardFacadeLocal mouchardFacadeLocal;
     protected Routine routine = new Routine();
 
-    protected Double cout_quantite = 0.0;
     protected Double total = 0.0;
 
-    protected Boolean showSelectorCommand = (true);
-    protected boolean payement_credit = false;
+    protected Boolean showSelectorCommand = true;
 
     protected Boolean detail = true;
     protected Boolean modifier = true;
@@ -176,14 +174,6 @@ public class AbstractLivraisonClientController {
         return this.supprimer;
     }
 
-    public Double getCout_quantite() {
-        return this.cout_quantite;
-    }
-
-    public void setCout_quantite(Double cout_quantite) {
-        this.cout_quantite = cout_quantite;
-    }
-
     public Double getTotal() {
         return this.total;
     }
@@ -240,10 +230,6 @@ public class AbstractLivraisonClientController {
         return this.lignedemandes;
     }
 
-    public boolean isPayement_credit() {
-        return this.payement_credit;
-    }
-
     public Mvtstock getMvtstock() {
         return this.mvtstock;
     }
@@ -274,10 +260,6 @@ public class AbstractLivraisonClientController {
 
     public List<Unite> getUnites() {
         return this.unites;
-    }
-
-    public void setUnites(List<Unite> unites) {
-        this.unites = unites;
     }
 
     public List<Demande> getDemandes_1() {

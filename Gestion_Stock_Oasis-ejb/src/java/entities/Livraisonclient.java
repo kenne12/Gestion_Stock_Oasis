@@ -78,6 +78,7 @@ public class Livraisonclient implements Serializable {
     private double montantRemise;
     @Column(name = "montantht")
     private double montantHt;
+    private double marge;
 
     public Livraisonclient() {
     }
@@ -213,6 +214,14 @@ public class Livraisonclient implements Serializable {
 
     public void setMontantHt(double montantHt) {
         this.montantHt = montantHt;
+    }
+
+    public double getMarge() {
+        return marge;
+    }
+
+    public void setMarge(double marge) {
+        this.marge = marge;
     }
 
     @Override
