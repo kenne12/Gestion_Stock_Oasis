@@ -10,6 +10,7 @@ import entities.Lot;
 import entities.Magasinarticle;
 import entities.Magasinlot;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -48,9 +49,11 @@ public class LivraisonClientController extends AbstractLivraisonClientController
             this.mode = "Create";
 
             this.livraisonclient = new Livraisonclient();
-            this.client = new Client();
+            this.livraisonclient.setClient(new Client());
+            this.livraisonclient.setDatelivraison(Date.from(Instant.now()));
+            this.livraisonclient.setModePayement("PAYE_COMPTANT");
+            this.livraisonclient.setMontant(0d);
 
-            this.livraisonclient.setMontant(0.0);
             this.lignelivraisonclients.clear();
 
             this.demande = new Demande();
@@ -100,7 +103,6 @@ public class LivraisonClientController extends AbstractLivraisonClientController
 
                 this.lignedemandes = this.lignedemandeFacadeLocal.findByIddemande(this.demande.getIddemande());
                 this.lignelivraisonclients = this.lignelivraisonclientFacadeLocal.findByIdlivraisonclient(this.livraisonclient.getIdlivraisonclient());
-                this.client = this.livraisonclient.getIddemande().getClient();
                 this.total = this.livraisonclient.getMontant();
                 RequestContext.getCurrentInstance().execute("PF('LivraisonClientCreateDialog').show()");
             } else {
@@ -153,11 +155,10 @@ public class LivraisonClientController extends AbstractLivraisonClientController
         try {
             if (this.demande != null) {
                 this.lignelivraisonclients.clear();
-
-                this.client = this.demande.getClient();
+                livraisonclient.setClient(demande.getClient());
                 this.lignedemandes = this.lignedemandeFacadeLocal.findByIddemande(this.demande.getIddemande());
 
-                this.demande.setDateeffectlivraison(new Date());
+                this.demande.setDateeffectlivraison(Date.from(Instant.now()));
                 livraisonclient.setTauxTva(demande.getTauxTva());
                 livraisonclient.setTauxRemise(demande.getTauxRemise());
                 int conteur = 0;
@@ -273,17 +274,17 @@ public class LivraisonClientController extends AbstractLivraisonClientController
         return null;
     }
 
-    public void create() {
+    public void save() {
         try {
             if ("Create".equals(this.mode)) {
                 if (!this.lignelivraisonclients.isEmpty()) {
                     updateTotal();
 
                     for (Lignedemande ld : this.lignedemandes) {
-                        Double somme = 0.0D;
+                        Double somme = 0d;
                         for (Lignelivraisonclient llc : this.lignelivraisonclients) {
                             if ((ld.getIdmagasinarticle().getIdarticle().equals(llc.getIdlot().getIdarticle())) && (ld.getIdmagasinarticle().getIdmagasin().equals(llc.getIdmagasinlot().getIdmagasinarticle().getIdmagasin()))) {
-                                somme = (somme + llc.getQuantitemultiple());
+                                somme += llc.getQuantitemultiple();
                             }
                         }
 
@@ -300,9 +301,15 @@ public class LivraisonClientController extends AbstractLivraisonClientController
                         }
                     }
 
-                    String message = "";
-                    updateTotal();
+                    if (livraisonclient.getModePayement().equalsIgnoreCase("PAYE_A_CREDIT")) {
+                        if (livraisonclient.getAvanceInitiale() > livraisonclient.getMontantTtc()) {
+                            notifyError("montant_avance_incorrect");
+                            return;
+                        }
+                    }
+
                     this.ut.begin();
+                    String message = "";
 
                     this.mvtstock.setIdmvtstock(this.mvtstockFacadeLocal.nextVal());
                     String codeMvt = "MVT";
@@ -326,6 +333,18 @@ public class LivraisonClientController extends AbstractLivraisonClientController
                     this.livraisonclient.setIddemande(this.demande);
                     this.livraisonclient.setClient(this.demande.getClient());
                     this.livraisonclient.setIdmvtstock(this.mvtstock);
+
+                    if (livraisonclient.getModePayement().equals("PAYE_COMPTANT")) {
+                        livraisonclient.setAvanceInitiale(livraisonclient.getMontantTtc());
+                        livraisonclient.setMontantPaye(livraisonclient.getMontantTtc());
+                    } else {
+                        if (livraisonclient.getAvanceInitiale() < 0) {
+                            livraisonclient.setAvanceInitiale(0);
+                        }
+                        livraisonclient.setMontantPaye(livraisonclient.getAvanceInitiale());
+                    }
+
+                    this.livraisonclient.setIdmagasin(demande.getMagasin());
                     this.livraisonclientFacadeLocal.create(this.livraisonclient);
 
                     for (Lignelivraisonclient llc : this.lignelivraisonclients) {
@@ -561,7 +580,6 @@ public class LivraisonClientController extends AbstractLivraisonClientController
                 RequestContext.getCurrentInstance().execute("PF('ArticleCreateDialog').hide()");
                 JsfUtil.addSuccessMessage(this.routine.localizeMessage("operation_reussie"));
                 this.lignedemande = new Lignedemande();
-
                 return;
             }
             JsfUtil.addErrorMessage("Article existant dans la lignelivraisonclient");

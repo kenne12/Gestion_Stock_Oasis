@@ -4,10 +4,10 @@ import entities.Client;
 import entities.Demande;
 import entities.Famille;
 import entities.Lignedemande;
-import entities.Magasin;
 import entities.Magasinarticle;
 import entities.Unite;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -43,7 +43,7 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
             }
             RequestContext.getCurrentInstance().execute("PF('CommandeCreateDialog').show()");
             this.mode = "Create";
-            this.magasin = new Magasin();
+            //this.magasin = new Magasin();
             this.magasinarticle = new Magasinarticle();
 
             this.client = new Client(0);
@@ -52,15 +52,16 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
             this.demande = new Demande();
             this.demande.setTauxRemise(SessionMBean.getParametrage().getTauxRemise());
             this.demande.setTauxTva(SessionMBean.getParametrage().getTauxTva());
-
             this.demande.setValidee(false);
             this.demande.setMontant(0.0);
             this.demande.setMotif("-");
-            this.demande.setDatedemande(new Date());
-            this.demande.setDateprevlivraison(new Date());
+            this.demande.setDatedemande(Date.from(Instant.now()));
+            this.demande.setDateprevlivraison(Date.from(Instant.now()));
+            this.demande.setComplete(false);
             this.magasinarticles.clear();
 
             this.magasins = Utilitaires.returMagasinByUser(this.magasinFacadeLocal, this.utilisateurmagasinFacadeLocal, this.personnel);
+            this.filterProductByMagasin();
             this.total = 0.0;
             this.conteur = 0;
         } catch (Exception e) {
@@ -71,7 +72,7 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
 
     public void prepareCreateCommande() {
         this.famille = new Famille();
-        this.magasin = new Magasin();
+        //this.magasin = new Magasin();
         this.unite = new Unite();
         this.magasinarticle = new Magasinarticle();
         this.lignedemande = new Lignedemande();
@@ -159,7 +160,7 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
             this.lignedemande.setMontant(this.magasinarticle.getIdarticle().getPrixunit());
             this.lignedemande.setQuantite(1.0);
             this.lignedemande.setQuantitemultiple(1.0);
-            this.magasin = this.magasinarticle.getIdmagasin();
+            //this.magasin = this.magasinarticle.getIdmagasin();
             this.libelle_article = this.magasinarticle.getIdarticle().getLibelle();
             this.lignedemande.setMarge(0);
             this.lignedemande.setPrixAchat(this.magasinarticle.getIdarticle().getCoutachat());
@@ -180,6 +181,7 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
                     this.demande.setClient(this.client);
                     this.demande.setTauxsatisfaction(0.0);
                     this.demande.setCode("D" + Utilitaires.genererCodeDemande("", this.demande.getIddemande()));
+                    this.demande.setMagasin(magasin);
                     this.demandeFacadeLocal.create(this.demande);
                     Utilitaires.saveOperation(this.mouchardFacadeLocal, "Enregistrement de la commande : " + this.client.getNom() + " ; Code : " + this.demande.getCode(), SessionMBean.getUserAccount());
 
@@ -486,6 +488,7 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
     }
 
     public void notifyError(String message) {
+        RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
         this.routine.feedBack("avertissement", "/resources/tool_images/warning.jpeg", this.routine.localizeMessage(message));
         RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
     }

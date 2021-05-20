@@ -37,12 +37,12 @@ public class AbstractAnalyseDepenseController {
 
     @EJB
     protected MagasinFacadeLocal magasinFacadeLocal;
-    protected Magasin magasin = SessionMBean.getMagasin();
+    protected Magasin magasin = new Magasin();
     protected List<Magasin> magasins = new ArrayList<>();
 
     @EJB
     protected AnneeFacadeLocal anneeFacadeLocal;
-    protected Annee annee = SessionMBean.getAnnee();
+    protected Annee annee = new Annee();
     protected List<Annee> annees = new ArrayList<>();
 
     @EJB

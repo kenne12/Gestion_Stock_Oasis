@@ -83,6 +83,10 @@ public class Demande implements Serializable {
     @Column(name = "montantht")
     private double montantHt;
     private double marge;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idmagasin", referencedColumnName = "idmagasin")
+    private Magasin magasin;
+    private boolean complete;
 
     public Demande() {
     }
@@ -225,6 +229,22 @@ public class Demande implements Serializable {
 
     public void setMarge(double marge) {
         this.marge = marge;
+    }
+
+    public Magasin getMagasin() {
+        return magasin;
+    }
+
+    public void setMagasin(Magasin magasin) {
+        this.magasin = magasin;
+    }
+
+    public boolean isComplete() {
+        return complete;
+    }
+
+    public void setComplete(boolean complete) {
+        this.complete = complete;
     }
 
     @XmlTransient

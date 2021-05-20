@@ -58,7 +58,7 @@ public class AbstractCommandePersonnelController {
 
     @EJB
     protected MagasinFacadeLocal magasinFacadeLocal;
-    protected Magasin magasin = new Magasin();
+    protected final Magasin magasin = SessionMBean.getMagasin();
     protected List<Magasin> magasins = new ArrayList();
 
     @EJB
@@ -292,10 +292,6 @@ public class AbstractCommandePersonnelController {
 
     public Magasin getMagasin() {
         return this.magasin;
-    }
-
-    public void setMagasin(Magasin magasin) {
-        this.magasin = magasin;
     }
 
     public List<Magasin> getMagasins() {

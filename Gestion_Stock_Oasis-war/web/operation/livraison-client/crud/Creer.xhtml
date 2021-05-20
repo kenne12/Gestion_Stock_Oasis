@@ -37,7 +37,7 @@
                         <h:panelGrid columns="4">
 
                             <p:outputLabel  value="#{langue.client} : &nbsp;"/>
-                            <p:outputLabel  value="#{livraisonClientController.client.nom}"/>
+                            <p:outputLabel  value="#{livraisonClientController.livraisonclient.client.nom}"/>
 
                             <p:outputLabel value="#{langue.date_demande}" for="date_commande" />
                             <p:calendar pattern="dd/MM/yyyy" disabled="true" id="date_commande" value="#{livraisonClientController.demande.datedemande}" navigator="true" requiredMessage="#{langue.valeur_obligatoire}">
@@ -54,6 +54,18 @@
 
                             <p:outputLabel value="#{langue.taux_remise}" for="taux_remise" />
                             <p:inputText id="taux_remise" value="#{livraisonClientController.livraisonclient.tauxRemise}" disabled="true" />
+                            
+                            <p:outputLabel value="#{langue.mode_reglement}" for="mode_reglement" />
+                            <p:selectOneMenu filterMatchMode="contains" required="true" id="mode_reglement" value="#{livraisonClientController.livraisonclient.modePayement}">
+                                <f:selectItem itemLabel="PAYE COMPTANT" itemValue="PAYE_COMPTANT"/>
+                                <f:selectItem itemLabel="CREDIT" itemValue="PAYE_A_CREDIT"/>
+                                <p:ajax update="avance,display" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel rendered="#{livraisonClientController.livraisonclient.modePayement.equals('PAYE_A_CREDIT')}" value="Avance" for="avance" />
+                            <p:inputText id="avance" rendered="#{livraisonClientController.livraisonclient.modePayement.equals('PAYE_A_CREDIT')}" value="#{livraisonClientController.livraisonclient.avanceInitiale}">
+                                <p:ajax event="keyup" update="avance" />
+                            </p:inputText>
 
                         </h:panelGrid>
 
@@ -216,7 +228,7 @@
 
                     <center>
                         <p:commandButton style="color: red;" icon="ui-icon-close" value="#{langue.annuler}" oncomplete="PF('LivraisonClientCreateDialog').hide()" partialSubmit="true"/>
-                        <p:commandButton actionListener="#{livraisonClientController.create()}" icon="ui-icon-check" value="#{langue.valider}" update="display,:LivraisonClientListerForm:datalist,:notify1,:LivraisonClientListerForm:msg" onclick="PF('AjaxNotifyDialog').show()"/>                        
+                        <p:commandButton actionListener="#{livraisonClientController.save()}" icon="ui-icon-check" value="#{langue.valider}" update="display,:LivraisonClientListerForm:datalist,:notify1,:LivraisonClientListerForm:msg" onclick="PF('AjaxNotifyDialog').show()"/>                        
                     </center>
 
                 </h:panelGroup>

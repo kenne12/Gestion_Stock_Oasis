@@ -88,6 +88,7 @@ public class Livraisonclient implements Serializable {
     private boolean comptabilise;
 
     public Livraisonclient() {
+        this.client = new Client();
     }
 
     public Livraisonclient(Long idlivraisonclient) {

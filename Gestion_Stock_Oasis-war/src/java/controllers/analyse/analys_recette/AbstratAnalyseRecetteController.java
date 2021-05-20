@@ -27,7 +27,7 @@ public class AbstratAnalyseRecetteController {
 
     @EJB
     protected MagasinFacadeLocal magasinFacadeLocal;
-    protected Magasin magasin = SessionMBean.getMagasin();
+    protected Magasin magasin = new Magasin();
     protected List<Magasin> magasins = new ArrayList<>();
 
     @EJB

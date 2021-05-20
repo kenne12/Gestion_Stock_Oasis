@@ -1,7 +1,6 @@
 package controllers.livraison_client;
 
 import entities.Article;
-import entities.Client;
 import entities.Demande;
 import entities.Lignedemande;
 import entities.Lignelivraisonclient;
@@ -57,7 +56,6 @@ public class AbstractLivraisonClientController {
 
     @EJB
     protected ClientFacadeLocal clientFacadeLocal;
-    protected Client client = new Client();
 
     @EJB
     protected LivraisonclientFacadeLocal livraisonclientFacadeLocal;
@@ -268,14 +266,6 @@ public class AbstractLivraisonClientController {
 
     public void setDemandes_1(List<Demande> demandes_1) {
         this.demandes_1 = demandes_1;
-    }
-
-    public Client getClient() {
-        return client;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
     }
 
 }

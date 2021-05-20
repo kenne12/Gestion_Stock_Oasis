@@ -1,7 +1,6 @@
 package converters;
 
 import entities.Annee;
-import entities.Magasin;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
