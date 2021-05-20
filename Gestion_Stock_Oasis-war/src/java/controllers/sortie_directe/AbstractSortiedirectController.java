@@ -74,8 +74,7 @@ public class AbstractSortiedirectController {
 
     @EJB
     protected MagasinFacadeLocal magasinFacadeLocal;
-    protected Magasin magasin = SessionMBean.getMagasin();
-    protected List<Magasin> magasins = new ArrayList();
+    protected final Magasin magasin = SessionMBean.getMagasin();
 
     @EJB
     protected UniteFacadeLocal uniteFacadeLocal;
@@ -205,14 +204,6 @@ public class AbstractSortiedirectController {
 
     public Magasin getMagasin() {
         return this.magasin;
-    }
-
-    public void setMagasin(Magasin magasin) {
-        this.magasin = magasin;
-    }
-
-    public List<Magasin> getMagasins() {
-        return this.magasins;
     }
 
     public Unite getUnite() {

@@ -79,6 +79,13 @@ public class Livraisonclient implements Serializable {
     @Column(name = "montantht")
     private double montantHt;
     private double marge;
+    @Column(name = "avance_initiale")
+    private double avanceInitiale;
+    @Column(name = "mode_payement")
+    private String modePayement;
+    @Column(name = "montant_paye", length = 15)
+    private double montantPaye;
+    private boolean comptabilise;
 
     public Livraisonclient() {
     }
@@ -222,6 +229,38 @@ public class Livraisonclient implements Serializable {
 
     public void setMarge(double marge) {
         this.marge = marge;
+    }
+
+    public double getAvanceInitiale() {
+        return avanceInitiale;
+    }
+
+    public void setAvanceInitiale(double avanceInitiale) {
+        this.avanceInitiale = avanceInitiale;
+    }
+
+    public String getModePayement() {
+        return modePayement;
+    }
+
+    public void setModePayement(String modePayement) {
+        this.modePayement = modePayement;
+    }
+
+    public double getMontantPaye() {
+        return montantPaye;
+    }
+
+    public void setMontantPaye(double montantPaye) {
+        this.montantPaye = montantPaye;
+    }
+
+    public boolean isComptabilise() {
+        return comptabilise;
+    }
+
+    public void setComptabilise(boolean comptabilise) {
+        this.comptabilise = comptabilise;
     }
 
     @Override

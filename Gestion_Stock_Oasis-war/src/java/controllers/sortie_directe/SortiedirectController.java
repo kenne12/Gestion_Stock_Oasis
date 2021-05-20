@@ -16,6 +16,7 @@ import java.util.Objects;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import org.joda.time.Instant;
 import org.primefaces.context.RequestContext;
 import utils.JsfUtil;
 import utils.PrintUtils;
@@ -28,8 +29,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
     
     @PostConstruct
     private void init() {
-        magasins.clear();
-        magasins.add(magasin);
+        
     }
     
     public void updateCalculTva() {
@@ -49,18 +49,19 @@ public class SortiedirectController extends AbstractSortiedirectController imple
             }
             RequestContext.getCurrentInstance().execute("PF('SortieDirecteCreateDialog').show()");
             this.mode = "Create";
+            this.client = new Client();
             this.magasinarticle = new Magasinarticle();
             this.livraisonclient = new Livraisonclient();
-            this.client = new Client();
-            this.livraisonclient.setDatelivraison(new Date());
+            this.livraisonclient.setDatelivraison(Instant.now().toDate());
+            this.livraisonclient.setModePayement("PAYE_COMPTANT");
+            this.livraisonclient.setMontant(0.0);
+            this.livraisonclient.setTauxRemise(SessionMBean.getParametrage().getTauxRemise());
+            this.livraisonclient.setTauxTva(SessionMBean.getParametrage().getTauxTva());
             clientToSave = new Client();
             
-            this.livraisonclient.setMontant(0.0);
             this.lignelivraisonclients.clear();
             this.mvtstock = new Mvtstock();
             this.total = 0.0;
-            this.livraisonclient.setTauxRemise(SessionMBean.getParametrage().getTauxRemise());
-            this.livraisonclient.setTauxTva(SessionMBean.getParametrage().getTauxTva());
             this.magasinarticles = this.magasinarticleFacadeLocal.findByIdmagasin(this.magasin.getIdmagasin(), true);
         } catch (Exception e) {
             this.routine.catchException(e, this.routine.localizeMessage("echec_operation"));
@@ -108,7 +109,6 @@ public class SortiedirectController extends AbstractSortiedirectController imple
                     this.client = this.livraisonclient.getClient();
                     this.total = this.livraisonclient.getMontant();
                     this.mvtstock = this.livraisonclient.getIdmvtstock();
-                    this.magasin = this.livraisonclient.getIdmagasin();
                 }
                 RequestContext.getCurrentInstance().execute("PF('SortieDirecteCreateDialog').show()");
             } else {
@@ -155,94 +155,108 @@ public class SortiedirectController extends AbstractSortiedirectController imple
         try {
             String message;
             if ("Create".equals(this.mode)) {
-                if (!this.lignelivraisonclients.isEmpty()) {
-                    message = "";
-                    
-                    updateTotal();
-                    
-                    this.ut.begin();
-                    
-                    this.client = this.clientFacadeLocal.find(this.client.getIdclient());
-                    this.magasin = this.magasinFacadeLocal.find(this.magasin.getIdmagasin());
-                    
-                    Long nextMvt = this.mvtstockFacadeLocal.nextVal();
-                    String codeMvt = "MVT";
-                    codeMvt = Utilitaires.genererCodeStock(codeMvt, nextMvt);
-                    
-                    this.mvtstock.setCode(codeMvt);
-                    this.mvtstock.setIdmvtstock(nextMvt);
-                    this.mvtstock.setDatemvt(this.livraisonclient.getDatelivraison());
-                    this.mvtstock.setType("-");
-                    this.mvtstock.setClient("-");
-                    this.mvtstock.setFournisseur("-");
-                    this.mvtstock.setMagasin("-");
-                    this.mvtstockFacadeLocal.create(this.mvtstock);
-                    
-                    String code = "F";
-                    Long nextPayement = this.livraisonclientFacadeLocal.nextVal();
-                    code = Utilitaires.genererCodeStock(code, nextPayement);
-                    
-                    this.livraisonclient.setCode(code);
-                    this.livraisonclient.setIdlivraisonclient(nextPayement);
-                    this.livraisonclient.setClient(this.client);
-                    this.livraisonclient.setIdmagasin(this.magasin);
-                    this.livraisonclient.setMontant(this.total);
-                    this.livraisonclient.setLivraisondirecte(true);
-                    
-                    this.livraisonclient.setIdmvtstock(this.mvtstock);
-                    this.livraisonclientFacadeLocal.create(this.livraisonclient);
-                    
-                    for (Lignelivraisonclient c : this.lignelivraisonclients) {
-                        c.setIdlignelivraisonclient(this.lignelivraisonclientFacadeLocal.nextVal());
-                        c.setIdlivraisonclient(this.livraisonclient);
-                        c.setQuantitemultiple((c.getQuantite() * c.getUnite()));
-                        c.setQuantitereduite(c.getQuantite());
-                        c.setIdlot(c.getIdmagasinlot().getIdlot());
-                        this.lignelivraisonclientFacadeLocal.create(c);
-                        
-                        c.setIdmagasinlot(this.magasinlotFacadeLocal.find(c.getIdmagasinlot().getIdmagasinlot()));
-                        double qteAvant = c.getIdmagasinlot().getQuantitemultiple();
-                        c.getIdmagasinlot().setQuantite((c.getIdmagasinlot().getQuantite() - c.getQuantite()));
-                        c.getIdmagasinlot().setQuantitemultiple((c.getIdmagasinlot().getQuantitemultiple() - c.getQuantitemultiple()));
-                        c.getIdmagasinlot().setQuantitereduite((c.getIdmagasinlot().getQuantitereduite() - c.getQuantitereduite()));
-                        this.magasinlotFacadeLocal.edit(c.getIdmagasinlot());
-                        
-                        c.getIdmagasinlot().setIdmagasinarticle(this.magasinarticleFacadeLocal.find(c.getIdmagasinlot().getIdmagasinarticle().getIdmagasinarticle()));
-                        c.getIdmagasinlot().getIdmagasinarticle().setQuantite((c.getIdmagasinlot().getIdmagasinarticle().getQuantite() - c.getQuantite()));
-                        c.getIdmagasinlot().getIdmagasinarticle().setQuantitemultiple((c.getIdmagasinlot().getIdmagasinarticle().getQuantitemultiple() - c.getQuantitemultiple()));
-                        c.getIdmagasinlot().getIdmagasinarticle().setQuantitereduite((c.getIdmagasinlot().getIdmagasinarticle().getQuantitereduite() - c.getQuantitereduite()));
-                        this.magasinarticleFacadeLocal.edit(c.getIdmagasinlot().getIdmagasinarticle());
-                        
-                        Lignemvtstock lmvts = new Lignemvtstock();
-                        lmvts.setIdlignemvtstock(this.ligneMvtstockFacadeLocal.nextVal());
-                        lmvts.setIdmvtstock(this.mvtstock);
-                        lmvts.setIdlot(c.getIdmagasinlot().getIdlot());
-                        lmvts.setIdmagasinlot(c.getIdmagasinlot());
-                        
-                        lmvts.setQteentree(0.0);
-                        lmvts.setQteAvant(qteAvant);
-                        lmvts.setQtesortie(c.getQuantitemultiple());
-                        lmvts.setReste(c.getIdmagasinlot().getQuantitemultiple());
-                        
-                        lmvts.setType("SORTIE");
-                        lmvts.setClient(this.client.getNom() + " " + this.client.getPrenom());
-                        lmvts.setFournisseur(this.magasin.getNom());
-                        lmvts.setMagasin(this.magasin.getNom());
-                        this.ligneMvtstockFacadeLocal.create(lmvts);
-                    }
-                    
-                    Utilitaires.saveOperation(this.mouchardFacadeLocal, "Enregistrement de la sortie  : " + code, SessionMBean.getUserAccount());
-                    
-                    this.ut.commit();
-                    this.livraisonclient = new Livraisonclient();
-                    this.supprimer = this.modifier = this.imprimer = detail = true;
-                    JsfUtil.addSuccessMessage(message);
-                    
-                    notifySuccess();
-                    RequestContext.getCurrentInstance().execute("PF('SortieDirecteCreateDialog').hide()");
-                } else {
+                if (this.lignelivraisonclients.isEmpty()) {
                     notifyError("liste_article_vide");
+                    return;
                 }
+                message = "";
+                updateTotal();
+                
+                if (livraisonclient.getModePayement().equalsIgnoreCase("PAYE_A_CREDIT")) {
+                    if (livraisonclient.getAvanceInitiale() > livraisonclient.getMontantTtc()) {
+                        notifyError("montant_avance_incorrect");
+                        return;
+                    }
+                }
+                
+                this.ut.begin();
+                this.client = this.clientFacadeLocal.find(this.client.getIdclient());
+                
+                Long nextMvt = this.mvtstockFacadeLocal.nextVal();
+                String codeMvt = "MVT";
+                codeMvt = Utilitaires.genererCodeStock(codeMvt, nextMvt);
+                
+                this.mvtstock.setCode(codeMvt);
+                this.mvtstock.setIdmvtstock(nextMvt);
+                this.mvtstock.setDatemvt(this.livraisonclient.getDatelivraison());
+                this.mvtstock.setType("-");
+                this.mvtstock.setClient("-");
+                this.mvtstock.setFournisseur("-");
+                this.mvtstock.setMagasin("-");
+                this.mvtstockFacadeLocal.create(this.mvtstock);
+                
+                String code = "F";
+                Long nextPayement = this.livraisonclientFacadeLocal.nextVal();
+                code = Utilitaires.genererCodeStock(code, nextPayement);
+                
+                this.livraisonclient.setCode(code);
+                this.livraisonclient.setIdlivraisonclient(nextPayement);
+                this.livraisonclient.setClient(this.client);
+                this.livraisonclient.setIdmagasin(this.magasin);
+                this.livraisonclient.setMontant(this.total);
+                this.livraisonclient.setLivraisondirecte(true);
+                
+                this.livraisonclient.setIdmvtstock(this.mvtstock);
+                if (livraisonclient.getModePayement().equals("PAYE_COMPTANT")) {
+                    livraisonclient.setAvanceInitiale(livraisonclient.getMontantTtc());
+                    livraisonclient.setMontantPaye(livraisonclient.getMontantTtc());
+                } else {
+                    if (livraisonclient.getAvanceInitiale() < 0) {
+                        livraisonclient.setAvanceInitiale(0);
+                    }
+                    livraisonclient.setMontantPaye(livraisonclient.getAvanceInitiale());
+                }
+                this.livraisonclientFacadeLocal.create(this.livraisonclient);
+                
+                for (Lignelivraisonclient c : this.lignelivraisonclients) {
+                    c.setIdlignelivraisonclient(this.lignelivraisonclientFacadeLocal.nextVal());
+                    c.setIdlivraisonclient(this.livraisonclient);
+                    c.setQuantitemultiple((c.getQuantite() * c.getUnite()));
+                    c.setQuantitereduite(c.getQuantite());
+                    c.setIdlot(c.getIdmagasinlot().getIdlot());
+                    this.lignelivraisonclientFacadeLocal.create(c);
+                    
+                    c.setIdmagasinlot(this.magasinlotFacadeLocal.find(c.getIdmagasinlot().getIdmagasinlot()));
+                    double qteAvant = c.getIdmagasinlot().getQuantitemultiple();
+                    c.getIdmagasinlot().setQuantite((c.getIdmagasinlot().getQuantite() - c.getQuantite()));
+                    c.getIdmagasinlot().setQuantitemultiple((c.getIdmagasinlot().getQuantitemultiple() - c.getQuantitemultiple()));
+                    c.getIdmagasinlot().setQuantitereduite((c.getIdmagasinlot().getQuantitereduite() - c.getQuantitereduite()));
+                    this.magasinlotFacadeLocal.edit(c.getIdmagasinlot());
+                    
+                    c.getIdmagasinlot().setIdmagasinarticle(this.magasinarticleFacadeLocal.find(c.getIdmagasinlot().getIdmagasinarticle().getIdmagasinarticle()));
+                    c.getIdmagasinlot().getIdmagasinarticle().setQuantite((c.getIdmagasinlot().getIdmagasinarticle().getQuantite() - c.getQuantite()));
+                    c.getIdmagasinlot().getIdmagasinarticle().setQuantitemultiple((c.getIdmagasinlot().getIdmagasinarticle().getQuantitemultiple() - c.getQuantitemultiple()));
+                    c.getIdmagasinlot().getIdmagasinarticle().setQuantitereduite((c.getIdmagasinlot().getIdmagasinarticle().getQuantitereduite() - c.getQuantitereduite()));
+                    this.magasinarticleFacadeLocal.edit(c.getIdmagasinlot().getIdmagasinarticle());
+                    
+                    Lignemvtstock lmvts = new Lignemvtstock();
+                    lmvts.setIdlignemvtstock(this.ligneMvtstockFacadeLocal.nextVal());
+                    lmvts.setIdmvtstock(this.mvtstock);
+                    lmvts.setIdlot(c.getIdmagasinlot().getIdlot());
+                    lmvts.setIdmagasinlot(c.getIdmagasinlot());
+                    
+                    lmvts.setQteentree(0.0);
+                    lmvts.setQteAvant(qteAvant);
+                    lmvts.setQtesortie(c.getQuantitemultiple());
+                    lmvts.setReste(c.getIdmagasinlot().getQuantitemultiple());
+                    
+                    lmvts.setType("SORTIE");
+                    lmvts.setClient(this.client.getNom() + " " + this.client.getPrenom());
+                    lmvts.setFournisseur(this.magasin.getNom());
+                    lmvts.setMagasin(this.magasin.getNom());
+                    this.ligneMvtstockFacadeLocal.create(lmvts);
+                }
+                
+                Utilitaires.saveOperation(this.mouchardFacadeLocal, "Enregistrement de la sortie : " + code, SessionMBean.getUserAccount());
+                
+                this.ut.commit();
+                this.livraisonclient = new Livraisonclient();
+                this.supprimer = this.modifier = this.imprimer = detail = true;
+                JsfUtil.addSuccessMessage(message);
+                
+                notifySuccess();
+                RequestContext.getCurrentInstance().execute("PF('SortieDirecteCreateDialog').hide()");
+                
             } else if (this.livraisonclient != null) {
                 this.calculTotal();
                 this.ut.begin();
@@ -596,6 +610,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
     }
     
     public void notifyError(String message) {
+        RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
         this.routine.feedBack("avertissement", "/resources/tool_images/warning.jpeg", this.routine.localizeMessage(message));
         RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
     }

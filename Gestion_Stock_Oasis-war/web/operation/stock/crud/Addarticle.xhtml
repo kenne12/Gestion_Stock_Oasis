@@ -19,22 +19,9 @@
 
                 <h:panelGroup id="display">
 
-                    <div style="width: 100% ; height: 570px">
+                    <div class="row">
 
-                        <div style="width: 60%; float: left ; height: 100%">
-
-                            <!--<p:panelGrid columns="3">
-                                <p:outputLabel value="#{langue.magasin}" for="magasin" />
-                                <p:selectOneMenu required="true" filter="true" id="magasin" value="#{entreedirecteController.magasin.idmagasin}" requiredMessage="#{langue.valeur_obligatoire}">
-                                    <f:selectItem itemLabel="#{langue.choisir}" itemValue=""/>
-                                    <f:selectItems value="#{entreedirecteController.magasins}" var="mag" itemLabel="#{mag.nom}" itemValue="#{mag.idmagasin}"/>                                                                             
-                                    <p:ajax update="datalist" listener="#{entreedirecteController.filterProductByMagasin()}"/>
-                                </p:selectOneMenu>
-
-                                <p:inputText placeholder="#{langue.zone_de_recherche}" style="width: 300px" />
-                            </p:panelGrid>
-
-                            <p:separator />-->
+                        <div class="col-md-7">
 
                             <p:dataTable id="datalist"
                                          value="#{entreedirecteController.magasinarticles}"
@@ -49,32 +36,18 @@
 
                                 <p:ajax event="rowSelect" update=":AddarticleCreateForm" listener="#{entreedirecteController.selectProduct()}"/>
 
-                                <p:column filterBy="#{item.idmagasin.nom}" style="width: 30%">
-                                    <f:facet name="header">
-                                        <h:outputText value="#{langue.nom}"/>
-                                    </f:facet>
-                                    <h:outputText value="#{item.idmagasin.nom}" />
-                                </p:column>
-
-                                <p:column filterBy="#{item.idarticle.code}" width="15%" style="text-align: center;">
+                                <p:column filterBy="#{item.idarticle.code}" filterMatchMode="contains" width="15%" style="text-align: center;">
                                     <f:facet name="header">
                                         <h:outputText value="#{langue.code}"/>
                                     </f:facet>
                                     <h:outputText value="#{item.idarticle.code}"/>
                                 </p:column>
 
-                                <p:column filterBy="#{item.idarticle.libelle}" style="width: 30%">
+                                <p:column filterBy="#{item.idarticle.libelle}" filterMatchMode="contains" style="width: 75%">
                                     <f:facet name="header">
                                         <h:outputText value="#{langue.libelle}"/>
                                     </f:facet>
                                     <h:outputText value="#{item.idarticle.libelle}"/>
-                                </p:column>
-
-                                <p:column filterBy="#{item.idarticle.fabricant}" style="width: 15%">
-                                    <f:facet name="header">
-                                        <h:outputText value="#{langue.fabricant}"/>
-                                    </f:facet>
-                                    <h:outputText value="#{item.idarticle.fabricant}"/>
                                 </p:column>
 
                                 <p:column style="text-align: center;width: 10%">
@@ -85,20 +58,17 @@
                                 </p:column>
 
                             </p:dataTable>
+
                         </div>
 
-                        <div style="width: 39.5%; float: right ; height: 100%">
-
-                            <br/>
-                            <br/>
-                            <br/>
+                        <div class="col-md-5">
 
                             <h:panelGrid columns="3">
 
                                 <p:outputLabel value="#{langue.article}"/>
                                 <p:outputLabel value="#{entreedirecteController.libelle_article}"/>
                                 <p:outputLabel value=""/>
-                                
+
                                 <p:outputLabel for="magasin_lot_id" value="#{langue.lot}"/>
                                 <p:selectOneMenu id="magasin_lot_id" value="#{entreedirecteController.magasinlot.idmagasinlot}">
                                     <f:selectItem itemLabel="#{langue.choisir}" itemValue="" />
@@ -114,7 +84,7 @@
                                     <p:commandButton ignoreAutoUpdate="true" partialSubmit="true" value="Generer" actionListener="#{entreedirecteController.generateLotNumber()}" update="num_lot,date_peremption"/>
                                 </h:panelGroup>
                                 <p:message for="num_lot"/>
-                                
+
                                 <p:outputLabel value="#{langue.date_entree}" for="date_entree" />
                                 <p:calendar id="date_entree" required="true" value="#{entreedirecteController.lot.dateenregistrement}">
                                     <p:ajax event="dateSelect" />
@@ -177,9 +147,7 @@
                             </center>
 
                         </div>
-
                     </div>
-
                 </h:panelGroup>
             </h:form>
         </p:dialog>

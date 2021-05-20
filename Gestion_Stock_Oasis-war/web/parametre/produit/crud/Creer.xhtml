@@ -28,7 +28,7 @@
 
                                 <p:outputLabel value="#{langue.groupe}" for="famille"/>
                                 <p:selectOneMenu filter="true" filterMatchMode="contains" id="famille" value="#{articleController.famille.idfamille}" rendered="true" required="#{langue.valeur_obligatoire}">
-                                    <f:selectItem itemLabel="#{langue.choisir}"/>
+                                    <f:selectItem itemLabel="#{langue.choisir}" itemValue=""/>
                                     <f:selectItems value="#{articleController.familles}" var="f" itemLabel="#{f.nom}" itemValue="#{f.idfamille}" />
                                     <p:ajax/>
                                 </p:selectOneMenu>
@@ -110,7 +110,7 @@
                             
                         </div>
                         
-                        <div class="col-md-4">
+                        <div class="col-md-5">
                             <center>
                                 <h3> Agence / Fépot de visibilité </h3>
                             </center>

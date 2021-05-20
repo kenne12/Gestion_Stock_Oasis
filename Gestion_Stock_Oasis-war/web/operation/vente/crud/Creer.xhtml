@@ -15,10 +15,12 @@
                   width="80%"
                   height="600"
                   header="#{langue.creer_modifier_sortie_directe}">
-            
-            
+
+
             <h:form id="client_btn">
-                <p:commandButton icon="ui-icon-plus" class="btn btn-sm btn-outline-info" actionListener="#{sortiedirectController.prepareCreateClient()}" update=":ClientCreerForm" value="Nouveau Client" />      
+                <p:commandButton icon="ui-icon-plus" 
+                                 actionListener="#{sortiedirectController.prepareCreateClient()}" 
+                                 update=":ClientCreerForm" value="Nouveau Client" />      
                 <p:separator />
             </h:form>
 
@@ -29,23 +31,17 @@
                     <center>
                         <br/>
 
-                        <h:panelGrid style="" columns="2">
+                        <h:panelGrid columns="4">
 
                             <p:outputLabel value="#{langue.client}" for="client" />
 
                             <h:panelGroup>
-                                <p:selectOneMenu  filter="true" filterMatchMode="contains" required="true" id="client" value="#{sortiedirectController.client.idclient}" requiredMessage="#{langue.valeur_obligatoire}">
+                                <p:selectOneMenu filter="true" filterMatchMode="contains" required="true" id="client" value="#{sortiedirectController.client.idclient}" requiredMessage="#{langue.valeur_obligatoire}">
                                     <f:selectItem itemLabel="#{langue.choisir}" itemValue="-1"/>
                                     <f:selectItems value="#{sortiedirectController.clients}" var="clt" itemLabel="#{clt.nom} #{clt.prenom}" itemValue="#{clt.idclient}"/>                                                                             
                                     <p:ajax/>
                                 </p:selectOneMenu>    
                             </h:panelGroup>
-
-                            <p:outputLabel value="#{langue.magasin}" for="magasin" />
-                            <p:selectOneMenu  filter="true" filterMatchMode="contains" required="true" id="magasin" value="#{sortiedirectController.magasin}" converter="magasinConverter" requiredMessage="#{langue.valeur_obligatoire}">
-                                <f:selectItems value="#{sortiedirectController.magasins}" var="mag" itemLabel="#{mag.nom}" itemValue="#{mag}"/>                                                                             
-                                <p:ajax />
-                            </p:selectOneMenu>
 
                             <p:outputLabel value="Date" for="date" />
                             <p:calendar pattern="dd/MM/yyyy" required="true" id="date" mindate="#{sortiedirectController.annee.dateDebut}" maxdate="#{sortiedirectController.annee.dateFin}" 
@@ -53,14 +49,26 @@
                                 <p:ajax/>  
                             </p:calendar>
 
-                            <p:outputLabel value="Taux tva" for="date" />
+                            <p:outputLabel value="#{langue.taux_tva}" for="date" />
                             <p:inputText value="#{sortiedirectController.livraisonclient.tauxTva}">
                                 <p:ajax event="keyup" update="info_2" listener="#{sortiedirectController.updateTotal()}" />
                             </p:inputText>
 
-                            <p:outputLabel value="Taux Rémise" for="date" />
+                            <p:outputLabel value="#{langue.taux_remise}" for="date" />
                             <p:inputText value="#{sortiedirectController.livraisonclient.tauxRemise}">
                                 <p:ajax event="keyup" update="info_2" listener="#{sortiedirectController.updateTotal()}" />
+                            </p:inputText>
+
+                            <p:outputLabel value="#{langue.mode_reglement}" for="mode_reglement" />
+                            <p:selectOneMenu filterMatchMode="contains" required="true" id="mode_reglement" value="#{sortiedirectController.livraisonclient.modePayement}">
+                                <f:selectItem itemLabel="PAYE COMPTANT" itemValue="PAYE_COMPTANT"/>
+                                <f:selectItem itemLabel="CREDIT" itemValue="PAYE_A_CREDIT"/>
+                                <p:ajax update="avance,display" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel rendered="#{sortiedirectController.livraisonclient.modePayement.equals('PAYE_A_CREDIT')}" value="Avance" for="avance" />
+                            <p:inputText id="avance" rendered="#{sortiedirectController.livraisonclient.modePayement.equals('PAYE_A_CREDIT')}" value="#{sortiedirectController.livraisonclient.avanceInitiale}">
+                                <p:ajax event="keyup" update="avance" />
                             </p:inputText>
                         </h:panelGrid>
 
@@ -94,14 +102,14 @@
                             <h:outputText value="#{langue.element_de_facture}"/>
                         </f:facet> 
 
-                        <p:column style="width: 33%" filterBy="#{item.idmagasinlot.idmagasinarticle.idarticle.libelle}" >
+                        <p:column style="width: 33%" filterBy="#{item.idmagasinlot.idmagasinarticle.idarticle.libelle}" filterMatchMode="contains" >
                             <f:facet name="header">
                                 <h:outputText value="#{langue.article}"/>
                             </f:facet>
                             <h:outputText value="#{item.idmagasinlot.idmagasinarticle.idarticle.libelle}"/>
                         </p:column>
 
-                        <p:column style="width: 31%" filterBy="#{item.idmagasinlot.idlot.numero}" >
+                        <p:column style="width: 31%" filterBy="#{item.idmagasinlot.idlot.numero}" filterMatchMode="contains" >
                             <f:facet name="header">
                                 <h:outputText value="#{langue.lot}"/>
                             </f:facet>
@@ -134,7 +142,7 @@
                                 </f:facet>
                             </p:cellEditor>
                         </p:column>
-                        
+
                         <p:column style="width: 10%;text-align: right" >
                             <f:facet name="header">
                                 <h:outputText value="#{langue.m_t}"/>
@@ -193,7 +201,7 @@
                     <p:separator/>
 
                     <center>
-                        <p:commandButton style="color: red;" icon="ui-icon-close" value="#{langue.annuler}" oncomplete="PF('SortieDirecteCreateDialog').hide()" partialSubmit="true"/>
+                        <p:commandButton icon="ui-icon-close" value="#{langue.annuler}" oncomplete="PF('SortieDirecteCreateDialog').hide()" partialSubmit="true"/>
                         <p:commandButton actionListener="#{sortiedirectController.create()}" 
                                          icon="ui-icon-check" value="#{langue.valider}" update="display,:SortieDirecteListerForm:datalist,:notify1" 
                                          onclick="PF('AjaxNotifyDialog').show()"/>                        
