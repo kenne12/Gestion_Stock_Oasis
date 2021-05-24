@@ -266,7 +266,7 @@ public class AbstractCommandePersonnelController {
     }
 
     public List<Demande> getDemandes() {
-        this.demandes = this.demandeFacadeLocal.findAllRange();
+        this.demandes = this.demandeFacadeLocal.findByIdMagasin(SessionMBean.getMagasin().getIdmagasin());
         return this.demandes;
     }
 

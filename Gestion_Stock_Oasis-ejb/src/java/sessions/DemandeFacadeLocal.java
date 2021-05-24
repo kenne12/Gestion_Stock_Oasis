@@ -26,9 +26,13 @@ public interface DemandeFacadeLocal {
 
     public List<Demande> findAllRange();
 
-    public List<Demande> findByValidee(boolean paramBoolean);
+    public List<Demande> findByValidee(boolean validee);
+
+    public List<Demande> findByValidee(int idMagasin, boolean validee);
 
     public List<Demande> findByIdpersonnelIntervalDate(int idclient, Date dateDebut, Date dateFin);
 
-    public List<Demande> findAllRange(int idclient);
+    public List<Demande> findAllRange(int idClient);
+
+    public List<Demande> findByIdMagasin(int idMagasin);
 }

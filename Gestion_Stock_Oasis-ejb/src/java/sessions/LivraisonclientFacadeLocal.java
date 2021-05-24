@@ -1,19 +1,20 @@
 package sessions;
 
 import entities.Livraisonclient;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
 
 @Local
 public interface LivraisonclientFacadeLocal {
 
-    public void create(Livraisonclient paramLivraisonclient);
+    public void create(Livraisonclient livraisonclient);
 
-    public void edit(Livraisonclient paramLivraisonclient);
+    public void edit(Livraisonclient livraisonclient);
 
-    public void remove(Livraisonclient paramLivraisonclient);
+    public void remove(Livraisonclient livraisonclient);
 
-    public Livraisonclient find(Object paramObject);
+    public Livraisonclient find(Object object);
 
     public List<Livraisonclient> findAll();
 
@@ -25,5 +26,7 @@ public interface LivraisonclientFacadeLocal {
 
     public List<Livraisonclient> findAllRange();
 
-    public Livraisonclient findByIddemande(long iddemande);
+    public Livraisonclient findByIddemande(long idDemande);
+
+    List<Livraisonclient> findAllRange(int idMagasin, Date dateDebut, Date dateFin);
 }

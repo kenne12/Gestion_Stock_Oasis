@@ -276,27 +276,27 @@ public class AbstractTraitementController {
     }
 
     public Unite getUnite() {
-        /* 304 */ return this.unite;
+        return this.unite;
     }
 
     public void setUnite(Unite unite) {
-        /* 308 */ this.unite = unite;
+        this.unite = unite;
     }
 
     public List<Unite> getUnites() {
-        /* 312 */ return this.unites;
+        return this.unites;
     }
 
     public void setUnites(List<Unite> unites) {
-        /* 316 */ this.unites = unites;
+        this.unites = unites;
     }
 
     public List<Demande> getDemandes_1() {
-        /* 320 */ return this.demandes_1;
+        return this.demandes_1;
     }
 
     public void setDemandes_1(List<Demande> demandes_1) {
-        /* 324 */ this.demandes_1 = demandes_1;
+        this.demandes_1 = demandes_1;
     }
 
     public Client getClient() {

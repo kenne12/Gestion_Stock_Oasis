@@ -1,6 +1,7 @@
 package sessions;
 
 import entities.Livraisonclient;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -48,5 +49,12 @@ public class LivraisonclientFacade extends AbstractFacade<Livraisonclient> imple
             return (Livraisonclient) list.get(0);
         }
         return null;
+    }
+
+    @Override
+    public List<Livraisonclient> findAllRange(int idMagasin, Date dateDebut, Date dateFin) {
+        return this.em.createQuery("SELECT l FROM Livraisonclient l WHERE l.iddemande.dateeffectlivraison BETWEEN :dateDebut AND :dateFin AND l.idmagasin.idmagasin=:idMagasin ORDER BY l.idlivraisonclient DESC")
+                .setParameter("dateDebut", dateDebut).setParameter("dateFin", dateFin).setParameter("idMagasin", idMagasin)
+                .getResultList();
     }
 }

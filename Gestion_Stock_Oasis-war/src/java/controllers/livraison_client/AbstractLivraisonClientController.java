@@ -29,6 +29,7 @@ import sessions.MvtstockFacadeLocal;
 import sessions.PersonnelFacadeLocal;
 import sessions.UniteFacadeLocal;
 import utils.Routine;
+import utils.SessionMBean;
 
 public class AbstractLivraisonClientController {
 
@@ -132,11 +133,7 @@ public class AbstractLivraisonClientController {
     }
 
     public List<Livraisonclient> getLivraisonclients() {
-        try {
-            this.livraisonclients = this.livraisonclientFacadeLocal.findAllRange();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        this.livraisonclients = this.livraisonclientFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getAnnee().getDateDebut(), SessionMBean.getAnnee().getDateFin());
         return this.livraisonclients;
     }
 

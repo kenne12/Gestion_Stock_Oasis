@@ -1,19 +1,20 @@
 package sessions;
 
 import entities.Livraisonfournisseur;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
 
 @Local
 public interface LivraisonfournisseurFacadeLocal {
 
-    public void create(Livraisonfournisseur paramLivraisonfournisseur);
+    public void create(Livraisonfournisseur livraisonfournisseur);
 
-    public void edit(Livraisonfournisseur paramLivraisonfournisseur);
+    public void edit(Livraisonfournisseur livraisonfournisseur);
 
-    public void remove(Livraisonfournisseur paramLivraisonfournisseur);
+    public void remove(Livraisonfournisseur livraisonfournisseur);
 
-    public Livraisonfournisseur find(Object paramObject);
+    public Livraisonfournisseur find(Object object);
 
     public List<Livraisonfournisseur> findAll();
 
@@ -25,5 +26,7 @@ public interface LivraisonfournisseurFacadeLocal {
 
     public List<Livraisonfournisseur> findAllRange();
 
-    public List<Livraisonfournisseur> findAllRange(boolean paramBoolean);
+    public List<Livraisonfournisseur> findAllRange(boolean livraisonDirecte);
+
+    public List<Livraisonfournisseur> findAllRange(int idMagasin, Date dateDebut, Date dateFin, boolean livraisonDirecte);
 }

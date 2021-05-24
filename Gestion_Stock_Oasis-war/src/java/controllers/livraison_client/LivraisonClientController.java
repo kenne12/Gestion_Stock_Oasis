@@ -70,7 +70,7 @@ public class LivraisonClientController extends AbstractLivraisonClientController
     public void prepareCreateCommande() {
         try {
             this.demande = new Demande();
-            this.demandes = this.demandeFacadeLocal.findByValidee(false);
+            this.demandes = this.demandeFacadeLocal.findByValidee(SessionMBean.getMagasin().getIdmagasin(), false);
             RequestContext.getCurrentInstance().execute("PF('ArticleCreateDialog').show()");
         } catch (Exception e) {
             notifyFail(e);

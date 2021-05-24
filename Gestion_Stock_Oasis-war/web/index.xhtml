@@ -15,10 +15,11 @@
             </h:selectOneMenu> 
         </h:form>
 
-        <h:form id="data">
 
+        <h:form id="data" >
 
         </h:form>
+
 
         <h:form style="margin-top: 200px ;">
             <center>
@@ -39,7 +40,7 @@
 
                     <h:outputLabel value="#{langue.produit_perimes} (#{controlPeremptionController.magasinlots.size()})" style="font-size: 20px;color: red;margin-left:0.5%" />
 
-                    <h:outputLabel value="#{langue.demandes_en_attente} (#{alerteController.demandes.size()})" style="font-size: 20px;margin-left:20%;color: red" />
+                    <h:outputLabel value="#{langue.commandes_en_attente} (#{alerteController.demandes.size()})" style="font-size: 20px;margin-left:20%;color: red" />
 
                     <h:outputLabel value="#{langue.alertes_peremption} (#{alerteController.magasinlot_peremps.size()})" style="font-size: 20px;margin-left:20%;color: red" />
                 </h:panelGrid>

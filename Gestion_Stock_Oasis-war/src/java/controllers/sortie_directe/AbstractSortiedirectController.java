@@ -109,11 +109,7 @@ public class AbstractSortiedirectController {
     }
 
     public List<Livraisonclient> getLivraisonclients() {
-        try {
-            this.livraisonclients = this.livraisonclientFacadeLocal.findAllRange();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        this.livraisonclients = this.livraisonclientFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getAnnee().getDateDebut(), SessionMBean.getAnnee().getDateFin());
         return this.livraisonclients;
     }
 

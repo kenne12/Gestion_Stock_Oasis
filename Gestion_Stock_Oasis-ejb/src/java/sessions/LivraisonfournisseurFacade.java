@@ -1,6 +1,7 @@
 package sessions;
 
 import entities.Livraisonfournisseur;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -41,6 +42,13 @@ public class LivraisonfournisseurFacade extends AbstractFacade<Livraisonfourniss
 
     @Override
     public List<Livraisonfournisseur> findAllRange(boolean livraisonDirecte) {
-        return this.em.createQuery("SELECT l FROM Livraisonfournisseur l WHERE l.livraisondirecte=:livraisonDirecte ORDER BY l.datelivraison DESC").setParameter("livraisonDirecte", Boolean.valueOf(livraisonDirecte)).getResultList();
+        return this.em.createQuery("SELECT l FROM Livraisonfournisseur l WHERE l.livraisondirecte=:livraisonDirecte ORDER BY l.datelivraison DESC").setParameter("livraisonDirecte", livraisonDirecte).getResultList();
+    }
+
+    @Override
+    public List<Livraisonfournisseur> findAllRange(int idMagasin, Date dateDebut, Date dateFin, boolean livraisonDirecte) {
+        return this.em.createQuery("SELECT l FROM Livraisonfournisseur l WHERE l.idmagasin.idmagasin=:idMagasin AND l.datelivraison BETWEEN :dateDebut AND :dateFin AND l.livraisondirecte=:livraisonDirecte ORDER BY l.datelivraison DESC").setParameter("livraisonDirecte", livraisonDirecte)
+                .setParameter("idMagasin", idMagasin).setParameter("dateDebut", dateDebut).setParameter("dateFin", dateFin)
+                .getResultList();
     }
 }
