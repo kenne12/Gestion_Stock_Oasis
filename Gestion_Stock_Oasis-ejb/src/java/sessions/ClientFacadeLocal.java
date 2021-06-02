@@ -32,8 +32,8 @@ public interface ClientFacadeLocal {
 
     public Integer nextVal();
 
-    public List<Client> findAllRange();
+    public List<Client> findAllRange(int idMagasin);
 
-    List<Client> findAllRange(boolean etat);
+    List<Client> findAllRange(int idMagasin, boolean etat);
 
 }

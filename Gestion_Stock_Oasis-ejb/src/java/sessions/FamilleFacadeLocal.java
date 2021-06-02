@@ -23,5 +23,5 @@ public interface FamilleFacadeLocal {
 
     public Long nextVal();
 
-    public List<Famille> findAllRange();
+    public List<Famille> findAllRange(int idStructure);
 }

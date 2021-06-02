@@ -34,13 +34,13 @@ public interface MagasinlotFacadeLocal {
 
     public List<Magasinlot> findByIdlot(long paramLong);
 
-    public List<Magasinlot> findByIdmagasinNotPerempt(int paramInt, boolean paramBoolean, Date paramDate) throws Exception;
+    public List<Magasinlot> findByIdmagasinNotPerempt(int idmagasin, boolean paramBoolean, Date paramDate) throws Exception;
 
-    public List<Magasinlot> findAllPeremptedEtatIsTrue(Date paramDate) throws Exception;
+    public List<Magasinlot> findAllPeremptedEtatIsTrue(int idMagasin, Date paramDate) throws Exception;
 
-    public void removeAllByIdarticle(long paramLong);
+    public void removeAllByIdarticle(long idmagasin);
 
-    public List<Magasinlot> findAllEtatIsTrue() throws Exception;
+    public List<Magasinlot> findAllEtatIsTrue(int idmagasin) throws Exception;
 
     public List<Magasinlot> findByArticleIsavailable(int idmagasin, long idarticle);
 

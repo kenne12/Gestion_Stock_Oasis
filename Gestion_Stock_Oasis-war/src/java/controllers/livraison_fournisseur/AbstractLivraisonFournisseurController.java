@@ -35,225 +35,225 @@ public class AbstractLivraisonFournisseurController {
 
     @EJB
     protected LivraisonfournisseurFacadeLocal livraisonfournisseurFacadeLocal;
-    /*  49 */    protected Livraisonfournisseur livraisonfournisseur = new Livraisonfournisseur();
-    /*  50 */    protected List<Livraisonfournisseur> livraisonfournisseurs = new ArrayList();
+    protected Livraisonfournisseur livraisonfournisseur = new Livraisonfournisseur();
+    protected List<Livraisonfournisseur> livraisonfournisseurs = new ArrayList();
 
     @EJB
     protected LignelivraisonfournisseurFacadeLocal lignelivraisonfournisseurFacadeLocal;
-    /*  54 */    protected Lignelivraisonfournisseur lignelivraisonfournisseur = new Lignelivraisonfournisseur();
-    /*  55 */    protected List<Lignelivraisonfournisseur> lignelivraisonfournisseurs = new ArrayList();
+    protected Lignelivraisonfournisseur lignelivraisonfournisseur = new Lignelivraisonfournisseur();
+    protected List<Lignelivraisonfournisseur> lignelivraisonfournisseurs = new ArrayList();
 
     @EJB
     protected CommandefournisseurFacadeLocal commandefournisseurFacadeLocal;
-    /*  59 */    protected Commandefournisseur commandefournisseur = new Commandefournisseur();
-    /*  60 */    protected List<Commandefournisseur> commandefournisseurs = new ArrayList();
+    protected Commandefournisseur commandefournisseur = new Commandefournisseur();
+    protected List<Commandefournisseur> commandefournisseurs = new ArrayList();
 
     @EJB
     protected LignecommandefournisseurFacadeLocal lignecommandefournisseurFacadeLocal;
-    /*  64 */    protected Lignecommandefournisseur lignecommandefournisseur = new Lignecommandefournisseur();
-    /*  65 */    protected List<Lignecommandefournisseur> lignecommandefournisseurs = new ArrayList();
+    protected Lignecommandefournisseur lignecommandefournisseur = new Lignecommandefournisseur();
+    protected List<Lignecommandefournisseur> lignecommandefournisseurs = new ArrayList();
 
     @EJB
     protected ArticleFacadeLocal articleFacadeLocal;
-    /*  69 */    protected Article article = new Article();
-    /*  70 */    protected List<Article> articles = new ArrayList();
+    protected Article article = new Article();
+    protected List<Article> articles = new ArrayList();
 
     @EJB
     protected FournisseurFacadeLocal fournisseurFacadeLocal;
-    /*  74 */    protected Fournisseur fournisseur = new Fournisseur();
+    protected Fournisseur fournisseur = new Fournisseur();
 
     @EJB
     protected LotFacadeLocal lotFacadeLocal;
-    /*  78 */    protected Lot lot = new Lot();
-    /*  79 */    protected List<Lot> lots = new ArrayList();
+    protected Lot lot = new Lot();
+    protected List<Lot> lots = new ArrayList();
 
     @EJB
     protected MvtstockFacadeLocal mvtstockFacadeLocal;
-    /*  83 */    protected Mvtstock mvtstock = new Mvtstock();
+    protected Mvtstock mvtstock = new Mvtstock();
 
     @EJB
     protected LignemvtstockFacadeLocal lignemvtstockFacadeLocal;
-    /*  87 */    protected List<Lignemvtstock> lignemvtstocks = new ArrayList();
+    protected List<Lignemvtstock> lignemvtstocks = new ArrayList();
 
     @EJB
     protected UniteFacadeLocal uniteFacadeLocal;
-    /*  91 */    protected List<Unite> unites = new ArrayList();
+    protected List<Unite> unites = new ArrayList();
 
     @EJB
     protected MouchardFacadeLocal mouchardFacadeLocal;
-    /*  96 */    protected Routine routine = new Routine();
+    protected Routine routine = new Routine();
 
-    /*  98 */    protected Double cout_quantite = Double.valueOf(0.0D);
-    /*  99 */    protected Double total = Double.valueOf(0.0D);
+    protected Double cout_quantite = (0.0D);
+    protected Double total = (0.0D);
 
-    /* 101 */    protected Boolean showSelectorCommand = Boolean.valueOf(true);
+    protected Boolean showSelectorCommand = (true);
 
-    /* 103 */    protected Boolean detail = Boolean.valueOf(true);
-    /* 104 */    protected Boolean modifier = Boolean.valueOf(true);
-    /* 105 */    protected Boolean consulter = Boolean.valueOf(true);
-    /* 106 */    protected Boolean imprimer = Boolean.valueOf(true);
-    /* 107 */    protected Boolean supprimer = Boolean.valueOf(true);
+    protected Boolean detail = (true);
+    protected Boolean modifier = (true);
+    protected Boolean consulter = (true);
+    protected Boolean imprimer = (true);
+    protected Boolean supprimer = (true);
 
-    /* 109 */    protected String fileName = "";
+    protected String fileName = "";
 
-    /* 111 */    protected String mode = "";
+    protected String mode = "";
 
     public Article getArticle() {
-        /* 114 */ return this.article;
+        return this.article;
     }
 
     public void setArticle(Article article) {
-        /* 118 */ this.article = article;
+        this.article = article;
     }
 
     public List<Article> getArticles() {
-        /* 122 */ return this.articles;
+        return this.articles;
     }
 
     public Boolean getDetail() {
-        /* 126 */ return this.detail;
+        return this.detail;
     }
 
     public Boolean getModifier() {
-        /* 130 */ return this.modifier;
+        return this.modifier;
     }
 
     public Boolean getConsulter() {
-        /* 134 */ return this.consulter;
+        return this.consulter;
     }
 
     public Boolean getImprimer() {
-        /* 138 */ return this.imprimer;
+        return this.imprimer;
     }
 
     public Boolean getSupprimer() {
-        /* 142 */ return this.supprimer;
+        return this.supprimer;
     }
 
     public Double getCout_quantite() {
-        /* 146 */ return this.cout_quantite;
+        return this.cout_quantite;
     }
 
     public void setCout_quantite(Double cout_quantite) {
-        /* 150 */ this.cout_quantite = cout_quantite;
+        this.cout_quantite = cout_quantite;
     }
 
     public Double getTotal() {
-        /* 154 */ return this.total;
+        return this.total;
     }
 
     public void setTotal(Double total) {
-        /* 158 */ this.total = total;
+        this.total = total;
     }
 
     public String getFileName() {
-        /* 162 */ return this.fileName;
+        return this.fileName;
     }
 
     public Boolean getShowSelectorCommand() {
-        /* 166 */ return this.showSelectorCommand;
+        return this.showSelectorCommand;
     }
 
     public Routine getRoutine() {
-        /* 170 */ return this.routine;
+        return this.routine;
     }
 
     public Lot getLot() {
-        /* 174 */ return this.lot;
+        return this.lot;
     }
 
     public void setLot(Lot lot) {
-        /* 178 */ this.lot = lot;
+        this.lot = lot;
     }
 
     public List<Lot> getLots() {
-        /* 182 */ return this.lots;
+        return this.lots;
     }
 
     public Mvtstock getMvtstock() {
-        /* 186 */ return this.mvtstock;
+        return this.mvtstock;
     }
 
     public void setMvtstock(Mvtstock mvtstock) {
-        /* 190 */ this.mvtstock = mvtstock;
+        this.mvtstock = mvtstock;
     }
 
     public List<Lignemvtstock> getLignemvtstocks() {
-        /* 194 */ return this.lignemvtstocks;
+        return this.lignemvtstocks;
     }
 
     public Commandefournisseur getCommandefournisseur() {
-        /* 198 */ return this.commandefournisseur;
+        return this.commandefournisseur;
     }
 
     public void setCommandefournisseur(Commandefournisseur commandefournisseur) {
-        /* 202 */ this.commandefournisseur = commandefournisseur;
+        this.commandefournisseur = commandefournisseur;
     }
 
     public List<Commandefournisseur> getCommandefournisseurs() {
-        /* 206 */ return this.commandefournisseurs;
+        return this.commandefournisseurs;
     }
 
     public void setCommandefournisseurs(List<Commandefournisseur> commandefournisseurs) {
-        /* 210 */ this.commandefournisseurs = commandefournisseurs;
+        this.commandefournisseurs = commandefournisseurs;
     }
 
     public Lignecommandefournisseur getLignecommandefournisseur() {
-        /* 214 */ return this.lignecommandefournisseur;
+        return this.lignecommandefournisseur;
     }
 
     public void setLignecommandefournisseur(Lignecommandefournisseur lignecommandefournisseur) {
-        /* 218 */ this.lignecommandefournisseur = lignecommandefournisseur;
+        this.lignecommandefournisseur = lignecommandefournisseur;
     }
 
     public List<Lignecommandefournisseur> getLignecommandefournisseurs() {
-        /* 222 */ return this.lignecommandefournisseurs;
+        return this.lignecommandefournisseurs;
     }
 
     public void setLignecommandefournisseurs(List<Lignecommandefournisseur> lignecommandefournisseurs) {
-        /* 226 */ this.lignecommandefournisseurs = lignecommandefournisseurs;
+        this.lignecommandefournisseurs = lignecommandefournisseurs;
     }
 
     public Livraisonfournisseur getLivraisonfournisseur() {
-        /* 230 */ return this.livraisonfournisseur;
+        return this.livraisonfournisseur;
     }
 
     public void setLivraisonfournisseur(Livraisonfournisseur livraisonfournisseur) {
-        /* 234 */ this.livraisonfournisseur = livraisonfournisseur;
-        /* 235 */ this.modifier = (this.supprimer = this.detail = this.imprimer = Boolean.valueOf(livraisonfournisseur == null));
+        this.livraisonfournisseur = livraisonfournisseur;
+        this.modifier = (this.supprimer = this.detail = this.imprimer = (livraisonfournisseur == null));
     }
 
     public List<Livraisonfournisseur> getLivraisonfournisseurs() {
         try {
-            /* 240 */ this.livraisonfournisseurs = this.livraisonfournisseurFacadeLocal.findAllRange(false);
+            this.livraisonfournisseurs = this.livraisonfournisseurFacadeLocal.findAllRange(false);
         } catch (Exception e) {
-            /* 242 */ e.printStackTrace();
+            e.printStackTrace();
         }
-        /* 244 */ return this.livraisonfournisseurs;
+        return this.livraisonfournisseurs;
     }
 
     public Lignelivraisonfournisseur getLignelivraisonfournisseur() {
-        /* 248 */ return this.lignelivraisonfournisseur;
+        return this.lignelivraisonfournisseur;
     }
 
     public List<Lignelivraisonfournisseur> getLignelivraisonfournisseurs() {
-        /* 252 */ return this.lignelivraisonfournisseurs;
+        return this.lignelivraisonfournisseurs;
     }
 
     public Fournisseur getFournisseur() {
-        /* 256 */ return this.fournisseur;
+        return this.fournisseur;
     }
 
     public void setFournisseur(Fournisseur fournisseur) {
-        /* 260 */ this.fournisseur = fournisseur;
+        this.fournisseur = fournisseur;
     }
 
     public List<Unite> getUnites() {
-        /* 264 */ this.unites = this.uniteFacadeLocal.findAllRange();
-        /* 265 */ return this.unites;
+        this.unites = this.uniteFacadeLocal.findAllRange();
+        return this.unites;
     }
 
     public void setUnites(List<Unite> unites) {
-        /* 269 */ this.unites = unites;
+        this.unites = unites;
     }
 }

@@ -23,7 +23,7 @@ public class LotController extends AbstractLotController implements Serializable
     private void init() {
         this.article = new Article();
         try {
-            this.articles = this.articleFacadeLocal.findByPerissable(true);
+            this.articles = this.articleFacadeLocal.findByPerissable(SessionMBean.getMagasin().getParametrage().getId(), true);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -38,7 +38,13 @@ public class LotController extends AbstractLotController implements Serializable
         this.mode = "Create";
         this.article = new Article();
         this.lot = new Lot();
-        this.lot.setQuantite(0.0);
+        this.lot.setQuantite(0d);
+        this.lot.setQuantitesecurite(0d);
+        this.lot.setQuantitevirtuelle(0d);
+        this.lot.setUniteentree(0d);
+        this.lot.setUnitesortie(0d);
+        this.lot.setQuantitemultiple(0d);
+        this.lot.setQuantitereduite(0d);
         this.lot.setEtat(true);
         this.disableProduct = false;
         this.dateRequired = true;
@@ -126,7 +132,7 @@ public class LotController extends AbstractLotController implements Serializable
                 this.lotFacadeLocal.edit(this.lot);
                 RequestContext.getCurrentInstance().execute("PF('LotCreerDialog').hide()");
                 notifySuccess();
-                this.articles = this.articleFacadeLocal.findByPerissable(true);
+                this.articles = this.articleFacadeLocal.findByPerissable(SessionMBean.getMagasin().getParametrage().getId(), true);
             } else {
                 notifyError("not_row_selected");
             }

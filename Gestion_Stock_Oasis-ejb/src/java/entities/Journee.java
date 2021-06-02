@@ -39,10 +39,11 @@ public class Journee implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     private AnneeMois anneeMois;
 
-    @JoinColumn(name = "idutilisateur_ouverture", referencedColumnName = "idutilisateur_ouverture")
+    @JoinColumn(name = "idutilisateur_ouverture", referencedColumnName = "idutilisateur")
     @ManyToOne(fetch = FetchType.LAZY)
     private Utilisateur utilisateurOuverture;
-    @JoinColumn(name = "idutilisateur_fermetture", referencedColumnName = "idutilisateur_fermetture")
+    
+    @JoinColumn(name = "idutilisateur_fermetture", referencedColumnName = "idutilisateur")
     @ManyToOne(fetch = FetchType.LAZY)
     private Utilisateur utilisateurFermetture;
 
@@ -52,6 +53,9 @@ public class Journee implements Serializable {
     @Column(name = "heure_fermetture")
     @Temporal(TemporalType.TIMESTAMP)
     private Date heureFermetture;
+    @Column(name = "date_jour")
+    @Temporal(TemporalType.DATE)
+    private Date dateJour;
     private boolean ouverte;
     private boolean fermee;
     @Column(name = "montant_vendu")
@@ -221,6 +225,14 @@ public class Journee implements Serializable {
 
     public void setQteTransfertSortant(double qteTransfertSortant) {
         this.qteTransfertSortant = qteTransfertSortant;
+    }
+
+    public Date getDateJour() {
+        return dateJour;
+    }
+
+    public void setDateJour(Date dateJour) {
+        this.dateJour = dateJour;
     }
 
     @Override

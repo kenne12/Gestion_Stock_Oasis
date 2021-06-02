@@ -27,11 +27,11 @@ public interface MagasinarticleFacadeLocal {
 
     public List<Magasinarticle> findByIdmagasinProductIsActif(int paramInt, boolean paramBoolean);
 
-    public Magasinarticle findByIdmagasinIdarticle(int paramInt, long paramLong);
+    public Magasinarticle findByIdmagasinIdarticle(int idmagasin, long paramLong);
 
-    public List<Magasinarticle> findByIdmagasinIsavailable(int paramInt, boolean paramBoolean);
+    public List<Magasinarticle> findByIdmagasinIsavailable(int idmagasin, boolean paramBoolean);
 
-    public List<Magasinarticle> findByIdmagasinIdfamille(int paramInt, long paramLong, boolean paramBoolean);
+    public List<Magasinarticle> findByIdmagasinIdfamille(int idmagasin, long paramLong, boolean paramBoolean);
 
     public List<Magasinarticle> findByIdmagasinIdfamilleIsavailable(int paramInt, long paramLong, boolean paramBoolean);
 

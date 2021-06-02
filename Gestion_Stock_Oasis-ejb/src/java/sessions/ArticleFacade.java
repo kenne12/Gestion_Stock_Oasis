@@ -35,14 +35,15 @@ public class ArticleFacade extends AbstractFacade<Article> implements ArticleFac
     }
 
     @Override
-    public List<Article> findAllRange() {
-        return this.em.createQuery("SELECT a FROM Article a ORDER BY a.libelle").getResultList();
+    public List<Article> findAllRange(int idStructure) {
+        return this.em.createQuery("SELECT a FROM Article a WHERE a.parametrage.id=:id ORDER BY a.libelle")
+                .setParameter("id", idStructure).getResultList();
     }
 
     @Override
-    public Article findByCode(String code) {
-        Query query = this.em.createQuery("SELECT a FROM Article a WHERE a.code=:code");
-        query.setParameter("code", code);
+    public Article findByCode(int idStructure, String code) {
+        Query query = this.em.createQuery("SELECT a FROM Article a WHERE a.code=:code ANd a.parametrage.id=:id");
+        query.setParameter("code", code).setParameter("id", idStructure);
         List list = query.getResultList();
         if (!list.isEmpty()) {
             return (Article) list.get(0);
@@ -51,9 +52,9 @@ public class ArticleFacade extends AbstractFacade<Article> implements ArticleFac
     }
 
     @Override
-    public List<Article> findByPerissable(boolean perrissable) {
-        Query query = this.em.createQuery("SELECT a FROM Article a WHERE a.perissable=:perrissable ORDER BY a.libelle");
-        query.setParameter("perrissable", perrissable);
+    public List<Article> findByPerissable(int idStructure, boolean perrissable) {
+        Query query = this.em.createQuery("SELECT a FROM Article a WHERE a.perissable=:perrissable AND a.parametrage.id=:id ORDER BY a.libelle");
+        query.setParameter("perrissable", perrissable).setParameter("id", idStructure);
         return query.getResultList();
     }
 
@@ -72,16 +73,16 @@ public class ArticleFacade extends AbstractFacade<Article> implements ArticleFac
     }
 
     @Override
-    public List<Article> findAllRange(boolean etat) {
-        Query query = this.em.createQuery("SELECT a FROM Article a WHERE a.etat=:etat ORDER BY a.libelle");
-        query.setParameter("etat", etat);
+    public List<Article> findAllRange(int idStructure, boolean etat) {
+        Query query = this.em.createQuery("SELECT a FROM Article a WHERE a.etat=:etat AND a.parametrage.id=:id ORDER BY a.libelle");
+        query.setParameter("etat", etat).setParameter("id", idStructure);
         return query.getResultList();
     }
 
     @Override
-    public List<Article> findByEtatQuantityPositif(boolean etat) throws Exception {
-        Query query = this.em.createQuery("SELECT a FROM Article a WHERE a.etat=:etat AND a.quantitestock>0D ORDER BY a.libelle");
-        query.setParameter("etat", etat);
+    public List<Article> findByEtatQuantityPositif(int idStructure, boolean etat) throws Exception {
+        Query query = this.em.createQuery("SELECT a FROM Article a WHERE a.etat=:etat AND a.quantitestock>0D AND a.parametrage.id=:id ORDER BY a.libelle");
+        query.setParameter("etat", etat).setParameter("id", idStructure);
         return query.getResultList();
     }
 }

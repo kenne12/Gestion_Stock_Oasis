@@ -63,7 +63,6 @@ public class Personnel implements Serializable {
     private String prenom;
     @Size(max = 100)
     private String addresse;
-
     @OneToMany(mappedBy = "idpersonnel", fetch = FetchType.LAZY)
     private List<Utilisateur> utilisateurList;
     @JoinColumn(name = "idmagasin", referencedColumnName = "idmagasin")

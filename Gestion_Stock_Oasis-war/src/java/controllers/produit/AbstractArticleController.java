@@ -176,22 +176,22 @@ public class AbstractArticleController {
     }
 
     public List<Famille> getFamilles() {
-        /* 188 */ this.familles = this.familleFacadeLocal.findAllRange();
-        /* 189 */ return this.familles;
+        this.familles = this.familleFacadeLocal.findAllRange(SessionMBean.getMagasin().getParametrage().getId());
+        return this.familles;
     }
 
     public Article getArticle() {
-        /* 193 */ return this.article;
+        return this.article;
     }
 
     public void setArticle(Article article) {
-        /* 197 */ this.modifier = (this.supprimer = this.detail = Boolean.valueOf(article == null));
-        /* 198 */ this.article = article;
+        this.modifier = (this.supprimer = this.detail = (article == null));
+        this.article = article;
     }
 
     public List<Article> getArticles() {
-        /* 202 */ this.articles = this.articleFacadeLocal.findAllRange();
-        /* 203 */ return this.articles;
+        this.articles = this.articleFacadeLocal.findAllRange(SessionMBean.getMagasin().getParametrage().getId());
+        return this.articles;
     }
 
     public String getFileName() {
@@ -240,27 +240,27 @@ public class AbstractArticleController {
     }
 
     public void setSession(Boolean session) {
-        /* 253 */ this.session = session;
+        this.session = session;
     }
 
     public String getSessionPassword() {
-        /* 257 */ return this.sessionPassword;
+        return this.sessionPassword;
     }
 
     public void setSessionPassword(String sessionPassword) {
-        /* 261 */ this.sessionPassword = sessionPassword;
+        this.sessionPassword = sessionPassword;
     }
 
     public Routine getRoutine() {
-        /* 265 */ return this.routine;
+        return this.routine;
     }
 
     public Unite getUnite() {
-        /* 269 */ return this.unite;
+        return this.unite;
     }
 
     public void setUnite(Unite unite) {
-        /* 273 */ this.unite = unite;
+        this.unite = unite;
     }
 
     public List<Unite> getUnites() {
@@ -269,51 +269,51 @@ public class AbstractArticleController {
     }
 
     public boolean isShowQuantiteDosage() {
-        /* 282 */ return this.showQuantiteDosage;
+        return this.showQuantiteDosage;
     }
 
     public boolean isShowFormeStockage() {
-        /* 286 */ return this.showFormeStockage;
+        return this.showFormeStockage;
     }
 
     public Lot getLot() {
-        /* 290 */ return this.lot;
+        return this.lot;
     }
 
     public void setLot(Lot lot) {
-        /* 294 */ this.lot = lot;
+        this.lot = lot;
     }
 
     public boolean isShowLot() {
-        /* 298 */ return this.showLot;
+        return this.showLot;
     }
 
     public boolean isShowUser() {
-        /* 302 */ return this.showUser;
+        return this.showUser;
     }
 
     public boolean isShowBailleur() {
-        /* 306 */ return this.showBailleur;
+        return this.showBailleur;
     }
 
     public String getMode() {
-        /* 310 */ return this.mode;
+        return this.mode;
     }
 
     public List<Magasin> getMagasins() {
-        /* 314 */ this.magasins = this.magasinFacadeLocal.findAllRange();
-        /* 315 */ return this.magasins;
+        this.magasins = this.magasinFacadeLocal.findAllRange(SessionMBean.getMagasin().getParametrage().getId());
+        return this.magasins;
     }
 
     public void setMagasins(List<Magasin> magasins) {
-        /* 319 */ this.magasins = magasins;
+        this.magasins = magasins;
     }
 
     public List<Magasin> getSelectedMagasins() {
-        /* 323 */ return this.selectedMagasins;
+        return this.selectedMagasins;
     }
 
     public void setSelectedMagasins(List<Magasin> selectedMagasins) {
-        /* 327 */ this.selectedMagasins = selectedMagasins;
+        this.selectedMagasins = selectedMagasins;
     }
 }

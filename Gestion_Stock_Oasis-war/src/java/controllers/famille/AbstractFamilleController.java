@@ -7,6 +7,7 @@ import javax.ejb.EJB;
 import sessions.FamilleFacadeLocal;
 import sessions.MouchardFacadeLocal;
 import utils.Routine;
+import utils.SessionMBean;
 
 public class AbstractFamilleController {
 
@@ -77,7 +78,7 @@ public class AbstractFamilleController {
     }
 
     public List<Famille> getFamilles() {
-        this.familles = this.familleFacadeLocal.findAllRange();
+        this.familles = this.familleFacadeLocal.findAllRange(SessionMBean.getMagasin().getParametrage().getId());
         return this.familles;
     }
 

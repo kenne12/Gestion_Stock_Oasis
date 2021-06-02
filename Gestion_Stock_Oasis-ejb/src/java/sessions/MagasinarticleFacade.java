@@ -19,7 +19,7 @@ public class MagasinarticleFacade extends AbstractFacade<Magasinarticle> impleme
     }
 
     public MagasinarticleFacade() {
-        /*  31 */ super(Magasinarticle.class);
+        super(Magasinarticle.class);
     }
 
     @Override
@@ -36,16 +36,16 @@ public class MagasinarticleFacade extends AbstractFacade<Magasinarticle> impleme
 
     @Override
     public List<Magasinarticle> findByIdmagasin(int idmagasin, boolean etat) {
-        /*  48 */ Query query = this.em.createQuery("SELECT m FROM Magasinarticle m WHERE m.idmagasin.idmagasin=:idmagasin AND m.etat=:etat ORDER BY m.idarticle.code");
-        /*  49 */ query.setParameter("idmagasin", idmagasin).setParameter("etat", Boolean.valueOf(etat));
-        /*  50 */ return query.getResultList();
+        Query query = this.em.createQuery("SELECT m FROM Magasinarticle m WHERE m.idmagasin.idmagasin=:idmagasin AND m.etat=:etat ORDER BY m.idarticle.code");
+        query.setParameter("idmagasin", idmagasin).setParameter("etat", etat);
+        return query.getResultList();
     }
 
     @Override
     public List<Magasinarticle> findByIdmagasinProductIsActif(int idmagasin, boolean etat) {
-        /*  55 */ Query query = this.em.createQuery("SELECT m FROM Magasinarticle m WHERE m.idmagasin.idmagasin=:idmagasin AND m.etat=:etat AND m.idarticle.etat=true ORDER BY m.idarticle.code");
-        /*  56 */ query.setParameter("idmagasin", idmagasin).setParameter("etat", (etat));
-        /*  57 */ return query.getResultList();
+        Query query = this.em.createQuery("SELECT m FROM Magasinarticle m WHERE m.idmagasin.idmagasin=:idmagasin AND m.etat=:etat AND m.idarticle.etat=true ORDER BY m.idarticle.code");
+        query.setParameter("idmagasin", idmagasin).setParameter("etat", (etat));
+        return query.getResultList();
     }
 
     @Override
@@ -62,22 +62,22 @@ public class MagasinarticleFacade extends AbstractFacade<Magasinarticle> impleme
     @Override
     public List<Magasinarticle> findByIdmagasinIsavailable(int idmagasin, boolean etat) {
         Query query = this.em.createQuery("SELECT m FROM Magasinarticle m WHERE m.idmagasin.idmagasin=:idmagasin AND m.etat=:etat AND m.quantite>0D ORDER BY m.idarticle.libelle");
-        /*  74 */ query.setParameter("idmagasin", (idmagasin)).setParameter("etat", (etat));
-        /*  75 */ return query.getResultList();
+        query.setParameter("idmagasin", (idmagasin)).setParameter("etat", (etat));
+        return query.getResultList();
     }
 
     @Override
     public List<Magasinarticle> findByIdmagasinIdfamille(int idmagasin, long idfamille, boolean etat) {
-        /*  80 */ Query query = this.em.createQuery("SELECT m FROM Magasinarticle m WHERE m.idmagasin.idmagasin=:idmagasin AND m.idarticle.idfamille.idfamille=:idfamille AND m.etat=:etat ORDER BY m.idarticle.libelle");
-        /*  81 */ query.setParameter("idmagasin", idmagasin).setParameter("etat", etat).setParameter("idfamille", (idfamille));
-        /*  82 */ return query.getResultList();
+        Query query = this.em.createQuery("SELECT m FROM Magasinarticle m WHERE m.idmagasin.idmagasin=:idmagasin AND m.idarticle.idfamille.idfamille=:idfamille AND m.etat=:etat ORDER BY m.idarticle.libelle");
+        query.setParameter("idmagasin", idmagasin).setParameter("etat", etat).setParameter("idfamille", (idfamille));
+        return query.getResultList();
     }
 
     @Override
     public List<Magasinarticle> findByIdmagasinIdfamilleIsavailable(int idmagasin, long idfamille, boolean etat) {
-        /*  87 */ Query query = this.em.createQuery("SELECT m FROM Magasinarticle m WHERE m.idmagasin.idmagasin=:idmagasin AND m.idarticle.idfamille.idfamille=:idfamille AND m.etat=:etat AND m.quantite>0d ORDER BY m.idarticle.libelle");
-        /*  88 */ query.setParameter("idmagasin", idmagasin).setParameter("etat", etat).setParameter("idfamille", idfamille);
-        /*  89 */ return query.getResultList();
+        Query query = this.em.createQuery("SELECT m FROM Magasinarticle m WHERE m.idmagasin.idmagasin=:idmagasin AND m.idarticle.idfamille.idfamille=:idfamille AND m.etat=:etat AND m.quantite>0d ORDER BY m.idarticle.libelle");
+        query.setParameter("idmagasin", idmagasin).setParameter("etat", etat).setParameter("idfamille", idfamille);
+        return query.getResultList();
     }
 
     @Override

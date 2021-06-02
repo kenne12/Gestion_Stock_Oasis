@@ -13,6 +13,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -38,6 +40,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Famille.findByDateEnregistre", query = "SELECT f FROM Famille f WHERE f.dateEnregistre = :dateEnregistre"),
     @NamedQuery(name = "Famille.findByDerniereModif", query = "SELECT f FROM Famille f WHERE f.derniereModif = :derniereModif")})
 public class Famille implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -57,6 +60,9 @@ public class Famille implements Serializable {
     private Date derniereModif;
     @OneToMany(mappedBy = "idfamille", fetch = FetchType.LAZY)
     private List<Article> articleList;
+    @JoinColumn(name = "idstructure", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Parametrage parametrage;
 
     public Famille() {
     }
@@ -113,6 +119,14 @@ public class Famille implements Serializable {
         this.derniereModif = derniereModif;
     }
 
+    public Parametrage getParametrage() {
+        return parametrage;
+    }
+
+    public void setParametrage(Parametrage parametrage) {
+        this.parametrage = parametrage;
+    }
+
     @XmlTransient
     public List<Article> getArticleList() {
         return articleList;
@@ -146,5 +160,5 @@ public class Famille implements Serializable {
     public String toString() {
         return "entities.Famille[ idfamille=" + idfamille + " ]";
     }
-    
+
 }

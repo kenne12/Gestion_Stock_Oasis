@@ -35,7 +35,9 @@ public class FamilleFacade extends AbstractFacade<Famille> implements FamilleFac
     }
 
     @Override
-    public List<Famille> findAllRange() {
-        return this.em.createQuery("SELECT f FROM Famille f ORDER BY f.code").getResultList();
+    public List<Famille> findAllRange(int idStructure) {
+        return this.em.createQuery("SELECT f FROM Famille f WHERE f.parametrage.id=:id ORDER BY f.code")
+                .setParameter("id", idStructure)
+                .getResultList();
     }
 }

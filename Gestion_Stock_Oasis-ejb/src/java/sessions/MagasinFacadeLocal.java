@@ -23,7 +23,7 @@ public interface MagasinFacadeLocal {
 
     public Integer nextVal();
 
-    public List<Magasin> findAllRange();
+    public List<Magasin> findAllRange(int idStructure);
 
-    public List<Magasin> findAllRangeMcIsFalse();
+    public List<Magasin> findAllRangeMcIsFalse(int idStructure);
 }

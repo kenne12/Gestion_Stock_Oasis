@@ -208,7 +208,7 @@ public class AbstractCommandePersonnelController {
     }
 
     public List<Famille> getFamilles() {
-        this.familles = this.familleFacadeLocal.findAllRange();
+        this.familles = this.familleFacadeLocal.findAllRange(SessionMBean.getMagasin().getParametrage().getId());
         return this.familles;
     }
 
@@ -348,7 +348,7 @@ public class AbstractCommandePersonnelController {
     }
 
     public List<Client> getClients() {
-        clients = clientFacadeLocal.findAllRange(true);
+        clients = clientFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), true);
         return clients;
     }
 

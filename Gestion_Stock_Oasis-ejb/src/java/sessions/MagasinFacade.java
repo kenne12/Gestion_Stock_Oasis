@@ -35,12 +35,14 @@ public class MagasinFacade extends AbstractFacade<Magasin> implements MagasinFac
     }
 
     @Override
-    public List<Magasin> findAllRange() {
-        return this.em.createQuery("SELECT m FROM Magasin m ORDER BY m.nom").getResultList();
+    public List<Magasin> findAllRange(int idStructure) {
+        return this.em.createQuery("SELECT m FROM Magasin m WHERE m.parametrage.id=:id ORDER BY m.nom")
+                .setParameter("id", idStructure).getResultList();
     }
 
     @Override
-    public List<Magasin> findAllRangeMcIsFalse() {
-        return this.em.createQuery("SELECT m FROM Magasin m WHERE m.central=false ORDER BY m.nom").getResultList();
+    public List<Magasin> findAllRangeMcIsFalse(int idStructure) {
+        return this.em.createQuery("SELECT m FROM Magasin m WHERE m.central=false AND m.parametrage.id=:id ORDER BY m.nom")
+                .setParameter("id", idStructure).getResultList();
     }
 }

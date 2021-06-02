@@ -16,11 +16,11 @@ public class MagasinlotFacade extends AbstractFacade<Magasinlot> implements Maga
 
     @Override
     protected EntityManager getEntityManager() {
-        /*  28 */ return this.em;
+        return this.em;
     }
 
     public MagasinlotFacade() {
-        /*  32 */ super(Magasinlot.class);
+        super(Magasinlot.class);
     }
 
     @Override
@@ -94,9 +94,9 @@ public class MagasinlotFacade extends AbstractFacade<Magasinlot> implements Maga
     }
 
     @Override
-    public List<Magasinlot> findAllPeremptedEtatIsTrue(Date date) throws Exception {
-        Query query = this.em.createQuery("SELECT ml FROM Magasinlot ml WHERE ml.idlot.idarticle.perissable = true AND ml.etat=true AND ml.idlot.etat=true AND :date>=ml.idlot.dateperemption ORDER BY ml.idmagasinarticle.idmagasin.nom,ml.idmagasinarticle.idarticle.libelle,ml.idlot.numero");
-        query.setParameter("date", date);
+    public List<Magasinlot> findAllPeremptedEtatIsTrue(int idMagasin, Date date) throws Exception {
+        Query query = this.em.createQuery("SELECT ml FROM Magasinlot ml WHERE ml.idlot.idarticle.perissable = true AND ml.etat=true AND ml.idlot.etat=true AND :date>=ml.idlot.dateperemption AND ml.idmagasinarticle.idmagasin.idmagasin=:idMagasin ORDER BY ml.idmagasinarticle.idmagasin.nom,ml.idmagasinarticle.idarticle.libelle,ml.idlot.numero");
+        query.setParameter("date", date).setParameter("idMagasin", idMagasin);
         return query.getResultList();
     }
 
@@ -108,9 +108,10 @@ public class MagasinlotFacade extends AbstractFacade<Magasinlot> implements Maga
     }
 
     @Override
-    public List<Magasinlot> findAllEtatIsTrue() throws Exception {
-        Query query = this.em.createQuery("SELECT ml FROM Magasinlot ml WHERE ml.etat=true AND ml.idlot.etat=true ORDER BY ml.idmagasinarticle.idmagasin.nom,ml.idmagasinarticle.idarticle.libelle,ml.idlot.numero");
-        return query.getResultList();
+    public List<Magasinlot> findAllEtatIsTrue(int idmagasin) throws Exception {
+        Query query = this.em.createQuery("SELECT ml FROM Magasinlot ml WHERE ml.etat=true AND ml.idlot.etat=true AND ml.idmagasinarticle.idmagasin.idmagasin=:idMagasin ORDER BY ml.idmagasinarticle.idmagasin.nom,ml.idmagasinarticle.idarticle.libelle,ml.idlot.numero");
+        return query.setParameter("idMagasin", idmagasin)
+                .getResultList();
     }
 
     @Override

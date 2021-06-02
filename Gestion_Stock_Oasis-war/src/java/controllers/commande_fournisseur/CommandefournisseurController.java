@@ -49,7 +49,7 @@ public class CommandefournisseurController extends AbstractCommandefournisseurCo
             this.commandefournisseur.setDateprevlivrasion(new Date());
             this.commandefournisseur.setLivre(false);
             this.commandefournisseur.setTauxsatisfaction(0d);
-            this.articles = this.articleFacadeLocal.findAllRange(true);
+            this.articles = this.articleFacadeLocal.findAllRange(SessionMBean.getMagasin().getParametrage().getId(), true);
             this.total = 0d;
         } catch (Exception e) {
             this.routine.catchException(e, this.routine.localizeMessage("echec_operation"));

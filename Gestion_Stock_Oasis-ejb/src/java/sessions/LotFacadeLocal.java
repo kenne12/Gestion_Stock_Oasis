@@ -28,11 +28,11 @@ public interface LotFacadeLocal {
 
     public List<Lot> findAllRangeEtatIsTrue();
 
-    public List<Lot> findAllRange(boolean paramBoolean);
+    public List<Lot> findAllRange(int idStructure, boolean perissable);
 
     public Lot findByCode(long idarticle, String numero);
 
-    public Lot findByCode(String numero);
+    public Lot findByCode(int idStructure, String numero);
 
     public List<Lot> findByArticle1(Long idarticle, boolean order, Date paramDate)
             throws Exception;
@@ -51,5 +51,5 @@ public interface LotFacadeLocal {
     public List<Lot> findByArticle(Long idarticle, boolean paramBoolean1, Date date, boolean paramBoolean2)
             throws Exception;
 
-    public List<Lot> findAllPeremptionIsActif(Date date);
+    public List<Lot> findAllPeremptionIsActif(int idStructure, Date date);
 }

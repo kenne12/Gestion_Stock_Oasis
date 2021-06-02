@@ -116,106 +116,106 @@ public class TransfertController extends AbstractTransertController implements S
 
             this.mode = "Edit";
             this.magasin = this.transfert.getIdmagasin();
-            /* 137 */ this.magasinCible = this.magasinFacadeLocal.find(this.transfert.getIdmagasincible());
+            this.magasinCible = this.magasinFacadeLocal.find(this.transfert.getIdmagasincible());
 
-            /* 139 */ this.lignetransferts = this.lignetransfertFacadeLocal.findByIdTransfert(this.transfert.getIdtransfert());
-            /* 140 */ this.lignetransferts_1 = this.lignetransferts;
-            /* 141 */ this.total = this.transfert.getMontanttotal();
-            /* 142 */ RequestContext.getCurrentInstance().execute("PF('TransfertCreateDialog').show()");
+            this.lignetransferts = this.lignetransfertFacadeLocal.findByIdTransfert(this.transfert.getIdtransfert());
+            this.lignetransferts_1 = this.lignetransferts;
+            this.total = this.transfert.getMontanttotal();
+            RequestContext.getCurrentInstance().execute("PF('TransfertCreateDialog').show()");
         } catch (Exception e) {
-            /* 145 */ notifyFail(e);
+            notifyFail(e);
         }
     }
 
     public void prepareview() {
         try {
-            /* 151 */ if (this.transfert != null) {
-                /* 153 */ this.lignetransferts = this.lignetransfertFacadeLocal.findByIdTransfert(this.transfert.getIdtransfert());
+            if (this.transfert != null) {
+                this.lignetransferts = this.lignetransfertFacadeLocal.findByIdTransfert(this.transfert.getIdtransfert());
 
-                /* 155 */ if (!this.lignetransferts.isEmpty()) {
-                    /* 156 */ this.magasin = this.transfert.getIdmagasin();
-                    /* 157 */ this.magasinCible = this.magasinFacadeLocal.find(this.transfert.getIdmagasincible());
-                    /* 158 */ RequestContext.getCurrentInstance().execute("PF('TransfertDetailDialog').show()");
-                    /* 159 */ return;
+                if (!this.lignetransferts.isEmpty()) {
+                    this.magasin = this.transfert.getIdmagasin();
+                    this.magasinCible = this.magasinFacadeLocal.find(this.transfert.getIdmagasincible());
+                    RequestContext.getCurrentInstance().execute("PF('TransfertDetailDialog').show()");
+                    return;
                 }
-                /* 161 */ notifyError("liste_article_vide");
+                notifyError("liste_article_vide");
             } else {
-                /* 163 */ notifyError("not_row_selected");
+                notifyError("not_row_selected");
             }
         } catch (Exception e) {
-            /* 166 */ notifyFail(e);
+            notifyFail(e);
         }
     }
 
     public Magasin findMagasin(int idmagasin) {
-        /* 171 */ return this.magasinFacadeLocal.find(Integer.valueOf(idmagasin));
+        return this.magasinFacadeLocal.find(idmagasin);
     }
 
     public void filterArticle() {
         try {
-            /* 176 */ this.magasinarticles.clear();
-            /* 177 */ this.magasinlots.clear();
-            /* 178 */ this.selectedMagasinlots.clear();
-            /* 179 */ this.magasinarticle = new Magasinarticle();
-            /* 180 */ this.magasinlot = new Magasinlot();
-            /* 181 */ if (this.famille.getIdfamille() != null) /* 182 */ {
-                this.magasinarticleFacadeLocal.findByIdmagasinIdfamilleIsavailable(this.magasin.getIdmagasin().intValue(), this.famille.getIdfamille().longValue(), true);
+            this.magasinarticles.clear();
+            this.magasinlots.clear();
+            this.selectedMagasinlots.clear();
+            this.magasinarticle = new Magasinarticle();
+            this.magasinlot = new Magasinlot();
+            if (this.famille.getIdfamille() != null) {
+                this.magasinarticleFacadeLocal.findByIdmagasinIdfamilleIsavailable(this.magasin.getIdmagasin(), this.famille.getIdfamille(), true);
             }
         } catch (Exception e) {
-            /* 185 */ e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
     public void addProduit() {
         try {
-            /* 191 */ if (this.magasinlot != null) {
-                /* 192 */ Magasinlot ml = this.magasinlot;
+            if (this.magasinlot != null) {
+                Magasinlot ml = this.magasinlot;
 
-                /* 194 */ if (this.magasinlot.getQuantitemultiple().doubleValue() < 1.0D) {
-                    /* 195 */ notifyError("defaut_de_quantite");
-                    /* 196 */ return;
+                if (this.magasinlot.getQuantitemultiple() < 1.0D) {
+                    notifyError("defaut_de_quantite");
+                    return;
                 }
 
-                /* 199 */ if (this.lignetransfert.getQuantite().doubleValue() > this.magasinlot.getQuantitemultiple().doubleValue() - this.magasinlot.getQuantitevirtuelle().doubleValue()) {
-                    /* 200 */ notifyError("quantite_inexate");
-                    /* 201 */ return;
+                if (this.lignetransfert.getQuantite() > this.magasinlot.getQuantitemultiple() - this.magasinlot.getQuantitevirtuelle()) {
+                    notifyError("quantite_inexate");
+                    return;
                 }
 
-                /* 204 */ if (findMagasinLotInLigneRepartition(ml, this.lignetransferts)) {
+                if (findMagasinLotInLigneRepartition(ml, this.lignetransferts)) {
                     /* 205 */ Lignetransfert lt = this.lignetransfert;
-                    /* 206 */ lt.setIdlignetransfert(Long.valueOf(0L));
+                    /* 206 */ lt.setIdlignetransfert((0L));
                     /* 207 */ lt.setIdmagasinlot(ml);
                     /* 208 */ lt.setUnite(ml.getIdlot().getIdarticle().getUnite());
                     /* 209 */ lt.setQuantitemultiple(ml.getIdlot().getIdarticle().getUnite());
                     /* 210 */ this.lignetransferts.add(lt);
                 }
-                /* 212 */ RequestContext.getCurrentInstance().execute("PF('ArticleCreateDialog').hide()");
+                RequestContext.getCurrentInstance().execute("PF('ArticleCreateDialog').hide()");
             }
         } catch (Exception e) {
-            /* 215 */ e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
     private boolean findMagasinLotInLigneRepartition(Magasinlot m, List<Lignetransfert> lignetransferts) {
-        /* 220 */ if (lignetransferts.isEmpty()) {
-            /* 221 */ return true;
+        if (lignetransferts.isEmpty()) {
+            return true;
         }
-        /* 223 */ boolean result = false;
+        boolean result = false;
 
-        /* 225 */ for (Lignetransfert lt : lignetransferts) {
-            /* 226 */ if (!lt.getIdmagasinlot().equals(m)) {
-                /* 227 */ result = true;
-                /* 228 */ break;
+        for (Lignetransfert lt : lignetransferts) {
+            if (!lt.getIdmagasinlot().equals(m)) {
+                result = true;
+                break;
             }
         }
-        /* 231 */ return result;
+        return result;
     }
 
     public void selectProduct() {
         try {
-            /* 236 */ if (this.magasinlot != null) {
-                /* 237 */ this.lignetransfert.setUnite(this.magasinlot.getIdmagasinarticle().getIdarticle().getUnite());
-                /* 238 */ this.libelle_article = this.magasinlot.getIdmagasinarticle().getIdarticle().getLibelle();
+            if (this.magasinlot != null) {
+                this.lignetransfert.setUnite(this.magasinlot.getIdmagasinarticle().getIdarticle().getUnite());
+                this.libelle_article = this.magasinlot.getIdmagasinarticle().getIdarticle().getLibelle();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -303,20 +303,20 @@ public class TransfertController extends AbstractTransertController implements S
                     /* 326 */ for (Lignetransfert ltt : this.lignetransferts) {
                         /* 328 */ ltt.setIdlignetransfert(this.lignetransfertFacadeLocal.nextVal());
                         /* 329 */ ltt.setIdtransfert(this.transfert);
-                        /* 330 */ ltt.setQuantitemultiple(Double.valueOf(ltt.getQuantite().doubleValue() * ltt.getUnite().doubleValue()));
-                        /* 331 */ ltt.setMontant(Double.valueOf(ltt.getIdmagasinlot().getIdlot().getPrixunitaire().doubleValue() * ltt.getQuantite().doubleValue()));
+                        /* 330 */ ltt.setQuantitemultiple((ltt.getQuantite() * ltt.getUnite()));
+                        /* 331 */ ltt.setMontant((ltt.getIdmagasinlot().getIdlot().getPrixunitaire() * ltt.getQuantite()));
                         /* 332 */ this.lignetransfertFacadeLocal.create(ltt);
 
                         /* 334 */ Magasinarticle maTemp = this.magasinarticleFacadeLocal.find(ltt.getIdmagasinlot().getIdmagasinarticle().getIdmagasinarticle());
-                        /* 335 */ maTemp.setQuantite(Double.valueOf(maTemp.getQuantite().doubleValue() - ltt.getQuantite().doubleValue()));
-                        /* 336 */ maTemp.setQuantitemultiple(Double.valueOf(maTemp.getQuantitemultiple().doubleValue() - ltt.getQuantitemultiple().doubleValue()));
-                        /* 337 */ maTemp.setQuantitereduite(Double.valueOf(maTemp.getQuantitereduite().doubleValue() - ltt.getQuantitereduite().doubleValue()));
+                        /* 335 */ maTemp.setQuantite((maTemp.getQuantite() - ltt.getQuantite()));
+                        /* 336 */ maTemp.setQuantitemultiple((maTemp.getQuantitemultiple() - ltt.getQuantitemultiple()));
+                        /* 337 */ maTemp.setQuantitereduite((maTemp.getQuantitereduite() - ltt.getQuantitereduite()));
                         /* 338 */ this.magasinarticleFacadeLocal.edit(maTemp);
 
                         /* 340 */ Magasinlot mlTemp = this.magasinlotFacadeLocal.find(ltt.getIdmagasinlot().getIdmagasinlot());
-                        /* 341 */ mlTemp.setQuantite(Double.valueOf(mlTemp.getQuantite().doubleValue() - ltt.getQuantite().doubleValue()));
-                        /* 342 */ mlTemp.setQuantitemultiple(Double.valueOf(mlTemp.getQuantitemultiple().doubleValue() - ltt.getQuantitemultiple().doubleValue()));
-                        /* 343 */ mlTemp.setQuantitereduite(Double.valueOf(mlTemp.getQuantitereduite().doubleValue() - ltt.getQuantitereduite().doubleValue()));
+                        /* 341 */ mlTemp.setQuantite((mlTemp.getQuantite() - ltt.getQuantite()));
+                        /* 342 */ mlTemp.setQuantitemultiple((mlTemp.getQuantitemultiple() - ltt.getQuantitemultiple()));
+                        /* 343 */ mlTemp.setQuantitereduite((mlTemp.getQuantitereduite() - ltt.getQuantitereduite()));
                         /* 344 */ this.magasinlotFacadeLocal.edit(mlTemp);
 
                         /* 346 */ Lignemvtstock lmvts = new Lignemvtstock();
@@ -325,24 +325,24 @@ public class TransfertController extends AbstractTransertController implements S
                         /* 349 */ lmvts.setIdlot(ltt.getIdmagasinlot().getIdlot());
                         /* 350 */ lmvts.setIdmagasinlot(ltt.getIdmagasinlot());
                         /* 351 */ lmvts.setQtesortie(ltt.getQuantite());
-                        /* 352 */ lmvts.setQteentree(Double.valueOf(0.0D));
+                        /* 352 */ lmvts.setQteentree((0.0D));
                         /* 353 */ lmvts.setClient(this.magasinCible.getNom());
                         /* 354 */ lmvts.setFournisseur(" ");
                         /* 355 */ lmvts.setType("SORTIE");
                         /* 356 */ lmvts.setReste(mlTemp.getQuantitemultiple());
                         /* 357 */ this.lignemvtstockFacadeLocal.create(lmvts);
 
-                        /* 359 */ Magasinlot ml = this.magasinlotFacadeLocal.findByIdmagasinIdlot(this.magasinCible.getIdmagasin().intValue(), ltt.getIdmagasinlot().getIdlot().getIdlot().longValue());
-                        /* 360 */ if (ml != null) {
+                        Magasinlot ml = this.magasinlotFacadeLocal.findByIdmagasinIdlot(this.magasinCible.getIdmagasin().intValue(), ltt.getIdmagasinlot().getIdlot().getIdlot().longValue());
+                        if (ml != null) {
                             /* 361 */ ml.setIdmagasinarticle(this.magasinarticleFacadeLocal.find(ml.getIdmagasinarticle().getIdmagasinarticle()));
-                            /* 362 */ ml.getIdmagasinarticle().setQuantite(Double.valueOf(ml.getIdmagasinarticle().getQuantite().doubleValue() + ltt.getQuantite().doubleValue()));
-                            /* 363 */ ml.getIdmagasinarticle().setQuantitemultiple(Double.valueOf(ml.getIdmagasinarticle().getQuantitemultiple().doubleValue() + ltt.getQuantitemultiple().doubleValue()));
-                            /* 364 */ ml.getIdmagasinarticle().setQuantitereduite(Double.valueOf(ml.getIdmagasinarticle().getQuantitereduite().doubleValue() + ltt.getQuantitereduite().doubleValue()));
+                            /* 362 */ ml.getIdmagasinarticle().setQuantite((ml.getIdmagasinarticle().getQuantite() + ltt.getQuantite()));
+                            /* 363 */ ml.getIdmagasinarticle().setQuantitemultiple((ml.getIdmagasinarticle().getQuantitemultiple() + ltt.getQuantitemultiple()));
+                            /* 364 */ ml.getIdmagasinarticle().setQuantitereduite((ml.getIdmagasinarticle().getQuantitereduite() + ltt.getQuantitereduite()));
                             /* 365 */ this.magasinarticleFacadeLocal.edit(ml.getIdmagasinarticle());
 
-                            /* 367 */ ml.setQuantite(Double.valueOf(ml.getQuantite().doubleValue() + ltt.getQuantite().doubleValue()));
-                            /* 368 */ ml.setQuantitemultiple(Double.valueOf(ml.getQuantitemultiple().doubleValue() + ltt.getQuantitemultiple().doubleValue()));
-                            /* 369 */ ml.setQuantitereduite(Double.valueOf(ml.getQuantitereduite().doubleValue() + ltt.getQuantitereduite().doubleValue()));
+                            /* 367 */ ml.setQuantite((ml.getQuantite() + ltt.getQuantite()));
+                            /* 368 */ ml.setQuantitemultiple((ml.getQuantitemultiple() + ltt.getQuantitemultiple()));
+                            /* 369 */ ml.setQuantitereduite((ml.getQuantitereduite() + ltt.getQuantitereduite()));
 
                             /* 371 */ this.magasinlotFacadeLocal.edit(ml);
 
@@ -351,7 +351,7 @@ public class TransfertController extends AbstractTransertController implements S
                             /* 376 */ lmvt.setIdmvtstock(this.mvtstock);
                             /* 377 */ lmvt.setIdlot(ml.getIdlot());
                             /* 378 */ lmvt.setIdmagasinlot(ml);
-                            /* 379 */ lmvt.setQtesortie(Double.valueOf(0.0D));
+                            /* 379 */ lmvt.setQtesortie((0.0D));
                             /* 380 */ lmvt.setQteentree(ltt.getQuantitemultiple());
                             /* 381 */ lmvt.setClient(" ");
                             /* 382 */ lmvt.setReste(ml.getQuantitemultiple());
@@ -360,8 +360,8 @@ public class TransfertController extends AbstractTransertController implements S
                             /* 385 */ this.lignemvtstockFacadeLocal.create(lmvt);
                             /* 386 */ System.err.println("existe et le mouvement crée");
                         } else {
-                            /* 389 */ Magasinarticle ma = this.magasinarticleFacadeLocal.findByIdmagasinIdarticle(this.magasinCible.getIdmagasin().intValue(), ltt.getIdmagasinlot().getIdlot().getIdarticle().getIdarticle().longValue());
-                            /* 390 */ if (ma == null) {
+                            Magasinarticle ma = this.magasinarticleFacadeLocal.findByIdmagasinIdarticle(this.magasinCible.getIdmagasin().intValue(), ltt.getIdmagasinlot().getIdlot().getIdarticle().getIdarticle().longValue());
+                            if (ma == null) {
                                 /* 391 */ ma = new Magasinarticle();
                                 /* 392 */ ma.setIdmagasinarticle(this.magasinarticleFacadeLocal.nextVal());
                                 /* 393 */ ma.setIdarticle(ltt.getIdmagasinlot().getIdlot().getIdarticle());
@@ -369,15 +369,15 @@ public class TransfertController extends AbstractTransertController implements S
                                 /* 395 */ ma.setQuantite(ltt.getQuantite());
                                 /* 396 */ ma.setQuantitemultiple(ltt.getQuantitemultiple());
                                 /* 397 */ ma.setUnite(ltt.getUnite());
-                                /* 398 */ ma.setEtat(Boolean.valueOf(true));
+                                /* 398 */ ma.setEtat((true));
                                 /* 399 */ ma.setQuantitereduite(ltt.getQuantitereduite());
-                                /* 400 */ ma.setQuantitevirtuelle(Double.valueOf(0.0D));
+                                /* 400 */ ma.setQuantitevirtuelle((0.0D));
                                 /* 401 */ ma.setQuantitesecurite(ltt.getIdmagasinlot().getIdlot().getIdarticle().getQuantitesecurite());
                                 /* 402 */ this.magasinarticleFacadeLocal.create(ma);
                             } else {
-                                /* 404 */ ma.setQuantite(Double.valueOf(ma.getQuantite().doubleValue() + ltt.getQuantite().doubleValue()));
-                                /* 405 */ ma.setQuantitemultiple(Double.valueOf(ma.getQuantitemultiple().doubleValue() + ltt.getQuantitemultiple().doubleValue()));
-                                /* 406 */ ma.setQuantitereduite(Double.valueOf(ma.getQuantitereduite().doubleValue() + ltt.getQuantitereduite().doubleValue()));
+                                /* 404 */ ma.setQuantite((ma.getQuantite() + ltt.getQuantite()));
+                                /* 405 */ ma.setQuantitemultiple((ma.getQuantitemultiple() + ltt.getQuantitemultiple()));
+                                /* 406 */ ma.setQuantitereduite((ma.getQuantitereduite() + ltt.getQuantitereduite()));
                                 /* 407 */ this.magasinarticleFacadeLocal.edit(ma);
                             }
 
@@ -385,12 +385,12 @@ public class TransfertController extends AbstractTransertController implements S
                             /* 411 */ mlTemp1.setIdmagasinlot(this.magasinlotFacadeLocal.nextVal());
                             /* 412 */ mlTemp1.setIdmagasinarticle(ma);
                             /* 413 */ mlTemp1.setIdlot(ltt.getIdmagasinlot().getIdlot());
-                            /* 414 */ mlTemp1.setEtat(Boolean.valueOf(true));
+                            /* 414 */ mlTemp1.setEtat((true));
                             /* 415 */ mlTemp1.setQuantite(ltt.getQuantite());
                             /* 416 */ mlTemp1.setUnite(ltt.getUnite());
                             /* 417 */ mlTemp1.setQuantitemultiple(ltt.getQuantitemultiple());
                             /* 418 */ mlTemp1.setQuantitereduite(ltt.getQuantitemultiple());
-                            /* 419 */ mlTemp1.setQuantitevirtuelle(Double.valueOf(0.0D));
+                            /* 419 */ mlTemp1.setQuantitevirtuelle((0.0D));
 
                             /* 421 */ this.magasinlotFacadeLocal.create(mlTemp1);
 
@@ -416,7 +416,7 @@ public class TransfertController extends AbstractTransertController implements S
                     /* 443 */ Utilitaires.saveOperation(this.mouchardFacadeLocal, "Enregistrement du transfert d'article ; N° : " + this.transfert.getCode() + "; Montant : " + this.transfert.getMontanttotal(), SessionMBean.getUserAccount());
 
                     /* 445 */ this.ut.commit();
-                    /* 446 */ this.detail = (this.supprimer = this.modifier = this.imprimer = Boolean.valueOf(true));
+                    /* 446 */ this.detail = (this.supprimer = this.modifier = this.imprimer = (true));
                     /* 447 */ JsfUtil.addSuccessMessage(message);
 
                     /* 449 */ notifySuccess();
@@ -434,49 +434,49 @@ public class TransfertController extends AbstractTransertController implements S
 
     public void delete() {
         try {
-            /* 468 */ if (this.transfert != null) {
-                /* 470 */ if (!Utilitaires.isAccess(Long.valueOf(43L))) {
-                    /* 471 */ notifyError("acces_refuse");
-                    /* 472 */ this.detail = (this.supprimer = this.modifier = this.imprimer = Boolean.valueOf(true));
-                    /* 473 */ this.transfert = null;
-                    /* 474 */ return;
+            if (this.transfert != null) {
+                if (!Utilitaires.isAccess((43L))) {
+                    notifyError("acces_refuse");
+                    this.detail = (this.supprimer = this.modifier = this.imprimer = (true));
+                    this.transfert = null;
+                    return;
                 }
 
-                /* 477 */ this.ut.begin();
+                this.ut.begin();
 
-                List<Lignemvtstock> lmvt = this.lignemvtstockFacadeLocal.findByIdmvt(this.transfert.getIdmvtstock().getIdmvtstock().longValue());
+                List<Lignemvtstock> lmvt = this.lignemvtstockFacadeLocal.findByIdmvt(this.transfert.getIdmvtstock().getIdmvtstock());
                 for (Lignemvtstock l : lmvt) {
                     this.lignemvtstockFacadeLocal.remove(l);
                 }
                 Lignemvtstock l;
-                /* 484 */ List<Lignetransfert> listLigneTransfert = this.lignetransfertFacadeLocal.findByIdTransfert(this.transfert.getIdtransfert().longValue());
-                /* 485 */ for (Lignetransfert lt : listLigneTransfert) {
-                    /* 486 */ this.lignetransfertFacadeLocal.remove(lt);
+                List<Lignetransfert> listLigneTransfert = this.lignetransfertFacadeLocal.findByIdTransfert(this.transfert.getIdtransfert());
+                for (Lignetransfert lt : listLigneTransfert) {
+                    this.lignetransfertFacadeLocal.remove(lt);
 
                     /* 488 */ Magasinarticle maTemp = this.magasinarticleFacadeLocal.find(lt.getIdmagasinlot().getIdmagasinarticle().getIdmagasinarticle());
-                    /* 489 */ maTemp.setQuantite(Double.valueOf(maTemp.getQuantite().doubleValue() + lt.getQuantite().doubleValue()));
-                    /* 490 */ maTemp.setQuantitemultiple(Double.valueOf(maTemp.getQuantitemultiple().doubleValue() + lt.getQuantitemultiple().doubleValue()));
-                    /* 491 */ maTemp.setQuantitereduite(Double.valueOf(maTemp.getQuantitereduite().doubleValue() + lt.getQuantitereduite().doubleValue()));
+                    /* 489 */ maTemp.setQuantite((maTemp.getQuantite() + lt.getQuantite()));
+                    /* 490 */ maTemp.setQuantitemultiple((maTemp.getQuantitemultiple() + lt.getQuantitemultiple()));
+                    /* 491 */ maTemp.setQuantitereduite((maTemp.getQuantitereduite() + lt.getQuantitereduite()));
                     /* 492 */ this.magasinarticleFacadeLocal.edit(maTemp);
 
                     /* 494 */ Magasinlot mlTemp = this.magasinlotFacadeLocal.find(lt.getIdmagasinlot().getIdmagasinlot());
-                    /* 495 */ mlTemp.setQuantite(Double.valueOf(mlTemp.getQuantite().doubleValue() + lt.getQuantite().doubleValue()));
-                    /* 496 */ mlTemp.setQuantitemultiple(Double.valueOf(mlTemp.getQuantitemultiple().doubleValue() + lt.getQuantitemultiple().doubleValue()));
-                    /* 497 */ mlTemp.setQuantitereduite(Double.valueOf(mlTemp.getQuantitereduite().doubleValue() + lt.getQuantitereduite().doubleValue()));
+                    /* 495 */ mlTemp.setQuantite((mlTemp.getQuantite() + lt.getQuantite()));
+                    /* 496 */ mlTemp.setQuantitemultiple((mlTemp.getQuantitemultiple() + lt.getQuantitemultiple()));
+                    /* 497 */ mlTemp.setQuantitereduite((mlTemp.getQuantitereduite() + lt.getQuantitereduite()));
                     /* 498 */ this.magasinlotFacadeLocal.edit(mlTemp);
 
-                    /* 500 */ Magasinlot ml = this.magasinlotFacadeLocal.findByIdmagasinIdlot(this.transfert.getIdmagasincible().intValue(), lt.getIdmagasinlot().getIdlot().getIdlot().longValue());
-                    /* 501 */ if (ml != null) {
+                    Magasinlot ml = this.magasinlotFacadeLocal.findByIdmagasinIdlot(this.transfert.getIdmagasincible().intValue(), lt.getIdmagasinlot().getIdlot().getIdlot().longValue());
+                    if (ml != null) {
                         /* 503 */ Magasinarticle ma1 = ml.getIdmagasinarticle();
 
-                        /* 505 */ ma1.setQuantite(Double.valueOf(ma1.getQuantite().doubleValue() - lt.getQuantite().doubleValue()));
-                        /* 506 */ ma1.setQuantitemultiple(Double.valueOf(ma1.getQuantitemultiple().doubleValue() - lt.getQuantitemultiple().doubleValue()));
-                        /* 507 */ ma1.setQuantitereduite(Double.valueOf(ma1.getQuantitereduite().doubleValue() - lt.getQuantitereduite().doubleValue()));
+                        /* 505 */ ma1.setQuantite((ma1.getQuantite() - lt.getQuantite()));
+                        /* 506 */ ma1.setQuantitemultiple((ma1.getQuantitemultiple() - lt.getQuantitemultiple()));
+                        /* 507 */ ma1.setQuantitereduite((ma1.getQuantitereduite() - lt.getQuantitereduite()));
                         /* 508 */ this.magasinarticleFacadeLocal.edit(ma1);
 
-                        /* 510 */ ml.setQuantite(Double.valueOf(ml.getQuantite().doubleValue() - lt.getQuantite().doubleValue()));
-                        /* 511 */ ml.setQuantitemultiple(Double.valueOf(ml.getQuantitemultiple().doubleValue() - lt.getQuantitemultiple().doubleValue()));
-                        /* 512 */ ml.setQuantitereduite(Double.valueOf(ml.getQuantitereduite().doubleValue() - lt.getQuantitereduite().doubleValue()));
+                        /* 510 */ ml.setQuantite((ml.getQuantite() - lt.getQuantite()));
+                        /* 511 */ ml.setQuantitemultiple((ml.getQuantitemultiple() - lt.getQuantitemultiple()));
+                        /* 512 */ ml.setQuantitereduite((ml.getQuantitereduite() - lt.getQuantitereduite()));
                         /* 513 */ this.magasinlotFacadeLocal.edit(ml);
                     }
                 }
@@ -520,7 +520,7 @@ public class TransfertController extends AbstractTransertController implements S
 
     public void print() {
         try {
-            /* 557 */ if (!Utilitaires.isAccess(Long.valueOf(43L))) {
+            /* 557 */ if (!Utilitaires.isAccess((43L))) {
                 /* 558 */ notifyError("acces_refuse");
                 /* 559 */ this.transfert = null;
                 /* 560 */ return;
@@ -554,9 +554,9 @@ public class TransfertController extends AbstractTransertController implements S
         Double resultat = 0.0D;
         int i = 0;
         for (Lignetransfert lt : lignetransferts) {
-            resultat = Double.valueOf(resultat.doubleValue() + lt.getIdmagasinlot().getIdlot().getPrixunitaire().doubleValue() * lt.getQuantite().doubleValue() * lt.getUnite().doubleValue());
-            ((Lignetransfert) lignetransferts.get(i)).setQuantitemultiple(Double.valueOf(((Lignetransfert) lignetransferts.get(i)).getQuantite().doubleValue() * lt.getUnite().doubleValue()));
-            ((Lignetransfert) lignetransferts.get(i)).setQuantitereduite(Double.valueOf(((Lignetransfert) lignetransferts.get(i)).getQuantitemultiple().doubleValue() / lt.getIdmagasinlot().getIdlot().getIdarticle().getUnite().doubleValue()));
+            resultat += (lt.getIdmagasinlot().getIdlot().getPrixunitaire() * lt.getQuantite() * lt.getUnite());
+            lignetransferts.get(i).setQuantitemultiple((lignetransferts.get(i).getQuantite() * lt.getUnite()));
+            lignetransferts.get(i).setQuantitereduite((lignetransferts.get(i).getQuantitemultiple() / lt.getIdmagasinlot().getIdlot().getIdarticle().getUnite()));
             i++;
         }
         return resultat;
@@ -564,10 +564,10 @@ public class TransfertController extends AbstractTransertController implements S
 
     public void updateTotal() {
         try {
-            /* 605 */ this.total = calculTotal(this.lignetransferts);
-            /* 606 */ this.transfert.setMontanttotal(this.total);
+            this.total = calculTotal(this.lignetransferts);
+            this.transfert.setMontanttotal(this.total);
         } catch (Exception e) {
-            /* 608 */ e.printStackTrace();
+            e.printStackTrace();
         }
     }
 

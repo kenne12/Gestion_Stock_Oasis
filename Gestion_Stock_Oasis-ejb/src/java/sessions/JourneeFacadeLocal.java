@@ -6,6 +6,7 @@
 package sessions;
 
 import entities.Journee;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -29,5 +30,13 @@ public interface JourneeFacadeLocal {
     List<Journee> findRange(int[] range);
 
     int count();
-    
+
+    Long nextVal();
+
+    List<Journee> findByInterval(Date dateDebut, Date dateFin);
+
+    List<Journee> findByIdMois(int idMois);
+
+    Journee findByIdMagasinDate(int idMagasin, Date date);
+
 }

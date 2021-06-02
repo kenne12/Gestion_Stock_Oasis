@@ -39,7 +39,7 @@ public class MagasinController extends AbstractMagasinController
             this.mode = "Edit";
             RequestContext.getCurrentInstance().execute("PF('MagasinCreerDialog').show()");
         } catch (Exception e) {
-             signalException(e);
+            signalException(e);
         }
     }
 
@@ -47,14 +47,15 @@ public class MagasinController extends AbstractMagasinController
         try {
             if (this.mode.equals("Create")) {
                 this.magasin.setIdmagasin(this.magasinFacadeLocal.nextVal());
+                this.magasin.setParametrage(SessionMBean.getParametrage());
                 this.magasinFacadeLocal.create(this.magasin);
                 Utilitaires.saveOperation(this.mouchardFacadeLocal, "Enregistrement du magasin : " + this.magasin.getNom(), SessionMBean.getUserAccount());
-                this.magasin = null;
+                this.magasin = new Magasin();
                 RequestContext.getCurrentInstance().execute("PF('MagasinCreerDialog').hide()");
                 signalSuccess();
             } else if (this.magasin != null) {
                 this.magasinFacadeLocal.edit(this.magasin);
-                this.magasin = null;
+                this.magasin = new Magasin();
                 this.modifier = this.supprimer = true;
                 RequestContext.getCurrentInstance().execute("PF('MagasinCreerDialog').hide()");
                 signalSuccess();

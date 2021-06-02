@@ -1,7 +1,7 @@
 <ui:composition 
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-    template="/s2b_template/template.xhtml">
+    template="#{loginBean.utilisateur.template}">
 
     <ui:define name="contenu">
         <h3 class="page-header">#{langue.utilisateurs}</h3>
@@ -9,11 +9,11 @@
         <ui:include src="crud/Session.xhtml"/>
     </ui:define>
 
-    <!--<ui:define name="scriptCollapse">
+    <ui:define name="scriptCollapse">
         <script>
             var el = document.getElementById("securite");
             el.setAttribute("class", "sub-menu active");
         </script>
-    </ui:define>-->
+    </ui:define>
 
 </ui:composition>

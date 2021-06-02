@@ -232,8 +232,8 @@ public class AbstractEntreedirecte1Controller {
     }
 
     public List<Famille> getFamilles() {
-        /* 245 */ this.familles = this.familleFacadeLocal.findAllRange();
-        /* 246 */ return this.familles;
+        this.familles = this.familleFacadeLocal.findAllRange(SessionMBean.getMagasin().getParametrage().getId());
+        return this.familles;
     }
 
     public void setFamilles(List<Famille> familles) {

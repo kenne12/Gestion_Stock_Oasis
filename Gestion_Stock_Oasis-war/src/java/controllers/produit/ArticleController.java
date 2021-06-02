@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -30,7 +31,7 @@ import utils.Utilitaires;
 @ManagedBean
 @SessionScoped
 public class ArticleController extends AbstractArticleController implements Serializable {
-
+    
     @PostConstruct
     private void init() {
         this.fournisseur = new Fournisseur();
@@ -38,7 +39,7 @@ public class ArticleController extends AbstractArticleController implements Seri
         this.password.add("momo1234");
         this.password.add("kenne1234");
     }
-
+    
     public void prepareCreate() {
         if (!Utilitaires.isAccess(13L)) {
             notifyError("acces_refuse");
@@ -86,7 +87,7 @@ public class ArticleController extends AbstractArticleController implements Seri
         /* 101 */ this.showBailleur = SessionMBean.getParametrage().getEtatbailleur().booleanValue();
         /* 102 */ RequestContext.getCurrentInstance().execute("PF('ArticleCreerDialog').show()");
     }
-
+    
     public void prepareEdit() {
         this.mode = "Edit";
         try {
@@ -98,7 +99,7 @@ public class ArticleController extends AbstractArticleController implements Seri
                 this.showLot = false;
                 this.famille = this.article.getIdfamille();
                 this.unite = this.article.getIdunite();
-
+                
                 this.selectedMagasins.clear();
                 List<Magasinarticle> listMa = this.magasinarticleFacadeLocal.findByIdarticle(this.article.getIdarticle().longValue());
                 if (!listMa.isEmpty()) {
@@ -106,17 +107,17 @@ public class ArticleController extends AbstractArticleController implements Seri
                         this.selectedMagasins.add(ma.getIdmagasin());
                     }
                 }
-
+                
                 RequestContext.getCurrentInstance().execute("PF('ArticleCreerDialog').show()");
                 return;
             }
-
+            
             notifyError("not_row_select");
         } catch (Exception e) {
             notifyFail(e);
         }
     }
-
+    
     public void updateLot() {
         if ("Create".equals(this.mode)) {
             this.showLot = this.article.getPerissable();
@@ -135,29 +136,29 @@ public class ArticleController extends AbstractArticleController implements Seri
         }
         this.showLot = false;
     }
-
+    
     public void create() {
         try {
-
+            
             if (this.mode.equals("Create")) {
-                if (this.articleFacadeLocal.findByCode(this.article.getCode()) != null) {
+                if (this.articleFacadeLocal.findByCode(SessionMBean.getMagasin().getParametrage().getId(), this.article.getCode()) != null) {
                     notifyError("code_article_existant");
                     return;
                 }
-
+                
                 this.article.setIdarticle(this.articleFacadeLocal.nextVal());
-
+                
                 if (this.famille.getIdfamille() != null) {
                     this.article.setIdfamille(this.famille);
                 }
-
+                
                 this.article.setIdunite(this.unite);
                 this.article.setUnitesortie(1.0);
-
+                this.article.setParametrage(SessionMBean.getMagasin().getParametrage());
                 this.ut.begin();
-
+                
                 this.articleFacadeLocal.create(this.article);
-
+                
                 this.lot.setIdlot(this.lotFacadeLocal.nextVal());
                 this.lot.setIdarticle(this.article);
                 this.lot.setPrixunitaire(this.article.getPrixunit());
@@ -171,16 +172,16 @@ public class ArticleController extends AbstractArticleController implements Seri
                 this.lot.setUniteentree(1.0);
                 this.lot.setQuantitesecurite(this.article.getQuantitesecurite());
                 this.lot.setEtat(true);
-
+                
                 if (!this.showLot) {
                     this.lot.setDatefabrication(null);
                     this.lot.setDateperemption(null);
                     this.lot.setNumero(this.article.getCode());
                     this.lotFacadeLocal.create(this.lot);
                 }
-
+                
                 for (Magasin m : selectedMagasins) {
-
+                    
                     Magasinarticle obj = new Magasinarticle();
                     obj.setIdmagasinarticle(this.magasinarticleFacadeLocal.nextVal());
                     obj.setIdarticle(this.article);
@@ -193,7 +194,7 @@ public class ArticleController extends AbstractArticleController implements Seri
                     obj.setQuantitevirtuelle(0.0);
                     obj.setQuantitesecurite(this.article.getQuantitesecurite());
                     this.magasinarticleFacadeLocal.create(obj);
-
+                    
                     if (!this.showLot) {
                         Magasinlot obj1 = new Magasinlot();
                         obj1.setIdmagasinlot(this.magasinlotFacadeLocal.nextVal());
@@ -210,37 +211,37 @@ public class ArticleController extends AbstractArticleController implements Seri
                         this.magasinlotFacadeLocal.create(obj1);
                     }
                 }
-
+                
                 Utilitaires.saveOperation(this.mouchardFacadeLocal, "Enregistrement de l'article : " + this.article.getLibelle(), SessionMBean.getUserAccount());
-
+                
                 this.ut.commit();
                 this.fournisseur = null;
                 this.famille = new Famille();
                 this.article = new Article();
-
+                
                 this.modifier = (this.supprimer = this.detail = true);
-
+                
                 RequestContext.getCurrentInstance().execute("PF('ArticleCreerDialog').hide()");
                 notifySuccess();
             } else if (this.article != null) {
                 Article p = this.articleFacadeLocal.find(this.article.getIdarticle());
-
+                
                 if ((!p.getCode().equals(this.article.getCode()))
-                        && (this.articleFacadeLocal.findByCode(this.article.getCode()) != null)) {
+                        && (this.articleFacadeLocal.findByCode(SessionMBean.getMagasin().getParametrage().getId(), this.article.getCode()) != null)) {
                     notifyError("code_article_existant");
                     return;
                 }
-
-                if (this.famille.getIdfamille() != p.getIdfamille().getIdfamille()) {
+                
+                if (!Objects.equals(this.famille.getIdfamille(), p.getIdfamille().getIdfamille())) {
                     this.article.setIdfamille(this.familleFacadeLocal.find(this.famille.getIdfamille()));
                 }
                 this.article.setIdunite(this.uniteFacadeLocal.find(this.unite.getIdunite()));
-
+                
                 this.ut.begin();
                 this.articleFacadeLocal.edit(this.article);
                 Utilitaires.saveOperation(this.mouchardFacadeLocal, "Modification de l'article : " + this.article.getLibelle() + " Ancienne quantité : " + p.getQuantitestock() + " ; Nouvelle quantité : " + this.article.getQuantitestock(), SessionMBean.getUserAccount());
                 this.ut.commit();
-
+                
                 for (Magasin m : selectedMagasins) {
                     Magasinarticle ma = this.magasinarticleFacadeLocal.findByIdmagasinIdarticle(m.getIdmagasin().intValue(), this.article.getIdarticle().longValue());
                     if (ma == null) {
@@ -258,7 +259,7 @@ public class ArticleController extends AbstractArticleController implements Seri
                         this.magasinarticleFacadeLocal.create(ma);
                     }
                 }
-
+                
                 this.modifier = (this.supprimer = this.detail = true);
                 this.article = new Article();
                 RequestContext.getCurrentInstance().execute("PF('ArticleCreerDialog').hide()");
@@ -270,25 +271,25 @@ public class ArticleController extends AbstractArticleController implements Seri
             notifyFail(e);
         }
     }
-
+    
     public void notifyError(String message) {
         RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
         this.routine.feedBack("avertissement", "/resources/tool_images/warning.jpeg", this.routine.localizeMessage(message));
         RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
     }
-
+    
     public void notifySuccess() {
         RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
         this.routine.feedBack("information", "/resources/tool_images/success.png", this.routine.localizeMessage("operation_reussie"));
         RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
     }
-
+    
     public void notifyFail(Exception e) {
         RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
         this.routine.catchException(e, this.routine.localizeMessage("echec_operation"));
         RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
     }
-
+    
     public void checkSession() {
         try {
             if (!"".equals(this.sessionPassword)) {
@@ -304,7 +305,7 @@ public class ArticleController extends AbstractArticleController implements Seri
             e.printStackTrace();
         }
     }
-
+    
     public void delete() {
         try {
             if (this.article != null) {
@@ -312,7 +313,7 @@ public class ArticleController extends AbstractArticleController implements Seri
                     notifyError("acces_refuse");
                     return;
                 }
-
+                
                 List<Lignedemande> listLd = this.lignedemandeFacadeLocal.findByIdarticle(this.article.getIdarticle());
                 List<Lignelivraisonfournisseur> listLlf = this.lignelivraisonfournisseurFacadeLocal.findByIdarticle(this.article.getIdarticle());
                 List<Lignetransfert> llt = lignetransfertFacadeLocal.findByIdarticle(article.getIdarticle());
@@ -320,7 +321,7 @@ public class ArticleController extends AbstractArticleController implements Seri
                     this.ut.begin();
                     this.magasinlotFacadeLocal.removeAllByIdarticle(this.article.getIdarticle());
                     this.magasinarticleFacadeLocal.removeAllByIdarticle(this.article.getIdarticle());
-
+                    
                     this.articleFacadeLocal.remove(this.article);
                     Utilitaires.saveOperation(this.mouchardFacadeLocal, "Suppresion de l'article : " + this.article.getLibelle(), SessionMBean.getUserAccount());
                     this.ut.commit();
@@ -336,21 +337,21 @@ public class ArticleController extends AbstractArticleController implements Seri
             notifyFail(e);
         }
     }
-
+    
     public void print() {
         try {
             if (!Utilitaires.isAccess(29L)) {
                 notifyError("acces_refuse");
                 return;
             }
-
+            
             Map map = new HashMap();
             Printer.print("/reports/ireport/liste_produit.jasper", map);
         } catch (Exception e) {
             notifyFail(e);
         }
     }
-
+    
     public void printStockGeneral() {
         try {
             if (!Utilitaires.isAccess(32L)) {
@@ -363,14 +364,14 @@ public class ArticleController extends AbstractArticleController implements Seri
             notifyFail(e);
         }
     }
-
+    
     public void printInventory() {
         try {
             if (!Utilitaires.isAccess(Long.valueOf(31L))) {
                 notifyError("acces_refuse");
                 return;
             }
-
+            
             this.fileName1 = PrintUtils.printInventoryReport(this.articles);
             RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
             RequestContext.getCurrentInstance().execute("PF('InventaireImprimerDialog').show()");
@@ -378,14 +379,14 @@ public class ArticleController extends AbstractArticleController implements Seri
             notifyFail(e);
         }
     }
-
+    
     public void printSousStock() {
         try {
             if (!Utilitaires.isAccess(30L)) {
                 notifyError("acces_refuse");
                 return;
             }
-
+            
             this.fileName2 = PrintUtils.printCritickStockReport(this.articles1);
             RequestContext.getCurrentInstance().execute("PF('StockImprimerDialog').show()");
         } catch (Exception e) {

@@ -109,7 +109,6 @@ public class AbstractSortiedirectController {
     }
 
     public List<Livraisonclient> getLivraisonclients() {
-        this.livraisonclients = this.livraisonclientFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getAnnee().getDateDebut(), SessionMBean.getAnnee().getDateFin());
         return this.livraisonclients;
     }
 
@@ -154,7 +153,7 @@ public class AbstractSortiedirectController {
     }
 
     public List<Famille> getFamilles() {
-        this.familles = this.familleFacadeLocal.findAllRange();
+        this.familles = this.familleFacadeLocal.findAllRange(SessionMBean.getMagasin().getParametrage().getId());
         return this.familles;
     }
 
@@ -224,7 +223,7 @@ public class AbstractSortiedirectController {
     }
 
     public List<Client> getClients() {
-        clients = clientFacadeLocal.findAllRange(true);
+        clients = clientFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), true);
         return clients;
     }
 

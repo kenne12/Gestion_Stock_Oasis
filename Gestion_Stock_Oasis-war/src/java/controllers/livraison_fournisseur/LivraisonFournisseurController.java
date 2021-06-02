@@ -30,118 +30,118 @@ public class LivraisonFournisseurController extends AbstractLivraisonFournisseur
     }
 
     public void updateCalculTva() {
-        /*  49 */ updateTotal();
+        updateTotal();
     }
 
     public List<Lot> findByProduit(Article a) {
         try {
-            /*  54 */ return this.lotFacadeLocal.findByArticle(a.getIdarticle(), a.getPerissable().booleanValue());
+            return this.lotFacadeLocal.findByArticle(a.getIdarticle(), a.getPerissable());
         } catch (Exception e) {
         }
-        /*  56 */ return new ArrayList();
+        return new ArrayList();
     }
 
     public void prepareCreate() {
         try {
-            /*  63 */ if (!Utilitaires.isAccess(Long.valueOf(52L))) {
-                /*  64 */ notifyError("acces_refuse");
-                /*  65 */ return;
+            if (!Utilitaires.isAccess((52L))) {
+                notifyError("acces_refuse");
+                return;
             }
-            /*  67 */ RequestContext.getCurrentInstance().execute("PF('CommandeCreateDialog').show()");
-            /*  68 */ this.mode = "Create";
+            RequestContext.getCurrentInstance().execute("PF('CommandeCreateDialog').show()");
+            this.mode = "Create";
 
-            /*  70 */ this.livraisonfournisseur = new Livraisonfournisseur();
-            /*  71 */ this.livraisonfournisseur.setMontant(Double.valueOf(0.0D));
+            this.livraisonfournisseur = new Livraisonfournisseur();
+            this.livraisonfournisseur.setMontant((0.0D));
 
-            /*  73 */ this.lignelivraisonfournisseurs.clear();
-            /*  74 */ this.lignecommandefournisseurs.clear();
+            this.lignelivraisonfournisseurs.clear();
+            this.lignecommandefournisseurs.clear();
 
-            /*  76 */ this.commandefournisseur = new Commandefournisseur();
-            /*  77 */ this.showSelectorCommand = Boolean.valueOf(false);
+            this.commandefournisseur = new Commandefournisseur();
+            this.showSelectorCommand = (false);
 
-            /*  79 */ this.total = Double.valueOf(0.0D);
+            this.total = (0.0D);
         } catch (Exception e) {
-            /*  81 */ this.routine.catchException(e, this.routine.localizeMessage("echec_operation"));
-            /*  82 */ RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
+            this.routine.catchException(e, this.routine.localizeMessage("echec_operation"));
+            RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
         }
     }
 
     public void prepareCreateCommande() {
         try {
-            /*  88 */ this.commandefournisseur = new Commandefournisseur();
-            /*  89 */ this.fournisseur = new Fournisseur();
-            /*  90 */ this.commandefournisseurs = this.commandefournisseurFacadeLocal.findByLivre(false);
-            /*  91 */ RequestContext.getCurrentInstance().execute("PF('ArticleCreateDialog').show()");
+            this.commandefournisseur = new Commandefournisseur();
+            this.fournisseur = new Fournisseur();
+            this.commandefournisseurs = this.commandefournisseurFacadeLocal.findByLivre(false);
+            RequestContext.getCurrentInstance().execute("PF('ArticleCreateDialog').show()");
         } catch (Exception e) {
-            /*  93 */ notifyFail(e);
+            notifyFail(e);
         }
     }
 
     public void prepareEdit() {
         try {
-            /* 100 */ if (this.livraisonfournisseur == null) {
-                /* 101 */ notifyError("not_row_selected");
-                /* 102 */ return;
+            if (this.livraisonfournisseur == null) {
+                notifyError("not_row_selected");
+                return;
             }
 
-            /* 105 */ if (this.livraisonfournisseur.getLivraisondirecte().booleanValue()) {
-                /* 106 */ notifyError("livraison_effectuee_par_commande");
-                /* 107 */ return;
+            if (this.livraisonfournisseur.getLivraisondirecte()) {
+                notifyError("livraison_effectuee_par_commande");
+                return;
             }
-            /* 109 */ if (Utilitaires.isDayClosed()) {
-                /* 110 */ notifyError("journee_cloturee");
-                /* 111 */ return;
-            }
-
-            /* 114 */ this.showSelectorCommand = Boolean.valueOf(true);
-            /* 115 */ this.commandefournisseur = this.commandefournisseurFacadeLocal.find(this.livraisonfournisseur.getIdcommandefournisseur().getIdcommandefournisseur());
-            /* 116 */ if (this.commandefournisseur.getLivre().booleanValue()) {
-                /* 117 */ notifyError("commande_deja_livree");
-                /* 118 */ return;
+            if (Utilitaires.isDayClosed()) {
+                notifyError("journee_cloturee");
+                return;
             }
 
-            /* 121 */ if (!Utilitaires.isAccess(Long.valueOf(49L))) {
-                /* 122 */ notifyError("acces_refuse");
-                /* 123 */ this.commandefournisseur = null;
-                /* 124 */ return;
+            this.showSelectorCommand = (true);
+            this.commandefournisseur = this.commandefournisseurFacadeLocal.find(this.livraisonfournisseur.getIdcommandefournisseur().getIdcommandefournisseur());
+            if (this.commandefournisseur.getLivre()) {
+                notifyError("commande_deja_livree");
+                return;
             }
 
-            /* 127 */ this.mode = "Edit";
+            if (!Utilitaires.isAccess((49L))) {
+                notifyError("acces_refuse");
+                this.commandefournisseur = null;
+                return;
+            }
 
-            /* 129 */ this.lignecommandefournisseurs = this.lignecommandefournisseurFacadeLocal.findByCommande(this.commandefournisseur.getIdcommandefournisseur().longValue());
-            /* 130 */ this.lignelivraisonfournisseurs = this.lignelivraisonfournisseurFacadeLocal.findByIdlivraison(this.livraisonfournisseur.getIdlivraisonfournisseur().longValue());
-            /* 131 */ this.fournisseur = this.commandefournisseur.getIdfournisseur();
-            /* 132 */ this.total = this.livraisonfournisseur.getMontant();
-            /* 133 */ RequestContext.getCurrentInstance().execute("PF('CommandeCreateDialog').show()");
+            this.mode = "Edit";
+
+            this.lignecommandefournisseurs = this.lignecommandefournisseurFacadeLocal.findByCommande(this.commandefournisseur.getIdcommandefournisseur());
+            this.lignelivraisonfournisseurs = this.lignelivraisonfournisseurFacadeLocal.findByIdlivraison(this.livraisonfournisseur.getIdlivraisonfournisseur());
+            this.fournisseur = this.commandefournisseur.getIdfournisseur();
+            this.total = this.livraisonfournisseur.getMontant();
+            RequestContext.getCurrentInstance().execute("PF('CommandeCreateDialog').show()");
         } catch (Exception e) {
-            /* 136 */ notifyFail(e);
+            notifyFail(e);
         }
     }
 
     public void prepareview() {
         try {
-            /* 142 */ if (this.livraisonfournisseur != null) {
-                /* 143 */ this.lignelivraisonfournisseurs = this.lignelivraisonfournisseurFacadeLocal.findByIdlivraison(this.livraisonfournisseur.getIdlivraisonfournisseur().longValue());
-                /* 144 */ if (!this.lignelivraisonfournisseurs.isEmpty()) {
-                    /* 145 */ RequestContext.getCurrentInstance().execute("PF('FactureDetailDialog').show()");
-                    /* 146 */ return;
+            if (this.livraisonfournisseur != null) {
+                this.lignelivraisonfournisseurs = this.lignelivraisonfournisseurFacadeLocal.findByIdlivraison(this.livraisonfournisseur.getIdlivraisonfournisseur());
+                if (!this.lignelivraisonfournisseurs.isEmpty()) {
+                    RequestContext.getCurrentInstance().execute("PF('FactureDetailDialog').show()");
+                    return;
                 }
-                /* 148 */ notifyError("liste_article_vide");
+                notifyError("liste_article_vide");
             } else {
-                /* 150 */ notifyError("not_row_selected");
+                notifyError("not_row_selected");
             }
         } catch (Exception e) {
-            /* 153 */ notifyFail(e);
+            notifyFail(e);
         }
     }
 
     public void selectCommande() {
         try {
-            /* 159 */ if (this.commandefournisseur != null) {
-                /* 161 */ this.lignelivraisonfournisseurs.clear();
+            if (this.commandefournisseur != null) {
+                this.lignelivraisonfournisseurs.clear();
 
                 /* 163 */ this.fournisseur = this.commandefournisseur.getIdfournisseur();
-                /* 164 */ this.lignecommandefournisseurs = this.lignecommandefournisseurFacadeLocal.findByCommande(this.commandefournisseur.getIdcommandefournisseur().longValue());
+                /* 164 */ this.lignecommandefournisseurs = this.lignecommandefournisseurFacadeLocal.findByCommande(this.commandefournisseur.getIdcommandefournisseur());
                 /* 165 */ this.commandefournisseurs.clear();
 
                 /* 167 */ this.commandefournisseur.setDateeffectlivraison(new Date());
@@ -150,7 +150,7 @@ public class LivraisonFournisseurController extends AbstractLivraisonFournisseur
                     /* 170 */ List lotTemps = this.lotFacadeLocal.findByArticleRangeDesc(lcf.getIdarticle().getIdarticle(), lcf.getIdarticle().getPerissable().booleanValue());
 
                     /* 172 */ Lignelivraisonfournisseur object = new Lignelivraisonfournisseur();
-                    /* 173 */ object.setIdlignelivraisonfournisseur(Long.valueOf(0L));
+                    /* 173 */ object.setIdlignelivraisonfournisseur((0L));
 
                     /* 175 */ object.setIdlot((Lot) lotTemps.get(0));
                     /* 176 */ object.setQuantite(lcf.getQuantite());
@@ -161,10 +161,10 @@ public class LivraisonFournisseurController extends AbstractLivraisonFournisseur
                     /* 181 */ object.setIdunite(lcf.getIdunite());
 
                     /* 183 */ this.lignelivraisonfournisseurs.add(object);
-                    /* 184 */ ((Lignelivraisonfournisseur) this.lignelivraisonfournisseurs.get(conteur)).setTauxsatisfaction(Double.valueOf(0.0D));
+                    /* 184 */ this.lignelivraisonfournisseurs.get(conteur).setTauxsatisfaction(0d);
                     /* 185 */ conteur++;
                 }
-                /* 187 */ this.commandefournisseur.setTauxsatisfaction(Double.valueOf(0.0D));
+                /* 187 */ this.commandefournisseur.setTauxsatisfaction((0.0D));
                 /* 188 */ updateTotal();
                 /* 189 */ RequestContext.getCurrentInstance().execute("PF('ArticleCreateDialog').hide()");
             }
@@ -262,24 +262,24 @@ public class LivraisonFournisseurController extends AbstractLivraisonFournisseur
                 } else {
                     /* 287 */ notifyError("liste_article_vide");
                 }
-            } /* 290 */ else if (this.livraisonfournisseur != null) {
-                /* 292 */ this.ut.begin();
+            } else if (this.livraisonfournisseur != null) {
+                this.ut.begin();
 
-                /* 294 */ updateTotal();
-                /* 295 */ this.livraisonfournisseurFacadeLocal.edit(this.livraisonfournisseur);
+                updateTotal();
+                this.livraisonfournisseurFacadeLocal.edit(this.livraisonfournisseur);
 
-                /* 297 */ this.mvtstock = this.livraisonfournisseur.getIdmvtstock();
+                this.mvtstock = this.livraisonfournisseur.getIdmvtstock();
 
-                /* 299 */ if (!this.lignelivraisonfournisseurs.isEmpty()) {
-                    /* 300 */ for (Lignelivraisonfournisseur s : this.lignelivraisonfournisseurs) {
-                        /* 302 */ Lignelivraisonfournisseur sp = this.lignelivraisonfournisseurFacadeLocal.find(s.getIdlignecommandefournisseur());
-                        /* 303 */ if (sp.getQuantite() != s.getQuantite()) {
+                if (!this.lignelivraisonfournisseurs.isEmpty()) {
+                    for (Lignelivraisonfournisseur s : this.lignelivraisonfournisseurs) {
+                        Lignelivraisonfournisseur sp = this.lignelivraisonfournisseurFacadeLocal.find(s.getIdlignecommandefournisseur());
+                        if (sp.getQuantite() != s.getQuantite()) {
                             /* 304 */ Article art = sp.getIdlot().getIdarticle();
-                            /* 305 */ art.setQuantitestock(Double.valueOf(art.getQuantitestock().doubleValue() + sp.getQuantite().doubleValue() - sp.getQuantite().doubleValue()));
+                            /* 305 */ art.setQuantitestock((art.getQuantitestock() + sp.getQuantite() - sp.getQuantite()));
                             /* 306 */ this.articleFacadeLocal.edit(art);
 
                             /* 308 */ Lot l = sp.getIdlot();
-                            /* 309 */ l.setQuantite(Double.valueOf(l.getQuantite().doubleValue() + sp.getQuantite().doubleValue() - sp.getQuantite().doubleValue()));
+                            /* 309 */ l.setQuantite((l.getQuantite() + sp.getQuantite() - sp.getQuantite()));
                             /* 310 */ this.lotFacadeLocal.edit(l);
 
                             /* 312 */ Lignemvtstock lmvts = new Lignemvtstock();
@@ -287,81 +287,81 @@ public class LivraisonFournisseurController extends AbstractLivraisonFournisseur
                             /* 314 */ lmvts.setIdmvtstock(this.mvtstock);
                             /* 315 */ lmvts.setIdlot(s.getIdlot());
 
-                            /* 317 */ if (s.getQuantite().doubleValue() > sp.getQuantite().doubleValue()) {
-                                /* 318 */ lmvts.setQteentree(Double.valueOf(s.getQuantite().doubleValue() - sp.getQuantite().doubleValue()));
-                                /* 319 */ lmvts.setQtesortie(Double.valueOf(0.0D));
-                                /* 320 */ lmvts.setReste(s.getIdlot().getQuantite());
+                            if (s.getQuantite() > sp.getQuantite()) {
+                                lmvts.setQteentree((s.getQuantite() - sp.getQuantite()));
+                                lmvts.setQtesortie((0.0D));
+                                lmvts.setReste(s.getIdlot().getQuantite());
                             } else {
-                                /* 322 */ lmvts.setQteentree(Double.valueOf(0.0D));
-                                /* 323 */ lmvts.setQtesortie(Double.valueOf(sp.getQuantite().doubleValue() - s.getQuantite().doubleValue()));
-                                /* 324 */ lmvts.setReste(s.getIdlot().getQuantite());
+                                lmvts.setQteentree((0.0D));
+                                lmvts.setQtesortie((sp.getQuantite() - s.getQuantite()));
+                                lmvts.setReste(s.getIdlot().getQuantite());
                             }
-                            /* 326 */ this.lignemvtstockFacadeLocal.create(lmvts);
+                            this.lignemvtstockFacadeLocal.create(lmvts);
                         }
-                        /* 328 */ this.lignelivraisonfournisseurFacadeLocal.edit(s);
+                        this.lignelivraisonfournisseurFacadeLocal.edit(s);
                     }
                 }
 
-                /* 332 */ this.ut.commit();
-                /* 333 */ this.lignecommandefournisseurs.clear();
+                this.ut.commit();
+                this.lignecommandefournisseurs.clear();
                 /* 334 */ this.commandefournisseurs.clear();
                 /* 335 */ this.lignemvtstocks.clear();
                 /* 336 */ this.commandefournisseur = new Commandefournisseur();
                 /* 337 */ this.livraisonfournisseur = null;
-                /* 338 */ this.supprimer = (this.modifier = this.imprimer = this.detail = Boolean.valueOf(true));
+                /* 338 */ this.supprimer = (this.modifier = this.imprimer = this.detail = (true));
 
-                /* 340 */ notifySuccess();
-                /* 341 */ RequestContext.getCurrentInstance().execute("PF('CommandeCreateDialog').hide()");
+                notifySuccess();
+                RequestContext.getCurrentInstance().execute("PF('CommandeCreateDialog').hide()");
             } else {
-                /* 343 */ notifyError("not_row_selected");
+                notifyError("not_row_selected");
             }
         } catch (Exception e) {
-            /* 347 */ notifyFail(e);
+            notifyFail(e);
         }
     }
 
     public void delete() {
         try {
-            /* 353 */ if (this.livraisonfournisseur != null) {
-                /* 355 */ if (!this.livraisonfournisseur.getLivraisondirecte().booleanValue()) {
-                    /* 357 */ if (!Utilitaires.isAccess(Long.valueOf(53L))) {
-                        /* 358 */ notifyError("acces_refuse");
-                        /* 359 */ this.detail = (this.supprimer = this.modifier = this.imprimer = Boolean.valueOf(true));
-                        /* 360 */ this.livraisonfournisseur = null;
-                        /* 361 */ return;
+            if (this.livraisonfournisseur != null) {
+                if (!this.livraisonfournisseur.getLivraisondirecte()) {
+                    if (!Utilitaires.isAccess((53L))) {
+                        notifyError("acces_refuse");
+                        this.detail = (this.supprimer = this.modifier = this.imprimer = (true));
+                        this.livraisonfournisseur = null;
+                        return;
                     }
 
-                    /* 364 */ this.ut.begin();
+                    this.ut.begin();
 
-                    /* 366 */ List<Lignelivraisonfournisseur> temp = this.lignelivraisonfournisseurFacadeLocal.findByIdlivraison(this.livraisonfournisseur.getIdlivraisonfournisseur().longValue());
-                    /* 367 */ if (!temp.isEmpty()) {
-                        /* 368 */ for (Lignelivraisonfournisseur sp : temp) {
-                            /* 369 */ sp.getIdlot().setIdarticle(this.articleFacadeLocal.find(sp.getIdlot().getIdarticle().getIdarticle()));
-                            /* 370 */ sp.getIdlot().getIdarticle().setQuantitestock(Double.valueOf(sp.getIdlot().getIdarticle().getQuantitestock().doubleValue() + sp.getQuantite().doubleValue()));
-                            /* 371 */ this.articleFacadeLocal.edit(sp.getIdlot().getIdarticle());
+                    List<Lignelivraisonfournisseur> temp = this.lignelivraisonfournisseurFacadeLocal.findByIdlivraison(this.livraisonfournisseur.getIdlivraisonfournisseur());
+                    if (!temp.isEmpty()) {
+                        for (Lignelivraisonfournisseur sp : temp) {
+                            sp.getIdlot().setIdarticle(this.articleFacadeLocal.find(sp.getIdlot().getIdarticle().getIdarticle()));
+                            sp.getIdlot().getIdarticle().setQuantitestock((sp.getIdlot().getIdarticle().getQuantitestock() + sp.getQuantite()));
+                            this.articleFacadeLocal.edit(sp.getIdlot().getIdarticle());
 
-                            /* 373 */ if (sp.getIdlot() != null) {
-                                /* 374 */ sp.setIdlot(this.lotFacadeLocal.find(sp.getIdlot().getIdlot()));
-                                /* 375 */ sp.getIdlot().setQuantite(Double.valueOf(sp.getIdlot().getQuantite().doubleValue() + sp.getQuantite().doubleValue()));
-                                /* 376 */ this.lotFacadeLocal.edit(sp.getIdlot());
+                            if (sp.getIdlot() != null) {
+                                sp.setIdlot(this.lotFacadeLocal.find(sp.getIdlot().getIdlot()));
+                                sp.getIdlot().setQuantite((sp.getIdlot().getQuantite() + sp.getQuantite()));
+                                this.lotFacadeLocal.edit(sp.getIdlot());
                             }
-                            /* 378 */ this.lignelivraisonfournisseurFacadeLocal.remove(sp);
+                            this.lignelivraisonfournisseurFacadeLocal.remove(sp);
                         }
                     }
                     /* 381 */ this.livraisonfournisseurFacadeLocal.remove(this.livraisonfournisseur);
 
                     /* 383 */ this.commandefournisseur = this.commandefournisseurFacadeLocal.find(this.livraisonfournisseur.getIdcommandefournisseur().getIdcommandefournisseur());
 
-                    /* 385 */ this.commandefournisseur.setLivre(Boolean.valueOf(false));
+                    /* 385 */ this.commandefournisseur.setLivre((false));
                     /* 386 */ this.commandefournisseur.setCode("-");
-                    /* 387 */ this.commandefournisseur.setTauxsatisfaction(Double.valueOf(0.0D));
+                    /* 387 */ this.commandefournisseur.setTauxsatisfaction((0.0D));
                     /* 388 */ this.commandefournisseurFacadeLocal.edit(this.commandefournisseur);
 
                     /* 390 */ Mvtstock mTemp = this.livraisonfournisseur.getIdmvtstock();
 
-                    /* 392 */ List<Lignemvtstock> lmvt = this.lignemvtstockFacadeLocal.findByIdmvt(mTemp.getIdmvtstock().longValue());
-                    /* 393 */ for (Lignemvtstock l : lmvt) {
-                        /* 394 */ this.lignemvtstockFacadeLocal.remove(l);
+                    List<Lignemvtstock> lmvt = this.lignemvtstockFacadeLocal.findByIdmvt(mTemp.getIdmvtstock());
+                    for (Lignemvtstock l : lmvt) {
+                        this.lignemvtstockFacadeLocal.remove(l);
                     }
                     /* 396 */ this.mvtstockFacadeLocal.remove(mTemp);
 
@@ -370,16 +370,16 @@ public class LivraisonFournisseurController extends AbstractLivraisonFournisseur
 
                     /* 401 */ this.livraisonfournisseur = null;
                     /* 402 */ this.commandefournisseur = new Commandefournisseur();
-                    /* 403 */ this.supprimer = (this.modifier = this.imprimer = this.detail = Boolean.valueOf(true));
+                    /* 403 */ this.supprimer = (this.modifier = this.imprimer = this.detail = (true));
                     /* 404 */ notifySuccess();
                 } else {
-                    /* 407 */ notifyError(this.mode);
+                    notifyError(this.mode);
                 }
-            } /* 410 */ else {
+            } else {
                 notifyError("not_row_selected");
             }
         } catch (Exception e) {
-            /* 413 */ notifyFail(e);
+            notifyFail(e);
         }
     }
 
@@ -475,21 +475,21 @@ public class LivraisonFournisseurController extends AbstractLivraisonFournisseur
     }
 
     public Double calculTotal() {
-        /* 517 */ Double resultat = Double.valueOf(0.0D);
-        /* 518 */ int i = 0;
-        /* 519 */ for (Lignelivraisonfournisseur llf : this.lignelivraisonfournisseurs) {
-            /* 520 */ resultat = Double.valueOf(resultat.doubleValue() + llf.getIdlot().getIdarticle().getCoutachat().doubleValue() * llf.getQuantite().doubleValue());
-            /* 521 */ ((Lignelivraisonfournisseur) this.lignelivraisonfournisseurs.get(i)).setQuantitemultiple(Double.valueOf(llf.getQuantite().doubleValue() * llf.getUnite().doubleValue()));
-            /* 522 */ ((Lignelivraisonfournisseur) this.lignelivraisonfournisseurs.get(i)).setQuantitereduite(Double.valueOf(((Lignelivraisonfournisseur) this.lignelivraisonfournisseurs.get(i)).getQuantitemultiple().doubleValue() / llf.getIdlot().getIdarticle().getUnite().doubleValue()));
+        Double resultat = (0.0D);
+        int i = 0;
+        for (Lignelivraisonfournisseur llf : this.lignelivraisonfournisseurs) {
+            /* 520 */ resultat += (llf.getIdlot().getIdarticle().getCoutachat() * llf.getQuantite());
+            /* 521 */ this.lignelivraisonfournisseurs.get(i).setQuantitemultiple((llf.getQuantite() * llf.getUnite()));
+            /* 522 */ this.lignelivraisonfournisseurs.get(i).setQuantitereduite(((this.lignelivraisonfournisseurs.get(i)).getQuantitemultiple().doubleValue() / llf.getIdlot().getIdarticle().getUnite().doubleValue()));
             /* 523 */ i++;
         }
-        /* 525 */ return resultat;
+        return resultat;
     }
 
     public void updateTotal() {
         try {
-            /* 530 */ this.total = calculTotal();
-            /* 531 */ this.livraisonfournisseur.setMontant(this.total);
+            this.total = calculTotal();
+            this.livraisonfournisseur.setMontant(this.total);
         } catch (Exception e) {
             /* 533 */ e.printStackTrace();
         }
@@ -497,10 +497,10 @@ public class LivraisonFournisseurController extends AbstractLivraisonFournisseur
 
     public void updateTotaux() {
         try {
-            /* 539 */ this.cout_quantite = Double.valueOf(0.0D);
-            /* 540 */ if ((this.lignecommandefournisseur.getQuantite() != null)
-                    && /* 541 */ (this.lignecommandefournisseur.getMontant() != null)) /* 542 */ {
-                this.cout_quantite = Double.valueOf(this.lignecommandefournisseur.getMontant().doubleValue() * this.lignecommandefournisseur.getQuantite().doubleValue());
+            this.cout_quantite = (0.0D);
+            if ((this.lignecommandefournisseur.getQuantite() != null)
+                    && (this.lignecommandefournisseur.getMontant() != null)) {
+                this.cout_quantite = (this.lignecommandefournisseur.getMontant() * this.lignecommandefournisseur.getQuantite());
             }
         } catch (Exception e) {
             /* 546 */ e.printStackTrace();

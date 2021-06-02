@@ -163,7 +163,6 @@ public class AbstractEntreedirecteController {
     }
 
     public List<Livraisonfournisseur> getLivraisonfournisseurs() {
-        this.livraisonfournisseurs = this.livraisonfournisseurFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getAnnee().getDateDebut(), SessionMBean.getAnnee().getDateFin(), true);
         return this.livraisonfournisseurs;
     }
 
@@ -236,7 +235,7 @@ public class AbstractEntreedirecteController {
     }
 
     public List<Famille> getFamilles() {
-        this.familles = this.familleFacadeLocal.findAllRange();
+        this.familles = this.familleFacadeLocal.findAllRange(SessionMBean.getMagasin().getParametrage().getId());
         return this.familles;
     }
 

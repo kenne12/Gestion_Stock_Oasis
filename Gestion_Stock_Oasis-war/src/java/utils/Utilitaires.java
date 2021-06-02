@@ -318,7 +318,7 @@ public class Utilitaires {
     }
 
     public static List<Magasin> returMagasinByUser(MagasinFacadeLocal magasinFacadeLocal, UtilisateurmagasinFacadeLocal umfl, Personnel personnel) {
-        List<Magasin> magasins = magasinFacadeLocal.findAllRange();
+        List<Magasin> magasins = magasinFacadeLocal.findAllRange(personnel.getIdmagasin().getParametrage().getId());
 
         List<Magasin> listMagasin = new ArrayList();
         listMagasin.add(personnel.getIdmagasin());

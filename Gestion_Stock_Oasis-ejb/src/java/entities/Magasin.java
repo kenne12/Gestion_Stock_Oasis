@@ -11,6 +11,8 @@ import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -32,6 +34,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Magasin.findByCode", query = "SELECT m FROM Magasin m WHERE m.code = :code"),
     @NamedQuery(name = "Magasin.findByCentral", query = "SELECT m FROM Magasin m WHERE m.central = :central")})
 public class Magasin implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -58,6 +61,9 @@ public class Magasin implements Serializable {
     private List<Personnel> personnelList;
     @OneToMany(mappedBy = "idmagasin", fetch = FetchType.LAZY)
     private List<Utilisateurmagasin> utilisateurmagasinList;
+    @JoinColumn(name = "idstructure", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Parametrage parametrage;
 
     public Magasin() {
     }
@@ -96,6 +102,14 @@ public class Magasin implements Serializable {
 
     public void setCentral(Boolean central) {
         this.central = central;
+    }
+
+    public Parametrage getParametrage() {
+        return parametrage;
+    }
+
+    public void setParametrage(Parametrage parametrage) {
+        this.parametrage = parametrage;
     }
 
     @XmlTransient
@@ -194,5 +208,5 @@ public class Magasin implements Serializable {
     public String toString() {
         return "entities.Magasin[ idmagasin=" + idmagasin + " ]";
     }
-    
+
 }

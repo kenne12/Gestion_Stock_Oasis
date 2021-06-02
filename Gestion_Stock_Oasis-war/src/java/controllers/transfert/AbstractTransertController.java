@@ -23,6 +23,7 @@ import sessions.MouchardFacadeLocal;
 import sessions.MvtstockFacadeLocal;
 import sessions.TransfertFacadeLocal;
 import utils.Routine;
+import utils.SessionMBean;
 
 public class AbstractTransertController {
 
@@ -42,29 +43,29 @@ public class AbstractTransertController {
 
     @EJB
     protected MagasinFacadeLocal magasinFacadeLocal;
-    /*  54 */    protected Magasin magasin = new Magasin();
-    /*  55 */    protected Magasin magasinCible = new Magasin();
-    /*  56 */    protected List<Magasin> magasins = new ArrayList();
+    protected Magasin magasin = new Magasin();
+    protected Magasin magasinCible = new Magasin();
+    protected List<Magasin> magasins = new ArrayList();
 
     @EJB
     protected FamilleFacadeLocal familleFacadeLocal;
-    /*  60 */    protected Famille famille = new Famille();
-    /*  61 */    protected List<Famille> familles = new ArrayList();
+    protected Famille famille = new Famille();
+    protected List<Famille> familles = new ArrayList();
 
     @EJB
     protected MagasinlotFacadeLocal magasinlotFacadeLocal;
-    /*  65 */    protected Magasinlot magasinlot = new Magasinlot();
-    /*  66 */    protected List<Magasinlot> magasinlots = new ArrayList();
-    /*  67 */    protected List<Magasinlot> selectedMagasinlots = new ArrayList();
+    protected Magasinlot magasinlot = new Magasinlot();
+    protected List<Magasinlot> magasinlots = new ArrayList();
+    protected List<Magasinlot> selectedMagasinlots = new ArrayList();
 
     @EJB
     protected MagasinarticleFacadeLocal magasinarticleFacadeLocal;
-    /*  71 */    protected Magasinarticle magasinarticle = new Magasinarticle();
-    /*  72 */    protected List<Magasinarticle> magasinarticles = new ArrayList();
+    protected Magasinarticle magasinarticle = new Magasinarticle();
+    protected List<Magasinarticle> magasinarticles = new ArrayList();
 
     @EJB
     protected MvtstockFacadeLocal mvtstockFacadeLocal;
-    /*  76 */    protected Mvtstock mvtstock = new Mvtstock();
+    protected Mvtstock mvtstock = new Mvtstock();
 
     @EJB
     protected LignemvtstockFacadeLocal lignemvtstockFacadeLocal;
@@ -76,15 +77,15 @@ public class AbstractTransertController {
 
     /*  87 */    protected String libelle_article = "-";
 
-    /*  89 */    protected Double total = Double.valueOf(0.0D);
+    /*  89 */    protected Double total = (0.0D);
 
-    /*  91 */    protected Boolean showSelectorCommand = Boolean.valueOf(true);
+    /*  91 */    protected Boolean showSelectorCommand = (true);
 
-    /*  93 */    protected Boolean detail = Boolean.valueOf(true);
-    /*  94 */    protected Boolean modifier = Boolean.valueOf(true);
-    /*  95 */    protected Boolean consulter = Boolean.valueOf(true);
-    /*  96 */    protected Boolean imprimer = Boolean.valueOf(true);
-    /*  97 */    protected Boolean supprimer = Boolean.valueOf(true);
+    /*  93 */    protected Boolean detail = (true);
+    /*  94 */    protected Boolean modifier = (true);
+    /*  95 */    protected Boolean consulter = (true);
+    /*  96 */    protected Boolean imprimer = (true);
+    /*  97 */    protected Boolean supprimer = (true);
 
     /*  99 */    protected String fileName = "";
     /* 100 */    protected String printDialogTitle = "";
@@ -168,32 +169,32 @@ public class AbstractTransertController {
     }
 
     public Famille getFamille() {
-        /* 181 */ return this.famille;
+        return this.famille;
     }
 
     public void setFamille(Famille famille) {
-        /* 185 */ this.famille = famille;
+        this.famille = famille;
     }
 
     public List<Famille> getFamilles() {
-        /* 189 */ this.familles = this.familleFacadeLocal.findAllRange();
-        /* 190 */ return this.familles;
+        this.familles = this.familleFacadeLocal.findAllRange(SessionMBean.getMagasin().getParametrage().getId());
+        return this.familles;
     }
 
     public void setFamilles(List<Famille> familles) {
-        /* 194 */ this.familles = familles;
+        this.familles = familles;
     }
 
     public List<Magasinlot> getSelectedMagasinlots() {
-        /* 198 */ return this.selectedMagasinlots;
+        return this.selectedMagasinlots;
     }
 
     public void setSelectedMagasinlots(List<Magasinlot> selectedMagasinlots) {
-        /* 202 */ this.selectedMagasinlots = selectedMagasinlots;
+        this.selectedMagasinlots = selectedMagasinlots;
     }
 
     public Transfert getTransfert() {
-        /* 206 */ return this.transfert;
+        return this.transfert;
     }
 
     public void setTransfert(Transfert transfert) {
@@ -243,7 +244,7 @@ public class AbstractTransertController {
     }
 
     public List<Magasin> getMagasins() {
-        /* 256 */ this.magasins = this.magasinFacadeLocal.findAllRange();
+        /* 256 */ this.magasins = this.magasinFacadeLocal.findAllRange(SessionMBean.getMagasin().getParametrage().getId());
         /* 257 */ return this.magasins;
     }
 

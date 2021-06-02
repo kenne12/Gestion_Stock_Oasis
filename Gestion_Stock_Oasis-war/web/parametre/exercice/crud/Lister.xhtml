@@ -12,7 +12,7 @@
             <p:effect type="pulsate" event="load" delay="50" />
         </p:messages>
 
-        <p:panel header="#{langue['Conv.ListeDes']} #{langue.exercices}">
+        <p:panel header="#{langue['Conv.ListeDes']} #{langue.exercices}" style="width: 60%">
             <p:contextMenu id="AnneeDataTableContextMenu" for="datalist">  
                 <p:menuitem value="#{langue['Conv.Creer']}" onclick="document.getElementById('actionsForm:creer').click();" icon="ui-icon-plus"/>
                 <p:menuitem value="#{langue['Conv.Detail']}" onclick="document.getElementById('actionsForm:detail').click();" icon="ui-icon-search"/>
@@ -25,7 +25,7 @@
                          rowKey="#{item.idannee}"
                          paginator="true"
                          rows="10"
-                         style="text-align: center;width: 60%"
+                         style="text-align: center"
                          rowsPerPageTemplate="10,20,30,40,50"
                          selectionMode="single"
                          selection="#{anneeController.selectedAnnee}">

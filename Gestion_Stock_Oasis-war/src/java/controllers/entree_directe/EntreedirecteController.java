@@ -30,6 +30,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
     @PostConstruct
     private void init() {
         this.magasins = SessionMBean.getMagasins();
+        this.livraisonfournisseurs = this.livraisonfournisseurFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getAnnee().getDateDebut(), SessionMBean.getAnnee().getDateFin(), true);
     }
 
     public void prepareCreate() {
@@ -220,6 +221,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                     this.livraisonfournisseur.setMontant(this.total);
                     this.livraisonfournisseur.setLivraisondirecte(true);
                     this.livraisonfournisseur.setIdmvtstock(this.mvtstock);
+                    this.livraisonfournisseur.setIdmagasin(SessionMBean.getMagasin());
                     this.livraisonfournisseurFacadeLocal.create(this.livraisonfournisseur);
                     double qteAvant = 0;
                     for (Lignelivraisonfournisseur llf : this.lignelivraisonfournisseurs) {
@@ -316,7 +318,8 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                     Utilitaires.saveOperation(this.mouchardFacadeLocal, "Enregistrement de l'entrée du stock N° : ", SessionMBean.getUserAccount());
                     this.ut.commit();
 
-                    this.livraisonfournisseur = null;
+                    this.livraisonfournisseur = new Livraisonfournisseur();
+                    this.livraisonfournisseurs = this.livraisonfournisseurFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getAnnee().getDateDebut(), SessionMBean.getAnnee().getDateFin(), true);
 
                     notifySuccess();
                     RequestContext.getCurrentInstance().execute("PF('StockCreateDialog').hide()");
@@ -394,6 +397,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                         }
                     }
                     Utilitaires.saveOperation(this.mouchardFacadeLocal, "Modification de l'entrée en stock N° : " + this.livraisonfournisseur.getCode() + " ; Ancien Montant : " + s1.getMontant() + " Nouveau montant : " + this.livraisonfournisseur.getMontant(), SessionMBean.getUserAccount());
+                    this.livraisonfournisseurs = this.livraisonfournisseurFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getAnnee().getDateDebut(), SessionMBean.getAnnee().getDateFin(), true);
 
                     this.ut.commit();
                     notifySuccess();
@@ -455,7 +459,9 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                 Utilitaires.saveOperation(this.mouchardFacadeLocal, "Annulation de l'entrée directe en stock : " + this.livraisonfournisseur.getCode() + " Montant : " + this.livraisonfournisseur.getMontant(), SessionMBean.getUserAccount());
                 this.ut.commit();
 
-                this.livraisonfournisseur = null;
+                this.livraisonfournisseur = new Livraisonfournisseur();
+                this.livraisonfournisseurs = this.livraisonfournisseurFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getAnnee().getDateDebut(), SessionMBean.getAnnee().getDateFin(), true);
+
                 notifySuccess();
                 return;
             }
@@ -594,7 +600,6 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
 
     private Double calculTotal() {
         Double resultat = 0.0;
-
         if (!this.lignelivraisonfournisseurs.isEmpty()) {
             int i = 0;
             for (Lignelivraisonfournisseur llf : this.lignelivraisonfournisseurs) {

@@ -29,7 +29,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
 
     @PostConstruct
     private void init() {
-
+        this.livraisonclients = this.livraisonclientFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getAnnee().getDateDebut(), SessionMBean.getAnnee().getDateFin());
     }
 
     public void updateCalculTva() {
@@ -206,6 +206,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
                     }
                     livraisonclient.setMontantPaye(livraisonclient.getAvanceInitiale());
                 }
+                this.livraisonclient.setIdmagasin(SessionMBean.getMagasin());
                 this.livraisonclientFacadeLocal.create(this.livraisonclient);
 
                 for (Lignelivraisonclient c : this.lignelivraisonclients) {
@@ -250,6 +251,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
                 Utilitaires.saveOperation(this.mouchardFacadeLocal, "Enregistrement de la sortie : " + code, SessionMBean.getUserAccount());
 
                 this.ut.commit();
+                this.livraisonclients = this.livraisonclientFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getAnnee().getDateDebut(), SessionMBean.getAnnee().getDateFin());
                 this.livraisonclient = new Livraisonclient();
                 this.supprimer = this.modifier = this.imprimer = detail = true;
                 JsfUtil.addSuccessMessage(message);
@@ -325,6 +327,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
                 }
 
                 this.ut.commit();
+                this.livraisonclients = this.livraisonclientFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getAnnee().getDateDebut(), SessionMBean.getAnnee().getDateFin());
                 this.livraisonclient = new Livraisonclient();
                 this.supprimer = this.modifier = this.imprimer = this.detail = true;
 
@@ -341,6 +344,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
     public void createClient() {
         this.clientToSave.setIdclient(this.clientFacadeLocal.nextVal());
         clientToSave.setEtat(true);
+        clientToSave.setMagasin(SessionMBean.getMagasin());
         this.clientFacadeLocal.create(this.clientToSave);
         Utilitaires.saveOperation(this.mouchardFacadeLocal, "Enregistrement du client : " + this.clientToSave.getNom(), SessionMBean.getUserAccount());
         this.client = clientToSave;
@@ -385,6 +389,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
                     this.mvtstockFacadeLocal.remove(mTemp);
 
                     this.ut.commit();
+                    this.livraisonclients = this.livraisonclientFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getAnnee().getDateDebut(), SessionMBean.getAnnee().getDateFin());
                     Utilitaires.saveOperation(this.mouchardFacadeLocal, "Annulation de la sortie : " + this.livraisonclient.getCode() + " Montant : " + this.livraisonclient.getMontant() + " Client : " + this.livraisonclient.getClient().getNom() + " " + this.livraisonclient.getClient().getPrenom(), SessionMBean.getUserAccount());
                     this.livraisonclient = new Livraisonclient();
                     this.supprimer = this.modifier = this.imprimer = true;

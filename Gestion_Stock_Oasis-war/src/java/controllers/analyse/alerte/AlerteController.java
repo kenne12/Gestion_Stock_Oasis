@@ -14,28 +14,32 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import org.primefaces.context.RequestContext;
 import utils.Printer;
+import utils.SessionMBean;
 import utils.Utilitaires;
 
 @ManagedBean
 @SessionScoped
-public class AlerteController extends AbstractAlerteController
-        implements Serializable {
+public class AlerteController extends AbstractAlerteController implements Serializable {
 
     @PostConstruct
     private void init() {
         try {
-            List<Magasinlot> list = this.magasinlotFacadeLocal.findAllEtatIsTrue();
-            this.magasins.clear();
-            this.magasinlot_peremps.clear();
-            if (!list.isEmpty()) {
-                for (Magasinlot ml : list) {
-                    int ecart = Utilitaires.duration(new Date(), ml.getIdlot().getDateperemption());
-                    if (ecart <= ml.getIdlot().getIdarticle().getNbjralerte()) {
-                        this.magasinlot_peremps.add(ml);
-                    }
 
-                    if (!this.magasins.contains(ml.getIdmagasinarticle().getIdmagasin())) {
-                        this.magasins.add(ml.getIdmagasinarticle().getIdmagasin());
+            if (SessionMBean.getMagasin() != null) {
+
+                List<Magasinlot> list = this.magasinlotFacadeLocal.findAllEtatIsTrue(SessionMBean.getMagasin().getIdmagasin());
+                this.magasins.clear();
+                this.magasinlot_peremps.clear();
+                if (!list.isEmpty()) {
+                    for (Magasinlot ml : list) {
+                        int ecart = Utilitaires.duration(new Date(System.currentTimeMillis()), ml.getIdlot().getDateperemption());
+                        if (ecart <= ml.getIdlot().getIdarticle().getNbjralerte()) {
+                            this.magasinlot_peremps.add(ml);
+                        }
+
+                        if (!this.magasins.contains(ml.getIdmagasinarticle().getIdmagasin())) {
+                            this.magasins.add(ml.getIdmagasinarticle().getIdmagasin());
+                        }
                     }
                 }
             }

@@ -253,7 +253,7 @@ public class LivraisonClientController extends AbstractLivraisonClientController
                     }
                     Utilitaires.arrondiNDecimales(sommeQte / qteDemandee * 100.0, 2);
                     this.lignedemandes.get(conteur).setTauxsatisfaction(Utilitaires.arrondiNDecimales(sommeQte / qteDemandee * 100.0, 2));
-                    pourcentage += pourcentage + Utilitaires.arrondiNDecimales(sommeQte / qteDemandee * 100.0, 2);
+                    pourcentage += Utilitaires.arrondiNDecimales(sommeQte / qteDemandee * 100.0, 2);
                     conteur++;
                 }
                 this.demande.setTauxsatisfaction(pourcentage);

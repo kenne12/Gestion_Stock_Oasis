@@ -1,6 +1,7 @@
 package utils;
 
 import entities.Annee;
+import entities.Journee;
 import entities.Magasin;
 import entities.Menu;
 import entities.Mouchard;
@@ -8,7 +9,9 @@ import entities.Privilege;
 import entities.Utilisateur;
 import java.io.IOException;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -20,6 +23,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 import org.primefaces.context.RequestContext;
+import sessions.JourneeFacadeLocal;
 import sessions.UtilisateurFacadeLocal;
 
 @ManagedBean(name = "loginBean")
@@ -29,6 +33,10 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
     @EJB
     private UtilisateurFacadeLocal utilisateurFacadeLocal;
     private Utilisateur utilisateur = new Utilisateur();
+
+    @EJB
+    private JourneeFacadeLocal journeeFacadeLocal;
+
     String sc = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
 
     @PostConstruct
@@ -47,7 +55,7 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
                     session.setAttribute("compte", this.utilisateur);
                     session.setAttribute("session", false);
 
-                    this.param = this.parametrageFacadeLocal.findAll().get(0);
+                    this.param = this.parametrageFacadeLocal.find(utilisateur.getIdpersonnel().getIdmagasin().getParametrage().getId());
 
                     session.setAttribute("parametre", this.param);
 
@@ -74,6 +82,7 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
                         session.setAttribute("magasin", magasin);
                         List<Magasin> list = new ArrayList<>();
                         list.add(magasin);
+                        this.initJour(magasin);
                         session.setAttribute("magasins", list);
                     }
 
@@ -88,7 +97,7 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
 
                     if (Objects.equals(this.magasins.size(), 1) && Objects.equals(this.annees.size(), 1)) {
                         this.showSessionPanel = false;
-                        initSession();
+                        initPrivilege();
                     }
                     FacesContext.getCurrentInstance().getExternalContext().redirect(this.sc + "/index.html");
                 } else {
@@ -105,7 +114,7 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
         }
     }
 
-    public void initSession() {
+    public void initPrivilege() {
         HttpSession session = SessionMBean.getSession();
         List allAccess = new ArrayList();
         for (Menu m : this.menuFacadeLocal.findAll()) {
@@ -145,8 +154,24 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
             session.setAttribute("magasin", magasin);
         }
 
-        initSession();
+        this.initJour(magasin);
+        initPrivilege();
         this.showSessionPanel = false;
+    }
+
+    private void initJour(Magasin magasin) {
+        Journee journee = journeeFacadeLocal.findByIdMagasinDate(magasin.getIdmagasin(), new Date());
+        if (journee == null) {
+            journee = new Journee();
+            journee.setIdjournee(journeeFacadeLocal.nextVal());
+            journee.setMagasin(magasin);
+            journee.setHeureOuverture(Date.from(Instant.now()));
+            journee.setDateJour(Date.from(Instant.now()));
+            journee.setUtilisateurOuverture(utilisateur);
+            journee.setOuverte(true);
+            journee.setFermee(false);
+            journeeFacadeLocal.create(journee);
+        }
     }
 
     public void closeSession() {

@@ -13,7 +13,7 @@ public interface ArticleFacadeLocal {
 
     public void remove(Article paramArticle);
 
-    public Article find(Object paramObject);
+    public Article find(Object object);
 
     public List<Article> findAll();
 
@@ -23,11 +23,11 @@ public interface ArticleFacadeLocal {
 
     public Long nextVal();
 
-    public List<Article> findAllRange();
+    public List<Article> findAllRange(int idStructure);
 
-    public Article findByCode(String paramString);
+    public Article findByCode(int idStructure, String code);
 
-    public List<Article> findByPerissable(boolean paramBoolean);
+    public List<Article> findByPerissable(int idStructure, boolean paramBoolean);
 
     public List<Article> findByFamille(long paramLong)
             throws Exception;
@@ -35,8 +35,8 @@ public interface ArticleFacadeLocal {
     public List<Article> findByFamille(long paramLong, boolean paramBoolean)
             throws Exception;
 
-    public List<Article> findAllRange(boolean paramBoolean);
+    public List<Article> findAllRange(int idStructure, boolean paramBoolean);
 
-    public List<Article> findByEtatQuantityPositif(boolean paramBoolean)
+    public List<Article> findByEtatQuantityPositif(int idStructure, boolean paramBoolean)
             throws Exception;
 }

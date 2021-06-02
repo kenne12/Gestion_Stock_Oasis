@@ -64,6 +64,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Article.findByQuantitevirtuelle", query = "SELECT a FROM Article a WHERE a.quantitevirtuelle = :quantitevirtuelle"),
     @NamedQuery(name = "Article.findByQuantitesecurite", query = "SELECT a FROM Article a WHERE a.quantitesecurite = :quantitesecurite")})
 public class Article implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -122,6 +123,9 @@ public class Article implements Serializable {
     @JoinColumn(name = "idunite", referencedColumnName = "idunite")
     @ManyToOne(fetch = FetchType.LAZY)
     private Unite idunite;
+    @JoinColumn(name = "idstructure", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Parametrage parametrage;
 
     public Article() {
     }
@@ -413,6 +417,14 @@ public class Article implements Serializable {
         this.idunite = idunite;
     }
 
+    public Parametrage getParametrage() {
+        return parametrage;
+    }
+
+    public void setParametrage(Parametrage parametrage) {
+        this.parametrage = parametrage;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -437,5 +449,5 @@ public class Article implements Serializable {
     public String toString() {
         return "entities.Article[ idarticle=" + idarticle + " ]";
     }
-    
+
 }

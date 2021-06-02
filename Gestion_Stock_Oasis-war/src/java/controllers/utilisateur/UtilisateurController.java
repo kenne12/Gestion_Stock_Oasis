@@ -1,6 +1,5 @@
 package controllers.utilisateur;
 
-import entities.Demande;
 import entities.Magasin;
 import entities.Menu;
 import entities.Personnel;
@@ -21,8 +20,7 @@ import utils.Utilitaires;
 
 @ManagedBean
 @ViewScoped
-public class UtilisateurController extends AbstractUtilisateurController
-        implements Serializable {
+public class UtilisateurController extends AbstractUtilisateurController implements Serializable {
 
     @PostConstruct
     private void init() {
@@ -35,7 +33,7 @@ public class UtilisateurController extends AbstractUtilisateurController
 
     public void prepareCreate() {
         try {
-            if (!Utilitaires.isAccess(Long.valueOf(2L))) {
+            if (!Utilitaires.isAccess((2L))) {
                 signalError("acces_refuse");
                 return;
             }
@@ -60,7 +58,7 @@ public class UtilisateurController extends AbstractUtilisateurController
             }
             this.personnels.removeAll(listPersonnel);
 
-            this.magasins = this.magasinFacadeLocal.findAllRangeMcIsFalse();
+            this.magasins = this.magasinFacadeLocal.findAllRangeMcIsFalse(SessionMBean.getMagasin().getParametrage().getId());
             this.selectedMagasins.clear();
             RequestContext.getCurrentInstance().execute("PF('UtilisateurCreerDialog').show()");
         } catch (Exception e) {
@@ -91,7 +89,7 @@ public class UtilisateurController extends AbstractUtilisateurController
                 }
             }
 
-            this.magasins = this.magasinFacadeLocal.findAllRangeMcIsFalse();
+            this.magasins = this.magasinFacadeLocal.findAllRangeMcIsFalse(SessionMBean.getMagasin().getParametrage().getId());
             this.magasins.remove(this.personnel.getIdmagasin());
 
             RequestContext.getCurrentInstance().execute("PF('UtilisateurCreerDialog').show()");
@@ -213,29 +211,29 @@ public class UtilisateurController extends AbstractUtilisateurController
 
     public void changeStatus(Utilisateur utilisateur, String mode) {
         try {
-            /* 228 */ if (mode.equals("activer")) {
-                /* 230 */ if (!Utilitaires.isAccess(Long.valueOf(6L))) {
-                    /* 231 */ signalError("acces_refuse");
-                    /* 232 */ return;
+            if (mode.equals("activer")) {
+                if (!Utilitaires.isAccess((6L))) {
+                    signalError("acces_refuse");
+                    return;
                 }
 
-                /* 235 */ utilisateur.setActif(Boolean.valueOf(true));
-                /* 236 */ this.utilisateurFacadeLocal.edit(utilisateur);
-                /* 237 */ Utilitaires.saveOperation(this.mouchardFacadeLocal, "Activation du compte de l'utilisateur : " + utilisateur.getNom() + " " + utilisateur.getPrenom(), SessionMBean.getUserAccount());
-                /* 238 */ JsfUtil.addSuccessMessage("Operation réussie");
+                utilisateur.setActif((true));
+                this.utilisateurFacadeLocal.edit(utilisateur);
+                Utilitaires.saveOperation(this.mouchardFacadeLocal, "Activation du compte de l'utilisateur : " + utilisateur.getNom() + " " + utilisateur.getPrenom(), SessionMBean.getUserAccount());
+                JsfUtil.addSuccessMessage("Operation réussie");
             } else {
-                /* 241 */ if (!Utilitaires.isAccess(Long.valueOf(7L))) {
-                    /* 242 */ signalError("acces_refuse");
-                    /* 243 */ return;
+                if (!Utilitaires.isAccess((7L))) {
+                    signalError("acces_refuse");
+                    return;
                 }
 
-                /* 246 */ utilisateur.setActif(Boolean.valueOf(false));
-                /* 247 */ this.utilisateurFacadeLocal.edit(utilisateur);
-                /* 248 */ Utilitaires.saveOperation(this.mouchardFacadeLocal, "Désativation du compte de l'utilisateur : " + utilisateur.getNom() + " " + utilisateur.getPrenom(), SessionMBean.getUserAccount());
-                /* 249 */ JsfUtil.addSuccessMessage("Operation réussie");
+                utilisateur.setActif((false));
+                this.utilisateurFacadeLocal.edit(utilisateur);
+                Utilitaires.saveOperation(this.mouchardFacadeLocal, "Désativation du compte de l'utilisateur : " + utilisateur.getNom() + " " + utilisateur.getPrenom(), SessionMBean.getUserAccount());
+                JsfUtil.addSuccessMessage("Operation réussie");
             }
         } catch (Exception e) {
-            /* 252 */ e.printStackTrace();
+            e.printStackTrace();
         }
     }
 

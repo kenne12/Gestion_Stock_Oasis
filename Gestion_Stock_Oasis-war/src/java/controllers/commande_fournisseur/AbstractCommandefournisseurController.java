@@ -21,6 +21,7 @@ import sessions.LotFacadeLocal;
 import sessions.MouchardFacadeLocal;
 import sessions.UniteFacadeLocal;
 import utils.Routine;
+import utils.SessionMBean;
 
 public class AbstractCommandefournisseurController {
 
@@ -120,7 +121,7 @@ public class AbstractCommandefournisseurController {
     }
 
     public List<Famille> getFamilles() {
-        this.familles = this.familleFacadeLocal.findAllRange();
+        this.familles = this.familleFacadeLocal.findAllRange(SessionMBean.getMagasin().getParametrage().getId());
         return this.familles;
     }
 

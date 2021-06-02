@@ -46,9 +46,9 @@ public class LotFacade extends AbstractFacade<Lot> implements LotFacadeLocal {
     }
 
     @Override
-    public List<Lot> findAllRange(boolean perissable) {
-        Query query = this.em.createQuery("SELECT l FROM Lot l WHERE l.idarticle.perissable=:perissable ORDER BY l.idarticle.libelle, l.numero");
-        query.setParameter("perissable", perissable);
+    public List<Lot> findAllRange(int idStructure, boolean perissable) {
+        Query query = this.em.createQuery("SELECT l FROM Lot l WHERE l.idarticle.perissable=:perissable AND l.idarticle.parametrage.id=:id ORDER BY l.idarticle.libelle, l.numero");
+        query.setParameter("perissable", perissable).setParameter("id", idStructure);
         return query.getResultList();
     }
 
@@ -64,9 +64,9 @@ public class LotFacade extends AbstractFacade<Lot> implements LotFacadeLocal {
     }
 
     @Override
-    public Lot findByCode(String numero) {
-        Query query = this.em.createQuery("SELECT l FROM Lot l WHERE l.numero=:numero");
-        query.setParameter("numero", numero);
+    public Lot findByCode(int idStructure, String numero) {
+        Query query = this.em.createQuery("SELECT l FROM Lot l WHERE l.numero=:numero AND l.idarticle.parametrage.id=:id");
+        query.setParameter("numero", numero).setParameter("id", idStructure);
         List list = query.getResultList();
         if (!list.isEmpty()) {
             return (Lot) list.get(0);
@@ -145,9 +145,9 @@ public class LotFacade extends AbstractFacade<Lot> implements LotFacadeLocal {
     }
 
     @Override
-    public List<Lot> findAllPeremptionIsActif(Date date) {
-        Query query = this.em.createQuery("SELECT l FROM Lot l WHERE l.idarticle.perissable=true AND l.etat=true AND :date>=l.dateperemption ORDER BY l.idarticle.libelle, l.numero");
-        query.setParameter("date", date);
+    public List<Lot> findAllPeremptionIsActif(int idStructure, Date date) {
+        Query query = this.em.createQuery("SELECT l FROM Lot l WHERE l.idarticle.perissable=true AND l.etat=true AND :date>=l.dateperemption AND l.idarticle.parametrage.id=:id ORDER BY l.idarticle.libelle, l.numero");
+        query.setParameter("date", date).setParameter("id", idStructure);
         return query.getResultList();
     }
 }

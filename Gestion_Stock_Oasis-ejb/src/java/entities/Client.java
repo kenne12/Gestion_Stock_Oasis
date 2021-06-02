@@ -11,7 +11,10 @@ import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -54,6 +57,10 @@ public class Client implements Serializable {
     private List<Livraisonclient> livraisonclients;
     @OneToMany(mappedBy = "client")
     private List<Demande> listDemandes;
+
+    @JoinColumn(name = "idmagasin", referencedColumnName = "idmagasin")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Magasin magasin;
 
     public Client() {
     }
@@ -172,6 +179,14 @@ public class Client implements Serializable {
 
     public void setListDemandes(List<Demande> listDemandes) {
         this.listDemandes = listDemandes;
+    }
+
+    public Magasin getMagasin() {
+        return magasin;
+    }
+
+    public void setMagasin(Magasin magasin) {
+        this.magasin = magasin;
     }
 
     @Override
