@@ -27,6 +27,7 @@ import sessions.MouchardFacadeLocal;
 import sessions.MvtstockFacadeLocal;
 import sessions.UniteFacadeLocal;
 import utils.Routine;
+import utils.SessionMBean;
 
 public class AbstractLivraisonFournisseurController {
 
@@ -249,11 +250,8 @@ public class AbstractLivraisonFournisseurController {
     }
 
     public List<Unite> getUnites() {
-        this.unites = this.uniteFacadeLocal.findAllRange();
+        this.unites = this.uniteFacadeLocal.findByStructure(SessionMBean.getParametrage().getId());
         return this.unites;
     }
 
-    public void setUnites(List<Unite> unites) {
-        this.unites = unites;
-    }
 }

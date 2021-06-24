@@ -35,7 +35,16 @@ public class FournisseurFacade extends AbstractFacade<Fournisseur> implements Fo
     }
 
     @Override
-    public List<Fournisseur> findAllRange() {
-        return this.em.createQuery("SELECT f FROM Fournisseur f ORDER BY f.nom").getResultList();
+    public List<Fournisseur> findAllRange(int idMagasin) {
+        return this.em.createQuery("SELECT f FROM Fournisseur f WHERE f.magasin.idmagasin=:idMagasin ORDER BY f.nom")
+                .setParameter("idMagasin", idMagasin)
+                .getResultList();
+    }
+
+    @Override
+    public List<Fournisseur> findByIdstructure(int idStructure) {
+        return this.em.createQuery("SELECT f FROM Fournisseur f WHERE f.magasin.parametrage.id=:idStructure ORDER BY f.nom")
+                .setParameter("idStructure", idStructure)
+                .getResultList();
     }
 }

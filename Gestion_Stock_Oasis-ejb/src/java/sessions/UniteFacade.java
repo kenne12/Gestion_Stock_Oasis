@@ -15,27 +15,36 @@ public class UniteFacade extends AbstractFacade<Unite> implements UniteFacadeLoc
 
     @Override
     protected EntityManager getEntityManager() {
-        /* 27 */ return this.em;
+        return this.em;
     }
 
     public UniteFacade() {
-        /* 31 */ super(Unite.class);
+        super(Unite.class);
     }
 
     @Override
     public Long nextVal() {
-        /* 36 */ Query query = this.em.createQuery("SELECT MAX(u.idunite) FROM Unite u");
-        /* 37 */ Long result = (Long) query.getSingleResult();
-        /* 38 */ if (result == null) /* 39 */ {
-            result = Long.valueOf(1L);
+        Query query = this.em.createQuery("SELECT MAX(u.idunite) FROM Unite u");
+        Long result = (Long) query.getSingleResult();
+        if (result == null) {
+            result = 1L;
         } else {
-            /* 41 */ result = Long.valueOf(result.longValue() + 1L);
+            result += 1L;
         }
-        /* 43 */ return result;
+        return result;
     }
 
     @Override
-    public List<Unite> findAllRange() {
-        /* 48 */ return this.em.createQuery("SELECT u FROM Unite u ORDER BY u.libelle").getResultList();
+    public List<Unite> findAllRange(int idMagasin) {
+        return this.em.createQuery("SELECT u FROM Unite u WHERE u.magasin.idmagasin=:idMagasin ORDER BY u.libelle")
+                .setParameter("idMagasin", idMagasin)
+                .getResultList();
+    }
+    
+    @Override
+    public List<Unite> findByStructure(int idStructure) {
+        return this.em.createQuery("SELECT u FROM Unite u WHERE u.magasin.parametrage.id=:idStructure ORDER BY u.libelle")
+                .setParameter("idStructure", idStructure)
+                .getResultList();
     }
 }

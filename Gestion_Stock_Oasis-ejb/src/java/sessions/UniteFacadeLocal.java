@@ -7,13 +7,13 @@ import javax.ejb.Local;
 @Local
 public abstract interface UniteFacadeLocal {
 
-    public abstract void create(Unite paramUnite);
+    public abstract void create(Unite unite);
 
-    public abstract void edit(Unite paramUnite);
+    public abstract void edit(Unite unite);
 
-    public abstract void remove(Unite paramUnite);
+    public abstract void remove(Unite unite);
 
-    public abstract Unite find(Object paramObject);
+    public abstract Unite find(Object object);
 
     public abstract List<Unite> findAll();
 
@@ -23,5 +23,7 @@ public abstract interface UniteFacadeLocal {
 
     public abstract Long nextVal();
 
-    public abstract List<Unite> findAllRange();
+    public List<Unite> findAllRange(int idMagasin);
+
+    public List<Unite> findByStructure(int idStructure);
 }

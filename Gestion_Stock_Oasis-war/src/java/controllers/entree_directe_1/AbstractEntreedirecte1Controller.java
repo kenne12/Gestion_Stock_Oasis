@@ -103,8 +103,8 @@ public class AbstractEntreedirecte1Controller {
 
     protected Routine routine = new Routine();
 
-    protected Double cout_quantite = 0.0D;
-    protected Double total = 0.0D;
+    protected Double cout_quantite = 0d;
+    protected Double total = 0d;
 
     protected Boolean detail = true;
     protected Boolean modifier = true;
@@ -117,7 +117,7 @@ public class AbstractEntreedirecte1Controller {
     protected String mode = "";
 
     public Article getArticle() {
-        /* 130 */ return this.article;
+        return this.article;
     }
 
     public void setArticle(Article article) {
@@ -137,20 +137,16 @@ public class AbstractEntreedirecte1Controller {
     }
 
     public void setFournisseur(Fournisseur fournisseur) {
-        /* 150 */ this.fournisseur = fournisseur;
+        this.fournisseur = fournisseur;
     }
 
     public List<Fournisseur> getFournisseurs() {
-        /* 154 */ this.fournisseurs = this.fournisseurFacadeLocal.findAllRange();
-        /* 155 */ return this.fournisseurs;
-    }
-
-    public void setFournisseurs(List<Fournisseur> fournisseurs) {
-        /* 159 */ this.fournisseurs = fournisseurs;
+        this.fournisseurs = this.fournisseurFacadeLocal.findByIdstructure(SessionMBean.getParametrage().getId());
+        return this.fournisseurs;
     }
 
     public Livraisonfournisseur getLivraisonfournisseur() {
-        /* 163 */ return this.livraisonfournisseur;
+        return this.livraisonfournisseur;
     }
 
     public void setLivraisonfournisseur(Livraisonfournisseur livraisonfournisseur) {
@@ -159,68 +155,48 @@ public class AbstractEntreedirecte1Controller {
     }
 
     public List<Livraisonfournisseur> getLivraisonfournisseurs() {
-        /* 172 */ this.livraisonfournisseurs = this.livraisonfournisseurFacadeLocal.findAllRange(true);
-        /* 173 */ return this.livraisonfournisseurs;
+        this.livraisonfournisseurs = this.livraisonfournisseurFacadeLocal.findAllRange(true);
+        return this.livraisonfournisseurs;
     }
 
     public void setLivraisonfournisseurs(List<Livraisonfournisseur> livraisonfournisseurs) {
-        /* 177 */ this.livraisonfournisseurs = livraisonfournisseurs;
+        this.livraisonfournisseurs = livraisonfournisseurs;
     }
 
     public Lignelivraisonfournisseur getLignelivraisonfournisseur() {
-        /* 181 */ return this.lignelivraisonfournisseur;
+        return this.lignelivraisonfournisseur;
     }
 
     public void setLignelivraisonfournisseur(Lignelivraisonfournisseur lignelivraisonfournisseur) {
-        /* 185 */ this.lignelivraisonfournisseur = lignelivraisonfournisseur;
+        this.lignelivraisonfournisseur = lignelivraisonfournisseur;
     }
 
     public List<Lignelivraisonfournisseur> getLignelivraisonfournisseurs() {
-        /* 189 */ return this.lignelivraisonfournisseurs;
+        return this.lignelivraisonfournisseurs;
     }
 
     public void setLignelivraisonfournisseurs(List<Lignelivraisonfournisseur> lignelivraisonfournisseurs) {
-        /* 193 */ this.lignelivraisonfournisseurs = lignelivraisonfournisseurs;
+        this.lignelivraisonfournisseurs = lignelivraisonfournisseurs;
     }
 
     public Boolean getDetail() {
-        /* 197 */ return this.detail;
-    }
-
-    public void setDetail(Boolean detail) {
-        /* 201 */ this.detail = detail;
+        return this.detail;
     }
 
     public Boolean getModifier() {
-        /* 205 */ return this.modifier;
-    }
-
-    public void setModifier(Boolean modifier) {
-        /* 209 */ this.modifier = modifier;
+        return this.modifier;
     }
 
     public Boolean getConsulter() {
-        /* 213 */ return this.consulter;
-    }
-
-    public void setConsulter(Boolean consulter) {
-        /* 217 */ this.consulter = consulter;
+        return this.consulter;
     }
 
     public Boolean getImprimer() {
         /* 221 */ return this.imprimer;
     }
 
-    public void setImprimer(Boolean imprimer) {
-        /* 225 */ this.imprimer = imprimer;
-    }
-
     public Boolean getSupprimer() {
         /* 229 */ return this.supprimer;
-    }
-
-    public void setSupprimer(Boolean supprimer) {
-        /* 233 */ this.supprimer = supprimer;
     }
 
     public Famille getFamille() {
@@ -236,16 +212,12 @@ public class AbstractEntreedirecte1Controller {
         return this.familles;
     }
 
-    public void setFamilles(List<Famille> familles) {
-        /* 250 */ this.familles = familles;
-    }
-
     public Double getCout_quantite() {
-        /* 254 */ return this.cout_quantite;
+        return this.cout_quantite;
     }
 
     public void setCout_quantite(Double cout_quantite) {
-        /* 258 */ this.cout_quantite = cout_quantite;
+        this.cout_quantite = cout_quantite;
     }
 
     public Double getTotal() {
@@ -253,85 +225,81 @@ public class AbstractEntreedirecte1Controller {
     }
 
     public void setTotal(Double total) {
-        /* 266 */ this.total = total;
+        this.total = total;
     }
 
     public String getFileName() {
-        /* 270 */ return this.fileName;
+        return this.fileName;
     }
 
     public Lot getLot() {
-        /* 274 */ return this.lot;
+        return this.lot;
     }
 
     public void setLot(Lot lot) {
-        /* 278 */ this.lot = lot;
+        this.lot = lot;
     }
 
     public List<Lot> getLots() {
-        /* 282 */ return this.lots;
+        return this.lots;
     }
 
     public Routine getRoutine() {
-        /* 286 */ return this.routine;
+        return this.routine;
     }
 
     public Unite getUnite() {
-        /* 290 */ return this.unite;
+        return this.unite;
     }
 
     public void setUnite(Unite unite) {
-        /* 294 */ this.unite = unite;
+        this.unite = unite;
     }
 
     public List<Unite> getUnites() {
-        /* 298 */ this.unites = this.uniteFacadeLocal.findAllRange();
-        /* 299 */ return this.unites;
-    }
-
-    public void setUnites(List<Unite> unites) {
-        /* 303 */ this.unites = unites;
+        this.unites = this.uniteFacadeLocal.findByStructure(SessionMBean.getParametrage().getId());
+        return this.unites;
     }
 
     public Magasin getMagasin() {
-        /* 307 */ return this.magasin;
+        return this.magasin;
     }
 
     public void setMagasin(Magasin magasin) {
-        /* 311 */ this.magasin = magasin;
+        this.magasin = magasin;
     }
 
     public List<Magasin> getMagasins() {
-        /* 315 */ this.magasins = Utilitaires.returMagasinByUser(this.magasinFacadeLocal, this.utilisateurmagasinFacadeLocal, SessionMBean.getUserAccount().getIdpersonnel());
-        /* 316 */ return this.magasins;
+        this.magasins = Utilitaires.returMagasinByUser(this.magasinFacadeLocal, this.utilisateurmagasinFacadeLocal, SessionMBean.getUserAccount().getIdpersonnel());
+        return this.magasins;
     }
 
     public void setMagasins(List<Magasin> magasins) {
-        /* 320 */ this.magasins = magasins;
+        this.magasins = magasins;
     }
 
     public Magasinarticle getMagasinarticle() {
-        /* 324 */ return this.magasinarticle;
+        return this.magasinarticle;
     }
 
     public void setMagasinarticle(Magasinarticle magasinarticle) {
-        /* 328 */ this.magasinarticle = magasinarticle;
+        this.magasinarticle = magasinarticle;
     }
 
     public List<Magasinarticle> getMagasinarticles() {
-        /* 332 */ return this.magasinarticles;
+        return this.magasinarticles;
     }
 
     public void setMagasinarticles(List<Magasinarticle> magasinarticles) {
-        /* 336 */ this.magasinarticles = magasinarticles;
+        this.magasinarticles = magasinarticles;
     }
 
     public String getLibelle_article() {
-        /* 340 */ return this.libelle_article;
+        return this.libelle_article;
     }
 
     public void setLibelle_article(String libelle_article) {
-        /* 344 */ this.libelle_article = libelle_article;
+        this.libelle_article = libelle_article;
     }
 
     public Fournisseur getFournisseurToSave() {

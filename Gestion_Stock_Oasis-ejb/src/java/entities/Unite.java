@@ -14,6 +14,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -40,6 +42,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Unite.findByDateEnregistre", query = "SELECT u FROM Unite u WHERE u.dateEnregistre = :dateEnregistre"),
     @NamedQuery(name = "Unite.findByDerniereModif", query = "SELECT u FROM Unite u WHERE u.derniereModif = :derniereModif")})
 public class Unite implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -73,6 +76,10 @@ public class Unite implements Serializable {
     private List<Lignelivraisonclient> lignelivraisonclientList;
     @OneToMany(mappedBy = "idunite", fetch = FetchType.LAZY)
     private List<Lignelivraisonfournisseur> lignelivraisonfournisseurList;
+
+    @JoinColumn(name = "idmagasin", referencedColumnName = "idmagasin")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Magasin magasin;
 
     public Unite() {
     }
@@ -135,6 +142,14 @@ public class Unite implements Serializable {
 
     public void setDerniereModif(Date derniereModif) {
         this.derniereModif = derniereModif;
+    }
+
+    public Magasin getMagasin() {
+        return magasin;
+    }
+
+    public void setMagasin(Magasin magasin) {
+        this.magasin = magasin;
     }
 
     @XmlTransient
@@ -224,5 +239,5 @@ public class Unite implements Serializable {
     public String toString() {
         return "entities.Unite[ idunite=" + idunite + " ]";
     }
-    
+
 }

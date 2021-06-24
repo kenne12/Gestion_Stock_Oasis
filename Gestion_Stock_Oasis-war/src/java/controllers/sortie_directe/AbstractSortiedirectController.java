@@ -210,7 +210,7 @@ public class AbstractSortiedirectController {
     }
 
     public List<Unite> getUnites() {
-        this.unites = this.uniteFacadeLocal.findAllRange();
+        this.unites = this.uniteFacadeLocal.findByStructure(SessionMBean.getParametrage().getId());
         return this.unites;
     }
 

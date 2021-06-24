@@ -29,7 +29,7 @@ public class TraitementController extends AbstractTraitementController implement
 
     @PostConstruct
     private void init() {
-        this.unites = this.uniteFacadeLocal.findAllRange();
+        this.unites = this.uniteFacadeLocal.findByStructure(SessionMBean.getParametrage().getId());
     }
 
     public Boolean checkPeremption(Lot lot) {

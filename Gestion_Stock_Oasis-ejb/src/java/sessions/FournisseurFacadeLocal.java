@@ -23,5 +23,7 @@ public interface FournisseurFacadeLocal {
 
     public Integer nextVal();
 
-    public List<Fournisseur> findAllRange();
+    public List<Fournisseur> findAllRange(int idMagasin);
+
+    public List<Fournisseur> findByIdstructure(int idStructure);
 }

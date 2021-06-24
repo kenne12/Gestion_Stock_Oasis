@@ -145,7 +145,7 @@ public class AbstractEntreedirecteController {
     }
 
     public List<Fournisseur> getFournisseurs() {
-        this.fournisseurs = this.fournisseurFacadeLocal.findAllRange();
+        this.fournisseurs = this.fournisseurFacadeLocal.findByIdstructure(SessionMBean.getParametrage().getId());
         return this.fournisseurs;
     }
 
@@ -288,7 +288,7 @@ public class AbstractEntreedirecteController {
     }
 
     public List<Unite> getUnites() {
-        this.unites = this.uniteFacadeLocal.findAllRange();
+        this.unites = this.uniteFacadeLocal.findByStructure(SessionMBean.getParametrage().getId());
         return this.unites;
     }
 

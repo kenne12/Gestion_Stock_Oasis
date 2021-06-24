@@ -311,12 +311,8 @@ public class AbstractCommandePersonnelController {
     }
 
     public List<Unite> getUnites() {
-        this.unites = this.uniteFacadeLocal.findAllRange();
-        return this.unites;
-    }
-
-    public void setUnites(List<Unite> unites) {
-        this.unites = unites;
+        unites = uniteFacadeLocal.findByStructure(SessionMBean.getParametrage().getId());
+        return unites;
     }
 
     public Magasinlot getMagasinlot() {

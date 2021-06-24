@@ -11,6 +11,8 @@ import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -33,6 +35,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Fournisseur.findByContact", query = "SELECT f FROM Fournisseur f WHERE f.contact = :contact"),
     @NamedQuery(name = "Fournisseur.findByEmail", query = "SELECT f FROM Fournisseur f WHERE f.email = :email")})
 public class Fournisseur implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -51,6 +54,10 @@ public class Fournisseur implements Serializable {
     private List<Livraisonfournisseur> livraisonfournisseurList;
     @OneToMany(mappedBy = "idfournisseur", fetch = FetchType.LAZY)
     private List<Commandefournisseur> commandefournisseurList;
+
+    @JoinColumn(name = "idmagasin", referencedColumnName = "idmagasin")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Magasin magasin;
 
     public Fournisseur() {
     }
@@ -99,6 +106,14 @@ public class Fournisseur implements Serializable {
         this.email = email;
     }
 
+    public Magasin getMagasin() {
+        return magasin;
+    }
+
+    public void setMagasin(Magasin magasin) {
+        this.magasin = magasin;
+    }
+
     @XmlTransient
     public List<Livraisonfournisseur> getLivraisonfournisseurList() {
         return livraisonfournisseurList;
@@ -141,5 +156,5 @@ public class Fournisseur implements Serializable {
     public String toString() {
         return "entities.Fournisseur[ idfournisseur=" + idfournisseur + " ]";
     }
-    
+
 }
