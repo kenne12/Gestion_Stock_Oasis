@@ -29,13 +29,23 @@ public class PersonnelFacade extends AbstractFacade<Personnel> implements Person
         if (result == null) {
             result = 1L;
         } else {
-            result = result.longValue() + 1L;
+            result += 1L;
         }
         return result;
     }
 
     @Override
-    public List<Personnel> findAllRange() {
-        return this.em.createQuery("SELECT p FROM Personnel p ORDER BY p.nom , p.prenom").getResultList();
+    public List<Personnel> findAllRange(int idMagasin) {
+        return this.em.createQuery("SELECT p FROM Personnel p WHERE p.idmagasin.idmagasin=:idMagasin ORDER BY p.nom , p.prenom")
+                .setParameter("idMagasin", idMagasin)
+                .getResultList();
+    }
+    
+    
+    @Override
+    public List<Personnel> findByIdStructure(int idStructure) {
+        return this.em.createQuery("SELECT p FROM Personnel p WHERE p.idmagasin.parametrage.id=:idStructure ORDER BY p.nom , p.prenom")
+                .setParameter("idStructure", idStructure)
+                .getResultList();
     }
 }

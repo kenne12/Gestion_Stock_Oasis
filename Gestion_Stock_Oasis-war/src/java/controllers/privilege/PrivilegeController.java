@@ -15,8 +15,7 @@ import utils.Utilitaires;
 
 @ManagedBean
 @ViewScoped
-public class PrivilegeController extends AbstractPrivilegeController
-        implements PrivilegeInterfaceController, Serializable {
+public class PrivilegeController extends AbstractPrivilegeController implements  Serializable {
 
     @PostConstruct
     private void initAcces() {
@@ -25,14 +24,14 @@ public class PrivilegeController extends AbstractPrivilegeController
 
     public void prepareCreate() {
         try {
-            if (Utilitaires.isAccess(Long.valueOf(5L))) {
-                this.showPrivilegeCreateDialog = Boolean.valueOf(true);
+            if (Utilitaires.isAccess(5L)) {
+                this.showPrivilegeCreateDialog = true;
                 this.dualMenu.getSource().clear();
                 this.dualMenu.getTarget().clear();
                 this.utilisateur = new Utilisateur();
                 return;
             }
-            this.showPrivilegeCreateDialog = Boolean.valueOf(false);
+            this.showPrivilegeCreateDialog = false;
             JsfUtil.addErrorMessage("Vous n'avez pas le droit d'attribuer les privilèges aux utilisateurs");
         } catch (Exception e) {
             e.printStackTrace();
@@ -42,7 +41,7 @@ public class PrivilegeController extends AbstractPrivilegeController
     public void viewAccess(Utilisateur utilisateur) {
         try {
             this.utilisateur = utilisateur;
-            this.privileges = this.privilegeFacadeLocal.findByUser(utilisateur.getIdutilisateur().intValue());
+            this.privileges = this.privilegeFacadeLocal.findByUser(utilisateur.getIdutilisateur());
         } catch (Exception e) {
             e.printStackTrace();
             JsfUtil.addErrorMessage("Echec");
@@ -56,7 +55,7 @@ public class PrivilegeController extends AbstractPrivilegeController
             if (this.utilisateur.getIdutilisateur() != null) {
                 this.utilisateur = this.utilisateurFacadeLocal.find(this.utilisateur.getIdutilisateur());
 
-                List<Privilege> privilegeTemp = this.privilegeFacadeLocal.findByUser(this.utilisateur.getIdutilisateur().intValue());
+                List<Privilege> privilegeTemp = this.privilegeFacadeLocal.findByUser(this.utilisateur.getIdutilisateur());
                 if (privilegeTemp.isEmpty()) {
                     this.dualMenu.setSource(this.menuFacadeLocal.findAllRangeEtatIsTrue());
                 } else {
@@ -89,33 +88,33 @@ public class PrivilegeController extends AbstractPrivilegeController
                     }
                 }
 
-                Boolean flag = Boolean.valueOf(false);
+                Boolean flag = (false);
                 for (Menu m : this.dualMenu.getTarget()) {
-                    if (!flag.booleanValue()) {
-                        if (m.getIdmenu().intValue() == 1) {
-                            flag = Boolean.valueOf(true);
+                    if (!flag) {
+                        if (m.getIdmenu() == 1) {
+                            flag = (true);
                             Privilege p = this.privilegeFacadeLocal.findByUser(this.utilisateur.getIdutilisateur().intValue(), 1);
                             if (p == null) {
-                                /* 113 */ p = new Privilege();
-                                /* 114 */ p.setIdprivilege(this.privilegeFacadeLocal.nextVal());
-                                /* 115 */ p.setIdmenu(m);
-                                /* 116 */ p.setIdutilisateur(this.utilisateur);
-                                /* 117 */ this.privilegeFacadeLocal.create(p);
-                                /* 118 */ Utilitaires.saveOperation(this.mouchardFacadeLocal, "ATTRIBUTION DU PRIVILEGE : SUPER ADMINISTRATEUR à l'utilisateur -> " + this.utilisateur.getNom() + " " + this.utilisateur.getPrenom(), SessionMBean.getUserAccount());
-                                /* 119 */ break;
+                                p = new Privilege();
+                                p.setIdprivilege(this.privilegeFacadeLocal.nextVal());
+                                p.setIdmenu(m);
+                                p.setIdutilisateur(this.utilisateur);
+                                this.privilegeFacadeLocal.create(p);
+                                Utilitaires.saveOperation(this.mouchardFacadeLocal, "ATTRIBUTION DU PRIVILEGE : SUPER ADMINISTRATEUR à l'utilisateur -> " + this.utilisateur.getNom() + " " + this.utilisateur.getPrenom(), SessionMBean.getUserAccount());
+                                break;
                             }
-                            /* 121 */ JsfUtil.addSuccessMessage("Vous disposez dejà du privilège SUPER ADMINISTRATEUR");
-                            /* 122 */ break;
+                            JsfUtil.addSuccessMessage("Vous disposez dejà du privilège SUPER ADMINISTRATEUR");
+                            break;
                         }
 
-                        /* 125 */ Privilege p = this.privilegeFacadeLocal.findByUser(this.utilisateur.getIdutilisateur().intValue(), m.getIdmenu().intValue());
-                        /* 126 */ if (p == null) {
-                            /* 127 */ p = new Privilege();
-                            /* 128 */ p.setIdprivilege(this.privilegeFacadeLocal.nextVal());
-                            /* 129 */ p.setIdmenu(m);
-                            /* 130 */ p.setIdutilisateur(this.utilisateur);
-                            /* 131 */ this.privilegeFacadeLocal.create(p);
-                            /* 132 */ Utilitaires.saveOperation(this.mouchardFacadeLocal, "ATTRIBUTION DU PRIVILEGE -> " + m.getNom() + " à l'utilisateur -> " + this.utilisateur.getNom() + " " + this.utilisateur.getPrenom(), SessionMBean.getUserAccount());
+                        Privilege p = this.privilegeFacadeLocal.findByUser(this.utilisateur.getIdutilisateur().intValue(), m.getIdmenu().intValue());
+                        if (p == null) {
+                            p = new Privilege();
+                            p.setIdprivilege(this.privilegeFacadeLocal.nextVal());
+                            p.setIdmenu(m);
+                            p.setIdutilisateur(this.utilisateur);
+                            this.privilegeFacadeLocal.create(p);
+                            Utilitaires.saveOperation(this.mouchardFacadeLocal, "ATTRIBUTION DU PRIVILEGE -> " + m.getNom() + " à l'utilisateur -> " + this.utilisateur.getNom() + " " + this.utilisateur.getPrenom(), SessionMBean.getUserAccount());
                         }
                     }
 

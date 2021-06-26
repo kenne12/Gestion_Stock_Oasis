@@ -29,28 +29,46 @@ public class UtilisateurFacade extends AbstractFacade<Utilisateur> implements Ut
         if (result == null) {
             result = 1;
         } else {
-            result = result.intValue() + 1;
+            result += 1;
         }
         return result;
     }
 
     @Override
-    public Utilisateur login(String login, String password) throws Exception {
-        Utilisateur utilisateur = null;
-        Query query = this.em.createQuery("SELECT u FROM Utilisateur U WHERE u.login=:login AND u.password=:password");
-        query.setParameter("login", login).setParameter("password", password);
-        if (!query.getResultList().isEmpty()) {
-            utilisateur = (Utilisateur) query.getResultList().get(0);
-        }
-        return utilisateur;
+    public List<Utilisateur> findByIdStructure(int idStructure) {
+        return em.createQuery("SELECT u FROM Utilisateur u WHERE u.idpersonnel.idmagasin.parametrage.id=:id ORDER BY u.idpersonnel.nom")
+                .setParameter("id", idStructure)
+                .getResultList();
     }
 
     @Override
-    public List<Utilisateur> findByActif(Boolean actif) {
-        List utilisateurs = null;
-        Query query = this.em.createQuery("SELECT u FROM Utilisateur u WHERE u.actif=:actif ORDER BY u.nom,u.prenom");
-        query.setParameter("actif", actif);
-        utilisateurs = query.getResultList();
-        return utilisateurs;
+    public Utilisateur login(String login) {
+        List list = this.em.createQuery("SELECT u FROM Utilisateur U WHERE u.login=:login ")
+                .setParameter("login", login)
+                .getResultList();
+        if (!list.isEmpty()) {
+            return (Utilisateur) list.get(0);
+        }
+        return null;
     }
+
+    @Override
+    public Utilisateur login(String login, String password) throws Exception {
+        List list = this.em.createQuery("SELECT u FROM Utilisateur U WHERE u.login=:login AND u.password=:password")
+                .setParameter("login", login).setParameter("password", password)
+                .getResultList();
+        if (!list.isEmpty()) {
+            return (Utilisateur) list.get(0);
+        }
+        return null;
+    }
+
+    @Override
+    public List<Utilisateur> findByIdStructureEtat(int idStructure, boolean actif) {
+        return this.em.createQuery("SELECT u FROM Utilisateur u WHERE u.idpersonnel.idmagasin.parametrage.id=:id AND u.actif=:actif ORDER BY u.idpersonnel.nom")
+                .setParameter("actif", actif)
+                .setParameter("id", idStructure)
+                .getResultList();
+    }
+
 }

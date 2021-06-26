@@ -51,12 +51,13 @@ public class FournisseurController extends AbstractFournisseurController impleme
                 this.fournisseur.setMagasin(SessionMBean.getMagasin());
                 this.fournisseurFacadeLocal.create(this.fournisseur);
                 Utilitaires.saveOperation(this.mouchardFacadeLocal, "Enregistrement du fournisseur : " + this.fournisseur.getNom(), SessionMBean.getUserAccount());
-                this.fournisseur = null;
+                this.fournisseur = new Fournisseur();
                 RequestContext.getCurrentInstance().execute("PF('FournisseurCreerDialog').hide()");
                 signalSuccess();
             } else if (this.fournisseur != null) {
                 this.fournisseurFacadeLocal.edit(this.fournisseur);
-                this.fournisseur = null;
+                this.fournisseur = new Fournisseur();
+                modifier = supprimer = detail = true;
                 RequestContext.getCurrentInstance().execute("PF('FournisseurCreerDialog').hide()");
                 signalSuccess();
             } else {
@@ -76,7 +77,8 @@ public class FournisseurController extends AbstractFournisseurController impleme
                 }
                 this.fournisseurFacadeLocal.remove(this.fournisseur);
                 Utilitaires.saveOperation(this.mouchardFacadeLocal, "Suppresion du fournisseur : " + this.fournisseur.getNom(), SessionMBean.getUserAccount());
-                this.fournisseur = null;
+                this.fournisseur = new Fournisseur();
+                modifier = supprimer = detail = true;
                 signalSuccess();
             } else {
                 JsfUtil.addErrorMessage("Aucun Fournisseur selectionnée");

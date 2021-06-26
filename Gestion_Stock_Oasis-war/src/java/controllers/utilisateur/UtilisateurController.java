@@ -48,7 +48,7 @@ public class UtilisateurController extends AbstractUtilisateurController impleme
             this.utilisateur.setTheme("hot-sneaks");
             this.personnel = new Personnel();
 
-            this.personnels = this.personnelFacadeLocal.findAllRange();
+            this.personnels = this.personnelFacadeLocal.findByIdStructure(SessionMBean.getParametrage().getId());
             List<Utilisateur> utilisateurs = this.utilisateurFacadeLocal.findAll();
             List listPersonnel = new ArrayList();
             if (!utilisateurs.isEmpty()) {
@@ -159,7 +159,7 @@ public class UtilisateurController extends AbstractUtilisateurController impleme
                         this.utilisateurmagasinFacadeLocal.create(um);
                     }
                 }
-                this.modifier = (this.detail = this.supprimer = Boolean.valueOf(true));
+                this.modifier = (this.detail = this.supprimer = (true));
                 RequestContext.getCurrentInstance().execute("PF('UtilisateurCreerDialog').hide()");
                 signalSuccess();
             } else {
@@ -238,20 +238,20 @@ public class UtilisateurController extends AbstractUtilisateurController impleme
     }
 
     public void signalError(String chaine) {
-        /* 257 */ RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
-        /* 258 */ this.routine.feedBack("information", "/resources/tool_images/warning.jpeg", this.routine.localizeMessage(chaine));
-        /* 259 */ RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
+        RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
+        this.routine.feedBack("information", "/resources/tool_images/warning.jpeg", this.routine.localizeMessage(chaine));
+        RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
     }
 
     public void signalSuccess() {
-        /* 263 */ RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
-        /* 264 */ this.routine.feedBack("information", "/resources/tool_images/success.png", this.routine.localizeMessage("operation_reussie"));
-        /* 265 */ RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
+        RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
+        this.routine.feedBack("information", "/resources/tool_images/success.png", this.routine.localizeMessage("operation_reussie"));
+        RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
     }
 
     public void signalException(Exception e) {
-        /* 269 */ RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
-        /* 270 */ this.routine.catchException(e, this.routine.localizeMessage("erreur_execution"));
-        /* 271 */ RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
+        RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
+        this.routine.catchException(e, this.routine.localizeMessage("erreur_execution"));
+        RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
     }
 }

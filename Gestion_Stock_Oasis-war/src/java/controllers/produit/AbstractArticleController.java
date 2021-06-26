@@ -97,8 +97,8 @@ public class AbstractArticleController {
 
     protected boolean showQuantiteDosage = SessionMBean.getParametrage().getEtatQuantiteDosage();
     protected boolean showFormeStockage = SessionMBean.getParametrage().getEtatFormeStockage();
-    protected boolean showUser = SessionMBean.getParametrage().getEtatuser();
-    protected boolean showBailleur = SessionMBean.getParametrage().getEtatbailleur();
+    protected boolean showUser = SessionMBean.getParametrage().isEtatuser();
+    protected boolean showBailleur = SessionMBean.getParametrage().isEtatbailleur();
 
     protected boolean showLot = true;
 
@@ -133,7 +133,7 @@ public class AbstractArticleController {
     }
 
     public Boolean getImprimer() {
-        this.imprimer = this.articleFacadeLocal.findAll().isEmpty();
+        this.imprimer = this.articleFacadeLocal.findAllRange(SessionMBean.getMagasin().getParametrage().getId()).isEmpty();
         return this.imprimer;
     }
 
@@ -142,15 +142,15 @@ public class AbstractArticleController {
     }
 
     public Boolean getSupprimer() {
-        /* 154 */ return this.supprimer;
+         return this.supprimer;
     }
 
     public void setSupprimer(Boolean supprimer) {
-        /* 158 */ this.supprimer = supprimer;
+         this.supprimer = supprimer;
     }
 
     public Fournisseur getFournisseur() {
-        /* 162 */ return this.fournisseur;
+         return this.fournisseur;
     }
 
     public void setFournisseur(Fournisseur fournisseur) {
@@ -159,20 +159,20 @@ public class AbstractArticleController {
     }
 
     public List<Fournisseur> getFournisseurs() {
-        this.fournisseurs = this.fournisseurFacadeLocal.findAll();
+        this.fournisseurs = this.fournisseurFacadeLocal.findByIdstructure(SessionMBean.getMagasin().getParametrage().getId());
         return this.fournisseurs;
     }
 
     public void setFournisseurs(List<Fournisseur> fournisseurs) {
-        /* 176 */ this.fournisseurs = fournisseurs;
+        this.fournisseurs = fournisseurs;
     }
 
     public Famille getFamille() {
-        /* 180 */ return this.famille;
+        return this.famille;
     }
 
     public void setFamille(Famille famille) {
-        /* 184 */ this.famille = famille;
+         this.famille = famille;
     }
 
     public List<Famille> getFamilles() {

@@ -7,13 +7,13 @@ import javax.ejb.Local;
 @Local
 public interface PersonnelFacadeLocal {
 
-    public void create(Personnel paramPersonnel);
+    public void create(Personnel personnel);
 
-    public void edit(Personnel paramPersonnel);
+    public void edit(Personnel personnel);
 
-    public void remove(Personnel paramPersonnel);
+    public void remove(Personnel personnel);
 
-    public Personnel find(Object paramObject);
+    public Personnel find(Object object);
 
     public List<Personnel> findAll();
 
@@ -23,5 +23,7 @@ public interface PersonnelFacadeLocal {
 
     public Long nextVal();
 
-    public List<Personnel> findAllRange();
+    public List<Personnel> findAllRange(int idMagasin);
+
+    public List<Personnel> findByIdStructure(int idStructure);
 }

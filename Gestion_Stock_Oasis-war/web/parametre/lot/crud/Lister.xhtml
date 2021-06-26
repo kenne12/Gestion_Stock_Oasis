@@ -29,7 +29,7 @@
                      selectionMode="single"
                      selection="#{lotController.lot}">
 
-            <p:ajax event="rowSelect"   update=":LotListerForm:LotDataTableContextMenu, :actionsForm"/>
+            <p:ajax event="rowSelect" update=":LotListerForm:LotDataTableContextMenu, :actionsForm"/>
             <p:ajax event="rowUnselect" update=":LotListerForm:LotDataTableContextMenu, :actionsForm"/>
             <p:ajax event="rowDblselect" onsuccess="document.getElementById('LotListerForm:viewButton').click();"/>
 

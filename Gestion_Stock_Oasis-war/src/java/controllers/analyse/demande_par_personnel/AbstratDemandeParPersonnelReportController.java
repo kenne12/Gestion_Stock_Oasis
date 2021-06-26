@@ -8,6 +8,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import sessions.DemandeFacadeLocal;
 import sessions.PersonnelFacadeLocal;
+import utils.SessionMBean;
 
 public class AbstratDemandeParPersonnelReportController {
 
@@ -28,11 +29,11 @@ public class AbstratDemandeParPersonnelReportController {
     }
 
     public Date getDateFin() {
-         return this.dateFin;
+        return this.dateFin;
     }
 
     public void setDateDebut(Date dateDebut) {
-         this.dateDebut = dateDebut;
+        this.dateDebut = dateDebut;
     }
 
     public void setDateFin(Date dateFin) {
@@ -48,12 +49,8 @@ public class AbstratDemandeParPersonnelReportController {
     }
 
     public List<Personnel> getPersonnels() {
-        /* 60 */ this.personnels = this.personnelFacadeLocal.findAllRange();
+        /* 60 */ this.personnels = this.personnelFacadeLocal.findByIdStructure(SessionMBean.getParametrage().getId());
         /* 61 */ return this.personnels;
-    }
-
-    public void setPersonnels(List<Personnel> personnels) {
-        /* 65 */ this.personnels = personnels;
     }
 
     public List<Demande> getDemandes() {

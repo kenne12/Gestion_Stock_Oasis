@@ -6,7 +6,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
 
-    <h:form id="UtilisateurListerForm">
+    <h:form id="StructureListerForm">
 
         <p:messages id="growl" closable="true">
             <p:effect type="pulsate" event="load" delay="50" />
@@ -15,64 +15,49 @@
         <br/>
         <div class="panel panel-default">
             <div class="panel-heading">
-                #{langue['Conv.ListeDes']} : #{langue.utilisateurs}
+                #{langue['Conv.ListeDes']} : #{langue.structure}
             </div>
 
             <div class="panel-body">
-                <p:contextMenu id="UtilisateurDataTableContextMenu" for="datalist">  
+                <p:contextMenu id="StructureDataTableContextMenu" for="datalist">  
                     <p:menuitem value="#{langue['Conv.Creer']}" onclick="document.getElementById('actionsForm:creer').click();" icon="ui-icon-plus"/>
                     <p:menuitem value="#{langue['Conv.Detail']}" onclick="document.getElementById('actionsForm:detail').click();" icon="ui-icon-search"/>
                     <p:menuitem value="#{langue['Conv.Modifier']}" onclick="document.getElementById('actionsForm:modifier').click();" icon="ui-icon-pencil"/>
                     <p:menuitem value="#{langue['Conv.Supprimer']}" onclick="document.getElementById('actionsForm:supprimer').click();" icon="ui-icon-trash"/>
                 </p:contextMenu>
                 <p:dataTable id="datalist"
-                             value="#{utilisateurController.utilisateurs}"
+                             value="#{structureController.parametrages}"
                              var="item"
-                             rowKey="#{item.idutilisateur}"
+                             rowKey="#{item.id}"
                              paginator="true"
                              rows="10"
-                             style=""
                              rowsPerPageTemplate="10,20,30,40,50"
                              selectionMode="single"
-                             selection="#{utilisateurController.utilisateur}">
+                             selection="#{structureController.parametrage}">
 
-                    <p:ajax event="rowSelect"   update=":UtilisateurListerForm:UtilisateurDataTableContextMenu, :actionsForm"/>
-                    <p:ajax event="rowUnselect" update=":UtilisateurListerForm:UtilisateurDataTableContextMenu, :actionsForm"/>
-                    <p:ajax event="rowDblselect" onsuccess="document.getElementById('UtilisateurListerForm:viewButton').click();"/>
+                    <p:ajax event="rowSelect" update=":StructureListerForm:StructureDataTableContextMenu, :actionsForm"/>
+                    <p:ajax event="rowUnselect" update=":StructureListerForm:StructureDataTableContextMenu, :actionsForm"/>
+                    <p:ajax event="rowDblselect" onsuccess="document.getElementById('StructureListerForm:viewButton').click();"/>
+                    
+                    <p:column filterBy="#{item.id}" style="width: 10%">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.identifiant}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.id} "/>
+                    </p:column>
 
-                    <p:column filterBy="#{item.idpersonnel.nom} #{item.idpersonnel.prenom}" filterMatchMode="contains" style="width: 30%">
+                    <p:column filterBy="#{item.nomStructure}" style="width: 35%">
                         <f:facet name="header">
                             <h:outputText value="#{langue.personnel}"/>
                         </f:facet>
-                        <h:outputText value="#{item.idpersonnel.nom} #{item.idpersonnel.prenom}"/>
+                        <h:outputText value="#{item.nomStructure} "/>
                     </p:column>
 
-                    <p:column filterBy="#{item.login}" filterMatchMode="contains" style="width: 20%">
+                    <p:column filterBy="#{item.rcm}" style="width: 25%">
                         <f:facet name="header">
-                            <h:outputText value="#{langue.login}"/>
+                            <h:outputText value="RCM"/>
                         </f:facet>
-                        <h:outputText value="#{item.login}"/>
-                    </p:column>
-
-                    <p:column filterBy="#{item.password}" style="width: 25%">
-                        <f:facet name="header">
-                            <h:outputText value="#{langue.password}"/>
-                        </f:facet>
-                        <h:outputText value="#{item.password}"/>
-                    </p:column>
-                    
-                    <p:column filterBy="#{item.idpersonnel.idmagasin.nom}" filterMatchMode="contains" style="width: 20%">
-                        <f:facet name="header">
-                            <h:outputText value="#{langue.magasin}"/>
-                        </f:facet>
-                        <h:outputText value="#{item.idpersonnel.idmagasin.nom}"/>
-                    </p:column>
-
-                    <p:column style="text-align: center ; width: 5%">
-                        <f:facet name="header">
-                            <h:outputText value="#{langue.etat}"/>
-                        </f:facet>
-                        <h:selectBooleanCheckbox value="#{item.actif}" disabled="true"/>
+                        <h:outputText value="#{item.rcm}"/>
                     </p:column>
 
                 </p:dataTable>
@@ -85,14 +70,14 @@
 
     <p:dialog id="notify1" widgetVar="NotifyDialog1" height="400" width="700" resizable="true" responsive="true" modal="true" style="text-align: center; font-size: 14px; font-family: Cambria;">
         <f:facet name="header">
-            <h:outputText style="font-family: Cambria; font-size: 14px;" value="#{utilisateurController.routine.titleNotify}" />
+            <h:outputText style="font-family: Cambria; font-size: 14px;" value="#{structureController.routine.titleNotify}" />
         </f:facet>
         <h:form id="NotifyForm1">
-            <h:graphicImage id="nt_img" url="#{utilisateurController.routine.iconMessage}" style="cursor:pointer" />
+            <h:graphicImage id="nt_img" url="#{structureController.routine.iconMessage}" style="cursor:pointer" />
 
             <hr size="3" style="background-color: cornflowerblue;"/>
 
-            <h:outputText id="nt_msg" value="#{utilisateurController.routine.message}"/>
+            <h:outputText id="nt_msg" value="#{structureController.routine.message}"/>
 
             <hr size="3" style="background-color: cornflowerblue; margin-top: 5%;"/>
 

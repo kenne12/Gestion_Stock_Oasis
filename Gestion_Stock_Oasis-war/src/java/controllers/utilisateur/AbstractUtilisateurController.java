@@ -14,6 +14,7 @@ import sessions.PrivilegeFacadeLocal;
 import sessions.UtilisateurFacadeLocal;
 import sessions.UtilisateurmagasinFacadeLocal;
 import utils.Routine;
+import utils.SessionMBean;
 
 public class AbstractUtilisateurController {
 
@@ -48,210 +49,109 @@ public class AbstractUtilisateurController {
     protected PrivilegeFacadeLocal privilegeFacadeLocal;
     protected List<String> templates = new ArrayList();
 
-    protected Boolean detail = Boolean.valueOf(true);
-    protected Boolean modifier = Boolean.valueOf(true);
-    protected Boolean consulter = Boolean.valueOf(true);
-    protected Boolean imprimer = Boolean.valueOf(true);
-    protected Boolean supprimer = Boolean.valueOf(true);
+    protected Boolean detail = true;
+    protected Boolean modifier = true;
+    protected Boolean consulter = true;
+    protected Boolean imprimer = true;
+    protected Boolean supprimer = true;
 
-    /*  63 */    protected Boolean showEditSolde = Boolean.valueOf(true);
+    protected boolean buttonActif = false;
+    protected boolean buttonInactif = true;
 
-    /*  65 */    protected Boolean showUserCreateDialog = Boolean.valueOf(false);
-    /*  66 */    protected Boolean showUserDetailDialog = Boolean.valueOf(false);
-    /*  67 */    protected Boolean showUserDeleteDialog = Boolean.valueOf(false);
-    /*  68 */    protected Boolean showUserEditDialog = Boolean.valueOf(false);
-    /*  69 */    protected Boolean showUserPrintDialog = Boolean.valueOf(false);
+    protected Routine routine = new Routine();
 
-    /*  71 */    protected boolean buttonActif = false;
-    /*  72 */    protected boolean buttonInactif = true;
-
-    /*  74 */    protected Routine routine = new Routine();
-
-    /*  76 */    protected String mode = "";
+    protected String mode = "";
 
     public Boolean getDetail() {
-        /*  79 */ return this.detail;
-    }
-
-    public void setDetail(Boolean detail) {
-        /*  83 */ this.detail = detail;
+        return this.detail;
     }
 
     public Boolean getModifier() {
-        /*  87 */ return this.modifier;
-    }
-
-    public void setModifier(Boolean modifier) {
-        /*  91 */ this.modifier = modifier;
+        return this.modifier;
     }
 
     public Boolean getConsulter() {
-        /*  95 */ return this.consulter;
-    }
-
-    public void setConsulter(Boolean consulter) {
-        /*  99 */ this.consulter = consulter;
+        return this.consulter;
     }
 
     public Boolean getImprimer() {
-        /* 103 */ this.imprimer = Boolean.valueOf(this.utilisateurFacadeLocal.findAll().isEmpty());
-        /* 104 */ return this.imprimer;
-    }
-
-    public void setImprimer(Boolean imprimer) {
-        /* 108 */ this.imprimer = imprimer;
+        //this.imprimer = (this.utilisateurFacadeLocal.findAll().isEmpty());
+        return this.imprimer;
     }
 
     public Boolean getSupprimer() {
-        /* 112 */ return this.supprimer;
-    }
-
-    public void setSupprimer(Boolean supprimer) {
-        /* 116 */ this.supprimer = supprimer;
-    }
-
-    public Boolean getShowEditSolde() {
-        /* 120 */ return this.showEditSolde;
-    }
-
-    public void setShowEditSolde(Boolean showEditSolde) {
-        /* 124 */ this.showEditSolde = showEditSolde;
+        return this.supprimer;
     }
 
     public Utilisateur getUtilisateur() {
-        /* 128 */ return this.utilisateur;
+        return this.utilisateur;
     }
 
     public void setUtilisateur(Utilisateur utilisateur) {
-        /* 132 */ this.modifier = (this.supprimer = this.detail = Boolean.valueOf(utilisateur == null));
-        /* 133 */ this.utilisateur = utilisateur;
+        this.modifier = (this.supprimer = this.detail = utilisateur == null);
+        this.utilisateur = utilisateur;
     }
 
     public List<Utilisateur> getUtilisateurs() {
-        /* 137 */ this.utilisateurs = this.utilisateurFacadeLocal.findAll();
-        /* 138 */ return this.utilisateurs;
-    }
-
-    public void setUtilisateurs(List<Utilisateur> utilisateurs) {
-        /* 142 */ this.utilisateurs = utilisateurs;
-    }
-
-    public Boolean getShowUserCreateDialog() {
-        /* 146 */ return this.showUserCreateDialog;
-    }
-
-    public void setShowUserCreateDialog(Boolean showUserCreateDialog) {
-        /* 150 */ this.showUserCreateDialog = showUserCreateDialog;
-    }
-
-    public Boolean getShowUserDetailDialog() {
-        /* 154 */ return this.showUserDetailDialog;
-    }
-
-    public void setShowUserDetailDialog(Boolean showUserDetailDialog) {
-        /* 158 */ this.showUserDetailDialog = showUserDetailDialog;
-    }
-
-    public Boolean getShowUserDeleteDialog() {
-        /* 162 */ return this.showUserDeleteDialog;
-    }
-
-    public void setShowUserDeleteDialog(Boolean showUserDeleteDialog) {
-        /* 166 */ this.showUserDeleteDialog = showUserDeleteDialog;
-    }
-
-    public Boolean getShowUserEditDialog() {
-        /* 170 */ return this.showUserEditDialog;
-    }
-
-    public void setShowUserEditDialog(Boolean showUserEditDialog) {
-        /* 174 */ this.showUserEditDialog = showUserEditDialog;
-    }
-
-    public Boolean getShowUserPrintDialog() {
-        /* 178 */ return this.showUserPrintDialog;
-    }
-
-    public void setShowUserPrintDialog(Boolean showUserPrintDialog) {
-        /* 182 */ this.showUserPrintDialog = showUserPrintDialog;
+        this.utilisateurs = this.utilisateurFacadeLocal.findByIdStructure(SessionMBean.getParametrage().getId());
+        return this.utilisateurs;
     }
 
     public List<Utilisateur> getUtilisateurActifs() {
-        /* 186 */ this.utilisateurActifs = this.utilisateurFacadeLocal.findByActif(Boolean.valueOf(true));
-        /* 187 */ return this.utilisateurActifs;
-    }
-
-    public void setUtilisateurActifs(List<Utilisateur> utilisateurActifs) {
-        /* 191 */ this.utilisateurActifs = utilisateurActifs;
+        this.utilisateurActifs = this.utilisateurFacadeLocal.findByIdStructureEtat(SessionMBean.getParametrage().getId(), true);
+        return this.utilisateurActifs;
     }
 
     public List<Utilisateur> getUtilisateurInactifs() {
-        /* 195 */ this.utilisateurInactifs = this.utilisateurFacadeLocal.findByActif(Boolean.valueOf(false));
-        /* 196 */ return this.utilisateurInactifs;
-    }
-
-    public void setUtilisateurInactifs(List<Utilisateur> utilisateurInactifs) {
-        /* 200 */ this.utilisateurInactifs = utilisateurInactifs;
+        this.utilisateurInactifs = this.utilisateurFacadeLocal.findByIdStructureEtat(SessionMBean.getParametrage().getId(), false);
+        return this.utilisateurInactifs;
     }
 
     public boolean isButtonActif() {
-        /* 204 */ return this.buttonActif;
-    }
-
-    public void setButtonActif(boolean buttonActif) {
-        /* 208 */ this.buttonActif = buttonActif;
+        return this.buttonActif;
     }
 
     public boolean isButtonInactif() {
-        /* 212 */ return this.buttonInactif;
-    }
-
-    public void setButtonInactif(boolean buttonInactif) {
-        /* 216 */ this.buttonInactif = buttonInactif;
+        return this.buttonInactif;
     }
 
     public List<String> getTemplates() {
-        /* 220 */ return this.templates;
+        return this.templates;
     }
 
     public Routine getRoutine() {
-        /* 224 */ return this.routine;
+        return this.routine;
     }
 
     public Personnel getPersonnel() {
-        /* 228 */ return this.personnel;
+        return this.personnel;
     }
 
     public void setPersonnel(Personnel personnel) {
-        /* 232 */ this.personnel = personnel;
+        this.personnel = personnel;
     }
 
     public List<Personnel> getPersonnels() {
-        /* 236 */ return this.personnels;
+        return this.personnels;
     }
 
     public List<Magasin> getMagasins() {
-        /* 240 */ return this.magasins;
+        return this.magasins;
     }
 
     public void setMagasins(List<Magasin> magasins) {
-        /* 244 */ this.magasins = magasins;
+        this.magasins = magasins;
     }
 
     public List<Magasin> getSelectedMagasins() {
-        /* 248 */ return this.selectedMagasins;
+        return this.selectedMagasins;
     }
 
     public void setSelectedMagasins(List<Magasin> selectedMagasins) {
-        /* 252 */ this.selectedMagasins = selectedMagasins;
+        this.selectedMagasins = selectedMagasins;
     }
 
     public String getMode() {
-        /* 256 */ return this.mode;
+        return this.mode;
     }
 }
-
-/* Location:           I:\GESTION_STOCK\GESTION_STOCK-war_war\WEB-INF\classes\
- * Qualified Name:     controllers.utilisateur.AbstractUtilisateurController
- * JD-Core Version:    0.6.2
- */

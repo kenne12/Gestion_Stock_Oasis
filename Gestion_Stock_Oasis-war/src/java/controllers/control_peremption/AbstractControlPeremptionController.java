@@ -54,6 +54,8 @@ public class AbstractControlPeremptionController {
 
     protected boolean showSessionPanel = true;
 
+    protected boolean showSessionPeremption = false;
+
     @EJB
     protected InventaireFacadeLocal inventaireFacadeLocal;
 
@@ -69,8 +71,8 @@ public class AbstractControlPeremptionController {
     protected String mode = "";
 
     protected boolean disableProduct = false;
-    protected boolean showUser = SessionMBean.getParametrage().getEtatuser();
-    protected boolean showBailleur = SessionMBean.getParametrage().getEtatbailleur();
+    protected boolean showUser = SessionMBean.getParametrage().isEtatuser();
+    protected boolean showBailleur = SessionMBean.getParametrage().isEtatbailleur();
 
     public String getFileName() {
         return this.fileName;
@@ -131,4 +133,9 @@ public class AbstractControlPeremptionController {
     public boolean isShowSessionPanel() {
         return this.showSessionPanel;
     }
+
+    public boolean isShowSessionPeremption() {
+        return showSessionPeremption;
+    }
+
 }

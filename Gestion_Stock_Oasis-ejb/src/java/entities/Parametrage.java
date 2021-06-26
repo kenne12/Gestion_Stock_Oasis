@@ -54,75 +54,76 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Parametrage.findByEtatbailleur", query = "SELECT p FROM Parametrage p WHERE p.etatbailleur = :etatbailleur"),
     @NamedQuery(name = "Parametrage.findByEtatuser", query = "SELECT p FROM Parametrage p WHERE p.etatuser = :etatuser")})
 public class Parametrage implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     private Integer id;
-    @Size(max = 2147483647)
+    @Size(max = 100)
     @Column(name = "nom_structure")
     private String nomStructure;
-    @Size(max = 2147483647)
+    @Size(max = 100)
     @Column(name = "boite_postale")
     private String boitePostale;
-    @Size(max = 2147483647)
+    @Size(max = 100)
     @Column(name = "contact_1")
     private String contact1;
-    @Size(max = 2147483647)
+    @Size(max = 100)
     @Column(name = "contact_2")
     private String contact2;
-    @Size(max = 2147483647)
+    @Size(max = 100)
     @Column(name = "contact_3")
     private String contact3;
-    @Size(max = 2147483647)
+    @Size(max = 100)
     private String descriptif;
-    @Size(max = 2147483647)
+    @Size(max = 100)
     private String rcm;
-    @Size(max = 2147483647)
+    @Size(max = 100)
     @Column(name = "no_contrib")
     private String noContrib;
-    @Size(max = 2147483647)
+    @Size(max = 100)
     private String localisation;
-    @Size(max = 2147483647)
+    @Size(max = 100)
     @Column(name = "repertoire_logo")
     private String repertoireLogo;
-    @Size(max = 2147483647)
+    @Size(max = 100)
     private String logo;
-    @Size(max = 2147483647)
+    @Size(max = 100)
     @Column(name = "repertoire_sauvegardre")
     private String repertoireSauvegardre;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "taux_tva")
-    private Double tauxTva;
-    private Double capital;
+    private double tauxTva;
+    private double capital;
     @Column(name = "taux_remise")
-    private Double tauxRemise;
-    @Size(max = 2147483647)
+    private double tauxRemise;
+    @Size(max = 100)
     @Column(name = "chemin_template")
     private String cheminTemplate;
     @Column(name = "etat_quantite_dosage")
-    private Boolean etatQuantiteDosage;
+    private boolean etatQuantiteDosage;
     @Column(name = "etat_forme_produit")
-    private Boolean etatFormeProduit;
+    private boolean etatFormeProduit;
     @Column(name = "etat_forme_stockage")
-    private Boolean etatFormeStockage;
-    private Boolean calcultva;
+    private boolean etatFormeStockage;
+    private boolean calcultva;
     @Column(name = "calcul_remise")
-    private Boolean calculRemise;
+    private boolean calculRemise;
     // @Pattern(regexp="^\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$", message="Invalid phone/fax format, should be as xxx-xxx-xxxx")//if the field contains phone or fax number consider using this annotation to enforce field validation
-    @Size(max = 2147483647)
+    @Size(max = 100)
     private String fax;
     @Column(name = "nbre_jr_alerte_peremption")
-    private Integer nbreJrAlertePeremption;
+    private int nbreJrAlertePeremption;
     @Column(name = "pourcentage_bailleur")
-    private Double pourcentageBailleur;
+    private double pourcentageBailleur;
     @Size(max = 50)
     private String banque;
     @Size(max = 60)
     @Column(name = "numero_compte")
     private String numeroCompte;
-    private Boolean etatbailleur;
-    private Boolean etatuser;
+    private boolean etatbailleur;
+    private boolean etatuser;
 
     public Parametrage() {
     }
@@ -235,27 +236,27 @@ public class Parametrage implements Serializable {
         this.repertoireSauvegardre = repertoireSauvegardre;
     }
 
-    public Double getTauxTva() {
+    public double getTauxTva() {
         return tauxTva;
     }
 
-    public void setTauxTva(Double tauxTva) {
+    public void setTauxTva(double tauxTva) {
         this.tauxTva = tauxTva;
     }
 
-    public Double getCapital() {
+    public double getCapital() {
         return capital;
     }
 
-    public void setCapital(Double capital) {
+    public void setCapital(double capital) {
         this.capital = capital;
     }
 
-    public Double getTauxRemise() {
+    public double getTauxRemise() {
         return tauxRemise;
     }
 
-    public void setTauxRemise(Double tauxRemise) {
+    public void setTauxRemise(double tauxRemise) {
         this.tauxRemise = tauxRemise;
     }
 
@@ -267,43 +268,43 @@ public class Parametrage implements Serializable {
         this.cheminTemplate = cheminTemplate;
     }
 
-    public Boolean getEtatQuantiteDosage() {
+    public boolean getEtatQuantiteDosage() {
         return etatQuantiteDosage;
     }
 
-    public void setEtatQuantiteDosage(Boolean etatQuantiteDosage) {
+    public void setEtatQuantiteDosage(boolean etatQuantiteDosage) {
         this.etatQuantiteDosage = etatQuantiteDosage;
     }
 
-    public Boolean getEtatFormeProduit() {
+    public boolean getEtatFormeProduit() {
         return etatFormeProduit;
     }
 
-    public void setEtatFormeProduit(Boolean etatFormeProduit) {
+    public void setEtatFormeProduit(boolean etatFormeProduit) {
         this.etatFormeProduit = etatFormeProduit;
     }
 
-    public Boolean getEtatFormeStockage() {
+    public boolean getEtatFormeStockage() {
         return etatFormeStockage;
     }
 
-    public void setEtatFormeStockage(Boolean etatFormeStockage) {
+    public void setEtatFormeStockage(boolean etatFormeStockage) {
         this.etatFormeStockage = etatFormeStockage;
     }
 
-    public Boolean getCalcultva() {
+    public boolean getCalcultva() {
         return calcultva;
     }
 
-    public void setCalcultva(Boolean calcultva) {
+    public void setCalcultva(boolean calcultva) {
         this.calcultva = calcultva;
     }
 
-    public Boolean getCalculRemise() {
+    public boolean getCalculRemise() {
         return calculRemise;
     }
 
-    public void setCalculRemise(Boolean calculRemise) {
+    public void setCalculRemise(boolean calculRemise) {
         this.calculRemise = calculRemise;
     }
 
@@ -315,19 +316,19 @@ public class Parametrage implements Serializable {
         this.fax = fax;
     }
 
-    public Integer getNbreJrAlertePeremption() {
+    public int getNbreJrAlertePeremption() {
         return nbreJrAlertePeremption;
     }
 
-    public void setNbreJrAlertePeremption(Integer nbreJrAlertePeremption) {
+    public void setNbreJrAlertePeremption(int nbreJrAlertePeremption) {
         this.nbreJrAlertePeremption = nbreJrAlertePeremption;
     }
 
-    public Double getPourcentageBailleur() {
+    public double getPourcentageBailleur() {
         return pourcentageBailleur;
     }
 
-    public void setPourcentageBailleur(Double pourcentageBailleur) {
+    public void setPourcentageBailleur(double pourcentageBailleur) {
         this.pourcentageBailleur = pourcentageBailleur;
     }
 
@@ -347,19 +348,19 @@ public class Parametrage implements Serializable {
         this.numeroCompte = numeroCompte;
     }
 
-    public Boolean getEtatbailleur() {
+    public boolean isEtatbailleur() {
         return etatbailleur;
     }
 
-    public void setEtatbailleur(Boolean etatbailleur) {
+    public void setEtatbailleur(boolean etatbailleur) {
         this.etatbailleur = etatbailleur;
     }
 
-    public Boolean getEtatuser() {
+    public boolean isEtatuser() {
         return etatuser;
     }
 
-    public void setEtatuser(Boolean etatuser) {
+    public void setEtatuser(boolean etatuser) {
         this.etatuser = etatuser;
     }
 
@@ -387,5 +388,5 @@ public class Parametrage implements Serializable {
     public String toString() {
         return "entities.Parametrage[ id=" + id + " ]";
     }
-    
+
 }

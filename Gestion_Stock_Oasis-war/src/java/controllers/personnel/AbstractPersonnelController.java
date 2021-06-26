@@ -45,25 +45,25 @@ public class AbstractPersonnelController {
     protected String mode = "";
 
     public Personnel getPersonnel() {
-        /*  57 */ return this.personnel;
+         return this.personnel;
     }
 
     public void setPersonnel(Personnel personnel) {
-        /*  61 */ this.modifier = (this.supprimer = this.detail = (personnel == null));
-        /*  62 */ this.personnel = personnel;
+       this.modifier = (this.supprimer = this.detail = (personnel == null));
+         this.personnel = personnel;
     }
 
     public List<Personnel> getPersonnels() {
-        /*  66 */ this.personnels = this.personnelFacadeLocal.findAllRange();
-        /*  67 */ return this.personnels;
+        this.personnels = this.personnelFacadeLocal.findByIdStructure(SessionMBean.getParametrage().getId());
+         return this.personnels;
     }
 
     public void setPersonnels(List<Personnel> personnels) {
-        /*  71 */ this.personnels = personnels;
+         this.personnels = personnels;
     }
 
     public Boolean getDetail() {
-        /*  75 */ return this.detail;
+        return this.detail;
     }
 
     public Boolean getModifier() {

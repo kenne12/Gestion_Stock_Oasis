@@ -46,8 +46,8 @@ public class AbstractLotController {
     protected Boolean supprimer = true;
 
     protected boolean disableProduct = false;
-    protected boolean showUser = SessionMBean.getParametrage().getEtatuser();
-    protected boolean showBailleur = SessionMBean.getParametrage().getEtatbailleur();
+    protected boolean showUser = SessionMBean.getParametrage().isEtatuser();
+    protected boolean showBailleur = SessionMBean.getParametrage().isEtatbailleur();
 
     public Boolean getDetail() {
         return this.detail;
@@ -90,8 +90,8 @@ public class AbstractLotController {
     }
 
     public void setLot(Lot lot) {
-        this.lot = lot;
-        this.modifier = (this.supprimer = this.detail = (lot == null));
+        this.modifier = this.supprimer = this.detail = lot == null;
+        this.lot = lot;    
     }
 
     public List<Lot> getLots() {

@@ -7,17 +7,21 @@ import javax.ejb.Local;
 @Local
 public interface ParametrageFacadeLocal {
 
-    public void create(Parametrage paramParametrage);
+    public void create(Parametrage parametrage);
 
-    public void edit(Parametrage paramParametrage);
+    public void edit(Parametrage parametrage);
 
-    public void remove(Parametrage paramParametrage);
+    public void remove(Parametrage parametrage);
 
-    public Parametrage find(Object paramObject);
+    public Parametrage find(Object object);
 
     public List<Parametrage> findAll();
 
-    public List<Parametrage> findRange(int[] paramArrayOfInt);
+    public List<Parametrage> findRange(int[] arrayOfInt);
 
     public int count();
+
+    Integer nextVal();
+
+    List<Parametrage> findAllRange();
 }
