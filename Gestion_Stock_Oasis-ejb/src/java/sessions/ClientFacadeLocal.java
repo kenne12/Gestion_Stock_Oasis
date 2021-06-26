@@ -36,4 +36,6 @@ public interface ClientFacadeLocal {
 
     List<Client> findAllRange(int idMagasin, boolean etat);
 
+    List<Client> findByIdstructure(int idStructure, boolean etat);
+
 }

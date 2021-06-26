@@ -86,6 +86,8 @@ public class Livraisonclient implements Serializable {
     @Column(name = "montant_paye", length = 15)
     private double montantPaye;
     private boolean comptabilise;
+    private double reste;
+    private boolean paye;
 
     public Livraisonclient() {
         this.client = new Client();
@@ -262,6 +264,22 @@ public class Livraisonclient implements Serializable {
 
     public void setComptabilise(boolean comptabilise) {
         this.comptabilise = comptabilise;
+    }
+
+    public double getReste() {
+        return reste;
+    }
+
+    public void setReste(double reste) {
+        this.reste = reste;
+    }
+
+    public boolean isPaye() {
+        return paye;
+    }
+
+    public void setPaye(boolean paye) {
+        this.paye = paye;
     }
 
     @Override

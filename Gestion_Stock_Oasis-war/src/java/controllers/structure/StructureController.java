@@ -88,7 +88,7 @@ public class StructureController extends AbstractStructureController implements 
             utilisateur = new Utilisateur();
             utilisateur.setActif(true);
             utilisateur.setPhoto("user_avatar.png");
-            utilisateur.setTemplate((String) this.templates.get(1));
+            utilisateur.setTemplate((String) this.templates.get(0));
             utilisateur.setTheme("hot-sneaks");
             utilisateur.setLogin("login_s" + parametrageFacadeLocal.nextVal());
             

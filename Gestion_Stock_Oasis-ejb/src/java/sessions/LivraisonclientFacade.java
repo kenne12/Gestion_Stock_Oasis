@@ -42,9 +42,9 @@ public class LivraisonclientFacade extends AbstractFacade<Livraisonclient> imple
 
     @Override
     public Livraisonclient findByIddemande(long iddemande) {
-        Query query = em.createQuery("SELECT l FROM Livraisonclient l WHERE l.iddemande.iddemande=:iddemande ORDER BY l.idlivraisonclient DESC");
-        query.setParameter("iddemande", iddemande);
-        List list = query.getResultList();
+        List list = em.createQuery("SELECT l FROM Livraisonclient l WHERE l.iddemande.iddemande=:iddemande ORDER BY l.idlivraisonclient DESC")
+                .setParameter("iddemande", iddemande)
+                .getResultList();
         if (!list.isEmpty()) {
             return (Livraisonclient) list.get(0);
         }
@@ -57,4 +57,13 @@ public class LivraisonclientFacade extends AbstractFacade<Livraisonclient> imple
                 .setParameter("dateDebut", dateDebut).setParameter("dateFin", dateFin).setParameter("idMagasin", idMagasin)
                 .getResultList();
     }
+
+    @Override
+    public List<Livraisonclient> findByIdmagasinNonRegle(int idMagasin) {
+        return this.em.createQuery("SELECT l FROM Livraisonclient l WHERE l.idmagasin.idmagasin=:idMagasin  AND l.modePayement=:modePayement AND l.montantPaye < l.montantTtc  ORDER BY l.idlivraisonclient DESC")
+                .setParameter("idMagasin", idMagasin)
+                .setParameter("modePayement", "PAYE_A_CREDIT")
+                .getResultList();
+    }
+
 }

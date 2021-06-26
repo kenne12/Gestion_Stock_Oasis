@@ -20,9 +20,11 @@ import entities.Livraisonclient;
 import entities.Livraisonfournisseur;
 import entities.Magasin;
 import entities.Parametrage;
+import entities.Versement;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -827,7 +829,7 @@ public class PrintUtils {
             bilan.addCell(createPdfPCell(" ", 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
             bilan.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney((int) demande.getMontantTtc()), 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 1, 1, 0, 1));
 
-            rapport.add((Element) bilan);
+            rapport.add( bilan);
 
             rapport.close();
         } catch (DocumentException ex) {
@@ -943,6 +945,92 @@ public class PrintUtils {
             table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(((double) map.get("nov"))), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
             table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(((double) map.get("dec"))), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
             rapport.add(table);
+            rapport.close();
+        } catch (DocumentException ex) {
+            Logger.getLogger(utils.PrintUtils.class.getName()).log(Level.SEVERE, (String) null, (Throwable) ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(utils.PrintUtils.class.getName()).log(Level.SEVERE, (String) null, ex);
+        }
+        return fileName;
+    }
+
+    public static String printRecuVersement(Versement versement, Parametrage parametrage) {
+        String fileName = "";
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            SimpleDateFormat sdf1 = new SimpleDateFormat("HH:mm:ss");
+            fileName = "Recu_versement_" + versement.getLivraisonclient().getClient().getNom() + "_" + versement.getCode() + "_" + sdf.format(versement.getDateOperation()) + ".pdf";
+            Document rapport = new Document();
+            PdfWriter.getInstance(rapport, new FileOutputStream(Utilitaires.path + "/reports/facture/" + fileName));
+            rapport.open();
+
+            createEntete(rapport, parametrage);
+
+            float[] width_entete = {2.0F, 2.0F, 1.8F, 3.8F, 1.0F, 1.0F};
+            PdfPTable entete_1 = new PdfPTable(width_entete);
+            entete_1.setWidthPercentage(100.0F);
+
+            entete_1.addCell(createPdfPCell("Date de tirage   : ", 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+            entete_1.addCell(createPdfPCell(" " + sdf.format(Date.from(Instant.now())), 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+            entete_1.addCell(createPdfPCell("Code du client : ", 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+            entete_1.addCell(createPdfPCell(" " + versement.getLivraisonclient().getClient().getCode(), 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+            entete_1.addCell(createPdfPCell("District : ", 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+            entete_1.addCell(createPdfPCell(" ", 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+
+            entete_1.addCell(createPdfPCell("Heure de tirage : ", 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+            entete_1.addCell(createPdfPCell(" " + sdf1.format(new Date()), 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+            entete_1.addCell(createPdfPCell("Nom du client   : ", 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+            entete_1.addCell(createPdfPCell(" " + versement.getLivraisonclient().getClient().getNom(), 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+            entete_1.addCell(createPdfPCell(" ", 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+            entete_1.addCell(createPdfPCell(" ", 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+
+            rapport.add(entete_1);
+            rapport.add(new Paragraph(" ", new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+
+            float[] widths = {3.2F, 1.5F, 1.2F, 1.2F};
+            PdfPTable table = new PdfPTable(widths);
+            table.setWidthPercentage(100.0F);
+
+            Paragraph titre = new Paragraph("Récu versement N° : " + versement.getCode() + " / " + sdf.format(versement.getDateOperation()), new Font(Font.FontFamily.TIMES_ROMAN, 14.0F, 1));
+            titre.setAlignment(1);
+            rapport.add(titre);
+
+            Paragraph ligne = new Paragraph("----------------------------------------------------------------------------------------------------------------------------------------------", new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 2));
+            rapport.add(ligne);
+
+            rapport.add(new Paragraph(" "));
+
+            table.addCell(createPdfPCell("Motif", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell("Réf facture", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell("Montant", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell("Status\nReste", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+
+            table.addCell(createPdfPCell(" Payement facture", 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell(" " + versement.getLivraisonclient().getCode(), 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(((int) versement.getMontant())), 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+
+            if (versement.getReste() <= 0.0D) {
+                table.addCell(createPdfPCell(" Soldé", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            } else {
+                table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney((int) versement.getReste()), 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+            }
+
+            rapport.add(table);
+
+            float[] width = {2.0F, 1.0F, 0.5F, 2.0F, 2.0F, 1.5F};
+            PdfPTable bilan = new PdfPTable(width);
+            bilan.setWidthPercentage(100.0F);
+            rapport.add(new Paragraph(" "));
+
+            bilan.addCell(createPdfPCell(" ", 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+            bilan.addCell(createPdfPCell(" ", 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+            bilan.addCell(createPdfPCell(" ", 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+            bilan.addCell(createPdfPCell(" ", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+            bilan.addCell(createPdfPCell("VISA DU CAISSIER(E)", 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+            bilan.addCell(createPdfPCell("   ", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+
+            rapport.add(bilan);
+
             rapport.close();
         } catch (DocumentException ex) {
             Logger.getLogger(utils.PrintUtils.class.getName()).log(Level.SEVERE, (String) null, (Throwable) ex);

@@ -18,7 +18,7 @@ public interface LivraisonclientFacadeLocal {
 
     public List<Livraisonclient> findAll();
 
-    public List<Livraisonclient> findRange(int[] paramArrayOfInt);
+    public List<Livraisonclient> findRange(int[] arrayOfInt);
 
     public int count();
 
@@ -28,5 +28,8 @@ public interface LivraisonclientFacadeLocal {
 
     public Livraisonclient findByIddemande(long idDemande);
 
-    List<Livraisonclient> findAllRange(int idMagasin, Date dateDebut, Date dateFin);
+    public List<Livraisonclient> findAllRange(int idMagasin, Date dateDebut, Date dateFin);
+
+    public List<Livraisonclient> findByIdmagasinNonRegle(int idMagasin);
+
 }

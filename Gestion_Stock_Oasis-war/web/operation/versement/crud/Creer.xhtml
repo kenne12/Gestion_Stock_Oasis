@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="VersementCreerDlg" 
+                  widgetVar="VersementCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{langue['Titre.Dlg.Creation']}: #{langue.regelement_facture}" 
+                  closeOnEscape="true">
+
+            <h:form id="VersementCreerForm">
+                <h:panelGroup id="display">
+                    <h:panelGrid columns="3" columnClasses ="column">
+
+                        <p:outputLabel value="#{langue.factures}" for="facture"/>
+                        <p:selectOneMenu filter="true" filterMatchMode="contains" id="facture" disabled="#{versementController.showClient}" required="true" value="#{versementController.livraisonclient}" converter="livraisonClientConverter" >
+                            <f:selectItem itemLabel="#{langue.choisir}"/>
+                            <f:selectItems value="#{versementController.livraisonclients}" var="fact" itemLabel="#{fact.client.nom} #{fact.code  }" itemValue="#{fact}" />
+                            <p:ajax update="montant_initial,montant_paye,reste" />
+                        </p:selectOneMenu>
+                        <p:message for="facture"/>
+                       
+                        <p:outputLabel value="#{langue.montant_initial}" for="montant_initial" />
+                        <p:inputText id="montant_initial" style="color: blue" disabled="true" value="#{versementController.livraisonclient.montantTtc}"/> 
+                        <p:message for="montant_initial"/>
+                        
+                        <p:outputLabel value="#{langue.montant_paye}" for="montant_paye" />
+                        <p:inputText id="montant_paye" style="color: blue" disabled="true" value="#{versementController.livraisonclient.montantPaye}"/> 
+                        <p:message for="montant_paye"/>
+                        
+                        <p:outputLabel value="#{langue.reste_a_payer}" for="reste" />
+                        <p:inputText id="reste" style="color: blue" disabled="true" value="#{versementController.livraisonclient.reste}"/> 
+                        <p:message for="reste"/>
+
+                        <p:outputLabel value="#{langue.montant_a_verser}" for="montant" />
+                        <p:inputText id="montant" value="#{versementController.versement.montant}" required="true" 
+                                     requiredMessage="#{langue.montant}: #{langue.valeur_obligatoire}">
+                            <p:ajax event="keyup" />   
+                        </p:inputText>
+                        <p:message for="montant"/>
+                        
+                        <p:outputLabel value="#{langue.date}" for="date" />
+                        <p:calendar id="date" navigator="true" value="#{versementController.versement.dateOperation}"/>
+                        <p:message for="date"/>
+
+                    </h:panelGrid>
+
+                    <p:separator/>
+                    
+                    <p:commandButton style="float: right" actionListener="#{versementController.create()}" value="#{langue['Conv.Enregistrer']}" 
+                                     update="display,:VersementListerForm:datalist,:notify1">                                      
+                        <p:confirm header="#{langue['Titre.Dlg.Confirm']}"
+                                   message="#{langue.confirmer_operation} ?"
+                                   icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    
+                    <p:commandButton style="float: left" value="#{langue.annuler}" onclick="PF('VersementCreerDialog').hide()"/>
+                </h:panelGroup>  
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -38,7 +39,8 @@ public class Versement implements Serializable {
     @JoinColumn(name = "idlivraisonclient", referencedColumnName = "idlivraisonclient")
     private Livraisonclient livraisonclient;
     @Temporal(TemporalType.DATE)
-    private Date date;
+    @Column(name = "date_operation")
+    private Date dateOperation;
     private double reste;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -85,12 +87,12 @@ public class Versement implements Serializable {
         this.livraisonclient = livraisonclient;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getDateOperation() {
+        return dateOperation;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDateOperation(Date dateOperation) {
+        this.dateOperation = dateOperation;
     }
 
     public double getReste() {
@@ -141,7 +143,7 @@ public class Versement implements Serializable {
 
     @Override
     public String toString() {
-        return "Versement{" + "idversement=" + idversement + ", montant=" + montant + ", heure=" + heure + ", livraisonclient=" + livraisonclient + ", date=" + date + ", reste=" + reste + ", mois=" + mois + ", code=" + code + '}';
+        return "Versement{" + "idversement=" + idversement + ", montant=" + montant + ", heure=" + heure + ", livraisonclient=" + livraisonclient + ", date=" + dateOperation + ", reste=" + reste + ", mois=" + mois + ", code=" + code + '}';
     }
 
 }

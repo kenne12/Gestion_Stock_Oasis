@@ -223,7 +223,7 @@ public class AbstractSortiedirectController {
     }
 
     public List<Client> getClients() {
-        clients = clientFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), true);
+        clients = clientFacadeLocal.findByIdstructure(SessionMBean.getMagasin().getParametrage().getId(), true);
         return clients;
     }
 
