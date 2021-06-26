@@ -37,6 +37,28 @@ public class TransfertFacade extends AbstractFacade<Transfert>
 
     @Override
     public List<Transfert> findAllRange() {
-        return this.em.createQuery("SELECT t FROM Transfert t ORDER BY t.datetransfert DESC").getResultList();
+        return this.em.createQuery("SELECT t FROM Transfert t ORDER BY t.datetransfert DESC")
+                .getResultList();
+    }
+
+    @Override
+    public List<Transfert> findByIdMagasinBidirection(int idMagasin) {
+        return this.em.createQuery("SELECT t FROM Transfert t WHERE t.idmagasin.idmagasin=:idMagasin OR t.idmagasincible=:idMagasin ORDER BY t.datetransfert DESC")
+                .setParameter("idMagasin", idMagasin)
+                .getResultList();
+    }
+    
+    @Override
+    public List<Transfert> findByIdMagasinSource(int idMagasin) {
+        return this.em.createQuery("SELECT t FROM Transfert t WHERE t.idmagasin.idmagasin=:idMagasin ORDER BY t.datetransfert DESC")
+                .setParameter("idMagasin", idMagasin)
+                .getResultList();
+    }
+    
+    @Override
+    public List<Transfert> findByIdMagasinDestination(int idMagasin) {
+        return this.em.createQuery("SELECT t FROM Transfert t WHERE t.idmagasincible=:idMagasin ORDER BY t.datetransfert DESC")
+                .setParameter("idMagasin", idMagasin)
+                .getResultList();
     }
 }

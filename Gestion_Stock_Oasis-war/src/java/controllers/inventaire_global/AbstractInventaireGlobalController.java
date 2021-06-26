@@ -182,15 +182,11 @@ public class AbstractInventaireGlobalController {
 
     public List<Inventaire> getInventaires() {
         try {
-            this.inventaires = this.inventaireFacadeLocal.findAllRange();
+            this.inventaires = this.inventaireFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin());
         } catch (Exception e) {
             e.printStackTrace();
         }
         return this.inventaires;
-    }
-
-    public void setInventaires(List<Inventaire> inventaires) {
-        this.inventaires = inventaires;
     }
 
     public List<Ligneinventaire> getLigneinventaires() {

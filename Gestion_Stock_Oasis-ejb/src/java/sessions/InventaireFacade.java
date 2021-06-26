@@ -35,8 +35,9 @@ public class InventaireFacade extends AbstractFacade<Inventaire> implements Inve
     }
 
     @Override
-    public List<Inventaire> findAllRange() {
-        Query query = this.em.createQuery("SELECT i FROM Inventaire i ORDER BY i.dateinventaire DESC");
-        return query.getResultList();
+    public List<Inventaire> findAllRange(int idMagasin) {
+        return this.em.createQuery("SELECT i FROM Inventaire i WHERE i.idmagasin.idmagasin=:idMagasin ORDER BY i.dateinventaire DESC")
+                .setParameter("idMagasin", idMagasin)
+                .getResultList();
     }
 }

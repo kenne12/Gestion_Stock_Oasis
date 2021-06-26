@@ -17,6 +17,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import java.time.Instant;
+import javax.transaction.Transactional;
 import org.primefaces.context.RequestContext;
 import utils.JsfUtil;
 import utils.PrintUtils;
@@ -162,7 +163,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
                 message = "";
                 updateTotal();
 
-                if (livraisonclient.getModePayement().equalsIgnoreCase("PAYE_A_CREDIT")) {
+                if (livraisonclient.getModePayement().equals("PAYE_A_CREDIT")) {
                     if (livraisonclient.getAvanceInitiale() > livraisonclient.getMontantTtc()) {
                         notifyError("montant_avance_incorrect");
                         return;

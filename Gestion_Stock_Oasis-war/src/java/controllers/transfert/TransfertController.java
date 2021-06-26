@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -59,7 +60,7 @@ public class TransfertController extends AbstractTransertController implements S
 
             this.showSelectorCommand = false;
 
-            this.total = 0.0D;
+            this.total = 0d;
         } catch (Exception e) {
             this.routine.catchException(e, this.routine.localizeMessage("echec_operation"));
             RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
@@ -70,7 +71,7 @@ public class TransfertController extends AbstractTransertController implements S
         try {
             if (this.magasin.getIdmagasin() != null) {
                 if (this.magasinCible.getIdmagasin() != null) {
-                    if (this.magasin.getIdmagasin() != this.magasinCible.getIdmagasin()) {
+                    if (!Objects.equals(this.magasin.getIdmagasin(), this.magasinCible.getIdmagasin())) {
                         this.famille = new Famille();
 
                         this.lignetransfert = new Lignetransfert();
@@ -266,169 +267,169 @@ public class TransfertController extends AbstractTransertController implements S
 
     public void create() {
         try {
-            /* 290 */ if ("Create".equals(this.mode)) {
-                /* 292 */ if (!this.lignetransferts.isEmpty()) {
-                    /* 294 */ this.magasin = this.magasinFacadeLocal.find(this.magasin.getIdmagasin());
-                    /* 295 */ this.magasinCible = this.magasinFacadeLocal.find(this.magasinCible.getIdmagasin());
+            if ("Create".equals(this.mode)) {
+                if (!this.lignetransferts.isEmpty()) {
+                    this.magasin = this.magasinFacadeLocal.find(this.magasin.getIdmagasin());
+                    this.magasinCible = this.magasinFacadeLocal.find(this.magasinCible.getIdmagasin());
 
-                    /* 297 */ String message = "";
+                    String message = "";
 
-                    /* 299 */ String codeMvt = "MVT";
-                    /* 300 */ this.mvtstock.setIdmvtstock(this.mvtstockFacadeLocal.nextVal());
-                    /* 301 */ Long nextMvt = this.mvtstock.getIdmvtstock();
-                    /* 302 */ codeMvt = Utilitaires.genererCodeStock(codeMvt, nextMvt);
+                    String codeMvt = "MVT";
+                    this.mvtstock.setIdmvtstock(this.mvtstockFacadeLocal.nextVal());
+                    Long nextMvt = this.mvtstock.getIdmvtstock();
+                    codeMvt = Utilitaires.genererCodeStock(codeMvt, nextMvt);
 
-                    /* 304 */ this.ut.begin();
+                    this.ut.begin();
 
-                    /* 306 */ this.mvtstock.setCode(codeMvt);
-                    /* 307 */ this.mvtstock.setDatemvt(this.transfert.getDatetransfert());
-                    /* 308 */ this.mvtstock.setClient(this.magasinCible.getNom());
-                    /* 309 */ this.mvtstock.setFournisseur(this.magasin.getNom());
-                    /* 310 */ this.mvtstock.setMagasin(" ");
-                    /* 311 */ this.mvtstock.setType("ENTRE SORTIE");
-                    /* 312 */ this.mvtstockFacadeLocal.create(this.mvtstock);
+                    this.mvtstock.setCode(codeMvt);
+                    this.mvtstock.setDatemvt(this.transfert.getDatetransfert());
+                    this.mvtstock.setClient(this.magasinCible.getNom());
+                    this.mvtstock.setFournisseur(this.magasin.getNom());
+                    this.mvtstock.setMagasin(" ");
+                    this.mvtstock.setType("ENTRE SORTIE");
+                    this.mvtstockFacadeLocal.create(this.mvtstock);
 
-                    /* 314 */ String code = "MVT";
-                    /* 315 */ Long nextVal = this.transfertFacadeLocal.nextVal();
-                    /* 316 */ code = Utilitaires.genererCodeDemande(code, nextVal);
-                    /* 317 */ this.transfert.setCode(code);
-                    /* 318 */ this.transfert.setIdtransfert(nextVal);
-                    /* 319 */ this.transfert.setIdmagasin(this.magasin);
-                    /* 320 */ this.transfert.setIdmagasincible(this.magasinCible.getIdmagasin());
-                    /* 321 */ this.transfert.setIdmvtstock(this.mvtstock);
-                    /* 322 */ this.transfertFacadeLocal.create(this.transfert);
+                    String code = "MVT";
+                    Long nextVal = this.transfertFacadeLocal.nextVal();
+                    code = Utilitaires.genererCodeDemande(code, nextVal);
+                    this.transfert.setCode(code);
+                    this.transfert.setIdtransfert(nextVal);
+                    this.transfert.setIdmagasin(this.magasin);
+                    this.transfert.setIdmagasincible(this.magasinCible.getIdmagasin());
+                    this.transfert.setIdmvtstock(this.mvtstock);
+                    this.transfertFacadeLocal.create(this.transfert);
 
-                    /* 324 */ updateTotal();
+                    updateTotal();
 
-                    /* 326 */ for (Lignetransfert ltt : this.lignetransferts) {
-                        /* 328 */ ltt.setIdlignetransfert(this.lignetransfertFacadeLocal.nextVal());
-                        /* 329 */ ltt.setIdtransfert(this.transfert);
-                        /* 330 */ ltt.setQuantitemultiple((ltt.getQuantite() * ltt.getUnite()));
-                        /* 331 */ ltt.setMontant((ltt.getIdmagasinlot().getIdlot().getPrixunitaire() * ltt.getQuantite()));
-                        /* 332 */ this.lignetransfertFacadeLocal.create(ltt);
+                    for (Lignetransfert ltt : this.lignetransferts) {
+                        ltt.setIdlignetransfert(this.lignetransfertFacadeLocal.nextVal());
+                        ltt.setIdtransfert(this.transfert);
+                        ltt.setQuantitemultiple((ltt.getQuantite() * ltt.getUnite()));
+                        ltt.setMontant((ltt.getIdmagasinlot().getIdlot().getPrixunitaire() * ltt.getQuantite()));
+                        this.lignetransfertFacadeLocal.create(ltt);
 
-                        /* 334 */ Magasinarticle maTemp = this.magasinarticleFacadeLocal.find(ltt.getIdmagasinlot().getIdmagasinarticle().getIdmagasinarticle());
-                        /* 335 */ maTemp.setQuantite((maTemp.getQuantite() - ltt.getQuantite()));
-                        /* 336 */ maTemp.setQuantitemultiple((maTemp.getQuantitemultiple() - ltt.getQuantitemultiple()));
-                        /* 337 */ maTemp.setQuantitereduite((maTemp.getQuantitereduite() - ltt.getQuantitereduite()));
-                        /* 338 */ this.magasinarticleFacadeLocal.edit(maTemp);
+                        Magasinarticle maTemp = this.magasinarticleFacadeLocal.find(ltt.getIdmagasinlot().getIdmagasinarticle().getIdmagasinarticle());
+                        maTemp.setQuantite(maTemp.getQuantite() - ltt.getQuantite());
+                        maTemp.setQuantitemultiple((maTemp.getQuantitemultiple() - ltt.getQuantitemultiple()));
+                        maTemp.setQuantitereduite((maTemp.getQuantitereduite() - ltt.getQuantitereduite()));
+                        this.magasinarticleFacadeLocal.edit(maTemp);
 
-                        /* 340 */ Magasinlot mlTemp = this.magasinlotFacadeLocal.find(ltt.getIdmagasinlot().getIdmagasinlot());
-                        /* 341 */ mlTemp.setQuantite((mlTemp.getQuantite() - ltt.getQuantite()));
-                        /* 342 */ mlTemp.setQuantitemultiple((mlTemp.getQuantitemultiple() - ltt.getQuantitemultiple()));
-                        /* 343 */ mlTemp.setQuantitereduite((mlTemp.getQuantitereduite() - ltt.getQuantitereduite()));
-                        /* 344 */ this.magasinlotFacadeLocal.edit(mlTemp);
+                        Magasinlot mlTemp = this.magasinlotFacadeLocal.find(ltt.getIdmagasinlot().getIdmagasinlot());
+                        double qteAvant = mlTemp.getQuantitemultiple();
 
-                        /* 346 */ Lignemvtstock lmvts = new Lignemvtstock();
-                        /* 347 */ lmvts.setIdlignemvtstock(this.lignemvtstockFacadeLocal.nextVal());
-                        /* 348 */ lmvts.setIdmvtstock(this.mvtstock);
-                        /* 349 */ lmvts.setIdlot(ltt.getIdmagasinlot().getIdlot());
-                        /* 350 */ lmvts.setIdmagasinlot(ltt.getIdmagasinlot());
-                        /* 351 */ lmvts.setQtesortie(ltt.getQuantite());
-                        /* 352 */ lmvts.setQteentree((0.0D));
-                        /* 353 */ lmvts.setClient(this.magasinCible.getNom());
-                        /* 354 */ lmvts.setFournisseur(" ");
-                        /* 355 */ lmvts.setType("SORTIE");
-                        /* 356 */ lmvts.setReste(mlTemp.getQuantitemultiple());
-                        /* 357 */ this.lignemvtstockFacadeLocal.create(lmvts);
+                        mlTemp.setQuantite((mlTemp.getQuantite() - ltt.getQuantite()));
+                        mlTemp.setQuantitemultiple((mlTemp.getQuantitemultiple() - ltt.getQuantitemultiple()));
+                        mlTemp.setQuantitereduite((mlTemp.getQuantitereduite() - ltt.getQuantitereduite()));
+                        this.magasinlotFacadeLocal.edit(mlTemp);
+
+                        Lignemvtstock lmvts = new Lignemvtstock();
+                        lmvts.setIdlignemvtstock(this.lignemvtstockFacadeLocal.nextVal());
+                        lmvts.setIdmvtstock(this.mvtstock);
+                        lmvts.setIdlot(ltt.getIdmagasinlot().getIdlot());
+                        lmvts.setIdmagasinlot(ltt.getIdmagasinlot());
+                        lmvts.setQtesortie(ltt.getQuantite());
+                        lmvts.setQteentree(0d);
+                        lmvts.setClient(this.magasinCible.getNom());
+                        lmvts.setFournisseur(" ");
+                        lmvts.setType("SORTIE");
+                        lmvts.setReste(mlTemp.getQuantitemultiple());
+                        lmvts.setQteAvant(qteAvant);
+                        this.lignemvtstockFacadeLocal.create(lmvts);
 
                         Magasinlot ml = this.magasinlotFacadeLocal.findByIdmagasinIdlot(this.magasinCible.getIdmagasin().intValue(), ltt.getIdmagasinlot().getIdlot().getIdlot().longValue());
                         if (ml != null) {
-                            /* 361 */ ml.setIdmagasinarticle(this.magasinarticleFacadeLocal.find(ml.getIdmagasinarticle().getIdmagasinarticle()));
-                            /* 362 */ ml.getIdmagasinarticle().setQuantite((ml.getIdmagasinarticle().getQuantite() + ltt.getQuantite()));
-                            /* 363 */ ml.getIdmagasinarticle().setQuantitemultiple((ml.getIdmagasinarticle().getQuantitemultiple() + ltt.getQuantitemultiple()));
-                            /* 364 */ ml.getIdmagasinarticle().setQuantitereduite((ml.getIdmagasinarticle().getQuantitereduite() + ltt.getQuantitereduite()));
-                            /* 365 */ this.magasinarticleFacadeLocal.edit(ml.getIdmagasinarticle());
+                            qteAvant = ml.getQuantitemultiple();
+                            ml.setIdmagasinarticle(this.magasinarticleFacadeLocal.find(ml.getIdmagasinarticle().getIdmagasinarticle()));
+                            ml.getIdmagasinarticle().setQuantite((ml.getIdmagasinarticle().getQuantite() + ltt.getQuantite()));
+                            ml.getIdmagasinarticle().setQuantitemultiple((ml.getIdmagasinarticle().getQuantitemultiple() + ltt.getQuantitemultiple()));
+                            ml.getIdmagasinarticle().setQuantitereduite((ml.getIdmagasinarticle().getQuantitereduite() + ltt.getQuantitereduite()));
+                            this.magasinarticleFacadeLocal.edit(ml.getIdmagasinarticle());
 
-                            /* 367 */ ml.setQuantite((ml.getQuantite() + ltt.getQuantite()));
-                            /* 368 */ ml.setQuantitemultiple((ml.getQuantitemultiple() + ltt.getQuantitemultiple()));
-                            /* 369 */ ml.setQuantitereduite((ml.getQuantitereduite() + ltt.getQuantitereduite()));
+                            ml.setQuantite(ml.getQuantite() + ltt.getQuantite());
+                            ml.setQuantitemultiple(ml.getQuantitemultiple() + ltt.getQuantitemultiple());
+                            ml.setQuantitereduite(ml.getQuantitereduite() + ltt.getQuantitereduite());
+                            this.magasinlotFacadeLocal.edit(ml);
 
-                            /* 371 */ this.magasinlotFacadeLocal.edit(ml);
-
-                            /* 374 */ Lignemvtstock lmvt = new Lignemvtstock();
-                            /* 375 */ lmvt.setIdlignemvtstock(this.lignemvtstockFacadeLocal.nextVal());
-                            /* 376 */ lmvt.setIdmvtstock(this.mvtstock);
-                            /* 377 */ lmvt.setIdlot(ml.getIdlot());
-                            /* 378 */ lmvt.setIdmagasinlot(ml);
-                            /* 379 */ lmvt.setQtesortie((0.0D));
-                            /* 380 */ lmvt.setQteentree(ltt.getQuantitemultiple());
-                            /* 381 */ lmvt.setClient(" ");
-                            /* 382 */ lmvt.setReste(ml.getQuantitemultiple());
-                            /* 383 */ lmvt.setFournisseur(this.magasin.getNom());
-                            /* 384 */ lmvt.setType("ENTREE");
-                            /* 385 */ this.lignemvtstockFacadeLocal.create(lmvt);
-                            /* 386 */ System.err.println("existe et le mouvement crée");
+                            Lignemvtstock lmvt = new Lignemvtstock();
+                            lmvt.setIdlignemvtstock(this.lignemvtstockFacadeLocal.nextVal());
+                            lmvt.setIdmvtstock(this.mvtstock);
+                            lmvt.setIdlot(ml.getIdlot());
+                            lmvt.setIdmagasinlot(ml);
+                            lmvt.setQtesortie(0d);
+                            lmvt.setQteentree(ltt.getQuantitemultiple());
+                            lmvt.setClient(" ");
+                            lmvt.setReste(ml.getQuantitemultiple());
+                            lmvt.setFournisseur(this.magasin.getNom());
+                            lmvt.setType("ENTREE");
+                            lmvt.setQteAvant(qteAvant);
+                            this.lignemvtstockFacadeLocal.create(lmvt);
                         } else {
                             Magasinarticle ma = this.magasinarticleFacadeLocal.findByIdmagasinIdarticle(this.magasinCible.getIdmagasin().intValue(), ltt.getIdmagasinlot().getIdlot().getIdarticle().getIdarticle().longValue());
                             if (ma == null) {
-                                /* 391 */ ma = new Magasinarticle();
-                                /* 392 */ ma.setIdmagasinarticle(this.magasinarticleFacadeLocal.nextVal());
-                                /* 393 */ ma.setIdarticle(ltt.getIdmagasinlot().getIdlot().getIdarticle());
-                                /* 394 */ ma.setIdmagasin(this.magasinCible);
-                                /* 395 */ ma.setQuantite(ltt.getQuantite());
-                                /* 396 */ ma.setQuantitemultiple(ltt.getQuantitemultiple());
-                                /* 397 */ ma.setUnite(ltt.getUnite());
-                                /* 398 */ ma.setEtat((true));
-                                /* 399 */ ma.setQuantitereduite(ltt.getQuantitereduite());
-                                /* 400 */ ma.setQuantitevirtuelle((0.0D));
-                                /* 401 */ ma.setQuantitesecurite(ltt.getIdmagasinlot().getIdlot().getIdarticle().getQuantitesecurite());
-                                /* 402 */ this.magasinarticleFacadeLocal.create(ma);
+                                ma = new Magasinarticle();
+                                ma.setIdmagasinarticle(this.magasinarticleFacadeLocal.nextVal());
+                                ma.setIdarticle(ltt.getIdmagasinlot().getIdlot().getIdarticle());
+                                ma.setIdmagasin(this.magasinCible);
+                                ma.setQuantite(ltt.getQuantite());
+                                ma.setQuantitemultiple(ltt.getQuantitemultiple());
+                                ma.setUnite(ltt.getUnite());
+                                ma.setEtat(true);
+                                ma.setQuantitereduite(ltt.getQuantitereduite());
+                                ma.setQuantitevirtuelle(0d);
+                                ma.setQuantitesecurite(ltt.getIdmagasinlot().getIdlot().getIdarticle().getQuantitesecurite());
+                                this.magasinarticleFacadeLocal.create(ma);
                             } else {
-                                /* 404 */ ma.setQuantite((ma.getQuantite() + ltt.getQuantite()));
-                                /* 405 */ ma.setQuantitemultiple((ma.getQuantitemultiple() + ltt.getQuantitemultiple()));
-                                /* 406 */ ma.setQuantitereduite((ma.getQuantitereduite() + ltt.getQuantitereduite()));
-                                /* 407 */ this.magasinarticleFacadeLocal.edit(ma);
+                                ma.setQuantite((ma.getQuantite() + ltt.getQuantite()));
+                                ma.setQuantitemultiple((ma.getQuantitemultiple() + ltt.getQuantitemultiple()));
+                                ma.setQuantitereduite((ma.getQuantitereduite() + ltt.getQuantitereduite()));
+                                this.magasinarticleFacadeLocal.edit(ma);
                             }
 
-                            /* 410 */ Magasinlot mlTemp1 = new Magasinlot();
-                            /* 411 */ mlTemp1.setIdmagasinlot(this.magasinlotFacadeLocal.nextVal());
-                            /* 412 */ mlTemp1.setIdmagasinarticle(ma);
-                            /* 413 */ mlTemp1.setIdlot(ltt.getIdmagasinlot().getIdlot());
-                            /* 414 */ mlTemp1.setEtat((true));
-                            /* 415 */ mlTemp1.setQuantite(ltt.getQuantite());
-                            /* 416 */ mlTemp1.setUnite(ltt.getUnite());
-                            /* 417 */ mlTemp1.setQuantitemultiple(ltt.getQuantitemultiple());
-                            /* 418 */ mlTemp1.setQuantitereduite(ltt.getQuantitemultiple());
-                            /* 419 */ mlTemp1.setQuantitevirtuelle((0.0D));
+                            Magasinlot mlTemp1 = new Magasinlot();
+                            mlTemp1.setIdmagasinlot(this.magasinlotFacadeLocal.nextVal());
+                            mlTemp1.setIdmagasinarticle(ma);
+                            mlTemp1.setIdlot(ltt.getIdmagasinlot().getIdlot());
+                            mlTemp1.setEtat((true));
+                            mlTemp1.setQuantite(ltt.getQuantite());
+                            mlTemp1.setUnite(ltt.getUnite());
+                            mlTemp1.setQuantitemultiple(ltt.getQuantitemultiple());
+                            mlTemp1.setQuantitereduite(ltt.getQuantitemultiple());
+                            mlTemp1.setQuantitevirtuelle(0d);
 
-                            /* 421 */ this.magasinlotFacadeLocal.create(mlTemp1);
+                            this.magasinlotFacadeLocal.create(mlTemp1);
 
-                            /* 424 */ Lignemvtstock lmvt = new Lignemvtstock();
-                            /* 425 */ lmvt.setIdlignemvtstock(this.lignemvtstockFacadeLocal.nextVal());
-                            /* 426 */ lmvt.setIdmvtstock(this.mvtstock);
-                            /* 427 */ lmvt.setIdlot(mlTemp1.getIdlot());
-                            /* 428 */ lmvt.setIdmagasinlot(mlTemp1);
-                            /* 429 */ lmvt.setQtesortie(Double.valueOf(0.0D));
-                            /* 430 */ lmvt.setQteentree(ltt.getQuantitemultiple());
-                            /* 431 */ lmvt.setClient(" ");
-                            /* 432 */ lmvt.setReste(ltt.getQuantitemultiple());
-                            /* 433 */ lmvt.setFournisseur(this.magasin.getNom());
-                            /* 434 */ lmvt.setType("ENTREE");
-                            /* 435 */ this.lignemvtstockFacadeLocal.create(lmvt);
-                            /* 436 */ System.err.println("existe et le mouvement crée");
-
-                            /* 438 */ System.err.println("n'existe pas et le mouvement crée");
+                            Lignemvtstock lmvt = new Lignemvtstock();
+                            lmvt.setIdlignemvtstock(this.lignemvtstockFacadeLocal.nextVal());
+                            lmvt.setIdmvtstock(this.mvtstock);
+                            lmvt.setIdlot(mlTemp1.getIdlot());
+                            lmvt.setIdmagasinlot(mlTemp1);
+                            lmvt.setQtesortie(0d);
+                            lmvt.setQteentree(ltt.getQuantitemultiple());
+                            lmvt.setClient(" ");
+                            lmvt.setReste(ltt.getQuantitemultiple());
+                            lmvt.setFournisseur(this.magasin.getNom());
+                            lmvt.setType("ENTREE");
+                            lmvt.setQteAvant(0d);
+                            this.lignemvtstockFacadeLocal.create(lmvt);
                         }
-
                     }
 
-                    /* 443 */ Utilitaires.saveOperation(this.mouchardFacadeLocal, "Enregistrement du transfert d'article ; N° : " + this.transfert.getCode() + "; Montant : " + this.transfert.getMontanttotal(), SessionMBean.getUserAccount());
+                    Utilitaires.saveOperation(this.mouchardFacadeLocal, "Enregistrement du transfert d'article ; N° : " + this.transfert.getCode() + "; Montant : " + this.transfert.getMontanttotal(), SessionMBean.getUserAccount());
 
-                    /* 445 */ this.ut.commit();
-                    /* 446 */ this.detail = (this.supprimer = this.modifier = this.imprimer = (true));
-                    /* 447 */ JsfUtil.addSuccessMessage(message);
+                    this.ut.commit();
+                    this.detail = this.supprimer = this.modifier = this.imprimer = true;
+                    JsfUtil.addSuccessMessage(message);
 
-                    /* 449 */ notifySuccess();
-                    /* 450 */ RequestContext.getCurrentInstance().execute("PF('TransfertCreateDialog').hide()");
+                    notifySuccess();
+                    RequestContext.getCurrentInstance().execute("PF('TransfertCreateDialog').hide()");
                 } else {
-                    /* 452 */ notifyError("liste_article_vide");
+                    notifyError("liste_article_vide");
                 }
-            } /* 455 */ else if (this.transfert == null) {
-                /* 458 */ notifyError("not_row_selected");
+            } else if (this.transfert == null) {
+                notifyError("not_row_selected");
             }
         } catch (Exception e) {
-            /* 462 */ notifyFail(e);
+            notifyFail(e);
         }
     }
 
@@ -453,89 +454,89 @@ public class TransfertController extends AbstractTransertController implements S
                 for (Lignetransfert lt : listLigneTransfert) {
                     this.lignetransfertFacadeLocal.remove(lt);
 
-                    /* 488 */ Magasinarticle maTemp = this.magasinarticleFacadeLocal.find(lt.getIdmagasinlot().getIdmagasinarticle().getIdmagasinarticle());
-                    /* 489 */ maTemp.setQuantite((maTemp.getQuantite() + lt.getQuantite()));
-                    /* 490 */ maTemp.setQuantitemultiple((maTemp.getQuantitemultiple() + lt.getQuantitemultiple()));
-                    /* 491 */ maTemp.setQuantitereduite((maTemp.getQuantitereduite() + lt.getQuantitereduite()));
-                    /* 492 */ this.magasinarticleFacadeLocal.edit(maTemp);
+                    Magasinarticle maTemp = this.magasinarticleFacadeLocal.find(lt.getIdmagasinlot().getIdmagasinarticle().getIdmagasinarticle());
+                    maTemp.setQuantite((maTemp.getQuantite() + lt.getQuantite()));
+                    maTemp.setQuantitemultiple((maTemp.getQuantitemultiple() + lt.getQuantitemultiple()));
+                    maTemp.setQuantitereduite((maTemp.getQuantitereduite() + lt.getQuantitereduite()));
+                    this.magasinarticleFacadeLocal.edit(maTemp);
 
-                    /* 494 */ Magasinlot mlTemp = this.magasinlotFacadeLocal.find(lt.getIdmagasinlot().getIdmagasinlot());
-                    /* 495 */ mlTemp.setQuantite((mlTemp.getQuantite() + lt.getQuantite()));
-                    /* 496 */ mlTemp.setQuantitemultiple((mlTemp.getQuantitemultiple() + lt.getQuantitemultiple()));
-                    /* 497 */ mlTemp.setQuantitereduite((mlTemp.getQuantitereduite() + lt.getQuantitereduite()));
-                    /* 498 */ this.magasinlotFacadeLocal.edit(mlTemp);
+                    Magasinlot mlTemp = this.magasinlotFacadeLocal.find(lt.getIdmagasinlot().getIdmagasinlot());
+                    mlTemp.setQuantite((mlTemp.getQuantite() + lt.getQuantite()));
+                    mlTemp.setQuantitemultiple((mlTemp.getQuantitemultiple() + lt.getQuantitemultiple()));
+                    mlTemp.setQuantitereduite((mlTemp.getQuantitereduite() + lt.getQuantitereduite()));
+                    this.magasinlotFacadeLocal.edit(mlTemp);
 
                     Magasinlot ml = this.magasinlotFacadeLocal.findByIdmagasinIdlot(this.transfert.getIdmagasincible().intValue(), lt.getIdmagasinlot().getIdlot().getIdlot().longValue());
                     if (ml != null) {
-                        /* 503 */ Magasinarticle ma1 = ml.getIdmagasinarticle();
+                        Magasinarticle ma1 = ml.getIdmagasinarticle();
 
-                        /* 505 */ ma1.setQuantite((ma1.getQuantite() - lt.getQuantite()));
-                        /* 506 */ ma1.setQuantitemultiple((ma1.getQuantitemultiple() - lt.getQuantitemultiple()));
-                        /* 507 */ ma1.setQuantitereduite((ma1.getQuantitereduite() - lt.getQuantitereduite()));
-                        /* 508 */ this.magasinarticleFacadeLocal.edit(ma1);
+                        ma1.setQuantite((ma1.getQuantite() - lt.getQuantite()));
+                        ma1.setQuantitemultiple((ma1.getQuantitemultiple() - lt.getQuantitemultiple()));
+                        ma1.setQuantitereduite((ma1.getQuantitereduite() - lt.getQuantitereduite()));
+                        this.magasinarticleFacadeLocal.edit(ma1);
 
-                        /* 510 */ ml.setQuantite((ml.getQuantite() - lt.getQuantite()));
-                        /* 511 */ ml.setQuantitemultiple((ml.getQuantitemultiple() - lt.getQuantitemultiple()));
-                        /* 512 */ ml.setQuantitereduite((ml.getQuantitereduite() - lt.getQuantitereduite()));
-                        /* 513 */ this.magasinlotFacadeLocal.edit(ml);
+                        ml.setQuantite((ml.getQuantite() - lt.getQuantite()));
+                        ml.setQuantitemultiple((ml.getQuantitemultiple() - lt.getQuantitemultiple()));
+                        ml.setQuantitereduite((ml.getQuantitereduite() - lt.getQuantitereduite()));
+                        this.magasinlotFacadeLocal.edit(ml);
                     }
                 }
 
-                /* 517 */ this.transfertFacadeLocal.remove(this.transfert);
-                /* 518 */ this.mvtstockFacadeLocal.remove(this.transfert.getIdmvtstock());
+                this.transfertFacadeLocal.remove(this.transfert);
+                this.mvtstockFacadeLocal.remove(this.transfert.getIdmvtstock());
 
-                /* 520 */ Utilitaires.saveOperation(this.mouchardFacadeLocal, "Annulation du transfert d'article : " + this.transfert.getCode() + " ; Montant : " + this.transfert.getMontanttotal(), SessionMBean.getUserAccount());
-                /* 521 */ this.ut.commit();
+                Utilitaires.saveOperation(this.mouchardFacadeLocal, "Annulation du transfert d'article : " + this.transfert.getCode() + " ; Montant : " + this.transfert.getMontanttotal(), SessionMBean.getUserAccount());
+                this.ut.commit();
 
-                /* 523 */ this.transfert = null;
-                /* 524 */ this.supprimer = (this.modifier = this.imprimer = this.detail = Boolean.valueOf(true));
-                /* 525 */ notifySuccess();
+                this.transfert = null;
+                this.supprimer = (this.modifier = this.imprimer = this.detail = Boolean.valueOf(true));
+                notifySuccess();
             } else {
-                /* 528 */ notifyError("not_row_selected");
+                notifyError("not_row_selected");
             }
         } catch (Exception e) {
-            /* 531 */ notifyFail(e);
+            notifyFail(e);
         }
     }
 
     public void initPrinter(Transfert t) {
-        /* 536 */ this.transfert = t;
-        /* 537 */ print();
+        this.transfert = t;
+        print();
     }
 
     public void initEdit(Transfert t) {
-        /* 541 */ this.transfert = t;
-        /* 542 */ prepareEdit();
+        this.transfert = t;
+        prepareEdit();
     }
 
     public void initView(Transfert t) {
-        /* 546 */ this.transfert = t;
-        /* 547 */ prepareview();
+        this.transfert = t;
+        prepareview();
     }
 
     public void initDelete(Transfert t) {
-        /* 551 */ this.transfert = t;
-        /* 552 */ delete();
+        this.transfert = t;
+        delete();
     }
 
     public void print() {
         try {
-            /* 557 */ if (!Utilitaires.isAccess((43L))) {
-                /* 558 */ notifyError("acces_refuse");
-                /* 559 */ this.transfert = null;
-                /* 560 */ return;
+            if (!Utilitaires.isAccess(43L)) {
+                notifyError("acces_refuse");
+                this.transfert = null;
+                return;
             }
 
-            /* 563 */ if (this.transfert != null) {
-                /* 568 */ Map map = new HashMap();
-                /* 569 */ map.put("idtransfert", this.transfert.getIdtransfert());
-                /* 570 */ Printer.print("/reports/ireport/transfert.jasper", map);
-                /* 571 */ RequestContext.getCurrentInstance().execute("PF('FactureImprimerDialog').show()");
+            if (this.transfert != null) {
+                Map map = new HashMap();
+                map.put("idtransfert", this.transfert.getIdtransfert());
+                Printer.print("/reports/ireport/transfert.jasper", map);
+                RequestContext.getCurrentInstance().execute("PF('FactureImprimerDialog').show()");
             } else {
-                /* 573 */ notifyError("not_row_selected");
+                notifyError("not_row_selected");
             }
         } catch (Exception e) {
-            /* 576 */ notifyFail(e);
+            notifyFail(e);
         }
     }
 

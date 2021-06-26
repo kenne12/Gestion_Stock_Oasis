@@ -69,103 +69,103 @@ public class AbstractTransertController {
 
     @EJB
     protected LignemvtstockFacadeLocal lignemvtstockFacadeLocal;
-    /*  80 */    protected List<Lignemvtstock> lignemvtstocks = new ArrayList();
+    protected List<Lignemvtstock> lignemvtstocks = new ArrayList();
 
     @EJB
     protected MouchardFacadeLocal mouchardFacadeLocal;
-    /*  85 */    protected Routine routine = new Routine();
+    protected Routine routine = new Routine();
 
-    /*  87 */    protected String libelle_article = "-";
+    protected String libelle_article = "-";
 
-    /*  89 */    protected Double total = (0.0D);
+    protected Double total = 0d;
 
-    /*  91 */    protected Boolean showSelectorCommand = (true);
+    protected Boolean showSelectorCommand = true;
 
-    /*  93 */    protected Boolean detail = (true);
-    /*  94 */    protected Boolean modifier = (true);
-    /*  95 */    protected Boolean consulter = (true);
-    /*  96 */    protected Boolean imprimer = (true);
-    /*  97 */    protected Boolean supprimer = (true);
+    protected Boolean detail = true;
+    protected Boolean modifier = true;
+    protected Boolean consulter = true;
+    protected Boolean imprimer = true;
+    protected Boolean supprimer = true;
 
-    /*  99 */    protected String fileName = "";
-    /* 100 */    protected String printDialogTitle = "";
+    protected String fileName = "";
+    protected String printDialogTitle = "";
 
-    /* 102 */    protected String mode = "";
+    protected String mode = "";
 
     public Boolean getDetail() {
-        /* 105 */ return this.detail;
+        return this.detail;
     }
 
     public Boolean getModifier() {
-        /* 109 */ return this.modifier;
+        return this.modifier;
     }
 
     public Boolean getConsulter() {
-        /* 113 */ return this.consulter;
+        return this.consulter;
     }
 
     public Boolean getImprimer() {
-        /* 117 */ return this.imprimer;
+        return this.imprimer;
     }
 
     public Boolean getSupprimer() {
-        /* 121 */ return this.supprimer;
+        return this.supprimer;
     }
 
     public Double getTotal() {
-        /* 125 */ return this.total;
+        return this.total;
     }
 
     public void setTotal(Double total) {
-        /* 129 */ this.total = total;
+        this.total = total;
     }
 
     public String getFileName() {
-        /* 133 */ return this.fileName;
+        return this.fileName;
     }
 
     public Boolean getShowSelectorCommand() {
-        /* 137 */ return this.showSelectorCommand;
+        return this.showSelectorCommand;
     }
 
     public Routine getRoutine() {
-        /* 141 */ return this.routine;
+        return this.routine;
     }
 
     public Mvtstock getMvtstock() {
-        /* 145 */ return this.mvtstock;
+        return this.mvtstock;
     }
 
     public void setMvtstock(Mvtstock mvtstock) {
-        /* 149 */ this.mvtstock = mvtstock;
+        this.mvtstock = mvtstock;
     }
 
     public List<Lignemvtstock> getLignemvtstocks() {
-        /* 153 */ return this.lignemvtstocks;
+        return this.lignemvtstocks;
     }
 
     public String getPrintDialogTitle() {
-        /* 157 */ return this.printDialogTitle;
+        return this.printDialogTitle;
     }
 
     public void setPrintDialogTitle(String printDialogTitle) {
-        /* 161 */ this.printDialogTitle = printDialogTitle;
+        this.printDialogTitle = printDialogTitle;
     }
 
     public List<Magasinarticle> getMagasinarticles() {
-        /* 165 */ return this.magasinarticles;
+        return this.magasinarticles;
     }
 
     public void setMagasinarticles(List<Magasinarticle> magasinarticles) {
-        /* 169 */ this.magasinarticles = magasinarticles;
+        this.magasinarticles = magasinarticles;
     }
 
     public List<Magasinlot> getMagasinlots() {
-        /* 173 */ return this.magasinlots;
+        return this.magasinlots;
     }
 
     public void setMagasinlots(List<Magasinlot> magasinlots) {
-        /* 177 */ this.magasinlots = magasinlots;
+        this.magasinlots = magasinlots;
     }
 
     public Famille getFamille() {
@@ -198,85 +198,77 @@ public class AbstractTransertController {
     }
 
     public void setTransfert(Transfert transfert) {
-        /* 210 */ this.transfert = transfert;
-        /* 211 */ this.modifier = (this.supprimer = this.detail = this.imprimer = Boolean.valueOf(transfert == null));
+        this.transfert = transfert;
+        this.modifier = this.supprimer = this.detail = this.imprimer = transfert == null;
     }
 
     public List<Transfert> getTransferts() {
-        /* 215 */ this.transferts = this.transfertFacadeLocal.findAllRange();
-        /* 216 */ return this.transferts;
-    }
-
-    public void setTransferts(List<Transfert> transferts) {
-        /* 220 */ this.transferts = transferts;
+        transferts = transfertFacadeLocal.findByIdMagasinBidirection(SessionMBean.getMagasin().getIdmagasin());
+        return transferts;
     }
 
     public Lignetransfert getLignetransfert() {
-        /* 224 */ return this.lignetransfert;
+        return this.lignetransfert;
     }
 
     public void setLignetransfert(Lignetransfert lignetransfert) {
-        /* 228 */ this.lignetransfert = lignetransfert;
+        this.lignetransfert = lignetransfert;
     }
 
     public List<Lignetransfert> getLignetransferts() {
-        /* 232 */ return this.lignetransferts;
+        return this.lignetransferts;
     }
 
     public void setLignetransferts(List<Lignetransfert> lignetransferts) {
-        /* 236 */ this.lignetransferts = lignetransferts;
+        this.lignetransferts = lignetransferts;
     }
 
     public Magasin getMagasin() {
-        /* 240 */ return this.magasin;
+        return this.magasin;
     }
 
     public void setMagasin(Magasin magasin) {
-        /* 244 */ this.magasin = magasin;
+        this.magasin = magasin;
     }
 
     public Magasin getMagasinCible() {
-        /* 248 */ return this.magasinCible;
+        return this.magasinCible;
     }
 
     public void setMagasinCible(Magasin magasinCible) {
-        /* 252 */ this.magasinCible = magasinCible;
+        this.magasinCible = magasinCible;
     }
 
     public List<Magasin> getMagasins() {
-        /* 256 */ this.magasins = this.magasinFacadeLocal.findAllRange(SessionMBean.getMagasin().getParametrage().getId());
-        /* 257 */ return this.magasins;
-    }
-
-    public void setMagasins(List<Magasin> magasins) {
-        /* 261 */ this.magasins = magasins;
+        this.magasins = this.magasinFacadeLocal.findAllRange(SessionMBean.getMagasin().getParametrage().getId());
+        return this.magasins;
     }
 
     public Magasinarticle getMagasinarticle() {
-        /* 265 */ return this.magasinarticle;
+        return this.magasinarticle;
     }
 
     public void setMagasinarticle(Magasinarticle magasinarticle) {
-        /* 269 */ this.magasinarticle = magasinarticle;
+        this.magasinarticle = magasinarticle;
     }
 
     public Magasinlot getMagasinlot() {
-        /* 273 */ return this.magasinlot;
+        return this.magasinlot;
     }
 
     public void setMagasinlot(Magasinlot magasinlot) {
-        /* 277 */ this.magasinlot = magasinlot;
+        this.magasinlot = magasinlot;
     }
 
     public List<Lignetransfert> getLignetransferts_1() {
-        /* 281 */ return this.lignetransferts_1;
+        return this.lignetransferts_1;
     }
 
     public void setLignetransferts_1(List<Lignetransfert> lignetransferts_1) {
-        /* 285 */ this.lignetransferts_1 = lignetransferts_1;
+        this.lignetransferts_1 = lignetransferts_1;
     }
 
     public String getLibelle_article() {
-        /* 289 */ return this.libelle_article;
+        return this.libelle_article;
     }
 }
