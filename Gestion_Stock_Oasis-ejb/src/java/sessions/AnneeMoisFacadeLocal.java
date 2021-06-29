@@ -33,4 +33,6 @@ public interface AnneeMoisFacadeLocal {
     List<AnneeMois> findByRange() throws Exception;
 
     AnneeMois findByDate(Date date) throws Exception;
+    
+    AnneeMois findDefaultMonthByIdannee(int idAnnee);
 }

@@ -25,6 +25,10 @@ public class AbstratStockReportController {
     @EJB
     protected UtilisateurmagasinFacadeLocal utilisateurmagasinFacadeLocal;
 
+    protected boolean printBtnState = true;
+
+    protected String fileName = "";
+
     public List<Magasin> getMagasins() {
         this.magasins = Utilitaires.returMagasinByUser(this.magasinFacadeLocal, this.utilisateurmagasinFacadeLocal, SessionMBean.getUserAccount().getIdpersonnel());
         return this.magasins;
@@ -42,7 +46,16 @@ public class AbstratStockReportController {
         return this.magasinlots;
     }
 
-    public void setMagasinlots(List<Magasinlot> magasinlots) {
-        this.magasinlots = magasinlots;
+    public String getFileName() {
+        return fileName;
     }
+
+    public boolean isPrintBtnState() {
+        return printBtnState;
+    }
+
+    public void setPrintBtnState(boolean printBtnState) {
+        this.printBtnState = printBtnState;
+    }
+
 }

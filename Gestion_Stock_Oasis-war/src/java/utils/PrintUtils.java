@@ -19,6 +19,7 @@ import entities.Lignelivraisonfournisseur;
 import entities.Livraisonclient;
 import entities.Livraisonfournisseur;
 import entities.Magasin;
+import entities.Magasinlot;
 import entities.Parametrage;
 import entities.Versement;
 import java.io.FileNotFoundException;
@@ -685,7 +686,7 @@ public class PrintUtils {
             rapport.add((Element) titre);
 
             Paragraph ligne = new Paragraph("----------------------------------------------------------------------------------------------------------------------------------------------", new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 2));
-            rapport.add((Element) ligne);
+            rapport.add(ligne);
 
             Paragraph nom = new Paragraph("Fournisseur : " + livraisonfournisseur.getIdfournisseur().getNom(), new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 2));
             rapport.add((Element) nom);
@@ -829,7 +830,7 @@ public class PrintUtils {
             bilan.addCell(createPdfPCell(" ", 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
             bilan.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney((int) demande.getMontantTtc()), 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 1, 1, 0, 1));
 
-            rapport.add( bilan);
+            rapport.add(bilan);
 
             rapport.close();
         } catch (DocumentException ex) {
@@ -1030,6 +1031,75 @@ public class PrintUtils {
             bilan.addCell(createPdfPCell("   ", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
 
             rapport.add(bilan);
+
+            rapport.close();
+        } catch (DocumentException ex) {
+            Logger.getLogger(utils.PrintUtils.class.getName()).log(Level.SEVERE, (String) null, (Throwable) ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(utils.PrintUtils.class.getName()).log(Level.SEVERE, (String) null, ex);
+        }
+        return fileName;
+    }
+
+    public static String printStockByStore(List<Magasinlot> listLot) {
+        String fileName = "";
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            fileName = "Fiche_Stock_" + listLot.get(0).getIdmagasinarticle().getIdmagasin().getNom() + "_" + sdf.format(Date.from(Instant.now())) + ".pdf";
+            Document rapport = new Document();
+            PdfWriter.getInstance(rapport, new FileOutputStream(Utilitaires.path + "/reports/stock/" + fileName));
+            rapport.open();
+            float[] widths = {0.5F, 3.5F, 1f, 0.8F, 0.6F, 1.0F};
+            PdfPTable table = new PdfPTable(widths);
+            table.setWidthPercentage(100.0F);
+
+            createEntete(rapport, SessionMBean.getParametrage());
+
+            rapport.add(new Paragraph(" "));
+
+            Paragraph titre = new Paragraph("FICHE DE STOCK", new Font(Font.FontFamily.TIMES_ROMAN, 14.0F, 1));
+            titre.setAlignment(1);
+            rapport.add(titre);
+
+            Paragraph ligne = new Paragraph("----------------------------------------------------------------------------------------------------------------------------------------------", new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 2));
+            rapport.add(ligne);
+
+            Paragraph nom = new Paragraph("Magasin : " + listLot.get(0).getIdmagasinarticle().getIdmagasin().getNom(), new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 2));
+            rapport.add(nom);
+
+            Paragraph dateAchat = new Paragraph("Date : " + sdf.format(Date.from(Instant.now())), new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 2));
+            rapport.add(dateAchat);
+
+            rapport.add(new Paragraph(" "));
+
+            table.addCell(createPdfPCell("N°", 2, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0)));
+            table.addCell(createPdfPCell("Produit", 2, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0)));
+            table.addCell(createPdfPCell("N° Lot", 2, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0)));
+            table.addCell(createPdfPCell("Prix", 2, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0)));
+            table.addCell(createPdfPCell("Qté", 2, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0)));
+            table.addCell(createPdfPCell("Total", 2, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0)));
+
+            Double quantite = 0d;
+            int compteur = 1;
+            Double montantTotal = 0d;
+            for (Magasinlot ml : listLot) {
+                quantite += ml.getQuantite();
+                table.addCell(createPdfPCell("" + compteur, 2, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0)));
+                table.addCell(createPdfPCell("" + Utilitaires.formatPrenomMaj(ml.getIdlot().getIdarticle().getLibelle()) , 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell("" + ml.getIdlot().getNumero(), 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(ml.getIdlot().getPrixunitaire()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(ml.getQuantite().intValue()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                Double value = (ml.getIdlot().getPrixunitaire() * ml.getQuantite());
+                montantTotal += value;
+                table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney((value.intValue())), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                compteur++;
+            }
+
+            table.addCell(createPdfPCell("Totaux", 4, 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0)));
+            table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(quantite), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
+            table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney((montantTotal.intValue())), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
+
+            rapport.add((Element) table);
 
             rapport.close();
         } catch (DocumentException ex) {

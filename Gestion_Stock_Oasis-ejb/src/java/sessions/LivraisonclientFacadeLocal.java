@@ -32,4 +32,12 @@ public interface LivraisonclientFacadeLocal {
 
     public List<Livraisonclient> findByIdmagasinNonRegle(int idMagasin);
 
+    public List<Livraisonclient> findByIdmagasin(int idMagasin);
+
+    public List<Livraisonclient> findByIdmagasinAndDate(int idMagasin, Date date);
+
+    public List<Livraisonclient> findByIdmagasinAndIdclientAndDate(int idMagasin, int idClient, Date date);
+
+    public List<Livraisonclient> findByIdmagasinAndIdclientTwoDates(int idMagasin, int idClient, Date dateDebut, Date dateFin);
+
 }

@@ -21,21 +21,21 @@
         </h:form>
 
 
-        <h:form style="margin-top: 200px ;">
+        <h:form style="margin-top: 25px;">
             <center>
 
                 <h:panelGrid columns="3">
 
                     <p:commandLink update=":PeremptionViewForm_1" disabled="false" style="margin-left:0.5%;border-radius: 10%" actionListener="#{controlPeremptionController.openDialog()}" >
-                        <h:graphicImage url="/resources/alert_images/alerte.jpg" style="cursor:pointer;width: 250px;height: 200px" />
+                        <h:graphicImage url="/resources/alert_images/alerte.jpg" style="cursor:pointer;width: 250px;height: 50px" />
                     </p:commandLink>
 
                     <p:commandLink disabled="false" style="margin-left:20%;" update=":AlerteCommandeClientForm" actionListener="#{alerteController.openDemandeDialog()}">
-                        <h:graphicImage url="/resources/alert_images/alerte.jpg" style="cursor:pointer;width: 250px;height: 200px" />
+                        <h:graphicImage url="/resources/alert_images/alerte.jpg" style="cursor:pointer;width: 250px;height: 50px" />
                     </p:commandLink>
 
                     <p:commandLink disabled="false" style="margin-left:25%;" update=":AlertePeremptionForm" actionListener="#{alerteController.openAlertPeremptionDialog()}">
-                        <h:graphicImage url="/resources/alert_images/alerte.jpg" style="cursor:pointer;width: 250px;height: 200px" />
+                        <h:graphicImage url="/resources/alert_images/alerte.jpg" style="cursor:pointer;width: 250px;height: 50px" />
                     </p:commandLink>
 
                     <h:outputLabel value="#{langue.produit_perimes} (#{controlPeremptionController.magasinlots.size()})" style="font-size: 20px;color: red;margin-left:0.5%" />
@@ -47,6 +47,8 @@
 
             </center>
         </h:form>
+
+        
 
         <p:dialog id="SessionCreerDlg" 
                   widgetVar="MenuCreerDialog" 

@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import sessions.AnneeFacadeLocal;
+import sessions.AnneeMoisFacadeLocal;
 import sessions.MagasinFacadeLocal;
 import sessions.MenuFacadeLocal;
 import sessions.MouchardFacadeLocal;
@@ -33,6 +34,9 @@ public class AbstractLoginBean {
     protected AnneeFacadeLocal anneeFacadeLocal;
     protected Annee annee = new Annee();
     protected List<Annee> annees = new ArrayList<>();
+    
+    @EJB
+    protected AnneeMoisFacadeLocal anneeMoisFacadeLocal;
 
     @EJB
     protected MenuFacadeLocal menuFacadeLocal;

@@ -47,6 +47,8 @@ public class AnneeMois implements Serializable {
     @JoinColumn(name = "idmois", referencedColumnName = "idmois")
     @ManyToOne(fetch = FetchType.LAZY)
     private Mois idmois;
+    @Column(name = "default_month")
+    private boolean defaultMonth;
 
     public AnneeMois() {
     }
@@ -101,6 +103,14 @@ public class AnneeMois implements Serializable {
 
     public void setIdmois(Mois idmois) {
         this.idmois = idmois;
+    }
+
+    public boolean isDefaultMonth() {
+        return defaultMonth;
+    }
+
+    public void setDefaultMonth(boolean defaultMonth) {
+        this.defaultMonth = defaultMonth;
     }
 
     @Override

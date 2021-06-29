@@ -65,5 +65,39 @@ public class LivraisonclientFacade extends AbstractFacade<Livraisonclient> imple
                 .setParameter("modePayement", "PAYE_A_CREDIT")
                 .getResultList();
     }
+    
+    @Override
+    public List<Livraisonclient> findByIdmagasin(int idMagasin) {
+        return this.em.createQuery("SELECT l FROM Livraisonclient l WHERE l.idmagasin.idmagasin=:idMagasin ORDER BY l.idlivraisonclient DESC")
+                .setParameter("idMagasin", idMagasin)
+                .getResultList();
+    }
+
+    @Override
+    public List<Livraisonclient> findByIdmagasinAndDate(int idMagasin, Date date) {
+        return this.em.createQuery("SELECT l FROM Livraisonclient l WHERE l.datelivraison  =:date AND l.idmagasin.idmagasin=:idMagasin ORDER BY l.idlivraisonclient DESC")
+                .setParameter("date", date)
+                .setParameter("idMagasin", idMagasin)
+                .getResultList();
+    }
+
+    @Override
+    public List<Livraisonclient> findByIdmagasinAndIdclientAndDate(int idMagasin, int idClient, Date date) {
+        return this.em.createQuery("SELECT l FROM Livraisonclient l WHERE l.datelivraison  =:date AND l.idmagasin.idmagasin=:idMagasin AND l.client.idclient=:idClient ORDER BY l.idlivraisonclient DESC")
+                .setParameter("date", date)
+                .setParameter("idMagasin", idMagasin)
+                .setParameter("idClient", idClient)
+                .getResultList();
+    }
+
+    @Override
+    public List<Livraisonclient> findByIdmagasinAndIdclientTwoDates(int idMagasin, int idClient, Date dateDebut, Date dateFin) {
+        return this.em.createQuery("SELECT l FROM Livraisonclient l WHERE l.datelivraison BETWEEN  :dateDebut AND :dateFin AND l.idmagasin.idmagasin=:idMagasin AND l.client.idclient=:idClient ORDER BY l.idlivraisonclient DESC")
+                .setParameter("dateDebut", dateDebut)
+                .setParameter("dateFin", dateFin)
+                .setParameter("idMagasin", idMagasin)
+                .setParameter("idClient", idClient)
+                .getResultList();
+    }
 
 }

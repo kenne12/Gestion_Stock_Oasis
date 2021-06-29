@@ -1,6 +1,7 @@
 package utils;
 
 import entities.Annee;
+import entities.AnneeMois;
 import entities.Journee;
 import entities.Magasin;
 import entities.Menu;
@@ -111,6 +112,18 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
             ex.printStackTrace();
             this.utilisateur = new Utilisateur();
             JsfUtil.addErrorMessage("Echec système");
+        }
+    }
+
+    private void intDefaultYear() {
+        Annee defaultAnnee = anneeFacadeLocal.findOneDefault();
+        if (defaultAnnee != null) {
+            annee = defaultAnnee;
+
+            AnneeMois defaultMonth = anneeMoisFacadeLocal.findDefaultMonthByIdannee(annee.getIdannee());
+            if (defaultMonth != null) {
+
+            }
         }
     }
 

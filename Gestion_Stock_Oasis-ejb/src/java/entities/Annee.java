@@ -45,6 +45,8 @@ public class Annee implements Serializable {
     private Date dateFin;
     @OneToMany(mappedBy = "idannee", fetch = FetchType.LAZY)
     private List<AnneeMois> anneeMoisList;
+    @Column(name = "default_year")
+    private boolean defaultYear;
 
     public Annee() {
     }
@@ -91,6 +93,14 @@ public class Annee implements Serializable {
 
     public void setDateFin(Date dateFin) {
         this.dateFin = dateFin;
+    }
+
+    public boolean isDefaultYear() {
+        return defaultYear;
+    }
+
+    public void setDefaultYear(boolean defaultYear) {
+        this.defaultYear = defaultYear;
     }
 
     @XmlTransient

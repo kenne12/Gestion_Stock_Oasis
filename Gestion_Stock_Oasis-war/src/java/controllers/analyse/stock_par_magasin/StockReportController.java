@@ -2,21 +2,15 @@ package controllers.analyse.stock_par_magasin;
 
 import entities.Lot;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import utils.Printer;
+import org.primefaces.context.RequestContext;
+import utils.PrintUtils;
 import utils.Utilitaires;
 
 @ManagedBean
 @ViewScoped
 public class StockReportController extends AbstratStockReportController implements Serializable {
-
-    @PostConstruct
-    private void init() {
-    }
 
     public Boolean checkPeremption(Lot lot) {
         return Utilitaires.checkPeremption(lot);
@@ -24,8 +18,12 @@ public class StockReportController extends AbstratStockReportController implemen
 
     public void search() {
         try {
+            this.setPrintBtnState(true);
             if (this.magasin.getIdmagasin() != null) {
-                this.magasinlots = this.magasinlotFacadeLocal.findByIdmagasinEtatIsTrue(this.magasin.getIdmagasin().intValue());
+                this.magasinlots = this.magasinlotFacadeLocal.findByIdmagasinEtatIsTrue(this.magasin.getIdmagasin());
+                if(!magasinlots.isEmpty()){
+                    this.setPrintBtnState(false);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -35,9 +33,12 @@ public class StockReportController extends AbstratStockReportController implemen
     public void printStock() {
         try {
             if (this.magasin.getIdmagasin() != null) {
-                Map map = new HashMap();
-                map.put("idmagasin", this.magasin.getIdmagasin());
-                Printer.print("/reports/ireport/stock_par_magasin.jasper", map);
+                // Map map = new HashMap();
+                // map.put("idmagasin", this.magasin.getIdmagasin());
+                fileName = PrintUtils.printStockByStore(magasinlots);
+                RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
+                RequestContext.getCurrentInstance().execute("PF('StockImprimerDialog').show()");
+                //Printer.print("/reports/ireport/stock_par_magasin.jasper", map);
             }
         } catch (Exception e) {
             e.printStackTrace();

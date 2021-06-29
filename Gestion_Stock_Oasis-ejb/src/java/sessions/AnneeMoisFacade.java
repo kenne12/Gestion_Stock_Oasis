@@ -72,4 +72,17 @@ public class AnneeMoisFacade extends AbstractFacade<AnneeMois> implements AnneeM
         }
         return null;
     }
+    
+    
+    @Override
+    public AnneeMois findDefaultMonthByIdannee(int idAnnee) {
+        List list = this.em.createQuery("SELECT a FROM AnneeMois a WHERE a.idannee.idannee=:idAnnee ORDER BY a.idmois.numero")
+        .setParameter("idAnnee", idAnnee)
+                .getResultList();
+        
+        if (!list.isEmpty()) {
+            return (AnneeMois) list.get(0);
+        }
+        return null;
+    }
 }

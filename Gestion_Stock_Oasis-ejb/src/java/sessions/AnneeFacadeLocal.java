@@ -13,7 +13,7 @@ public interface AnneeFacadeLocal {
 
     void remove(Annee annee);
 
-    Annee find(Object id);
+    Annee find(Object object);
 
     List<Annee> findAll();
 
@@ -30,4 +30,6 @@ public interface AnneeFacadeLocal {
     Annee findByCode(String nom);
 
     Annee findOneActive();
+
+    Annee findOneDefault();
 }

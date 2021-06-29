@@ -1,7 +1,9 @@
 package utils;
 
 import entities.Annee;
+import entities.AnneeMois;
 import entities.Magasin;
+import entities.Mois;
 import entities.Parametrage;
 import entities.Utilisateur;
 import java.util.Date;
@@ -96,6 +98,14 @@ public class SessionMBean {
         HttpSession session = getSession();
         if (session != null) {
             return (List<Annee>) session.getAttribute("annees");
+        }
+        return null;
+    }
+    
+    public static AnneeMois getMois() {
+        HttpSession session = getSession();
+        if (session != null) {
+            return (AnneeMois) session.getAttribute("mois");
         }
         return null;
     }
