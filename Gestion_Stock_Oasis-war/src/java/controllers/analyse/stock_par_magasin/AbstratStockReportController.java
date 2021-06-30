@@ -8,6 +8,7 @@ import javax.ejb.EJB;
 import sessions.MagasinFacadeLocal;
 import sessions.MagasinlotFacadeLocal;
 import sessions.UtilisateurmagasinFacadeLocal;
+import utils.Routine;
 import utils.SessionMBean;
 import utils.Utilitaires;
 
@@ -21,6 +22,8 @@ public class AbstratStockReportController {
     @EJB
     protected MagasinlotFacadeLocal magasinlotFacadeLocal;
     protected List<Magasinlot> magasinlots = new ArrayList();
+
+    protected Routine routine = new Routine();
 
     @EJB
     protected UtilisateurmagasinFacadeLocal utilisateurmagasinFacadeLocal;
@@ -56,6 +59,10 @@ public class AbstratStockReportController {
 
     public void setPrintBtnState(boolean printBtnState) {
         this.printBtnState = printBtnState;
+    }
+
+    public Routine getRoutine() {
+        return routine;
     }
 
 }

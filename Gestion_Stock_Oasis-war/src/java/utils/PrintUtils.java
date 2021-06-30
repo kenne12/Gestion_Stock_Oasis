@@ -16,16 +16,20 @@ import entities.Demande;
 import entities.Lignedemande;
 import entities.Lignelivraisonclient;
 import entities.Lignelivraisonfournisseur;
+import entities.Lignemvtstock;
+import entities.Lignetransfert;
 import entities.Livraisonclient;
 import entities.Livraisonfournisseur;
 import entities.Magasin;
 import entities.Magasinlot;
 import entities.Parametrage;
+import entities.Transfert;
 import entities.Versement;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -1085,11 +1089,214 @@ public class PrintUtils {
             for (Magasinlot ml : listLot) {
                 quantite += ml.getQuantite();
                 table.addCell(createPdfPCell("" + compteur, 2, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0)));
-                table.addCell(createPdfPCell("" + Utilitaires.formatPrenomMaj(ml.getIdlot().getIdarticle().getLibelle()) , 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell("" + Utilitaires.formatPrenomMaj(ml.getIdlot().getIdarticle().getLibelle()), 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
                 table.addCell(createPdfPCell("" + ml.getIdlot().getNumero(), 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
                 table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(ml.getIdlot().getPrixunitaire()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
                 table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(ml.getQuantite().intValue()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
                 Double value = (ml.getIdlot().getPrixunitaire() * ml.getQuantite());
+                montantTotal += value;
+                table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney((value.intValue())), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                compteur++;
+            }
+
+            table.addCell(createPdfPCell("Totaux", 4, 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0)));
+            table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(quantite), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
+            table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney((montantTotal.intValue())), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
+
+            rapport.add((Element) table);
+
+            rapport.close();
+        } catch (DocumentException ex) {
+            Logger.getLogger(utils.PrintUtils.class.getName()).log(Level.SEVERE, (String) null, (Throwable) ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(utils.PrintUtils.class.getName()).log(Level.SEVERE, (String) null, ex);
+        }
+        return fileName;
+    }
+
+    private static List<Lignemvtstock> filterMvtStock(Article p, List<Lignemvtstock> ligneMvtStocks) {
+        List<Lignemvtstock> results = new ArrayList<>();
+        for (Lignemvtstock l : ligneMvtStocks) {
+            if (p.equals(l.getIdlot().getIdarticle())) {
+                results.add(l);
+            }
+        }
+        return results;
+    }
+
+    public static String printMouvementMensuel(List<Lignemvtstock> ligneMvtStocks, List<Article> produits, Parametrage parametrage, String title, String nom_fichier) {
+        String fileName = "";
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yy");
+            fileName = nom_fichier;
+            Document rapport = new Document();
+            PdfWriter.getInstance(rapport, new FileOutputStream(Utilitaires.path + "/reports/facture/" + fileName));
+            rapport.open();
+
+            createEntete(rapport, parametrage);
+
+            int conteur = 0;
+
+            for (Article p : produits) {
+
+                List<Lignemvtstock> ligne = filterMvtStock(p, ligneMvtStocks);
+                if (!ligne.isEmpty()) {
+
+                    ligneMvtStocks.removeAll(ligne);
+
+                    Paragraph titre = new Paragraph("FICHE DE STOCK N° : " + (conteur + 1), new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 1));
+                    titre.setAlignment(1);
+                    rapport.add(titre);
+
+                    rapport.add(new Paragraph(" ", new Font(Font.FontFamily.TIMES_ROMAN, 9.0F, 0)));
+
+                    float[] widthsEntete = {1.4F, 3.0F, 3.0F, 1.4F};
+                    PdfPTable tableEntete = new PdfPTable(widthsEntete);
+                    tableEntete.setWidthPercentage(100.0F);
+
+                    tableEntete.addCell(createPdfPCell("Nom(DCI)", 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+                    tableEntete.addCell(createPdfPCell("" + p.getLibelle(), 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+                    tableEntete.addCell(createPdfPCell("CMM", 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+                    tableEntete.addCell(createPdfPCell("--", 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+
+                    tableEntete.addCell(createPdfPCell("Dosage", 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+                    tableEntete.addCell(createPdfPCell("", 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+                    tableEntete.addCell(createPdfPCell("Niveau Maximum", 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+                    tableEntete.addCell(createPdfPCell("--", 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+
+                    tableEntete.addCell(createPdfPCell("Forme", 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+                    tableEntete.addCell(createPdfPCell("", 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+                    tableEntete.addCell(createPdfPCell("Niveau Minimum", 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+                    tableEntete.addCell(createPdfPCell("--", 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+
+                    tableEntete.addCell(createPdfPCell("Conditionnement", 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+                    tableEntete.addCell(createPdfPCell("--", 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+                    tableEntete.addCell(createPdfPCell("Stock de sécurité", 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+                    tableEntete.addCell(createPdfPCell("--", 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+
+                    rapport.add(tableEntete);
+
+                    rapport.add(new Paragraph(" ", new Font(Font.FontFamily.TIMES_ROMAN, 7.0F, 0)));
+
+                    float[] widths = {1.0F, 1.9F, 1.9F, 1.4f, 1.4F, 2.0F, 1.4F, 2.0F, 1.4F, 1.6F};
+                    PdfPTable table = new PdfPTable(widths);
+                    table.setWidthPercentage(100.0F);
+
+                    rapport.add(new Paragraph("MOUVEMENTS DE STOCK", new Font(Font.FontFamily.TIMES_ROMAN, 9.0F, 0)));
+                    rapport.add(new Paragraph(" ", new Font(Font.FontFamily.TIMES_ROMAN, 7.0F, 0)));
+
+                    table.addCell(createPdfPCell("Date", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
+                    table.addCell(createPdfPCell("Numéro de lot", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
+                    table.addCell(createPdfPCell("Date de péremption", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
+                    table.addCell(createPdfPCell("Qte A", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
+                    table.addCell(createPdfPCell("Qte E", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
+                    table.addCell(createPdfPCell("Provenance", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
+                    table.addCell(createPdfPCell("Qté S", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
+                    table.addCell(createPdfPCell("Destination", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
+                    table.addCell(createPdfPCell("Reste", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
+                    table.addCell(createPdfPCell("Observation", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
+
+                    for (Lignemvtstock l : ligne) {
+
+                        table.addCell(createPdfPCell("" + sdf.format(l.getIdmvtstock().getDatemvt()), 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                        table.addCell(createPdfPCell("" + l.getIdlot().getNumero(), 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+
+                        try {
+                            Date d = l.getIdlot().getDateperemption();
+                            table.addCell(createPdfPCell(" " + sdf2.format(d), 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                        } catch (Exception e) {
+                            table.addCell(createPdfPCell(" / ", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                        }
+
+                        table.addCell(createPdfPCell("" + l.getQteAvant().intValue(), 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+
+                        if (l.getQteentree() == 0d) {
+                            table.addCell(createPdfPCell(" / ", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                            table.addCell(createPdfPCell(" / ", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                        } else {
+                            table.addCell(createPdfPCell("" + l.getQteentree(), 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                            table.addCell(createPdfPCell(" " + l.getFournisseur(), 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                        }
+
+                        if (l.getQtesortie() == 0d) {
+                            table.addCell(createPdfPCell(" / ", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                            table.addCell(createPdfPCell(" / ", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                        } else {
+                            table.addCell(createPdfPCell(" " + l.getQtesortie().intValue(), 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                            table.addCell(createPdfPCell(" " + l.getClient(), 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                        }
+
+                        table.addCell(createPdfPCell(" " + l.getReste(), 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                        table.addCell(createPdfPCell(" ", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                    }
+                    rapport.add((Element) table);
+                    rapport.newPage();
+                }
+                conteur++;
+            }
+
+            rapport.close();
+        } catch (DocumentException ex) {
+            Logger.getLogger(utils.PrintUtils.class.getName()).log(Level.SEVERE, (String) null, (Throwable) ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(utils.PrintUtils.class.getName()).log(Level.SEVERE, (String) null, ex);
+        }
+        return fileName;
+    }
+
+    public static String printTransfert(Transfert transfert, String magasinCible) {
+        String fileName = "";
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            fileName = "Fiche_Transfert_Stock" + transfert.getIdmagasin().getNom() + "_" + magasinCible + "_" + sdf.format(Date.from(Instant.now())) + ".pdf";
+            Document rapport = new Document();
+            PdfWriter.getInstance(rapport, new FileOutputStream(Utilitaires.path + "/reports/stock/" + fileName));
+            rapport.open();
+            float[] widths = {0.5F, 3.5F, 1f, 0.8F, 0.6F, 1.0F};
+            PdfPTable table = new PdfPTable(widths);
+            table.setWidthPercentage(100.0F);
+
+            createEntete(rapport, SessionMBean.getParametrage());
+
+            rapport.add(new Paragraph(" "));
+
+            Paragraph titre = new Paragraph("FICHE DE TRANSFERT DE MARCHANDISE", new Font(Font.FontFamily.TIMES_ROMAN, 14.0F, 1));
+            titre.setAlignment(1);
+            rapport.add(titre);
+
+            Paragraph ligne = new Paragraph("----------------------------------------------------------------------------------------------------------------------------------------------", new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 2));
+            rapport.add(ligne);
+
+            Paragraph magasinSource = new Paragraph("Magasin Source : " + transfert.getIdmagasin().getNom(), new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 2));
+            rapport.add(magasinSource);
+
+            Paragraph magasinDestination = new Paragraph("Magasin de Destination : " + magasinCible, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 2));
+            rapport.add(magasinDestination);
+
+            Paragraph dateAchat = new Paragraph("Date : " + sdf.format(Date.from(Instant.now())), new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 2));
+            rapport.add(dateAchat);
+
+            rapport.add(new Paragraph(" "));
+
+            table.addCell(createPdfPCell("N°", 2, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0)));
+            table.addCell(createPdfPCell("Produit", 2, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0)));
+            table.addCell(createPdfPCell("N° Lot", 2, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0)));
+            table.addCell(createPdfPCell("Prix", 2, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0)));
+            table.addCell(createPdfPCell("Qté", 2, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0)));
+            table.addCell(createPdfPCell("Total", 2, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0)));
+
+            Double quantite = 0d;
+            int compteur = 1;
+            Double montantTotal = 0d;
+            for (Lignetransfert lt : transfert.getLignetransfertList()) {
+                quantite += lt.getQuantite();
+                table.addCell(createPdfPCell("" + compteur, 2, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0)));
+                table.addCell(createPdfPCell("" + Utilitaires.formatPrenomMaj(lt.getIdmagasinlot().getIdlot().getIdarticle().getLibelle()), 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell("" + lt.getIdmagasinlot().getIdlot().getNumero(), 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(lt.getMontant().intValue()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(lt.getQuantitemultiple().intValue()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                Double value = (lt.getMontant() * lt.getQuantite());
                 montantTotal += value;
                 table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney((value.intValue())), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
                 compteur++;

@@ -88,6 +88,9 @@ public class Demande implements Serializable {
     private Magasin magasin;
     private boolean complete;
 
+    @Column(name = "idutilisateur")
+    private int idUtilisateur;
+
     public Demande() {
     }
 
@@ -245,6 +248,14 @@ public class Demande implements Serializable {
 
     public void setComplete(boolean complete) {
         this.complete = complete;
+    }
+
+    public int getIdUtilisateur() {
+        return idUtilisateur;
+    }
+
+    public void setIdUtilisateur(int idUtilisateur) {
+        this.idUtilisateur = idUtilisateur;
     }
 
     @XmlTransient

@@ -89,6 +89,9 @@ public class Livraisonclient implements Serializable {
     private double reste;
     private boolean paye;
 
+    @Column(name = "idutilisateur")
+    private int idUtilisateur;
+
     public Livraisonclient() {
         this.client = new Client();
     }
@@ -280,6 +283,14 @@ public class Livraisonclient implements Serializable {
 
     public void setPaye(boolean paye) {
         this.paye = paye;
+    }
+
+    public int getIdUtilisateur() {
+        return idUtilisateur;
+    }
+
+    public void setIdUtilisateur(int idUtilisateur) {
+        this.idUtilisateur = idUtilisateur;
     }
 
     @Override

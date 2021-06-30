@@ -222,6 +222,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                     this.livraisonfournisseur.setLivraisondirecte(true);
                     this.livraisonfournisseur.setIdmvtstock(this.mvtstock);
                     this.livraisonfournisseur.setIdmagasin(SessionMBean.getMagasin());
+                    this.livraisonfournisseur.setIdUtilisateur(SessionMBean.getUserAccount().getIdutilisateur());
                     this.livraisonfournisseurFacadeLocal.create(this.livraisonfournisseur);
                     double qteAvant = 0;
                     for (Lignelivraisonfournisseur llf : this.lignelivraisonfournisseurs) {

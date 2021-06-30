@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -67,6 +68,9 @@ public class Livraisonfournisseur implements Serializable {
     @OneToMany(mappedBy = "idlivraisonfournisseur", fetch = FetchType.LAZY)
     private List<Lignelivraisonfournisseur> lignelivraisonfournisseurList;
 
+    @Column(name = "idutilisateur")
+    private int idUtilisateur;
+    
     public Livraisonfournisseur() {
     }
 
@@ -153,6 +157,15 @@ public class Livraisonfournisseur implements Serializable {
     public void setIdmvtstock(Mvtstock idmvtstock) {
         this.idmvtstock = idmvtstock;
     }
+
+    public int getIdUtilisateur() {
+        return idUtilisateur;
+    }
+
+    public void setIdUtilisateur(int idUtilisateur) {
+        this.idUtilisateur = idUtilisateur;
+    }
+    
 
     @XmlTransient
     public List<Lignelivraisonfournisseur> getLignelivraisonfournisseurList() {

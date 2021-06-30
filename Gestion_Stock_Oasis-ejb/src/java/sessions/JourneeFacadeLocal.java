@@ -39,4 +39,8 @@ public interface JourneeFacadeLocal {
 
     Journee findByIdMagasinDate(int idMagasin, Date date);
 
+    public List<Journee> findByIdmagasinTwoDates(int idMagasin, Date dateDebut, Date dateFin);
+    
+    public List<Journee> findByTwoDates(Date dateDebut, Date dateFin);
+
 }

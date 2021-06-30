@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -38,6 +39,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Transfert.findByCode", query = "SELECT t FROM Transfert t WHERE t.code = :code"),
     @NamedQuery(name = "Transfert.findByIdmagasincible", query = "SELECT t FROM Transfert t WHERE t.idmagasincible = :idmagasincible")})
 public class Transfert implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -58,6 +60,9 @@ public class Transfert implements Serializable {
     @JoinColumn(name = "idmvtstock", referencedColumnName = "idmvtstock")
     @ManyToOne(fetch = FetchType.LAZY)
     private Mvtstock idmvtstock;
+
+    @Column(name = "idutilisateur")
+    private int idUtilisateur;
 
     public Transfert() {
     }
@@ -104,6 +109,14 @@ public class Transfert implements Serializable {
 
     public void setIdmagasincible(Integer idmagasincible) {
         this.idmagasincible = idmagasincible;
+    }
+
+    public int getIdUtilisateur() {
+        return idUtilisateur;
+    }
+
+    public void setIdUtilisateur(int idUtilisateur) {
+        this.idUtilisateur = idUtilisateur;
     }
 
     @XmlTransient
@@ -155,5 +168,5 @@ public class Transfert implements Serializable {
     public String toString() {
         return "entities.Transfert[ idtransfert=" + idtransfert + " ]";
     }
-    
+
 }

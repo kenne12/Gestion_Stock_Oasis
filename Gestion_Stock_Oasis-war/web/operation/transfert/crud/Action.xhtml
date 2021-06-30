@@ -33,13 +33,6 @@
                            icon="ui-icon-alert"/>
             </p:commandButton>
 
-            <p:commandButton id="imprimer" icon="ui-icon-print"
-                             ajax="false"
-                             value="#{langue['Conv.Imprimer']}" 
-                             actionListener="#{transfertController.print()}"
-                             disabled="#{transfertController.imprimer}"
-                             update=":TransfertImprimerForm,:TransfertImprimerDlg,:notify1"/>  
-
         </div>
 
     </h:form>

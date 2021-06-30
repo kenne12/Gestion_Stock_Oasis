@@ -31,10 +31,12 @@ public class StatisticController extends AbstractStatisticController implements 
     private void init() {
         try {
             this.critere = 1;
-            this.annee = SessionMBean.getAnnee();
-            this.anneeMoises = this.anneeMoisFacadeLocal.findByAnnee(annee.getIdannee());
-            createLineModels();
-            createBarModel();
+            if (SessionMBean.getAnnee() != null) {
+                this.annee = SessionMBean.getAnnee();
+                this.anneeMoises = this.anneeMoisFacadeLocal.findByAnnee(annee.getIdannee());
+                createLineModels();
+                createBarModel();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -228,7 +230,7 @@ public class StatisticController extends AbstractStatisticController implements 
                 return;
             }
             if (this.critere == 2) {
-                this.livraisonclients = this.livraisonclientFacadeLocal.findAllRange( SessionMBean.getMagasin().getIdmagasin() , anneeMois.getDateDebut() , anneeMois.getDateFin());
+                this.livraisonclients = this.livraisonclientFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), anneeMois.getDateDebut(), anneeMois.getDateFin());
                 ajaxHide();
                 if (!this.livraisonclients.isEmpty()) {
                     this.imprimer = false;
@@ -240,9 +242,9 @@ public class StatisticController extends AbstractStatisticController implements 
             }
             if (this.critere == 3) {
                 if (this.date_interval == 2) {
-                    this.livraisonclients = this.livraisonclientFacadeLocal.findByIdmagasinAndIdclientAndDate(SessionMBean.getMagasin().getIdmagasin() , this.client.getIdclient(), this.date);
+                    this.livraisonclients = this.livraisonclientFacadeLocal.findByIdmagasinAndIdclientAndDate(SessionMBean.getMagasin().getIdmagasin(), this.client.getIdclient(), this.date);
                 } else {
-                    this.livraisonclients = this.livraisonclientFacadeLocal.findByIdmagasinAndIdclientTwoDates(SessionMBean.getMagasin().getIdmagasin() ,  this.client.getIdclient(), this.dateDebut, this.dateFin);
+                    this.livraisonclients = this.livraisonclientFacadeLocal.findByIdmagasinAndIdclientTwoDates(SessionMBean.getMagasin().getIdmagasin(), this.client.getIdclient(), this.dateDebut, this.dateFin);
                 }
                 ajaxHide();
                 if (!this.livraisonclients.isEmpty()) {
@@ -264,7 +266,7 @@ public class StatisticController extends AbstractStatisticController implements 
                 }
                 return;
             }
-            this.livraisonclients = this.livraisonclientFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin() , this.dateDebut, this.dateFin);
+            this.livraisonclients = this.livraisonclientFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), this.dateDebut, this.dateFin);
             ajaxHide();
             if (!this.livraisonclients.isEmpty()) {
                 this.imprimer = false;

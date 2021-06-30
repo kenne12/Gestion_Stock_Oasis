@@ -37,7 +37,8 @@ public class ArticleFacade extends AbstractFacade<Article> implements ArticleFac
     @Override
     public List<Article> findAllRange(int idStructure) {
         return this.em.createQuery("SELECT a FROM Article a WHERE a.parametrage.id=:id ORDER BY a.libelle")
-                .setParameter("id", idStructure).getResultList();
+                .setParameter("id", idStructure)
+                .getResultList();
     }
 
     @Override

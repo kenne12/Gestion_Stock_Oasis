@@ -141,7 +141,7 @@ public class StructureController extends AbstractStructureController implements 
                 parametrage.setId(parametrageFacadeLocal.nextVal());
                 parametrage.setBanque("-");
                 parametrage.setFax("-");
-                parametrage.setCheminTemplate("/SystemTemplate/principalTemplate.xhtml;/SystemTemplate1/template.xhtml");
+                parametrage.setCheminTemplate("/SystemTemplate/template.xhtml");
                 parametrage.setRcm("-");
                 parametrage.setNoContrib("-");
                 parametrage.setRepertoireLogo("-");
@@ -164,7 +164,7 @@ public class StructureController extends AbstractStructureController implements 
                 utilisateur.setActif(true);
                 utilisateur.setIdpersonnel(this.personnel);
                 utilisateur.setDatecreation(Date.from(Instant.now()));
-                utilisateur.setTemplate(templates.get(0));
+                utilisateur.setTemplate("/SystemTemplate/template.xhtml");
                 utilisateurFacadeLocal.create(this.utilisateur);
                 
                 Utilisateurmagasin u = new Utilisateurmagasin();

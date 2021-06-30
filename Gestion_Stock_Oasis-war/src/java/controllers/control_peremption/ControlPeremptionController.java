@@ -15,14 +15,14 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import org.primefaces.context.RequestContext;
 import utils.Printer;
 import utils.SessionMBean;
 import utils.Utilitaires;
 
 @ManagedBean
-@SessionScoped
+@ViewScoped
 public class ControlPeremptionController extends AbstractControlPeremptionController implements Serializable {
 
     @PostConstruct
@@ -118,7 +118,7 @@ public class ControlPeremptionController extends AbstractControlPeremptionContro
                     li.setIdligneinventaire(this.ligneinventaireFacadeLocal.nextVal());
                     li.setIdinventaire(inventaire);
                     li.setQtetheorique(ml.getQuantitemultiple());
-                    li.setQtephysique((0.0D));
+                    li.setQtephysique(0d);
                     li.setEcart(ml.getQuantitemultiple());
                     li.setIdlot(ml.getIdlot());
                     li.setIdmagasinlot(ml);

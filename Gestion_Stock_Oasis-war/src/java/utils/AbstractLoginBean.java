@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
+import org.primefaces.model.chart.LineChartModel;
 import sessions.AnneeFacadeLocal;
 import sessions.AnneeMoisFacadeLocal;
+import sessions.LivraisonclientFacadeLocal;
 import sessions.MagasinFacadeLocal;
 import sessions.MenuFacadeLocal;
 import sessions.MouchardFacadeLocal;
@@ -34,7 +36,7 @@ public class AbstractLoginBean {
     protected AnneeFacadeLocal anneeFacadeLocal;
     protected Annee annee = new Annee();
     protected List<Annee> annees = new ArrayList<>();
-    
+
     @EJB
     protected AnneeMoisFacadeLocal anneeMoisFacadeLocal;
 
@@ -45,8 +47,13 @@ public class AbstractLoginBean {
     protected PrivilegeFacadeLocal privilegeFacadeLocal;
 
     @EJB
+    protected LivraisonclientFacadeLocal livraisonclientFacadeLocal;
+
+    @EJB
     protected MouchardFacadeLocal mouchardFacadeLocal;
     protected Routine routine = new Routine();
+
+    protected LineChartModel lineModel;
 
     protected Date date = new Date();
 
@@ -127,6 +134,14 @@ public class AbstractLoginBean {
 
     public List<Annee> getAnnees() {
         return annees;
+    }
+
+    public LineChartModel getLineModel() {
+        return lineModel;
+    }
+
+    public void setLineModel(LineChartModel lineModel) {
+        this.lineModel = lineModel;
     }
 
 }

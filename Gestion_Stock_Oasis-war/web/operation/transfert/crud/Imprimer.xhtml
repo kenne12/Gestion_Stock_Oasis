@@ -12,12 +12,12 @@
                   modal="true" resizable="false"                    
                   appendTo="@(body)"
                   width="80%"
-                  header="#{langue['Titre.Dlg.Impression']} : #{transfertController.printDialogTitle}"
+                  header="#{langue['Titre.Dlg.Impression']} : FICHE DE TRANSFERT D'ARTICLE"
                   closeOnEscape="true">
 
             <h:form id="TransfertImprimerForm">
 
-                <object data="#{request.contextPath}/reports/facture/#{transfertController.fileName}" type="application/pdf" title="-" width="100%" height="540"></object>
+                <object data="#{request.contextPath}/reports/stock/#{transfertController.fileName}" type="application/pdf" title="-" width="100%" height="540"></object>
 
             </h:form>
 

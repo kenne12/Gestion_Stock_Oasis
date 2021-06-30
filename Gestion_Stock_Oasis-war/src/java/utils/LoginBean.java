@@ -3,6 +3,8 @@ package utils;
 import entities.Annee;
 import entities.AnneeMois;
 import entities.Journee;
+import entities.Livraisonclient;
+import entities.Livraisonfournisseur;
 import entities.Magasin;
 import entities.Menu;
 import entities.Mouchard;
@@ -10,6 +12,8 @@ import entities.Privilege;
 import entities.Utilisateur;
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,6 +28,12 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 import org.primefaces.context.RequestContext;
+import org.primefaces.model.chart.Axis;
+import org.primefaces.model.chart.AxisType;
+import org.primefaces.model.chart.CategoryAxis;
+import org.primefaces.model.chart.ChartSeries;
+import org.primefaces.model.chart.LineChartModel;
+import org.primefaces.model.chart.LineChartSeries;
 import sessions.JourneeFacadeLocal;
 import sessions.UtilisateurFacadeLocal;
 
@@ -44,6 +54,7 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
     public void init() {
         this.utilisateur = new Utilisateur();
         this.utilisateur.setTheme("bootstrap");
+        lineModel = new LineChartModel();
     }
 
     public void login() {
@@ -87,19 +98,22 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
                         session.setAttribute("magasins", list);
                     }
 
-                    this.annees = anneeFacadeLocal.findByEtat(true);
-                    if (Objects.equals(this.annees.size(), 1)) {
-                        this.annee = this.annees.get(0);
+                    Annee an = anneeFacadeLocal.findOneDefault();
+                    if (an != null) {
+                        this.annee = an;
                         session.setAttribute("annee", annee);
-                        List<Annee> list = new ArrayList<>();
-                        list.add(annee);
-                        session.setAttribute("annees", list);
                     }
 
-                    if (Objects.equals(this.magasins.size(), 1) && Objects.equals(this.annees.size(), 1)) {
+                    this.intDefaultMonth(annee, session);
+
+                    this.annees = anneeFacadeLocal.findByEtat(true);
+                    session.setAttribute("annees", annees);
+
+                    if (Objects.equals(this.magasins.size(), 1)) {
                         this.showSessionPanel = false;
                         initPrivilege();
                     }
+                    //this.createLineModels();
                     FacesContext.getCurrentInstance().getExternalContext().redirect(this.sc + "/index.html");
                 } else {
                     JsfUtil.addWarningMessage("Compte bloqué ! contactez l'administrateur");
@@ -115,15 +129,10 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
         }
     }
 
-    private void intDefaultYear() {
-        Annee defaultAnnee = anneeFacadeLocal.findOneDefault();
-        if (defaultAnnee != null) {
-            annee = defaultAnnee;
-
-            AnneeMois defaultMonth = anneeMoisFacadeLocal.findDefaultMonthByIdannee(annee.getIdannee());
-            if (defaultMonth != null) {
-
-            }
+    private void intDefaultMonth(Annee annee, HttpSession session) {
+        AnneeMois defaultMonth = anneeMoisFacadeLocal.findDefaultMonthByIdannee(annee.getIdannee());
+        if (defaultMonth != null) {
+            session.setAttribute("mois", defaultMonth);
         }
     }
 
@@ -313,6 +322,41 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
             this.confirmPassword = "";
             this.routine.catchException(e, this.routine.localizeMessage("echec_operation"));
             RequestContext.getCurrentInstance().execute("PF('NotifyDialog').show()");
+        }
+    }
+
+    private void createLineModels() {
+        this.lineModel = initLinearModel();
+        this.lineModel.setTitle("Courbe évolutive des ventes et approvisionnement");
+        this.lineModel.setLegendPosition("e");
+        this.lineModel.getAxes().put(AxisType.X, new CategoryAxis("Mois"));
+        this.lineModel.getAxes().put(AxisType.Y, new CategoryAxis("Montant"));
+        Axis yAxis = this.lineModel.getAxis(AxisType.Y);
+        yAxis.setMin(0);
+    }
+
+    private LineChartModel initLinearModel() {
+        try {
+            LineChartModel model = new LineChartModel();
+            DateFormat sdf = new SimpleDateFormat("MM-yyyy");
+            for (Magasin m : magasins) {
+                LineChartSeries series1 = new LineChartSeries();
+                series1.setLabel(m.getNom());
+
+                for (Journee j : journeeFacadeLocal.findByTwoDates(SessionMBean.getMois().getDateDebut(), SessionMBean.getMois().getDateFin())) {
+                    Integer somme = 0;
+                    List<Livraisonclient> livraisonclients = livraisonclientFacadeLocal.findByIdmagasinAndDate(m.getIdmagasin(), j.getDateJour());
+                    for (Livraisonclient l : livraisonclients) {
+                        somme += (int) l.getMontantTtc();
+                    }
+                    series1.set(sdf.format(j.getDateJour()), somme);
+                }
+                model.addSeries((ChartSeries) series1);
+            }
+            return model;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new LineChartModel();
         }
     }
 

@@ -69,6 +69,7 @@ public class VersementController extends AbstractVersementController implements 
                 this.versement.setIdversement(this.versementFacadeLocal.nextVal());
                 this.versement.setHeure(new Date());
                 this.versement.setLivraisonclient(livraisonclient);
+                this.versement.setIdUtilisateur(SessionMBean.getUserAccount().getIdutilisateur());
 
                 /*String code = "V-" + SessionMBean.getMois().getIdannee().getNom() + "-" + SessionMBean.getMois().getIdmois().getNom().toUpperCase().substring(0, 3);
                  Long nextPayement = this.versementFacadeLocal.nextVal(SessionMBean.getMois().getDateDebut(), SessionMBean.getMois().getDateFin());

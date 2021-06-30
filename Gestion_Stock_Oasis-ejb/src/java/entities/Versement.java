@@ -48,6 +48,9 @@ public class Versement implements Serializable {
     private AnneeMois mois;
     private String code;
 
+    @Column(name = "idutilisateur")
+    private int idUtilisateur;
+
     public Versement() {
     }
 
@@ -117,6 +120,14 @@ public class Versement implements Serializable {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public int getIdUtilisateur() {
+        return idUtilisateur;
+    }
+
+    public void setIdUtilisateur(int idUtilisateur) {
+        this.idUtilisateur = idUtilisateur;
     }
 
     @Override

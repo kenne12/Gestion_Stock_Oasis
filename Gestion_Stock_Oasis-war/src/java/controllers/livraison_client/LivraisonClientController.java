@@ -332,6 +332,7 @@ public class LivraisonClientController extends AbstractLivraisonClientController
                     this.livraisonclient.setDatelivraison(this.demande.getDateeffectlivraison());
                     this.livraisonclient.setIddemande(this.demande);
                     this.livraisonclient.setClient(this.demande.getClient());
+                    this.livraisonclient.setIdUtilisateur(SessionMBean.getUserAccount().getIdutilisateur());
                     this.livraisonclient.setIdmvtstock(this.mvtstock);
 
                     if (livraisonclient.getModePayement().equals("PAYE_COMPTANT")) {

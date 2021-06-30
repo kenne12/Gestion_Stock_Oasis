@@ -11,11 +11,11 @@
                   widgetVar="StockImprimerDialog"
                   modal="true" resizable="false"  
                   appendTo="@(body)" 
-                  header="#{langue['Titre.Dlg.Impression']}: STOCK EN MARCHANDISE" closeOnEscape="true">
+                  header="#{langue['Titre.Dlg.Impression']}: MVT DE STOCK" closeOnEscape="true">
 
             <h:form id="StockImprimerForm">
 
-                <object data="#{request.contextPath}/reports/stock/#{produitController.fileName1}" type="application/pdf" title="cv" width="1200" height="600"></object>
+                <object data="#{request.contextPath}/reports/facture/#{mvtMReportController.fileName}" type="application/pdf" title="cv" width="1200" height="600"></object>
 
             </h:form>
 

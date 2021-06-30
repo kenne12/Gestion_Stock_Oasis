@@ -139,6 +139,7 @@ public class CommandefournisseurController extends AbstractCommandefournisseurCo
                     this.commandefournisseur.setPaye(false);
                     this.commandefournisseur.setLivre(false);
                     this.commandefournisseur.setMontant(this.total);
+                    this.commandefournisseur.setIdUtilisateur(SessionMBean.getUserAccount().getIdutilisateur());
                     this.commandefournisseur.setCode("CF" + Utilitaires.genererCodeDemande("", this.commandefournisseur.getIdcommandefournisseur()));
 
                     this.ut.begin();

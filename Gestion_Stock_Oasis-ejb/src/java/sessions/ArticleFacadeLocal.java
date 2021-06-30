@@ -7,17 +7,17 @@ import javax.ejb.Local;
 @Local
 public interface ArticleFacadeLocal {
 
-    public void create(Article paramArticle);
+    public void create(Article article);
 
-    public void edit(Article paramArticle);
+    public void edit(Article article);
 
-    public void remove(Article paramArticle);
+    public void remove(Article article);
 
     public Article find(Object object);
 
     public List<Article> findAll();
 
-    public List<Article> findRange(int[] paramArrayOfInt);
+    public List<Article> findRange(int[] arrayOfInt);
 
     public int count();
 
@@ -29,14 +29,11 @@ public interface ArticleFacadeLocal {
 
     public List<Article> findByPerissable(int idStructure, boolean paramBoolean);
 
-    public List<Article> findByFamille(long paramLong)
-            throws Exception;
+    public List<Article> findByFamille(long idfamille) throws Exception;
 
-    public List<Article> findByFamille(long paramLong, boolean paramBoolean)
-            throws Exception;
+    public List<Article> findByFamille(long idfamille, boolean paramBoolean) throws Exception;
 
     public List<Article> findAllRange(int idStructure, boolean paramBoolean);
 
-    public List<Article> findByEtatQuantityPositif(int idStructure, boolean paramBoolean)
-            throws Exception;
+    public List<Article> findByEtatQuantityPositif(int idStructure, boolean paramBoolean) throws Exception;
 }

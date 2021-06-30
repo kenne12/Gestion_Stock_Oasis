@@ -40,8 +40,10 @@ public class StockReportController extends AbstratStockReportController implemen
                 RequestContext.getCurrentInstance().execute("PF('StockImprimerDialog').show()");
                 //Printer.print("/reports/ireport/stock_par_magasin.jasper", map);
             }
+            RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
         } catch (Exception e) {
             e.printStackTrace();
+            RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
         }
     }
 }

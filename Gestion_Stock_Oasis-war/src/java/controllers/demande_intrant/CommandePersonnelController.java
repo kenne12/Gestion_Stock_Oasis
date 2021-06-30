@@ -182,6 +182,7 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
                     this.demande.setTauxsatisfaction(0.0);
                     this.demande.setCode("D" + Utilitaires.genererCodeDemande("", this.demande.getIddemande()));
                     this.demande.setMagasin(magasin);
+                    this.demande.setIdUtilisateur(SessionMBean.getUserAccount().getIdutilisateur());
                     this.demandeFacadeLocal.create(this.demande);
                     Utilitaires.saveOperation(this.mouchardFacadeLocal, "Enregistrement de la commande : " + this.client.getNom() + " ; Code : " + this.demande.getCode(), SessionMBean.getUserAccount());
 

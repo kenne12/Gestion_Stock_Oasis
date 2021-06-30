@@ -10,16 +10,14 @@ import entities.Magasinlot;
 import entities.Transfert;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import org.primefaces.context.RequestContext;
 import utils.JsfUtil;
-import utils.Printer;
+import utils.PrintUtils;
 import utils.SessionMBean;
 import utils.Utilitaires;
 
@@ -297,6 +295,7 @@ public class TransfertController extends AbstractTransertController implements S
                     this.transfert.setIdmagasin(this.magasin);
                     this.transfert.setIdmagasincible(this.magasinCible.getIdmagasin());
                     this.transfert.setIdmvtstock(this.mvtstock);
+                    this.transfert.setIdUtilisateur(SessionMBean.getUserAccount().getIdutilisateur());
                     this.transfertFacadeLocal.create(this.transfert);
 
                     updateTotal();
@@ -305,7 +304,7 @@ public class TransfertController extends AbstractTransertController implements S
                         ltt.setIdlignetransfert(this.lignetransfertFacadeLocal.nextVal());
                         ltt.setIdtransfert(this.transfert);
                         ltt.setQuantitemultiple((ltt.getQuantite() * ltt.getUnite()));
-                        ltt.setMontant((ltt.getIdmagasinlot().getIdlot().getPrixunitaire() * ltt.getQuantite()));
+                        ltt.setMontant(ltt.getIdmagasinlot().getIdlot().getPrixunitaire());
                         this.lignetransfertFacadeLocal.create(ltt);
 
                         Magasinarticle maTemp = this.magasinarticleFacadeLocal.find(ltt.getIdmagasinlot().getIdmagasinarticle().getIdmagasinarticle());
@@ -528,10 +527,16 @@ public class TransfertController extends AbstractTransertController implements S
             }
 
             if (this.transfert != null) {
-                Map map = new HashMap();
-                map.put("idtransfert", this.transfert.getIdtransfert());
-                Printer.print("/reports/ireport/transfert.jasper", map);
-                RequestContext.getCurrentInstance().execute("PF('FactureImprimerDialog').show()");
+                transfert.setLignetransfertList(lignetransfertFacadeLocal.findByIdTransfert(transfert.getIdtransfert()));
+
+                fileName = PrintUtils.printTransfert(transfert, magasinFacadeLocal.find(transfert.getIdmagasincible()).getNom());
+
+                RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
+                RequestContext.getCurrentInstance().execute("PF('TransfertImprimerDialog').show()");
+
+                //Map map = new HashMap();
+                //map.put("idtransfert", this.transfert.getIdtransfert());
+                //Printer.print("/reports/ireport/transfert.jasper", map);
             } else {
                 notifyError("not_row_selected");
             }
@@ -552,11 +557,12 @@ public class TransfertController extends AbstractTransertController implements S
     }
 
     public Double calculTotal(List<Lignetransfert> lignetransferts) {
-        Double resultat = 0.0D;
+        Double resultat = 0d;
         int i = 0;
         for (Lignetransfert lt : lignetransferts) {
             resultat += (lt.getIdmagasinlot().getIdlot().getPrixunitaire() * lt.getQuantite() * lt.getUnite());
             lignetransferts.get(i).setQuantitemultiple((lignetransferts.get(i).getQuantite() * lt.getUnite()));
+            lignetransferts.get(i).setMontant(lt.getIdmagasinlot().getIdlot().getPrixunitaire());
             lignetransferts.get(i).setQuantitereduite((lignetransferts.get(i).getQuantitemultiple() / lt.getIdmagasinlot().getIdlot().getIdarticle().getUnite()));
             i++;
         }

@@ -55,8 +55,7 @@ public class AbstractStatisticController {
 
     @EJB
     protected AnneeMoisFacadeLocal anneeMoisFacadeLocal;
-    //protected AnneeMois anneeMois = SessionMBean.getMois();
-    protected AnneeMois anneeMois = new AnneeMois();
+    protected AnneeMois anneeMois = SessionMBean.getMois();
     protected List<AnneeMois> anneeMoises = new ArrayList<>();
 
     @EJB

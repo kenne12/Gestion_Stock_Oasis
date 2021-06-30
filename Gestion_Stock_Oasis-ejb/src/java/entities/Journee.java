@@ -42,7 +42,7 @@ public class Journee implements Serializable {
     @JoinColumn(name = "idutilisateur_ouverture", referencedColumnName = "idutilisateur")
     @ManyToOne(fetch = FetchType.LAZY)
     private Utilisateur utilisateurOuverture;
-    
+
     @JoinColumn(name = "idutilisateur_fermetture", referencedColumnName = "idutilisateur")
     @ManyToOne(fetch = FetchType.LAZY)
     private Utilisateur utilisateurFermetture;
@@ -81,6 +81,10 @@ public class Journee implements Serializable {
 
     public Journee(Long idjournee) {
         this.idjournee = idjournee;
+    }
+
+    public Journee(Date dateJour) {
+        this.dateJour = dateJour;
     }
 
     public Long getIdjournee() {

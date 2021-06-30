@@ -197,6 +197,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
                 this.livraisonclient.setIdmagasin(this.magasin);
                 this.livraisonclient.setMontant(this.total);
                 this.livraisonclient.setLivraisondirecte(true);
+                this.livraisonclient.setIdUtilisateur(SessionMBean.getUserAccount().getIdutilisateur());
                 
                 this.livraisonclient.setIdmvtstock(this.mvtstock);
                 if (livraisonclient.getModePayement().equals("PAYE_COMPTANT")) {

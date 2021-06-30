@@ -43,8 +43,9 @@ public class UtilisateurController extends AbstractUtilisateurController impleme
             this.utilisateur = new Utilisateur();
             this.utilisateur.setActif(true);
             this.utilisateur.setPhoto("user_avatar.png");
-
-            this.utilisateur.setTemplate((String) this.templates.get(1));
+            
+            //this.utilisateur.setTemplate((String) this.templates.get(1));
+            this.utilisateur.setTemplate("/SystemTemplate/template.xhtml");
             this.utilisateur.setTheme("hot-sneaks");
             this.personnel = new Personnel();
 

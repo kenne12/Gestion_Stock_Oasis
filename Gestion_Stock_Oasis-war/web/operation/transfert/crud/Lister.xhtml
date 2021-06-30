@@ -43,14 +43,14 @@
                     <h:outputText value="#{item.code}"/>
                 </p:column> 
 
-                <p:column filterBy="#{item.idmagasin.nom}" style="width:37%">
+                <p:column filterBy="#{item.idmagasin.nom}" style="width:33%">
                     <f:facet name="header">
                         <h:outputText value="#{langue.magasin_initital}"/>
                     </f:facet>
                     <h:outputText value="#{item.idmagasin.nom}"/>
                 </p:column>
 
-                <p:column style="width : 37%">
+                <p:column style="width : 33%">
                     <f:facet name="header">
                         <h:outputText value="#{langue.magasin_cible}"/>
                     </f:facet>
@@ -64,6 +64,15 @@
                     <h:outputText value="#{item.datetransfert}">
                         <f:convertDateTime pattern="dd/MM/yyyy"/>   
                     </h:outputText>
+                </p:column>
+
+                <p:column style="width: 7%;text-align: center" >
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.action}"/>
+                    </f:facet>
+                    <p:commandButton icon="ui-icon-print" onclick="PF('AjaxNotifyDialog').show()">
+                        <p:ajax event="click" listener="#{transfertController.initPrinter(item)}" update=":TransfertImprimerForm,:notify1"/>
+                    </p:commandButton>
                 </p:column>
 
             </p:dataTable>

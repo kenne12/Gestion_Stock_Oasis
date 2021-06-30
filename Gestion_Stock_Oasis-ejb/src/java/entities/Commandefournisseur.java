@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -42,6 +43,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Commandefournisseur.findByPaye", query = "SELECT c FROM Commandefournisseur c WHERE c.paye = :paye"),
     @NamedQuery(name = "Commandefournisseur.findByTauxsatisfaction", query = "SELECT c FROM Commandefournisseur c WHERE c.tauxsatisfaction = :tauxsatisfaction")})
 public class Commandefournisseur implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -67,6 +69,9 @@ public class Commandefournisseur implements Serializable {
     @JoinColumn(name = "idfournisseur", referencedColumnName = "idfournisseur")
     @ManyToOne(fetch = FetchType.LAZY)
     private Fournisseur idfournisseur;
+
+    @Column(name = "idutilisateur")
+    private int idUtilisateur;
 
     public Commandefournisseur() {
     }
@@ -147,6 +152,14 @@ public class Commandefournisseur implements Serializable {
         this.tauxsatisfaction = tauxsatisfaction;
     }
 
+    public int getIdUtilisateur() {
+        return idUtilisateur;
+    }
+
+    public void setIdUtilisateur(int idUtilisateur) {
+        this.idUtilisateur = idUtilisateur;
+    }
+
     @XmlTransient
     public List<Livraisonfournisseur> getLivraisonfournisseurList() {
         return livraisonfournisseurList;
@@ -197,5 +210,5 @@ public class Commandefournisseur implements Serializable {
     public String toString() {
         return "entities.Commandefournisseur[ idcommandefournisseur=" + idcommandefournisseur + " ]";
     }
-    
+
 }
