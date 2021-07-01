@@ -23,6 +23,8 @@ public interface ArticleFacadeLocal {
 
     public Long nextVal();
 
+    Long nextValByIdstructure(int idStructure);
+
     public List<Article> findAllRange(int idStructure);
 
     public Article findByCode(int idStructure, String code);

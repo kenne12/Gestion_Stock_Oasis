@@ -4,7 +4,8 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <ui:composition>
 
@@ -15,7 +16,7 @@
                   header="#{langue['Titre.Dlg.Creation']} : #{langue.article}" 
                   closeOnEscape="true"
                   height="580px"
-                  width="70%">
+                  width="80%">
 
             <h:form id="ArticleCreerForm">
                 <h:panelGroup id="display">
@@ -43,68 +44,115 @@
 
                                         <p:outputLabel value="#{langue.nom}" for="nom" />
                                         <p:inputTextarea style="width: 350px" cols="100" rows="2" id="nom" value="#{articleController.article.libelle}" required="true" 
-                                                         requiredMessage="#{langue['Conv.Nom']}: #{langue['Conv.ValeurRequise']}"/>
+                                                         requiredMessage="#{langue['Conv.Nom']}: #{langue['Conv.ValeurRequise']}">
+                                            <p:ajax />
+                                        </p:inputTextarea>
                                         <p:message for="nom"/>
 
                                         <p:outputLabel value="#{langue.code} / #{langue.reference}" for="code" />
-                                        <p:inputText id="code" value="#{articleController.article.code}" style="width: 200px" required="true" requiredMessage="#{langue.valeur_obligatoire}"/>
+                                        <p:inputText id="code" value="#{articleController.article.code}" style="width: 200px" required="true" requiredMessage="#{langue.valeur_obligatoire}">
+                                            <p:ajax />
+                                        </p:inputText>
                                         <p:message for="code"/>
 
                                         <p:outputLabel value="#{langue.description}" for="description" />
                                         <p:inputTextarea style="width: 350px" cols="100" rows="2" id="description" value="#{articleController.article.description}" required="true" 
-                                                         requiredMessage="#{langue.description} : #{langue['Conv.ValeurRequise']}"/>
+                                                         requiredMessage="#{langue.description} : #{langue['Conv.ValeurRequise']}">
+                                            <p:ajax />
+                                        </p:inputTextarea>
                                         <p:message for="description"/>
 
                                         <p:outputLabel value="#{langue.fabricant}" for="fabricant" />
-                                        <p:inputText id="fabricant" value="#{articleController.article.fabricant}" style="width: 350px" required="true" requiredMessage="#{langue.valeur_obligatoire}"/>
+                                        <p:inputText id="fabricant" value="#{articleController.article.fabricant}" style="width: 350px" required="true" requiredMessage="#{langue.valeur_obligatoire}">
+                                            <p:ajax />
+                                        </p:inputText>
                                         <p:message for="fabricant"/>
 
-                                        <p:outputLabel value="#{langue.prix_achat}" for="prix_achat" />
+                                        <p:outputLabel value="#{langue.prix_achat} Gros" for="prix_achat" />
                                         <p:inputText id="prix_achat" value="#{articleController.article.coutachat}" required="true"
                                                      style="width: 120px"
-                                                     requiredMessage="#{langue.prix_achat} : #{langue['Conv.ValeurRequise']}"/>
+                                                     requiredMessage="#{langue.prix_achat} : #{langue['Conv.ValeurRequise']}">
+                                            <p:ajax update="prix_achat_detail,prix_vente_detail" listener="#{articleController.updatePrixDetail()}" />
+                                        </p:inputText>
                                         <p:message for="prix_achat"/>
 
-                                        <p:outputLabel value="#{langue.prix_vente}" for="prix" />
+                                        <p:outputLabel value="#{langue.prix_vente} Gros" for="prix" />
                                         <p:inputText id="prix" value="#{articleController.article.prixunit}" required="true"
                                                      style="width: 120px"
-                                                     requiredMessage="#{langue.prix} : #{langue['Conv.ValeurRequise']}"/>
-                                        <p:message for="prix"/>  
+                                                     requiredMessage="#{langue.prix} : #{langue['Conv.ValeurRequise']}">
+                                            <p:ajax update="prix_achat_detail,prix_vente_detail" listener="#{articleController.updatePrixDetail()}" />
+                                        </p:inputText>
+                                        <p:message for="prix"/>
+                                        
+                                        <p:outputLabel value="#{langue.unite} En Gros" for="unite_en_gros"/>
+                                        <p:selectOneMenu filter="true" filterMatchMode="contains" id="unite_en_gros" value="#{articleController.article.idunite.idunite}" required="#{langue.valeur_obligatoire}">
+                                            <f:selectItem itemLabel="#{langue.choisir}" itemValue="0"/>
+                                            <f:selectItems value="#{articleController.unites}" var="u" itemLabel="#{u.libelle}" itemValue="#{u.idunite}" />
+                                            <p:ajax/>
+                                        </p:selectOneMenu>
+                                        <p:message for="unite_en_gros"/>
+                                        
+                                        <p:outputLabel value="Quantité de detail" for="qpu" />
+                                        <p:inputText  id="qpu" value="#{articleController.article.unite}" required="true" 
+                                                      style="width: 75px"
+                                                      requiredMessage="#{langue.quantite_par_unite} : #{langue['Conv.ValeurRequise']}">
+                                            <p:ajax update="prix_achat_detail,prix_vente_detail" listener="#{articleController.updatePrixDetail()}" />
+                                        </p:inputText>
+                                        
+                                        <p:message for="qpu" />
+                                                    
+                                        <p:outputLabel value="#{langue.prix_achat} Détail" for="prix_achat_detail" />
+                                        <p:inputText id="prix_achat_detail" value="#{articleController.article.prixAchatDetail}" required="true"
+                                                     style="width: 120px"
+                                                     requiredMessage="#{langue.prix_achat} : #{langue['Conv.ValeurRequise']}">
+                                            <p:ajax />
+                                        </p:inputText>
+                                        <p:message for="prix_achat_detail"/>
+
+                                        <p:outputLabel value="#{langue.prix_vente} Détail" for="prix_vente_detail" />
+                                        <p:inputText id="prix_vente_detail" value="#{articleController.article.prixVenteDetail}" required="true"
+                                                     style="width: 120px"
+                                                     requiredMessage="#{langue.prix} : #{langue['Conv.ValeurRequise']}">
+                                            <p:ajax />
+                                        </p:inputText>
+                                        <p:message for="prix_vente_detail"/>
+                                        
+                                        <p:outputLabel value="#{langue.unite} En Detail" for="unite_detail"/>
+                                        <p:selectOneMenu filter="true" filterMatchMode="contains" id="unite_detail" value="#{articleController.article.idUniteDetail}" required="#{langue.valeur_obligatoire}">
+                                            <f:selectItem itemLabel="#{langue.choisir}" itemValue="0"/>
+                                            <f:selectItems value="#{articleController.unites}" var="u" itemLabel="#{u.libelle}" itemValue="#{u.idunite}" />
+                                            <p:ajax/>
+                                        </p:selectOneMenu>
+                                        <p:message for="unite_detail"/>
 
                                         <p:outputLabel value="#{langue.stock_securite}" for="ss" />
                                         <p:inputText  id="ss" value="#{articleController.article.quantitesecurite}" required="true"
                                                       style="width: 85px"
-                                                      requiredMessage="#{langue.stock_securite}: #{langue['Conv.ValeurRequise']}"/>
+                                                      requiredMessage="#{langue.stock_securite}: #{langue['Conv.ValeurRequise']}">
+                                            <p:ajax />
+                                        </p:inputText>
                                         <p:message for="ss"/>
 
                                         <p:outputLabel value="#{langue.stock_critic}" for="sct"/>
                                         <p:inputText  id="sct" value="#{articleController.article.quantitealerte}" required="true" 
                                                       style="width: 85px"
-                                                      requiredMessage="#{langue.stock_critic}: #{langue['Conv.ValeurRequise']}"/>
+                                                      requiredMessage="#{langue.stock_critic}: #{langue['Conv.ValeurRequise']}">
+                                            <p:ajax />
+                                        </p:inputText>
                                         <p:message for="sct"/>
 
                                         <p:outputLabel value="Nbre jr d'alerte" for="nb_jr_alerte" />
                                         <p:inputText  id="nb_jr_alerte" value="#{articleController.article.nbjralerte}" required="true"
                                                       style="width: 85px"
-                                                      requiredMessage="Nbre jr d'alerte : #{langue['Conv.ValeurRequise']}"/>
-                                        <p:message for="nb_jr_alerte"/>
-
-                                        <p:outputLabel value="#{langue.unite}" for="unite"/>
-                                        <p:selectOneMenu filter="true" filterMatchMode="contains" id="unite" value="#{articleController.unite.idunite}" required="#{langue.valeur_obligatoire}">
-                                            <f:selectItem itemLabel="#{langue.choisir}" itemValue="0"/>
-                                            <f:selectItems value="#{articleController.unites}" var="u" itemLabel="#{u.libelle}" itemValue="#{u.idunite}" />
-                                            <p:ajax/>
-                                        </p:selectOneMenu>
-                                        <p:message for="unite"/>
-
-                                        <p:outputLabel value="#{langue.quantite_par_unite}" for="qpu" />
-                                        <p:inputText  id="qpu" value="#{articleController.article.unite}" required="true" 
-                                                      style="width: 75px"
-                                                      requiredMessage="#{langue.quantite_par_unite} : #{langue['Conv.ValeurRequise']}"/>
-                                        <p:message for="qpu"/>
-
+                                                      requiredMessage="Nbre jr d'alerte : #{langue['Conv.ValeurRequise']}">
+                                            <p:ajax />
+                                        </p:inputText>
+                                        <p:message for="nb_jr_alerte"/> 
+                                                                                                              
                                         <p:outputLabel rendered="#{articleController.mode.equals('Edit')}" value="#{langue.etat}" for="etat"/>
-                                        <h:selectBooleanCheckbox rendered="#{articleController.mode.equals('Edit')}" id="etat" value="#{articleController.article.etat}"/>
+                                        <h:selectBooleanCheckbox rendered="#{articleController.mode.equals('Edit')}" id="etat" value="#{articleController.article.etat}">
+                                            <p:ajax />
+                                        </h:selectBooleanCheckbox>
                                         <p:message rendered="#{articleController.mode.equals('Edit')}" for="etat"/>
 
                                         <p:outputLabel value="#{langue.produit_perissable_}" for="perissable"/>
@@ -128,7 +176,7 @@
 
                                 <div class="panel-body">
                                     <center>
-                                        <h3> Agence / Fépot de visibilité </h3>
+                                        <h3>Agences / Dépots de visibilité </h3>
                                     </center>
 
                                     <p:separator />

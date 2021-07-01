@@ -50,9 +50,9 @@ public class Unite implements Serializable {
     private Long idunite;
     @Column(name = "id_parent")
     private BigInteger idParent;
-    @Size(max = 1024)
+    @Size(max = 150)
     private String libelle;
-    @Size(max = 1024)
+    @Size(max = 50)
     private String code;
     @Size(max = 50)
     private String etat;

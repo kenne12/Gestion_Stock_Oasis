@@ -275,6 +275,19 @@ public class Utilitaires {
         }
         return code;
     }
+    
+    public static String genererCodeArticle(String code, Long nextPayement) {
+        if (nextPayement < 10L) {
+            code = code + "000" + nextPayement.toString();
+        } else if ((nextPayement >= 10L) && (nextPayement < 100L)) {
+            code = code + "00" + nextPayement.toString();
+        } else if ((nextPayement >= 100L) && (nextPayement < 1000L)) {
+            code = code + "0" + nextPayement.toString();
+        } else {
+            code = code + "" + nextPayement.toString();
+        }
+        return code;
+    }
 
     public static String genererCodeInventaire(String code, Long nextPayement) {
         if (nextPayement < 10L) {

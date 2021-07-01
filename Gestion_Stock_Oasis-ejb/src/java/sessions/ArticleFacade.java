@@ -35,8 +35,21 @@ public class ArticleFacade extends AbstractFacade<Article> implements ArticleFac
     }
 
     @Override
+    public Long nextValByIdstructure(int idStructure) {
+        Query query = this.em.createQuery("SELECT MAX(a.idarticle) FROM Article a WHERE a.parametrage.id=:idParametre")
+                .setParameter("idParametre", idStructure);
+        Long result = (Long) query.getSingleResult();
+        if (result == null) {
+            result = 1L;
+        } else {
+            result = (result + 1L);
+        }
+        return result;
+    }
+
+    @Override
     public List<Article> findAllRange(int idStructure) {
-        return this.em.createQuery("SELECT a FROM Article a WHERE a.parametrage.id=:id ORDER BY a.libelle")
+        return this.em.createQuery("SELECT a FROM Article a WHERE a.parametrage.id=:id ORDER BY a.code")
                 .setParameter("id", idStructure)
                 .getResultList();
     }
@@ -54,7 +67,7 @@ public class ArticleFacade extends AbstractFacade<Article> implements ArticleFac
 
     @Override
     public List<Article> findByPerissable(int idStructure, boolean perrissable) {
-        Query query = this.em.createQuery("SELECT a FROM Article a WHERE a.perissable=:perrissable AND a.parametrage.id=:id ORDER BY a.libelle");
+        Query query = this.em.createQuery("SELECT a FROM Article a WHERE a.perissable=:perrissable AND a.parametrage.id=:id ORDER BY a.code");
         query.setParameter("perrissable", perrissable).setParameter("id", idStructure);
         return query.getResultList();
     }

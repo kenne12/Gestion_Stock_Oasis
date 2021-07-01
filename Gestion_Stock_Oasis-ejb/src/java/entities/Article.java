@@ -80,14 +80,14 @@ public class Article implements Serializable {
     private Double coutachat;
     private Double poids;
     private Double prixunit;
-    private Boolean tva;
+    private boolean tva;
     private Double quantitestock;
     private Integer quantitemin;
     private Double quantitealerte;
     private Integer quantiteavarie;
     private Integer quantitepv;
     private Integer quantiteminpv;
-    private Integer quantitealertepv;
+    private int quantitealertepv;
     @Size(max = 254)
     private String photo;
     @Size(max = 254)
@@ -102,7 +102,7 @@ public class Article implements Serializable {
     private Boolean perissable;
     private Double unite;
     private Boolean etat;
-    @Size(max = 2147483647)
+    @Size(max = 100)
     private String fabricant;
     private Integer nbjralerte;
     private Double quantitemultiple;
@@ -127,7 +127,18 @@ public class Article implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     private Parametrage parametrage;
 
+    @Column(name = "idunite_detail")
+    private long idUniteDetail;
+
+    @Column(name = "prix_achat_detail")
+    private double prixAchatDetail;
+
+    @Column(name = "prix_vente_detail")
+    private double prixVenteDetail;
+
     public Article() {
+        idunite = new Unite();
+        idfamille = new Famille();
     }
 
     public Article(Long idarticle) {
@@ -190,14 +201,6 @@ public class Article implements Serializable {
         this.prixunit = prixunit;
     }
 
-    public Boolean getTva() {
-        return tva;
-    }
-
-    public void setTva(Boolean tva) {
-        this.tva = tva;
-    }
-
     public Double getQuantitestock() {
         return quantitestock;
     }
@@ -246,11 +249,11 @@ public class Article implements Serializable {
         this.quantiteminpv = quantiteminpv;
     }
 
-    public Integer getQuantitealertepv() {
+    public int getQuantitealertepv() {
         return quantitealertepv;
     }
 
-    public void setQuantitealertepv(Integer quantitealertepv) {
+    public void setQuantitealertepv(int quantitealertepv) {
         this.quantitealertepv = quantitealertepv;
     }
 
@@ -372,6 +375,38 @@ public class Article implements Serializable {
 
     public void setQuantitesecurite(Double quantitesecurite) {
         this.quantitesecurite = quantitesecurite;
+    }
+
+    public long getIdUniteDetail() {
+        return idUniteDetail;
+    }
+
+    public void setIdUniteDetail(long idUniteDetail) {
+        this.idUniteDetail = idUniteDetail;
+    }
+
+    public boolean isTva() {
+        return tva;
+    }
+
+    public void setTva(boolean tva) {
+        this.tva = tva;
+    }
+
+    public double getPrixAchatDetail() {
+        return prixAchatDetail;
+    }
+
+    public void setPrixAchatDetail(double prixAchatDetail) {
+        this.prixAchatDetail = prixAchatDetail;
+    }
+
+    public double getPrixVenteDetail() {
+        return prixVenteDetail;
+    }
+
+    public void setPrixVenteDetail(double prixVenteDetail) {
+        this.prixVenteDetail = prixVenteDetail;
     }
 
     @XmlTransient

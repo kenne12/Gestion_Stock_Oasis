@@ -12,6 +12,7 @@ import entities.Magasinarticle;
 import entities.Magasinlot;
 import entities.Unite;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -48,41 +49,41 @@ public class ArticleController extends AbstractArticleController implements Seri
 
         this.mode = "Create";
         this.fournisseur = new Fournisseur();
-        this.unite = new Unite();
         this.famille = new Famille();
         this.article = new Article();
         this.lot = new Lot();
-        this.article.setQuantitestock((0.0D));
-        this.article.setQuantitealerte((0.0D));
-        this.article.setPerissable((true));
-        this.article.setEtat((true));
-        this.article.setUnite((0.0D));
+        this.article.setQuantitestock(0d);
+        this.article.setQuantitealerte(0d);
+        this.article.setPerissable(false);
+        this.article.setEtat(true);
+        this.article.setUnite(0d);
         this.article.setPhoto("article.jpeg");
         this.article.setPhotoRelatif("article.jpeg");
-        this.article.setDateEnregistre(new Date());
-        this.article.setDerniereModif(new Date());
+        this.article.setDateEnregistre(Date.from(Instant.now()));
+        this.article.setDerniereModif(Date.from(Instant.now()));
         this.article.setDescription("-");
-        this.article.setUnite((1d));
-        this.article.setQuantitemultiple((0.0D));
-        this.article.setNbjralerte((30));
+        this.article.setUnite(1d);
+        this.article.setQuantitemultiple(0d);
+        this.article.setNbjralerte(30);
         this.article.setPhotoRelatif("article.jpeg");
         this.article.setFabricant("-");
-        this.article.setPoids((0.0D));
-        this.article.setQuantitemin((0));
-        this.article.setQuantiteavarie((0));
-        this.article.setQuantiteminpv((0));
-        this.article.setQuantitepv((0));
-        this.article.setQuantitesecurite((0.0D));
-        this.article.setNbjralerte((30));
-        this.article.setUnitesortie((1.0D));
-        this.article.setCoutachat((0.0D));
-        this.article.setPrixunit((0.0D));
-        this.article.setQuantitereduite((0.0D));
-        this.article.setQuantitemultiple((0.0D));
+        this.article.setPoids(0d);
+        this.article.setQuantitemin(0);
+        this.article.setQuantiteavarie(0);
+        this.article.setQuantiteminpv(0);
+        this.article.setQuantitepv(0);
+        this.article.setQuantitesecurite(0d);
+        this.article.setNbjralerte(30);
+        this.article.setUnitesortie(1d);
+        this.article.setCoutachat(0d);
+        this.article.setPrixunit(0d);
+        this.article.setQuantitereduite(0d);
+        this.article.setQuantitemultiple(0d);
+        article.setCode(Utilitaires.genererCodeArticle("ARTICLE_", articleFacadeLocal.nextValByIdstructure(SessionMBean.getParametrage().getId())));
 
         List listMag = this.magasins;
         this.selectedMagasins = listMag;
-        this.showLot = true;
+        this.showLot = false;
         this.showUser = SessionMBean.getParametrage().isEtatuser();
         this.showBailleur = SessionMBean.getParametrage().isEtatbailleur();
         RequestContext.getCurrentInstance().execute("PF('ArticleCreerDialog').show()");
@@ -98,8 +99,6 @@ public class ArticleController extends AbstractArticleController implements Seri
             if (this.article != null) {
                 this.showLot = false;
                 this.famille = this.article.getIdfamille();
-                this.unite = this.article.getIdunite();
-
                 this.selectedMagasins.clear();
                 List<Magasinarticle> listMa = this.magasinarticleFacadeLocal.findByIdarticle(this.article.getIdarticle());
                 if (!listMa.isEmpty()) {
@@ -137,6 +136,22 @@ public class ArticleController extends AbstractArticleController implements Seri
         this.showLot = false;
     }
 
+    public void updatePrixDetail() {
+        try {
+            if (article.getUnite() != null && article.getUnite() != 1) {
+                article.setPrixAchatDetail(article.getCoutachat() / article.getUnite());
+                article.setPrixVenteDetail(article.getPrixunit() / article.getUnite());
+            } else {
+                article.setPrixVenteDetail(article.getPrixunit());
+                article.setPrixAchatDetail(article.getCoutachat());
+            }
+        } catch (Exception e) {
+            article.setPrixVenteDetail(article.getPrixunit());
+            article.setPrixAchatDetail(article.getCoutachat());
+            article.setUnite(1d);
+        }
+    }
+
     public void create() {
         try {
 
@@ -152,11 +167,11 @@ public class ArticleController extends AbstractArticleController implements Seri
                     this.article.setIdfamille(this.famille);
                 }
 
-                article.setIdunite(unite);
                 article.setUnitesortie(1.0);
                 article.setParametrage(SessionMBean.getMagasin().getParametrage());
                 article.setQuantitevirtuelle(0d);
                 article.setUniteentree(0d);
+                article.setIdunite(uniteFacadeLocal.find(article.getIdunite().getIdunite()));
 
                 this.ut.begin();
 
@@ -177,7 +192,7 @@ public class ArticleController extends AbstractArticleController implements Seri
                 this.lot.setEtat(true);
                 lot.setQuantitevirtuelle(0d);
 
-                if (!this.showLot) {
+                if (!showLot) {
                     lot.setDatefabrication(null);
                     lot.setDateperemption(null);
                     lot.setNumero(this.article.getCode());
@@ -222,8 +237,7 @@ public class ArticleController extends AbstractArticleController implements Seri
                 this.fournisseur = null;
                 this.famille = new Famille();
                 this.article = new Article();
-
-                this.modifier = (this.supprimer = this.detail = true);
+                this.modifier = this.supprimer = this.detail = true;
 
                 RequestContext.getCurrentInstance().execute("PF('ArticleCreerDialog').hide()");
                 notifySuccess();
@@ -239,7 +253,7 @@ public class ArticleController extends AbstractArticleController implements Seri
                 if (!Objects.equals(this.famille.getIdfamille(), p.getIdfamille().getIdfamille())) {
                     this.article.setIdfamille(this.familleFacadeLocal.find(this.famille.getIdfamille()));
                 }
-                this.article.setIdunite(this.uniteFacadeLocal.find(this.unite.getIdunite()));
+                article.setIdunite(uniteFacadeLocal.find(article.getIdunite().getIdunite()));
 
                 this.ut.begin();
                 this.articleFacadeLocal.edit(this.article);
@@ -264,8 +278,10 @@ public class ArticleController extends AbstractArticleController implements Seri
                     }
                 }
 
-                this.modifier = (this.supprimer = this.detail = true);
-                this.article = new Article();
+                this.modifier = this.supprimer = this.detail = true;
+                article = new Article();
+                article.setIdunite(new Unite());
+
                 RequestContext.getCurrentInstance().execute("PF('ArticleCreerDialog').hide()");
                 notifySuccess();
             } else {

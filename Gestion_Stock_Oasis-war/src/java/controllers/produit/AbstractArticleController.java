@@ -34,7 +34,7 @@ public class AbstractArticleController {
 
     @EJB
     protected ArticleFacadeLocal articleFacadeLocal;
-    protected Article article;
+    protected Article article = new Article();
     protected List<Article> articles = new ArrayList<>();
     protected List<Article> articles1 = new ArrayList<>();
 
@@ -61,7 +61,6 @@ public class AbstractArticleController {
 
     @EJB
     protected UniteFacadeLocal uniteFacadeLocal;
-    protected Unite unite = new Unite();
     protected List<Unite> unites = new ArrayList();
 
     @EJB
@@ -142,15 +141,15 @@ public class AbstractArticleController {
     }
 
     public Boolean getSupprimer() {
-         return this.supprimer;
+        return this.supprimer;
     }
 
     public void setSupprimer(Boolean supprimer) {
-         this.supprimer = supprimer;
+        this.supprimer = supprimer;
     }
 
     public Fournisseur getFournisseur() {
-         return this.fournisseur;
+        return this.fournisseur;
     }
 
     public void setFournisseur(Fournisseur fournisseur) {
@@ -172,7 +171,7 @@ public class AbstractArticleController {
     }
 
     public void setFamille(Famille famille) {
-         this.famille = famille;
+        this.famille = famille;
     }
 
     public List<Famille> getFamilles() {
@@ -253,14 +252,6 @@ public class AbstractArticleController {
 
     public Routine getRoutine() {
         return this.routine;
-    }
-
-    public Unite getUnite() {
-        return this.unite;
-    }
-
-    public void setUnite(Unite unite) {
-        this.unite = unite;
     }
 
     public List<Unite> getUnites() {
