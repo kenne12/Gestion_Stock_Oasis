@@ -53,7 +53,7 @@ public class LivraisonclientFacade extends AbstractFacade<Livraisonclient> imple
 
     @Override
     public List<Livraisonclient> findAllRange(int idMagasin, Date dateDebut, Date dateFin) {
-        return this.em.createQuery("SELECT l FROM Livraisonclient l WHERE l.datelivraison BETWEEN :dateDebut AND :dateFin AND l.idmagasin.idmagasin=:idMagasin ORDER BY l.idlivraisonclient DESC")
+        return this.em.createQuery("SELECT l FROM Livraisonclient l WHERE l.datelivraison BETWEEN :dateDebut AND :dateFin AND l.idmagasin.idmagasin=:idMagasin ORDER BY l.idlivraisonclient DESC , l.datelivraison DESC")
                 .setParameter("dateDebut", dateDebut).setParameter("dateFin", dateFin).setParameter("idMagasin", idMagasin)
                 .getResultList();
     }

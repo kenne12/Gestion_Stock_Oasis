@@ -12,7 +12,7 @@
                   modal="true" 
                   resizable="true" 
                   appendTo="@(body)"
-                  width="80%"
+                  width="90%"
                   height="600"
                   header="#{langue.creer_modifier_sortie_directe}">
 
@@ -102,14 +102,14 @@
                             <h:outputText value="#{langue.element_de_facture}"/>
                         </f:facet> 
 
-                        <p:column style="width: 33%" filterBy="#{item.idmagasinlot.idmagasinarticle.idarticle.libelle}" filterMatchMode="contains" >
+                        <p:column style="width: 30%" filterBy="#{item.idmagasinlot.idmagasinarticle.idarticle.libelle}" filterMatchMode="contains" >
                             <f:facet name="header">
                                 <h:outputText value="#{langue.article}"/>
                             </f:facet>
                             <h:outputText value="#{item.idmagasinlot.idmagasinarticle.idarticle.libelle}"/>
                         </p:column>
 
-                        <p:column style="width: 31%" filterBy="#{item.idmagasinlot.idlot.numero}" filterMatchMode="contains" >
+                        <p:column style="width: 29%" filterBy="#{item.idmagasinlot.idlot.numero}" filterMatchMode="contains" >
                             <f:facet name="header">
                                 <h:outputText value="#{langue.lot}"/>
                             </f:facet>
@@ -150,6 +150,13 @@
                             <h:outputText value="#{item.montant}">
                                 <f:convertNumber />
                             </h:outputText>  
+                        </p:column>
+                        
+                        <p:column style="width: 5%"  filterMatchMode="contains" >
+                            <f:facet name="header">
+                                <h:outputText value="QR"/>
+                            </f:facet>
+                            <h:outputText value="#{item.quantitereduite}"/>
                         </p:column>
 
                         <p:column headerText="" style="width: 3%;text-align: center">

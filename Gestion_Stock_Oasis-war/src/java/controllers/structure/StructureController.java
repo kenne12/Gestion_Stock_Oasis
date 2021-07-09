@@ -19,7 +19,7 @@ import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.transaction.Transactional;
+//import javax.transaction.Transactional;
 import org.primefaces.context.RequestContext;
 import utils.SessionMBean;
 import utils.ShaHash;
@@ -127,7 +127,7 @@ public class StructureController extends AbstractStructureController implements 
         this.privilegeFacadeLocal.create(p);
     }
     
-    @Transactional
+    //@Transactional
     public void create() {
         try {
             if (this.mode.equals("Create")) {

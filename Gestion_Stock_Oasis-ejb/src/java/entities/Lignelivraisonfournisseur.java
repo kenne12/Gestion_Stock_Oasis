@@ -7,6 +7,7 @@ package entities;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -33,6 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Lignelivraisonfournisseur.findByPrixachat", query = "SELECT l FROM Lignelivraisonfournisseur l WHERE l.prixachat = :prixachat"),
     @NamedQuery(name = "Lignelivraisonfournisseur.findByQuantitereduite", query = "SELECT l FROM Lignelivraisonfournisseur l WHERE l.quantitereduite = :quantitereduite")})
 public class Lignelivraisonfournisseur implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -60,6 +62,9 @@ public class Lignelivraisonfournisseur implements Serializable {
     @JoinColumn(name = "idunite", referencedColumnName = "idunite")
     @ManyToOne(fetch = FetchType.LAZY)
     private Unite idunite;
+
+    @Column(name = "mode_vente", length = 15)
+    private String modeVente;
 
     public Lignelivraisonfournisseur() {
     }
@@ -164,6 +169,14 @@ public class Lignelivraisonfournisseur implements Serializable {
         this.idunite = idunite;
     }
 
+    public String getModeVente() {
+        return modeVente;
+    }
+
+    public void setModeVente(String modeVente) {
+        this.modeVente = modeVente;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -188,5 +201,5 @@ public class Lignelivraisonfournisseur implements Serializable {
     public String toString() {
         return "entities.Lignelivraisonfournisseur[ idlignelivraisonfournisseur=" + idlignelivraisonfournisseur + " ]";
     }
-    
+
 }

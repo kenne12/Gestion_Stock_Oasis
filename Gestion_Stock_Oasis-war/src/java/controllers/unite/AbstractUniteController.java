@@ -54,7 +54,7 @@ public class AbstractUniteController {
     }
 
     public void setUnite(Unite unite) {
-        this.modifier = (this.supprimer = this.detail = (unite == null));
+        this.modifier = this.supprimer = this.detail = unite == null;
         this.unite = unite;
     }
 

@@ -36,7 +36,7 @@
                         <p:selectOneMenu required="true" id="produit" filter="true" filterMatchMode="contains"  value="#{sortiedirectController.magasinarticle}" converter="magasinarticleConverter">
                             <f:selectItem itemLabel="#{langue.choisir}" itemValue="#{null}"/>
                             <f:selectItems value="#{sortiedirectController.magasinarticles}" var="prd" itemLabel="#{prd.idarticle.libelle}" itemValue="#{prd}"/>
-                            <p:ajax update="sr,cu,famille,lot,qt,qpu,quantite,mt" listener="#{sortiedirectController.updatedata()}"/>
+                            <p:ajax update="sr,cu,famille,lot,qt,qpu,quantite,mt,mode" listener="#{sortiedirectController.updatedata()}"/>
                         </p:selectOneMenu>
                         <p:message for="produit"/>
 
@@ -44,9 +44,17 @@
                         <p:selectOneMenu required="true" id="lot" filter="true" filterMatchMode="contains"  value="#{sortiedirectController.magasinlot}" converter="magasinlotConverter">
                             <f:selectItem itemLabel="#{langue.choisir}" itemValue="#{null}"/>
                             <f:selectItems value="#{sortiedirectController.magasinlots}" var="lot" itemLabel="#{lot.idlot.numero}" itemValue="#{lot}"/>
-                            <p:ajax update="cu,sr,qt,qpu,quantite,mt" listener="#{sortiedirectController.updatedataLot()}"/>
+                            <p:ajax update="cu,sr,qt,qpu,quantite,mt,mode" listener="#{sortiedirectController.updatedataLot()}"/>
                         </p:selectOneMenu>
                         <p:message for="lot"/>
+                        
+                        <p:outputLabel value="Mode" for="mode"/>
+                        <p:selectOneMenu required="true" id="mode" filter="true" filterMatchMode="contains" value="#{sortiedirectController.lignelivraisonclient.modeVente}">
+                            <f:selectItem itemLabel="VENTE_EN_GROS" itemValue="VENTE_EN_GROS"/>
+                            <f:selectItem itemLabel="VENTE_EN_DETAIL" itemValue="VENTE_EN_DETAIL"/>
+                            <p:ajax update="sr,cu,famille,lot,qt,qpu,quantite,mt" listener="#{sortiedirectController.updatePrixGrosAndDetail()}"/>
+                        </p:selectOneMenu>
+                        <p:message for="mode"/>
 
                         <p:outputLabel value="#{langue.stock_disponible}" for="sr" />
                         <p:inputText id="sr" disabled="true"  required="true" style="width: 100px;color: blue" value="#{sortiedirectController.magasinlot.quantite}">
@@ -85,7 +93,7 @@
                             <p:ajax/>
                         </p:inputText>
                         <p:message for="mt"/>
-
+                                                
                     </h:panelGrid>
 
                     <p:separator/>

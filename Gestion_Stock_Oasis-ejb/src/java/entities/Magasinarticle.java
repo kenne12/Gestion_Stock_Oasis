@@ -62,6 +62,7 @@ public class Magasinarticle implements Serializable {
     private List<Magasinlot> magasinlotList;
 
     public Magasinarticle() {
+        
     }
 
     public Magasinarticle(Long idmagasinarticle) {

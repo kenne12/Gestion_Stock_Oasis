@@ -620,7 +620,7 @@ public class PrintUtils {
                 table.addCell(createPdfPCell(" " + llc.getIdlot().getIdarticle().getCode(), 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
                 table.addCell(createPdfPCell(" " + Utilitaires.formatPrenomMaj(llc.getIdlot().getIdarticle().getLibelle()), 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
                 table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(llc.getQuantite()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
-                table.addCell(createPdfPCell(" " + Utilitaires.formatPrenomMaj(llc.getIdlot().getIdarticle().getIdunite().getLibelle()), 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell(" " + Utilitaires.formatPrenomMaj(llc.getIdunite().getLibelle()), 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
                 table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(llc.getPrixUnitaire().intValue()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
                 table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(llc.getMontant().intValue()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
             }

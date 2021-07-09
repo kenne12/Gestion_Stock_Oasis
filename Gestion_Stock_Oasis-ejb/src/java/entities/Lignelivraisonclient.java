@@ -67,6 +67,9 @@ public class Lignelivraisonclient implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     private Unite idunite;
 
+    @Column(name = "mode_vente", length = 15)
+    private String modeVente;
+
     public Lignelivraisonclient() {
     }
 
@@ -192,6 +195,14 @@ public class Lignelivraisonclient implements Serializable {
 
     public void setPrixVente(double prixVente) {
         this.prixVente = prixVente;
+    }
+
+    public String getModeVente() {
+        return modeVente;
+    }
+
+    public void setModeVente(String modeVente) {
+        this.modeVente = modeVente;
     }
 
     @Override

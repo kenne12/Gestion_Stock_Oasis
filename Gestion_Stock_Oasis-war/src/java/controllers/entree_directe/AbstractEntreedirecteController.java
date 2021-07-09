@@ -84,7 +84,6 @@ public class AbstractEntreedirecteController {
 
     @EJB
     protected UniteFacadeLocal uniteFacadeLocal;
-    protected Unite unite = new Unite();
     protected List<Unite> unites = new ArrayList();
 
     @EJB
@@ -149,10 +148,6 @@ public class AbstractEntreedirecteController {
         return this.fournisseurs;
     }
 
-    public void setFournisseurs(List<Fournisseur> fournisseurs) {
-        this.fournisseurs = fournisseurs;
-    }
-
     public Livraisonfournisseur getLivraisonfournisseur() {
         return this.livraisonfournisseur;
     }
@@ -164,10 +159,6 @@ public class AbstractEntreedirecteController {
 
     public List<Livraisonfournisseur> getLivraisonfournisseurs() {
         return this.livraisonfournisseurs;
-    }
-
-    public void setLivraisonfournisseurs(List<Livraisonfournisseur> livraisonfournisseurs) {
-        this.livraisonfournisseurs = livraisonfournisseurs;
     }
 
     public Lignelivraisonfournisseur getLignelivraisonfournisseur() {
@@ -190,40 +181,20 @@ public class AbstractEntreedirecteController {
         return this.detail;
     }
 
-    public void setDetail(Boolean detail) {
-        this.detail = detail;
-    }
-
     public Boolean getModifier() {
         return this.modifier;
-    }
-
-    public void setModifier(Boolean modifier) {
-        this.modifier = modifier;
     }
 
     public Boolean getConsulter() {
         return this.consulter;
     }
 
-    public void setConsulter(Boolean consulter) {
-        this.consulter = consulter;
-    }
-
     public Boolean getImprimer() {
         return this.imprimer;
     }
 
-    public void setImprimer(Boolean imprimer) {
-        this.imprimer = imprimer;
-    }
-
     public Boolean getSupprimer() {
         return this.supprimer;
-    }
-
-    public void setSupprimer(Boolean supprimer) {
-        this.supprimer = supprimer;
     }
 
     public Famille getFamille() {
@@ -237,10 +208,6 @@ public class AbstractEntreedirecteController {
     public List<Famille> getFamilles() {
         this.familles = this.familleFacadeLocal.findAllRange(SessionMBean.getMagasin().getParametrage().getId());
         return this.familles;
-    }
-
-    public void setFamilles(List<Famille> familles) {
-        this.familles = familles;
     }
 
     public Double getCout_quantite() {
@@ -279,21 +246,9 @@ public class AbstractEntreedirecteController {
         return this.routine;
     }
 
-    public Unite getUnite() {
-        return this.unite;
-    }
-
-    public void setUnite(Unite unite) {
-        this.unite = unite;
-    }
-
     public List<Unite> getUnites() {
         this.unites = this.uniteFacadeLocal.findByStructure(SessionMBean.getParametrage().getId());
         return this.unites;
-    }
-
-    public void setUnites(List<Unite> unites) {
-        this.unites = unites;
     }
 
     public Magasin getMagasin() {

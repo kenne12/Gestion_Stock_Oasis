@@ -67,27 +67,20 @@
                             <h:outputText value="#{langue.liste_des_elements}"/>
                         </f:facet> 
 
-                        <p:column style="width: 23%" filterBy="#{item.idlot.idarticle.libelle}" >
+                        <p:column style="width: 32%" filterBy="#{item.idlot.idarticle.libelle}" >
                             <f:facet name="header">
                                 <h:outputText value="#{langue.article}"/>
                             </f:facet>
                             <h:outputText value="#{item.idlot.idarticle.libelle}"/>
                         </p:column>
 
-                        <p:column style="width: 11%" filterBy="#{item.idlot.numero}">
+                        <p:column style="width: 16%" filterBy="#{item.idlot.numero}">
                             <f:facet name="header">
                                 <h:outputText value="#{langue.lot}"/>
                             </f:facet>
                             <h:outputText value="#{item.idlot.numero}"/>
                         </p:column>
-
-                        <p:column style="width: 19%" filterBy="#{item.idlot.numero}">
-                            <f:facet name="header">
-                                <h:outputText value="#{item.idmagasinlot.idmagasinarticle.idmagasin.nom}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.idmagasinlot.idmagasinarticle.idmagasin.nom}"/>
-                        </p:column>
-
+                      
                         <p:column filterBy="#{item.prixachat}" style="width: 9%;text-align: center" headerText="#{langue.p_u}">
                             <p:cellEditor>
                                 <f:facet name="output">
@@ -117,7 +110,7 @@
                             </p:cellEditor>
                         </p:column>
 
-                        <p:column style="width: 10%;text-align: center" headerText="#{langue.unite}">
+                        <p:column style="width: 15%;text-align: center" headerText="#{langue.unite}">
                             <p:cellEditor>
                                 <f:facet name="output">
                                     <h:outputText value="#{item.idunite.libelle}"/>
