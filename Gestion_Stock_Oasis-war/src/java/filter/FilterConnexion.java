@@ -35,18 +35,19 @@ public class FilterConnexion implements Filter, Serializable {
 
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
-         System.err.println("FilterConnexion--------------<< doAfterProcessing");
+        System.err.println("FilterConnexion--------------<< doAfterProcessing");
 
-         log("FilterConnexion:DoAfterProcessing");
+        log("FilterConnexion:DoAfterProcessing");
     }
 
+    @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-         HttpServletRequest hRequest = (HttpServletRequest) request;
-         HttpServletResponse hResponse = (HttpServletResponse) response;
-         HttpSession session = hRequest.getSession();
+        HttpServletRequest hRequest = (HttpServletRequest) request;
+        HttpServletResponse hResponse = (HttpServletResponse) response;
+        HttpSession session = hRequest.getSession();
 
-         if (session.getAttribute("compte") != null) {
+        if (session.getAttribute("compte") != null) {
             request.getRequestDispatcher("/index.html?faces-redirect=true").forward(request, response);
         } else {
             chain.doFilter(request, response);
@@ -61,19 +62,22 @@ public class FilterConnexion implements Filter, Serializable {
         /* 103 */ this.filterConfig = filterConfig;
     }
 
+    @Override
     public void destroy() {
     }
 
+    @Override
     public void init(FilterConfig filterConfig) {
-        /* 120 */ this.filterConfig = filterConfig;
-        /* 121 */ if (filterConfig != null) {
-            /* 123 */ log("FilterConnexion:Initializing filter");
+        this.filterConfig = filterConfig;
+        if (filterConfig != null) {
+            log("FilterConnexion:Initializing filter");
         }
     }
 
+    @Override
     public String toString() {
-        /* 133 */ if (this.filterConfig == null) {
-            /* 134 */ return "FilterConnexion()";
+        if (this.filterConfig == null) {
+            return "FilterConnexion()";
         }
         /* 136 */ StringBuffer sb = new StringBuffer("FilterConnexion(");
         /* 137 */ sb.append(this.filterConfig);
@@ -82,9 +86,9 @@ public class FilterConnexion implements Filter, Serializable {
     }
 
     private void sendProcessingError(Throwable t, ServletResponse response) {
-        /* 143 */ String stackTrace = getStackTrace(t);
+        String stackTrace = getStackTrace(t);
 
-        /* 145 */ if ((stackTrace != null) && (!stackTrace.equals(""))) {
+        if ((stackTrace != null) && (!stackTrace.equals(""))) {
             try {
                 /* 147 */ response.setContentType("text/html");
                 /* 148 */ PrintStream ps = new PrintStream(response.getOutputStream());
@@ -101,16 +105,16 @@ public class FilterConnexion implements Filter, Serializable {
             }
         } else {
             try {
-                /* 163 */ PrintStream ps = new PrintStream(response.getOutputStream());
-                /* 164 */ t.printStackTrace(ps);
-                /* 165 */ ps.close();
-                /* 166 */ response.getOutputStream().close();
+                PrintStream ps = new PrintStream(response.getOutputStream());
+                t.printStackTrace(ps);
+                ps.close();
+                response.getOutputStream().close();
             } catch (Exception localException1) {
             }
         }
     }
 
-    /* 173 */ public static String getStackTrace(Throwable t) {
+    public static String getStackTrace(Throwable t) {
         String stackTrace = null;
         try {
             /* 175 */ StringWriter sw = new StringWriter();
@@ -121,11 +125,10 @@ public class FilterConnexion implements Filter, Serializable {
             /* 180 */ stackTrace = sw.getBuffer().toString();
         } catch (Exception localException) {
         }
-        /* 183 */ return stackTrace;
+        return stackTrace;
     }
 
     public void log(String msg) {
-        /* 187 */ this.filterConfig.getServletContext().log(msg);
+        this.filterConfig.getServletContext().log(msg);
     }
 }
-

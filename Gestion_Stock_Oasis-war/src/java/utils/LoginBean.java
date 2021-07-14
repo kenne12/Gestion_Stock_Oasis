@@ -4,7 +4,6 @@ import entities.Annee;
 import entities.AnneeMois;
 import entities.Journee;
 import entities.Livraisonclient;
-import entities.Livraisonfournisseur;
 import entities.Magasin;
 import entities.Menu;
 import entities.Mouchard;

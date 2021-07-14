@@ -38,6 +38,7 @@ public class FilterPrivellege
         log("FilterPrivellege:DoAfterProcessing");
     }
 
+    @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest hRequest = (HttpServletRequest) request;
         HttpServletResponse hResponse = (HttpServletResponse) response;
@@ -85,9 +86,11 @@ public class FilterPrivellege
         this.filterConfig = filterConfig;
     }
 
+    @Override
     public void destroy() {
     }
 
+    @Override
     public void init(FilterConfig filterConfig) {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
@@ -95,6 +98,7 @@ public class FilterPrivellege
         }
     }
 
+    @Override
     public String toString() {
         if (this.filterConfig == null) {
             return "FilterPrivellege()";
@@ -128,22 +132,22 @@ public class FilterPrivellege
 
     public String getPropertyValue(String key) {
         try {
-            /* 193 */ if (key == null) {
-                /* 194 */ System.out.println("=============== key null  ++++++++++++++++++++");
+            if (key == null) {
+                System.out.println("=============== key null  ++++++++++++++++++++");
             }
-            /* 196 */ if (key == "") {
-                /* 197 */ System.out.println("=============== key empty  ++++++++++++++++++++");
+            if (key == "") {
+                System.out.println("=============== key empty  ++++++++++++++++++++");
             }
-            /* 199 */ if (this.properties == null) {
-                /* 200 */ System.out.println("=============== properties empty  ++++++++++++++++++++");
+            if (this.properties == null) {
+                System.out.println("=============== properties empty  ++++++++++++++++++++");
             }
-            /* 202 */ String propValue = this.properties.getProperty(key);
+            String propValue = this.properties.getProperty(key);
 
-            /* 204 */ System.out.println("key is: " + key);
-            /* 205 */ System.out.println("Property value is: " + propValue);
-            /* 206 */ return propValue;
+            System.out.println("key is: " + key);
+            System.out.println("Property value is: " + propValue);
+            return propValue;
         } catch (Exception ex) {
         }
-        /* 208 */ return null;
+        return null;
     }
 }

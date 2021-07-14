@@ -1,6 +1,6 @@
 package controllers.privilege;
 
-public abstract interface PrivilegeInterfaceController {
+public interface PrivilegeInterfaceController {
 
-    public abstract void save();
+    public void save();
 }

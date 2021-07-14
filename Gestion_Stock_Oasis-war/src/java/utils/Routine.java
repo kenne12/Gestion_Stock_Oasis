@@ -4,16 +4,17 @@ import java.util.ResourceBundle;
 import javax.faces.context.FacesContext;
 
 public class Routine {
-    /*  16 */ private ResourceBundle rs = ResourceBundle.getBundle("langues.langue", FacesContext.getCurrentInstance().getViewRoot().getLocale());
-    /*  17 */    private String titleNotify = "";
-    /*  18 */    private String message = "";
-    /*  19 */    private String iconMessage = "";
+
+    private ResourceBundle rs = ResourceBundle.getBundle("langues.langue", FacesContext.getCurrentInstance().getViewRoot().getLocale());
+    private String titleNotify = "";
+    private String message = "";
+    private String iconMessage = "";
     private String processus;
     private String showProcessus;
     private String progress;
     private String progressLabel;
     private String showProgress;
-    /*  25 */    private String converse = "false";
+    private String converse = "false";
 
     public String localizeMessage(String info) {
         String msg = info;
@@ -27,14 +28,14 @@ public class Routine {
     }
 
     public void catchException(Exception e, String contexte) {
-        /*  43 */ e.printStackTrace();
-        /*  44 */ this.message = "";
-        /*  45 */ this.message = (this.message + localizeMessage("contexte") + " : " + contexte + ", \n");
-        /*  46 */ this.message = (this.message + localizeMessage("message") + "  : " + e.getMessage() + ", \n");
-        /*  47 */ this.message = (this.message + localizeMessage("cause") + "     : " + e.getCause() + ", \n");
-        /*  48 */ this.message = (this.message + localizeMessage("class") + "   : " + e.getClass() + ", \n");
-        /*  49 */ this.iconMessage = "/resources/tool_images/error.png";
-        /*  50 */ this.titleNotify = localizeMessage("erreur");
+        e.printStackTrace();
+        this.message = "";
+        this.message = (this.message + localizeMessage("contexte") + " : " + contexte + ", \n");
+        this.message = (this.message + localizeMessage("message") + "  : " + e.getMessage() + ", \n");
+        this.message = (this.message + localizeMessage("cause") + "     : " + e.getCause() + ", \n");
+        this.message = (this.message + localizeMessage("class") + "   : " + e.getClass() + ", \n");
+        this.iconMessage = "/resources/tool_images/error.png";
+        this.titleNotify = localizeMessage("erreur");
     }
 
     public void feedBack(String type, String icon, String msg) {
@@ -44,25 +45,25 @@ public class Routine {
     }
 
     public String convert(String value) {
-        /*  60 */ if (value.equals("0")) {
-            /*  61 */ return "false";
+        if (value.equals("0")) {
+            return "false";
         }
-        /*  63 */ return "true";
+        return "true";
     }
 
     public void progressBarHandler(String operation, String state) {
-        /*  68 */ if (operation.equals("open")) {
-            /*  69 */ this.processus = localizeMessage(state);
-            /*  70 */ this.showProcessus = "true";
-            /*  71 */ this.showProgress = "true";
-            /*  72 */ this.progress = "0";
-            /*  73 */ this.progressLabel = "0%";
+        if (operation.equals("open")) {
+            this.processus = localizeMessage(state);
+            this.showProcessus = "true";
+            this.showProgress = "true";
+            this.progress = "0";
+            this.progressLabel = "0%";
         }
-        /*  75 */ if (operation.equals("progress")) {
+        if (operation.equals("progress")) {
             /*  76 */ this.progress = state;
             /*  77 */ this.progressLabel = (state + "%");
         }
-        /*  79 */ if (operation.equals("close")) {
+        if (operation.equals("close")) {
             /*  80 */ this.showProcessus = "false";
             /*  81 */ this.showProgress = "false";
         }
@@ -144,8 +145,3 @@ public class Routine {
         /* 158 */ this.converse = converse;
     }
 }
-
-/* Location:           I:\GESTION_STOCK\GESTION_STOCK-war_war\WEB-INF\classes\
- * Qualified Name:     utils.Routine
- * JD-Core Version:    0.6.2
- */
