@@ -37,6 +37,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Magasinarticle.findByQuantitevirtuelle", query = "SELECT m FROM Magasinarticle m WHERE m.quantitevirtuelle = :quantitevirtuelle"),
     @NamedQuery(name = "Magasinarticle.findByQuantitesecurite", query = "SELECT m FROM Magasinarticle m WHERE m.quantitesecurite = :quantitesecurite")})
 public class Magasinarticle implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -62,7 +63,8 @@ public class Magasinarticle implements Serializable {
     private List<Magasinlot> magasinlotList;
 
     public Magasinarticle() {
-        
+        idarticle = new Article();
+        idmagasin = new Magasin();
     }
 
     public Magasinarticle(Long idmagasinarticle) {
@@ -191,5 +193,5 @@ public class Magasinarticle implements Serializable {
     public String toString() {
         return "entities.Magasinarticle[ idmagasinarticle=" + idmagasinarticle + " ]";
     }
-    
+
 }

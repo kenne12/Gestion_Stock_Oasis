@@ -596,11 +596,11 @@ public class Entreedirecte1Controller extends AbstractEntreedirecte1Controller i
     public void updateTotaux() {
         try {
             this.cout_quantite = 0.0D;
-            if (this.lignelivraisonfournisseur.getQuantite() != null) {
-                if (this.lignelivraisonfournisseur.getUnite() != null) {
+            if (this.lignelivraisonfournisseur.getQuantite() != 0) {
+                if (this.lignelivraisonfournisseur.getUnite() != 0) {
                     this.lignelivraisonfournisseur.setQuantitemultiple(this.lignelivraisonfournisseur.getQuantite() * this.lignelivraisonfournisseur.getUnite());
                 }
-                if (this.lignelivraisonfournisseur.getPrixachat() != null) {
+                if (this.lignelivraisonfournisseur.getPrixachat() != 0) {
                     this.cout_quantite = (this.lignelivraisonfournisseur.getPrixachat() * this.lignelivraisonfournisseur.getQuantite());
                 }
             }

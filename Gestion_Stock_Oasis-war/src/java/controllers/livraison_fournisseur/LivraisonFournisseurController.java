@@ -216,19 +216,19 @@ public class LivraisonFournisseurController extends AbstractLivraisonFournisseur
                     /* 239 */ for (Lignelivraisonfournisseur llf : this.lignelivraisonfournisseurs) {
                         /* 240 */ llf.setIdlignelivraisonfournisseur(this.lignelivraisonfournisseurFacadeLocal.nextVal());
                         /* 241 */ llf.setIdlivraisonfournisseur(this.livraisonfournisseur);
-                        /* 242 */ llf.setQuantitemultiple(Double.valueOf(llf.getQuantite().doubleValue() * llf.getUnite().doubleValue()));
+                        /* 242 */ llf.setQuantitemultiple(Double.valueOf(llf.getQuantite() * llf.getUnite()));
                         /* 243 */ this.lignelivraisonfournisseurFacadeLocal.create(llf);
 
                         /* 245 */ llf.setIdlot(this.lotFacadeLocal.find(llf.getIdlot().getIdlot()));
 
-                        /* 247 */ llf.getIdlot().getIdarticle().setQuantitereduite(Double.valueOf(llf.getIdlot().getIdarticle().getQuantitereduite().doubleValue() + llf.getQuantitereduite().doubleValue()));
-                        /* 248 */ llf.getIdlot().getIdarticle().setQuantitestock(Double.valueOf(llf.getIdlot().getIdarticle().getQuantitestock().doubleValue() + llf.getQuantite().doubleValue()));
-                        /* 249 */ llf.getIdlot().getIdarticle().setQuantitemultiple(Double.valueOf(llf.getIdlot().getIdarticle().getQuantitemultiple().doubleValue() + llf.getQuantitemultiple().doubleValue()));
+                        /* 247 */ llf.getIdlot().getIdarticle().setQuantitereduite(Double.valueOf(llf.getIdlot().getIdarticle().getQuantitereduite() + llf.getQuantitereduite()));
+                        /* 248 */ llf.getIdlot().getIdarticle().setQuantitestock(Double.valueOf(llf.getIdlot().getIdarticle().getQuantitestock() + llf.getQuantite()));
+                        /* 249 */ llf.getIdlot().getIdarticle().setQuantitemultiple(Double.valueOf(llf.getIdlot().getIdarticle().getQuantitemultiple() + llf.getQuantitemultiple()));
                         /* 250 */ this.articleFacadeLocal.edit(llf.getIdlot().getIdarticle());
 
-                        /* 252 */ llf.getIdlot().setQuantitereduite(Double.valueOf(llf.getIdlot().getQuantitereduite().doubleValue() + llf.getQuantitereduite().doubleValue()));
-                        /* 253 */ llf.getIdlot().setQuantite(Double.valueOf(llf.getIdlot().getQuantite().doubleValue() + llf.getQuantite().doubleValue()));
-                        /* 254 */ llf.getIdlot().setQuantitemultiple(Double.valueOf(llf.getIdlot().getQuantitemultiple().doubleValue() + llf.getQuantitemultiple().doubleValue()));
+                        /* 252 */ llf.getIdlot().setQuantitereduite(Double.valueOf(llf.getIdlot().getQuantitereduite() + llf.getQuantitereduite()));
+                        /* 253 */ llf.getIdlot().setQuantite(Double.valueOf(llf.getIdlot().getQuantite() + llf.getQuantite()));
+                        /* 254 */ llf.getIdlot().setQuantitemultiple(Double.valueOf(llf.getIdlot().getQuantitemultiple() + llf.getQuantitemultiple()));
                         /* 255 */ this.lotFacadeLocal.edit(llf.getIdlot());
 
                         /* 257 */ Lignemvtstock lmvts = new Lignemvtstock();
@@ -481,7 +481,7 @@ public class LivraisonFournisseurController extends AbstractLivraisonFournisseur
         for (Lignelivraisonfournisseur llf : this.lignelivraisonfournisseurs) {
             /* 520 */ resultat += (llf.getIdlot().getIdarticle().getCoutachat() * llf.getQuantite());
             /* 521 */ this.lignelivraisonfournisseurs.get(i).setQuantitemultiple((llf.getQuantite() * llf.getUnite()));
-            /* 522 */ this.lignelivraisonfournisseurs.get(i).setQuantitereduite(((this.lignelivraisonfournisseurs.get(i)).getQuantitemultiple().doubleValue() / llf.getIdlot().getIdarticle().getUnite().doubleValue()));
+            /* 522 */ this.lignelivraisonfournisseurs.get(i).setQuantitereduite(((this.lignelivraisonfournisseurs.get(i)).getQuantitemultiple() / llf.getIdlot().getIdarticle().getUnite().doubleValue()));
             /* 523 */ i++;
         }
         return resultat;

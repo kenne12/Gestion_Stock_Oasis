@@ -13,7 +13,7 @@ public class AbstractFamilleController {
 
     @EJB
     protected FamilleFacadeLocal familleFacadeLocal;
-    protected Famille famille;
+    protected Famille famille = new Famille();
     protected List<Famille> familles = new ArrayList();
 
     @EJB

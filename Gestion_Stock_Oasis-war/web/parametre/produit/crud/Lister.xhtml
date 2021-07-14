@@ -30,7 +30,7 @@
                          selectionMode="single"
                          selection="#{articleController.article}">
 
-                <p:ajax event="rowSelect"   update=":ArticleListerForm:ArticleDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowSelect" update=":ArticleListerForm:ArticleDataTableContextMenu, :actionsForm"/>
                 <p:ajax event="rowUnselect" update=":ArticleListerForm:ArticleDataTableContextMenu, :actionsForm"/>
                 <p:ajax event="rowDblselect" onsuccess="document.getElementById('ArticleListerForm:viewButton').click();"/>
 

@@ -21,7 +21,9 @@ public class FamilleController extends AbstractFamilleController implements Seri
                 return;
             }
             
-            this.famille = new Famille();
+            famille = new Famille();
+            famille.setNom("-");
+            famille.setCode(Utilitaires.genererCodeArticle("F", familleFacadeLocal.nextValByIdstructure(SessionMBean.getParametrage().getId())));
             this.mode = "Create";
             RequestContext.getCurrentInstance().execute("PF('FamilleCreerDialog').show()");
         } catch (Exception e) {

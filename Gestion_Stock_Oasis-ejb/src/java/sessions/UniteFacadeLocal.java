@@ -26,4 +26,6 @@ public abstract interface UniteFacadeLocal {
     public List<Unite> findAllRange(int idMagasin);
 
     public List<Unite> findByStructure(int idStructure);
+
+    public Long nextValByIdstructure(int idStructure);
 }

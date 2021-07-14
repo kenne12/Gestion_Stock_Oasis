@@ -104,8 +104,7 @@ public class AbstractEntreedirecteController {
 
     protected Routine routine = new Routine();
 
-    protected Double cout_quantite = 0.0;
-    protected Double total = 0.0;
+    protected Double total = 0d;
 
     protected boolean perempted = false;
 
@@ -208,14 +207,6 @@ public class AbstractEntreedirecteController {
     public List<Famille> getFamilles() {
         this.familles = this.familleFacadeLocal.findAllRange(SessionMBean.getMagasin().getParametrage().getId());
         return this.familles;
-    }
-
-    public Double getCout_quantite() {
-        return this.cout_quantite;
-    }
-
-    public void setCout_quantite(Double cout_quantite) {
-        this.cout_quantite = cout_quantite;
     }
 
     public Double getTotal() {

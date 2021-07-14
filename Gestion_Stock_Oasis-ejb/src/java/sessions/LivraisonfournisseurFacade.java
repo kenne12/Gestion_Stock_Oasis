@@ -47,7 +47,7 @@ public class LivraisonfournisseurFacade extends AbstractFacade<Livraisonfourniss
 
     @Override
     public List<Livraisonfournisseur> findAllRange(int idMagasin, Date dateDebut, Date dateFin, boolean livraisonDirecte) {
-        return this.em.createQuery("SELECT l FROM Livraisonfournisseur l WHERE l.idmagasin.idmagasin=:idMagasin AND l.datelivraison BETWEEN :dateDebut AND :dateFin AND l.livraisondirecte=:livraisonDirecte ORDER BY l.datelivraison DESC")
+        return this.em.createQuery("SELECT l FROM Livraisonfournisseur l WHERE l.idmagasin.idmagasin=:idMagasin AND l.datelivraison BETWEEN :dateDebut AND :dateFin AND l.livraisondirecte=:livraisonDirecte ORDER BY l.idlivraisonfournisseur DESC , l.datelivraison DESC")
                 .setParameter("idMagasin", idMagasin)
                 .setParameter("dateDebut", dateDebut)
                 .setParameter("dateFin", dateFin)

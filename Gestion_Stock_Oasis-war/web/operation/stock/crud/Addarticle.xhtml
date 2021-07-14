@@ -13,7 +13,7 @@
                   modal="true" resizable="true"
                   appendTo="@(body)"
                   width="95%"
-                  height="580"
+                  height="600"
                   header="#{langue.ajouter_un_article}">
             <h:form id="AddarticleCreateForm">
 
@@ -28,7 +28,7 @@
                                          var="item"
                                          rowKey="#{item.idmagasinarticle}"
                                          paginator="true"
-                                         rows="8"
+                                         rows="12"
                                          rowsPerPageTemplate="10,20,30,40,50"
                                          selectionMode="single"
                                          emptyMessage="#{langue.tableau_vide}"
@@ -66,7 +66,7 @@
                             <h:panelGrid columns="3">
 
                                 <p:outputLabel value="#{langue.article}"/>
-                                <p:outputLabel value="#{entreedirecteController.libelle_article}"/>
+                                <p:outputLabel value="#{entreedirecteController.magasinarticle.idarticle.libelle}"/>
                                 <p:outputLabel value=""/>
 
                                 <p:outputLabel for="magasin_lot_id" value="#{langue.lot}"/>
@@ -78,7 +78,7 @@
 
                                 <p:outputLabel value="#{langue.numero_lot}" for="num_lot" />
                                 <h:panelGroup>
-                                    <p:inputText id="num_lot"  required="true" style="width: 150px;color: blue" value="#{entreedirecteController.lot.numero}">
+                                    <p:inputText id="num_lot" required="true" style="width: 150px;color: blue" value="#{entreedirecteController.lot.numero}">
                                         <p:ajax event="keyup" />
                                     </p:inputText>
                                     <p:commandButton ignoreAutoUpdate="true" partialSubmit="true" value="Generer" actionListener="#{entreedirecteController.generateLotNumber()}" update="num_lot,date_peremption"/>
@@ -96,6 +96,14 @@
                                     <p:ajax event="dateSelect" />
                                 </p:calendar>
                                 <p:message for="date_peremption"/>
+
+                                <p:outputLabel value="Mode" for="mode"/>
+                                <p:selectOneMenu required="true" id="mode" filter="true" filterMatchMode="contains" value="#{entreedirecteController.lignelivraisonfournisseur.modeVente}">
+                                    <f:selectItem itemLabel="VENTE_EN_GROS" itemValue="VENTE_EN_GROS"/>
+                                    <f:selectItem itemLabel="VENTE_EN_DETAIL" itemValue="VENTE_EN_DETAIL"/>
+                                    <p:ajax update="cu,qt,qpu,quantite,mt,unite" listener="#{entreedirecteController.updatePrixGrosAndDetail()}"/>
+                                </p:selectOneMenu>
+                                <p:message for="mode"/>
 
                                 <p:outputLabel value="#{langue.prix_unitaire}" for="cu" />
                                 <p:inputText id="cu" required="true" style="width: 100px" value="#{entreedirecteController.lignelivraisonfournisseur.prixachat}">
@@ -131,7 +139,7 @@
                                 <p:message for="qt"/>
 
                                 <p:outputLabel value="#{langue.montant_total}" for="mt" />
-                                <p:inputText id="mt" disabled="true" required="true" style="width: 150px" value="#{entreedirecteController.cout_quantite}">
+                                <p:inputText id="mt" disabled="true" required="true" style="width: 150px" value="#{entreedirecteController.lignelivraisonfournisseur.montantTotal}">
                                     <f:convertNumber />
                                     <p:ajax/>
                                 </p:inputText>

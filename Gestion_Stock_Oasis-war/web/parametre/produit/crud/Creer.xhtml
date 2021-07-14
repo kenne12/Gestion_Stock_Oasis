@@ -14,8 +14,23 @@
                   appendTo="@(body)" 
                   header="#{langue['Titre.Dlg.Creation']} : #{langue.article}" 
                   closeOnEscape="true"
-                  height="580px"
+                  height="600px"
                   width="80%">
+
+            <h:form id="form_btn">
+                <div class="row">
+                    <div class="col-md-12">
+                        <center>
+                            <p:commandButton value="Group" icon="ui-icon-plus" actionListener="#{familleController.prepareCreate()}" update=":FamilleCreerForm" />
+
+
+                            <p:commandButton value="Unité" icon="ui-icon-plus" actionListener="#{uniteController.prepareCreate()}" update=":UniteCreerForm" />
+
+                        </center>
+                    </div>
+                </div>
+                <br/>
+            </h:form>
 
             <h:form id="ArticleCreerForm">
                 <h:panelGroup id="display">
@@ -82,7 +97,7 @@
                                             <p:ajax update="prix_achat_detail,prix_vente_detail" listener="#{articleController.updatePrixDetail()}" />
                                         </p:inputText>
                                         <p:message for="prix"/>
-                                        
+
                                         <p:outputLabel value="#{langue.unite} En Gros" for="unite_en_gros"/>
                                         <p:selectOneMenu filter="true" filterMatchMode="contains" id="unite_en_gros" value="#{articleController.article.idunite.idunite}" required="#{langue.valeur_obligatoire}">
                                             <f:selectItem itemLabel="#{langue.choisir}" itemValue="0"/>
@@ -90,16 +105,16 @@
                                             <p:ajax/>
                                         </p:selectOneMenu>
                                         <p:message for="unite_en_gros"/>
-                                        
+
                                         <p:outputLabel value="Quantité de detail" for="qpu" />
                                         <p:inputText  id="qpu" value="#{articleController.article.unite}" required="true" 
                                                       style="width: 75px"
                                                       requiredMessage="#{langue.quantite_par_unite} : #{langue['Conv.ValeurRequise']}">
                                             <p:ajax update="prix_achat_detail,prix_vente_detail" listener="#{articleController.updatePrixDetail()}" />
                                         </p:inputText>
-                                        
+
                                         <p:message for="qpu" />
-                                                    
+
                                         <p:outputLabel value="#{langue.prix_achat} Détail" for="prix_achat_detail" />
                                         <p:inputText id="prix_achat_detail" value="#{articleController.article.prixAchatDetail}" required="true"
                                                      style="width: 120px"
@@ -115,7 +130,7 @@
                                             <p:ajax />
                                         </p:inputText>
                                         <p:message for="prix_vente_detail"/>
-                                        
+
                                         <p:outputLabel value="#{langue.unite} En Detail" for="unite_detail"/>
                                         <p:selectOneMenu filter="true" filterMatchMode="contains" id="unite_detail" value="#{articleController.article.idUniteDetail}" required="#{langue.valeur_obligatoire}">
                                             <f:selectItem itemLabel="#{langue.choisir}" itemValue="0"/>
@@ -147,7 +162,7 @@
                                             <p:ajax />
                                         </p:inputText>
                                         <p:message for="nb_jr_alerte"/> 
-                                                                                                              
+
                                         <p:outputLabel rendered="#{articleController.mode.equals('Edit')}" value="#{langue.etat}" for="etat"/>
                                         <h:selectBooleanCheckbox rendered="#{articleController.mode.equals('Edit')}" id="etat" value="#{articleController.article.etat}">
                                             <p:ajax />

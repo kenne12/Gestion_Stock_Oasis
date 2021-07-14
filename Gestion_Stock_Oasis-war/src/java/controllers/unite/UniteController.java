@@ -22,7 +22,8 @@ public class UniteController extends AbstractUniteController implements Serializ
                 return;
             }
 
-            this.unite = new Unite();
+            unite = new Unite();
+            unite.setCode(Utilitaires.genererCodeArticle("U", uniteFacadeLocal.nextValByIdstructure(SessionMBean.getParametrage().getId())));
             this.mode = "Create";
             RequestContext.getCurrentInstance().execute("PF('UniteCreerDialog').show()");
         } catch (Exception e) {
@@ -60,7 +61,7 @@ public class UniteController extends AbstractUniteController implements Serializ
                 this.unite.setDerniereModif(Date.from(Instant.now()));
                 this.uniteFacadeLocal.edit(this.unite);
                 this.unite = new Unite();
-                this.modifier = (this.detail = this.supprimer = (true));
+                this.modifier = this.detail = this.supprimer = true;
                 RequestContext.getCurrentInstance().execute("PF('UniteCreerDialog').hide()");
                 signalSuccess();
             } else {

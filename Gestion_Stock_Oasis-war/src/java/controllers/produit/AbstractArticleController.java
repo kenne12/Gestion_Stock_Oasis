@@ -255,7 +255,7 @@ public class AbstractArticleController {
     }
 
     public List<Unite> getUnites() {
-        this.unites = this.uniteFacadeLocal.findAll();
+        this.unites = this.uniteFacadeLocal.findByStructure(SessionMBean.getParametrage().getId());
         return this.unites;
     }
 

@@ -41,12 +41,17 @@ public class Lignelivraisonfournisseur implements Serializable {
     @NotNull
     private Long idlignelivraisonfournisseur;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    private Double quantite;
-    private Double tauxsatisfaction;
-    private Double quantitemultiple;
-    private Double unite;
-    private Double prixachat;
-    private Double quantitereduite;
+    private double quantite;
+    private double tauxsatisfaction;
+    private double quantitemultiple;
+    private double unite;
+    private double prixachat;
+    private double quantitereduite;
+    @Column(name = "montant_total")
+    private double montantTotal;
+    @Column(name = "prix_achat_detail")
+    private double prixAchatDetail;
+
     @JoinColumn(name = "idlignecommandefournisseur", referencedColumnName = "idlignecommandefournisseur")
     @ManyToOne(fetch = FetchType.LAZY)
     private Lignecommandefournisseur idlignecommandefournisseur;
@@ -81,52 +86,68 @@ public class Lignelivraisonfournisseur implements Serializable {
         this.idlignelivraisonfournisseur = idlignelivraisonfournisseur;
     }
 
-    public Double getQuantite() {
+    public double getQuantite() {
         return quantite;
     }
 
-    public void setQuantite(Double quantite) {
+    public void setQuantite(double quantite) {
         this.quantite = quantite;
     }
 
-    public Double getTauxsatisfaction() {
+    public double getTauxsatisfaction() {
         return tauxsatisfaction;
     }
 
-    public void setTauxsatisfaction(Double tauxsatisfaction) {
+    public void setTauxsatisfaction(double tauxsatisfaction) {
         this.tauxsatisfaction = tauxsatisfaction;
     }
 
-    public Double getQuantitemultiple() {
+    public double getQuantitemultiple() {
         return quantitemultiple;
     }
 
-    public void setQuantitemultiple(Double quantitemultiple) {
+    public void setQuantitemultiple(double quantitemultiple) {
         this.quantitemultiple = quantitemultiple;
     }
 
-    public Double getUnite() {
+    public double getUnite() {
         return unite;
     }
 
-    public void setUnite(Double unite) {
+    public void setUnite(double unite) {
         this.unite = unite;
     }
 
-    public Double getPrixachat() {
+    public double getPrixachat() {
         return prixachat;
     }
 
-    public void setPrixachat(Double prixachat) {
+    public void setPrixachat(double prixachat) {
         this.prixachat = prixachat;
     }
 
-    public Double getQuantitereduite() {
+    public double getQuantitereduite() {
         return quantitereduite;
     }
 
-    public void setQuantitereduite(Double quantitereduite) {
+    public void setQuantitereduite(double quantitereduite) {
         this.quantitereduite = quantitereduite;
+    }
+
+    public double getMontantTotal() {
+        return montantTotal;
+    }
+
+    public void setMontantTotal(double montantTotal) {
+        this.montantTotal = montantTotal;
+    }
+
+    public double getPrixAchatDetail() {
+        return prixAchatDetail;
+    }
+
+    public void setPrixAchatDetail(double prixAchatDetail) {
+        this.prixAchatDetail = prixAchatDetail;
     }
 
     public Lignecommandefournisseur getIdlignecommandefournisseur() {

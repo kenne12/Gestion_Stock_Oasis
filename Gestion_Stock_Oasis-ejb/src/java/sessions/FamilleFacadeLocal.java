@@ -7,21 +7,23 @@ import javax.ejb.Local;
 @Local
 public interface FamilleFacadeLocal {
 
-    public void create(Famille paramFamille);
+    public void create(Famille famille);
 
-    public void edit(Famille paramFamille);
+    public void edit(Famille famille);
 
-    public void remove(Famille paramFamille);
+    public void remove(Famille famille);
 
-    public Famille find(Object paramObject);
+    public Famille find(Object object);
 
     public List<Famille> findAll();
 
-    public List<Famille> findRange(int[] paramArrayOfInt);
+    public List<Famille> findRange(int[] arrayOfInt);
 
     public int count();
 
     public Long nextVal();
 
     public List<Famille> findAllRange(int idStructure);
+
+    public Long nextValByIdstructure(int idStructure);
 }

@@ -40,4 +40,17 @@ public class FamilleFacade extends AbstractFacade<Famille> implements FamilleFac
                 .setParameter("id", idStructure)
                 .getResultList();
     }
+    
+    @Override
+    public Long nextValByIdstructure(int idStructure) {
+        Query query = this.em.createQuery("SELECT MAX(f.idfamille) FROM Famille f WHERE f.parametrage.id=:idParametre")
+                .setParameter("idParametre", idStructure);
+        Long result = (Long) query.getSingleResult();
+        if (result == null) {
+            result = 1L;
+        } else {
+            result = (result + 1L);
+        }
+        return result;
+    }
 }

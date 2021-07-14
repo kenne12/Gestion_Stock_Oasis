@@ -48,6 +48,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Lot.findByQuantitevirtuelle", query = "SELECT l FROM Lot l WHERE l.quantitevirtuelle = :quantitevirtuelle"),
     @NamedQuery(name = "Lot.findByQuantitesecurite", query = "SELECT l FROM Lot l WHERE l.quantitesecurite = :quantitesecurite")})
 public class Lot implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -89,6 +90,7 @@ public class Lot implements Serializable {
     private List<Lignemvtstock> lignemvtstockList;
 
     public Lot() {
+        idarticle = new Article();
     }
 
     public Lot(Long idlot) {
@@ -301,5 +303,5 @@ public class Lot implements Serializable {
     public String toString() {
         return "entities.Lot[ idlot=" + idlot + " ]";
     }
-    
+
 }
