@@ -15,12 +15,6 @@
             </h:selectOneMenu> 
         </h:form>
 
-
-        <h:form id="data" >
-
-        </h:form>
-
-
         <h:form style="margin-top: 25px;">
             <center>
 
@@ -46,10 +40,361 @@
                 </h:panelGrid>
 
             </center>
-                     
         </h:form>
 
-        
+
+        <h:form id="data">
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            #{langue.tableau_de_bord_jour}
+                        </div>
+
+                        <div class="panel-body">
+
+                            <center>
+
+                                <p:panelGrid columns="2">
+
+                                    <h:outputLabel style="font-family: cambria ; font-size: 25px;color: black" value="#{langue.utilisateur_ouverture}"/>
+                                    <h:outputLabel style="font-family: cambria ; font-size: 25px; color: blueviolet" value="#{loginBean.journee.utilisateurOuverture.idpersonnel.nom} #{loginBean.journee.utilisateurOuverture.idpersonnel.prenom}"/>
+
+                                    <h:outputLabel style="font-family: cambria ; font-size: 25px;color: black" value="#{langue.date}" />
+                                    <h:outputLabel style="font-family: cambria ; font-size: 25px;color: blueviolet" value="#{loginBean.journee.dateJour}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                    </h:outputLabel>
+
+                                    <h:outputLabel style="font-family: cambria ; font-size: 25px;color: black" value="#{langue.heure_ouverture}" />
+                                    <h:outputLabel style="font-family: cambria ; font-size: 25px;color: blueviolet" value="#{loginBean.journee.heureOuverture}">
+                                        <f:convertDateTime pattern="HH:mm"/>
+                                    </h:outputLabel>
+
+                                    <h:outputLabel style="font-family: cambria ; font-size: 25px;color: black" value="#{langue.journee_ouverte} ?"/>
+                                    <h:selectBooleanCheckbox value="#{loginBean.journee.ouverte}" style="font-family: cambria ; font-size: 25px; color: blueviolet" disabled="true"/>
+
+                                    <h:outputLabel style="font-family: cambria ; font-size: 25px;color: black" value="#{langue.journee_cloturee} ?" />
+                                    <h:selectBooleanCheckbox value="#{loginBean.journee.fermee}" disabled="true"/>
+
+                                    <h:outputLabel style="font-family: cambria ; font-size: 25px;color: black" value="#{langue.heure_fermetture}" />
+                                    <h:outputLabel style="font-family: cambria ; font-size: 25px;color: blueviolet" value="#{loginBean.journee.heureFermetture}">
+                                        <f:convertDateTime pattern="HH:mm"/>
+                                    </h:outputLabel>
+
+                                    <h:outputLabel style="font-family: cambria ; font-size: 25px;color: black" value="#{langue.montant_fermetture}"/>
+                                    <h:outputLabel style="font-family: cambria ; font-size: 25px;color: blueviolet" value="#{loginBean.journee.montantVendu}">
+                                        <f:convertNumber/>
+                                    </h:outputLabel>
+
+                                    <h:outputLabel style="font-family: cambria ; font-size: 25px;color: black" value="#{langue.utilisateur_fermetture}"/>
+                                    <h:outputLabel style="font-family: cambria ; font-size: 25px;color: blueviolet" value="#{loginBean.findPersonnelFermetture()}"/>
+
+                                </p:panelGrid>
+
+                            </center> 
+
+                        </div>
+
+                        <div class="panel-footer">
+                            <center>
+                                <p:commandButton style="color: red" update=":SessionCreerForm,:FermettureCreerDlg,:FermettureCreerForm,:notify1" actionListener="#{loginBean.updateFermetture()}" value="#{langue.cloturer_journee}" icon="ui-icon-power"/>
+                            </center>                          
+                        </div>                
+                    </div>
+
+                </div>
+            </div>
+
+        </h:form>
+
+
+        <p:dialog id="FermettureCreerDlg" 
+                  widgetVar="FermettureCreerDialog" 
+                  modal="true" resizable="false" 
+                  appendTo="@(body)"
+                  closable="false"
+                  width="80%"
+                  height="600px"
+                  header="#{langue.etat_cloture_journee}">
+
+            <h:form id="FermettureCreerForm">
+
+                <p:messages id="growl" closable="true">
+                    <p:effect type="pulsate" event="load" delay="50" />
+                </p:messages>
+                
+                <h3 class="page-header">Recettes</h3>
+
+                <p:dataTable id="datalist"
+                             value="#{loginBean.livraisonclients}"
+                             var="item"
+                             rowKey="#{item.idlivraisonclient}"
+                             paginator="true"
+                             rows="10"
+                             rowsPerPageTemplate="10,20,30,40,50">
+     
+                    <p:column filterBy="#{item.code}" width="20%" style="text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.numero_facture}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.code}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{item.client.nom} #{item.client.prenom}" width="40%">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.client}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.client.nom} #{item.client.prenom}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{item.montant}" style="text-align: right;">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.montant_total}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.montant}">
+                            <f:convertNumber/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column filterBy="#{item.montantPaye}" style="text-align: right;">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.montant_paye}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.montantPaye}">
+                            <f:convertNumber/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column filterBy="#{item.reste}" style="text-align: right;">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.reste}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.reste}">
+                            <f:convertNumber/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:columnGroup type="footer">
+                        <p:row>
+                            <p:column colspan="2" style="text-align:right" footerText="#{langue.totaux}" />               
+                            <p:column style="text-align: right" footerText="#{loginBean.calculTotal()}" />
+                            <p:column style="text-align: right" footerText="#{loginBean.calculMontantRegle()}" />
+                            <p:column style="text-align: right" footerText="#{loginBean.calculMontantReste()}" />
+                        </p:row>
+                    </p:columnGroup>
+
+                </p:dataTable>
+                       
+                <h3 class="page-header">Transfert Sortant</h3>
+                       
+                <p:dataTable id="datalist_transfert"
+                             value="#{loginBean.livraisonclients}"
+                             var="item"
+                             rowKey="#{item.idlivraisonclient}"
+                             paginator="true"
+                             rows="10"
+                             rowsPerPageTemplate="10,20,30,40,50">
+     
+                    <p:column filterBy="#{item.code}" width="20%" style="text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.numero_facture}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.code}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{item.client.nom} #{item.client.prenom}" width="40%">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.client}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.client.nom} #{item.client.prenom}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{item.montant}" style="text-align: right;">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.montant_total}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.montant}">
+                            <f:convertNumber/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column filterBy="#{item.montantPaye}" style="text-align: right;">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.montant_paye}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.montantPaye}">
+                            <f:convertNumber/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column filterBy="#{item.reste}" style="text-align: right;">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.reste}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.reste}">
+                            <f:convertNumber/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:columnGroup type="footer">
+                        <p:row>
+                            <p:column colspan="2" style="text-align:right" footerText="#{langue.totaux}" />               
+                            <p:column style="text-align: right" footerText="#{loginBean.calculTotal()}" />
+                            <p:column style="text-align: right" footerText="#{loginBean.calculMontantRegle()}" />
+                            <p:column style="text-align: right" footerText="#{loginBean.calculMontantReste()}" />
+                        </p:row>
+                    </p:columnGroup>
+
+                </p:dataTable>
+                
+                
+                <h3 class="page-header">Approvisionnement</h3>
+                
+                <p:dataTable id="datalist_approvisionnement"
+                             value="#{loginBean.livraisonclients}"
+                             var="item"
+                             rowKey="#{item.idlivraisonclient}"
+                             paginator="true"
+                             rows="10"
+                             rowsPerPageTemplate="10,20,30,40,50">
+     
+                    <p:column filterBy="#{item.code}" width="20%" style="text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.numero_facture}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.code}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{item.client.nom} #{item.client.prenom}" width="40%">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.client}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.client.nom} #{item.client.prenom}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{item.montant}" style="text-align: right;">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.montant_total}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.montant}">
+                            <f:convertNumber/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column filterBy="#{item.montantPaye}" style="text-align: right;">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.montant_paye}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.montantPaye}">
+                            <f:convertNumber/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column filterBy="#{item.reste}" style="text-align: right;">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.reste}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.reste}">
+                            <f:convertNumber/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:columnGroup type="footer">
+                        <p:row>
+                            <p:column colspan="2" style="text-align:right" footerText="#{langue.totaux}" />               
+                            <p:column style="text-align: right" footerText="#{loginBean.calculTotal()}" />
+                            <p:column style="text-align: right" footerText="#{loginBean.calculMontantRegle()}" />
+                            <p:column style="text-align: right" footerText="#{loginBean.calculMontantReste()}" />
+                        </p:row>
+                    </p:columnGroup>
+
+                </p:dataTable>
+                       
+                <h3 class="page-header">Transfert entrant</h3>
+                
+                <p:dataTable id="datalist_transfert_entrant"
+                             value="#{loginBean.livraisonclients}"
+                             var="item"
+                             rowKey="#{item.idlivraisonclient}"
+                             paginator="true"
+                             rows="10"
+                             rowsPerPageTemplate="10,20,30,40,50">
+     
+                    <p:column filterBy="#{item.code}" width="20%" style="text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.numero_facture}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.code}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{item.client.nom} #{item.client.prenom}" width="40%">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.client}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.client.nom} #{item.client.prenom}"/>
+                    </p:column>
+
+                    <p:column filterBy="#{item.montant}" style="text-align: right;">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.montant_total}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.montant}">
+                            <f:convertNumber/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column filterBy="#{item.montantPaye}" style="text-align: right;">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.montant_paye}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.montantPaye}">
+                            <f:convertNumber/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column filterBy="#{item.reste}" style="text-align: right;">
+                        <f:facet name="header">
+                            <h:outputText value="#{langue.reste}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.reste}">
+                            <f:convertNumber/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:columnGroup type="footer">
+                        <p:row>
+                            <p:column colspan="2" style="text-align:right" footerText="#{langue.totaux}" />               
+                            <p:column style="text-align: right" footerText="#{loginBean.calculTotal()}" />
+                            <p:column style="text-align: right" footerText="#{loginBean.calculMontantRegle()}" />
+                            <p:column style="text-align: right" footerText="#{loginBean.calculMontantReste()}" />
+                        </p:row>
+                    </p:columnGroup>
+
+                </p:dataTable>
+                
+
+                <p:separator/>
+
+                <center>
+                    <p:commandButton oncomplete="PF('FermettureCreerDialog').hide()" 
+                                     partialSubmit="true" style="float: left"
+                                     value="#{langue.fermer}" 
+                                     update="FermettureCreerForm,:FermettureCreerDlg,growl,:data" 
+                                     icon="ui-icon-close"/>
+
+                    <p:commandButton oncomplete="PF('FermettureCreerDialog').hide()" 
+                                     partialSubmit="true" style="float: right" 
+                                     actionListener="#{loginBean.closeSession()}"
+                                     value="#{langue.valider}" 
+                                     update="FermettureCreerForm,:FermettureCreerDlg,:data,:notify1" icon="ui-icon-check"/>
+                </center>
+
+            </h:form>
+
+        </p:dialog>
+
 
         <p:dialog id="SessionCreerDlg" 
                   widgetVar="MenuCreerDialog" 
@@ -77,6 +422,18 @@
                         <f:selectItem itemLabel="#{langue.choisir}" itemValue="0" />
                         <f:selectItems value="#{loginBean.annees}" var="an" itemLabel="#{an.nom}" itemValue="#{an.idannee}" />
                     </p:selectOneMenu>
+                    
+                    <p:outputLabel for="mois" value="#{langue.mois}" />
+                    <p:selectOneMenu id="mois" filter="true" value="#{loginBean.anneeMois.idAnneeMois}">
+                        <f:selectItem itemLabel="#{langue.choisir}" itemValue="#{0}"/>
+                        <f:selectItems value="#{loginBean.anneeMoises}" var="item" itemLabel="#{item.idmois.nom}" itemValue="#{item.idAnneeMois}"/>
+                        <p:ajax update="date" listener="#{loginBean.updateCalendar()}"/>
+                    </p:selectOneMenu>
+
+                    <h:outputLabel for="date" value="#{langue.date}"/>                    
+                    <p:calendar id="date" value="#{loginBean.date}" mindate="#{loginBean.anneeMois.dateDebut}" maxdate="#{loginBean.anneeMois.dateFin}">
+                        <p:ajax event="dateSelect"/>
+                    </p:calendar>
                 </h:panelGrid>
 
                 <p:separator/>

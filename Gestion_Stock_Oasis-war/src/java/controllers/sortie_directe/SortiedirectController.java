@@ -187,12 +187,12 @@ public class SortiedirectController extends AbstractSortiedirectController imple
                 this.mvtstock.setMagasin("-");
                 this.mvtstockFacadeLocal.create(this.mvtstock);
 
-                String code = "F";
-                Long nextPayement = this.livraisonclientFacadeLocal.nextVal();
-                code = Utilitaires.genererCodeStock(code, nextPayement);
+                String code = "F-" + SessionMBean.getAnnee().getNom() + "-" + SessionMBean.getMois().getIdmois().getNom().toUpperCase().substring(0, 3);
+                Long nextFacture = this.livraisonclientFacadeLocal.nextVal(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getMois());
+                code = Utilitaires.genererCodeFacture(code, nextFacture);
 
                 this.livraisonclient.setCode(code);
-                this.livraisonclient.setIdlivraisonclient(nextPayement);
+                this.livraisonclient.setIdlivraisonclient(livraisonclientFacadeLocal.nextVal());
                 this.livraisonclient.setClient(this.client);
                 this.livraisonclient.setIdmagasin(this.magasin);
                 this.livraisonclient.setMontant(this.total);
@@ -222,7 +222,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
                     llc.setQuantitereduite(llc.getQuantitereduite());
                     llc.setIdlot(llc.getIdmagasinlot().getIdlot());
                     llc.setTauxsatisfaction(0d);
-                    if(llc.getModeVente().equals("VENTE_EN_DETAIL")){
+                    if (llc.getModeVente().equals("VENTE_EN_DETAIL")) {
                         llc.setPrixAchat(llc.getIdmagasinlot().getIdlot().getIdarticle().getPrixAchatDetail());
                         llc.setPrixVente(llc.getIdmagasinlot().getIdlot().getIdarticle().getPrixVenteDetail());
                     }
@@ -563,7 +563,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
 
             resultatTotal += resultat;
             this.lignelivraisonclients.get(i).setMontant(resultat);
-            
+
             if (lignelivraisonclients.get(i).getMarge() < 0) {
                 lignelivraisonclients.get(i).setMarge(0);
             }

@@ -1,5 +1,6 @@
 package sessions;
 
+import entities.AnneeMois;
 import entities.Livraisonclient;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +24,8 @@ public interface LivraisonclientFacadeLocal {
     public int count();
 
     public Long nextVal();
+
+    Long nextVal(int idMagasin, AnneeMois anneeMois);
 
     public List<Livraisonclient> findAllRange();
 

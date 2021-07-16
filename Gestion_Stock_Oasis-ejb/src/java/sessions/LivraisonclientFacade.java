@@ -1,5 +1,6 @@
 package sessions;
 
+import entities.AnneeMois;
 import entities.Livraisonclient;
 import java.util.Date;
 import java.util.List;
@@ -23,16 +24,47 @@ public class LivraisonclientFacade extends AbstractFacade<Livraisonclient> imple
         super(Livraisonclient.class);
     }
 
+    /*@Override
+     public Long nextVal2(){
+     Query query =  em.createQuery("SELECT l.idlivraisonclient, MAX(l.idlivraisonclient) FROM Livraisonclient l GROUP BY l.idlivraisonclient", Object[].class);
+      
+     if(query.getResultList().isEmpty()){
+     return 1L;
+     }
+     Long result = 0l;
+     query.getResultList().stream()
+     .forEach(e -> {
+              
+     result = (long) e[1];
+            
+     });
+     }*/
     @Override
     public Long nextVal() {
         Query query = this.em.createQuery("SELECT MAX(l.idlivraisonclient) FROM Livraisonclient l");
-        Long result = (Long) query.getSingleResult();
-        if (result == null) {
-            result = 1L;
+        List list = query.getResultList();
+        if (list.isEmpty()) {
+            return 1L;
         } else {
-            result = result + 1L;
+            return (Long) list.get(0) + 1;
         }
-        return result;
+    }
+
+    @Override
+    public Long nextVal(int idMagasin, AnneeMois anneeMois) {
+        try {
+            Query query = this.em.createQuery("SELECT COUNT(l.idlivraisonclient) FROM Livraisonclient l WHERE l.datelivraison BETWEEN :dateDebut AND :dateFin AND l.idmagasin.idmagasin=:idMagasin");
+            query.setParameter("dateDebut", anneeMois.getDateDebut()).setParameter("dateFin", anneeMois.getDateFin()).setParameter("idMagasin", idMagasin);
+            List list = query.getResultList();
+            if (list.isEmpty()) {
+                return 1L;
+            } else {
+                return (Long) list.get(0) + 1;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 1L;
+        }
     }
 
     @Override
@@ -65,7 +97,7 @@ public class LivraisonclientFacade extends AbstractFacade<Livraisonclient> imple
                 .setParameter("modePayement", "PAYE_A_CREDIT")
                 .getResultList();
     }
-    
+
     @Override
     public List<Livraisonclient> findByIdmagasin(int idMagasin) {
         return this.em.createQuery("SELECT l FROM Livraisonclient l WHERE l.idmagasin.idmagasin=:idMagasin ORDER BY l.idlivraisonclient DESC")

@@ -275,7 +275,7 @@ public class Utilitaires {
         }
         return code;
     }
-    
+
     public static String genererCodeArticle(String code, Long nextPayement) {
         if (nextPayement < 10L) {
             code = code + "000" + nextPayement.toString();
@@ -296,6 +296,23 @@ public class Utilitaires {
             code = code + "0" + nextPayement.toString();
         } else {
             code = code + "" + nextPayement.toString();
+        }
+        return code;
+    }
+
+    public static String genererCodeFacture(String code, Long nextPayement) {
+        if (nextPayement < 10L) {
+            code = code + "-00000" + nextPayement;
+        } else if (nextPayement >= 10L && nextPayement < 100L) {
+            code = code + "-0000" + nextPayement;
+        } else if (nextPayement >= 100L && nextPayement < 1000L) {
+            code = code + "-000" + nextPayement;
+        } else if (nextPayement >= 1000L && nextPayement < 10000L) {
+            code = code + "-00" + nextPayement;
+        } else if (nextPayement >= 10000L && nextPayement < 100000L) {
+            code = code + "-0" + nextPayement;
+        } else {
+            code = code + "-" + nextPayement;
         }
         return code;
     }

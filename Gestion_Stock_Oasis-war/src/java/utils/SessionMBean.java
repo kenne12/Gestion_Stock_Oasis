@@ -108,6 +108,14 @@ public class SessionMBean {
         }
         return null;
     }
+    
+    public static AnneeMois getDefaultMonth() {
+        HttpSession session = getSession();
+        if (session != null) {
+            return (AnneeMois) session.getAttribute("default_mois");
+        }
+        return null;
+    }
 
     public static List<Magasin> getMagasins() {
         HttpSession session = getSession();

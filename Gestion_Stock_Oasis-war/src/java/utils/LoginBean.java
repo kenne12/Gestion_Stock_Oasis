@@ -6,7 +6,6 @@ import entities.Journee;
 import entities.Livraisonclient;
 import entities.Magasin;
 import entities.Menu;
-import entities.Mouchard;
 import entities.Privilege;
 import entities.Utilisateur;
 import java.io.IOException;
@@ -33,7 +32,6 @@ import org.primefaces.model.chart.CategoryAxis;
 import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
-import sessions.JourneeFacadeLocal;
 import sessions.UtilisateurFacadeLocal;
 
 @ManagedBean(name = "loginBean")
@@ -44,15 +42,11 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
     private UtilisateurFacadeLocal utilisateurFacadeLocal;
     private Utilisateur utilisateur = new Utilisateur();
 
-    @EJB
-    private JourneeFacadeLocal journeeFacadeLocal;
-
     String sc = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
 
     @PostConstruct
     public void init() {
-        this.utilisateur = new Utilisateur();
-        this.utilisateur.setTheme("bootstrap");
+        utilisateur.setTheme("bootstrap");
         lineModel = new LineChartModel();
     }
 
@@ -70,50 +64,25 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
 
                     session.setAttribute("parametre", this.param);
 
-                    List<Privilege> privilegesTemp = this.privilegeFacadeLocal.findByUser(this.utilisateur.getIdutilisateur());
-                    List accesses = new ArrayList();
-                    List access = new ArrayList();
-
-                    for (Privilege p : privilegesTemp) {
-                        accesses.add(Long.valueOf(p.getIdmenu().getIdmenu()));
-                        String[] menus = p.getIdmenu().getRessource().split(";");
-                        for (String temp : menus) {
-                            if (!access.contains(temp)) {
-                                access.add(temp);
-                            }
-                        }
-                    }
-
-                    session.setAttribute("accesses", accesses);
-                    session.setAttribute("access", access);
-
                     this.magasins = Utilitaires.returMagasinByUser(magasinFacadeLocal, utilisateurmagasinFacadeLocal, utilisateur.getIdpersonnel());
                     if (Objects.equals(this.magasins.size(), 1)) {
                         this.magasin = this.magasins.get(0);
                         session.setAttribute("magasin", magasin);
                         List<Magasin> list = new ArrayList<>();
                         list.add(magasin);
-                        this.initJour(magasin);
                         session.setAttribute("magasins", list);
                     }
 
                     Annee an = anneeFacadeLocal.findOneDefault();
                     if (an != null) {
                         this.annee = an;
-                        session.setAttribute("annee", annee);
+                        anneeMoises = anneeMoisFacadeLocal.findByAnneeEtat(an.getIdannee(), true);
                     }
 
-                    this.intDefaultMonth(annee, session);
-
+                    filterDate(date);
                     this.annees = anneeFacadeLocal.findByEtat(true);
                     session.setAttribute("annees", annees);
-
-                    if (Objects.equals(this.magasins.size(), 1)) {
-                        this.showSessionPanel = false;
-                        initPrivilege();
-                    }
-                    //this.createLineModels();
-                    FacesContext.getCurrentInstance().getExternalContext().redirect(this.sc + "/index.html");
+                    redirect("/index.html");
                 } else {
                     JsfUtil.addWarningMessage("Compte bloqué ! contactez l'administrateur");
                 }
@@ -131,11 +100,11 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
     private void intDefaultMonth(Annee annee, HttpSession session) {
         AnneeMois defaultMonth = anneeMoisFacadeLocal.findDefaultMonthByIdannee(annee.getIdannee());
         if (defaultMonth != null) {
-            session.setAttribute("mois", defaultMonth);
+            session.setAttribute("default_mois", defaultMonth);
         }
     }
 
-    public void initPrivilege() {
+    public void initPrivilegeMap() {
         HttpSession session = SessionMBean.getSession();
         List allAccess = new ArrayList();
         for (Menu m : this.menuFacadeLocal.findAll()) {
@@ -147,7 +116,36 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
             }
         }
         session.setAttribute("allAccess", allAccess);
-        Utilitaires.saveOperation(this.mouchardFacadeLocal, "Connexion", this.utilisateur);
+    }
+
+    public void initUserPrivilege(int idUtilisateur, HttpSession session) {
+        List<Privilege> privilegesTemp = this.privilegeFacadeLocal.findByUser(idUtilisateur);
+        List accesses = new ArrayList();
+        List access = new ArrayList();
+
+        for (Privilege p : privilegesTemp) {
+            accesses.add(Long.valueOf(p.getIdmenu().getIdmenu()));
+            String[] menus = p.getIdmenu().getRessource().split(";");
+            for (String temp : menus) {
+                if (!access.contains(temp)) {
+                    access.add(temp);
+                }
+            }
+        }
+        session.setAttribute("accesses", accesses);
+        session.setAttribute("access", access);
+    }
+
+    private void filterDate(Date date) {
+        for (AnneeMois a : this.anneeMoises) {
+            try {
+                if ((a.getDateDebut().equals(date) || a.getDateDebut().before(date)) && (a.getDateFin().equals(date) || a.getDateFin().after(date))) {
+                    this.anneeMois = a;
+                    break;
+                }
+            } catch (Exception exception) {
+            }
+        }
     }
 
     public void finalizeSession() {
@@ -161,26 +159,45 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
             return;
         }
 
-        HttpSession session = SessionMBean.getSession();
+        if (anneeMois.getIdAnneeMois().equals(0)) {
+            JsfUtil.addWarningMessage("Sélectionner le mois");
+            return;
+        }
 
-        if (annees.size() > 1) {
+        anneeMois = anneeMoisFacadeLocal.find(anneeMois.getIdAnneeMois());
+        if (this.date.equals(this.anneeMois.getDateDebut()) || (this.date.after(this.anneeMois.getDateDebut()) && this.date.equals(this.anneeMois.getDateFin())) || this.date.before(this.anneeMois.getDateFin())) {
+
+            HttpSession session = SessionMBean.getSession();
             annee = anneeFacadeLocal.find(annee.getIdannee());
+
             session.setAttribute("annee", annee);
-            session.setAttribute("annees", annees);
-        }
+            session.setAttribute("mois", anneeMois);
+            session.setAttribute("date", date);
 
-        if (magasins.size() > 1) {
-            session.setAttribute("magasins", magasins);
-            magasin = magasinFacadeLocal.find(magasin.getIdmagasin());
-            session.setAttribute("magasin", magasin);
-        }
+            if (magasins.size() > 1) {
+                session.setAttribute("magasins", magasins);
+                magasin = magasinFacadeLocal.find(magasin.getIdmagasin());
+                session.setAttribute("magasin", magasin);
+            }
+            journee = initJour(magasin);
+            initPrivilegeMap();
+            this.intDefaultMonth(annee, session);
+            this.initUserPrivilege(utilisateur.getIdutilisateur(), session);
+            this.showSessionPanel = false;
+            Utilitaires.saveOperation(this.mouchardFacadeLocal, "Connexion", this.utilisateur);
 
-        this.initJour(magasin);
-        initPrivilege();
-        this.showSessionPanel = false;
+            redirect("/index.html");
+        }
     }
 
-    private void initJour(Magasin magasin) {
+    private void redirect(String link) {
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect(this.sc + link);
+        } catch (Exception e) {
+        }
+    }
+
+    private Journee initJour(Magasin magasin) {
         Journee journee = journeeFacadeLocal.findByIdMagasinDate(magasin.getIdmagasin(), new Date());
         if (journee == null) {
             journee = new Journee();
@@ -192,6 +209,19 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
             journee.setOuverte(true);
             journee.setFermee(false);
             journeeFacadeLocal.create(journee);
+        }
+        return journee;
+    }
+
+    public void updateCalendar() {
+        try {
+            if (this.anneeMois.getIdAnneeMois() != 0) {
+                this.anneeMois = this.anneeMoisFacadeLocal.find(this.anneeMois.getIdAnneeMois());
+                return;
+            }
+            JsfUtil.addErrorMessage("Veuillez sélectionner une année");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -208,12 +238,12 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
     public void updateFermetture() {
         try {
             if (Utilitaires.isAccess(40L)) {
+                livraisonclients = livraisonclientFacadeLocal.findByIdmagasinAndDate(SessionMBean.getMagasin().getIdmagasin(), date);
                 RequestContext.getCurrentInstance().execute("PF('FermettureCreerDialog').show()");
-            } else {
-                this.routine.feedBack("information", "/resources/tool_images/error.png", this.routine.localizeMessage("acces_refuse"));
-                RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
                 return;
             }
+            this.routine.feedBack("information", "/resources/tool_images/error.png", this.routine.localizeMessage("acces_refuse"));
+            RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
         } catch (Exception e) {
             this.routine.catchException(e, this.routine.localizeMessage("echec_operation"));
             RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
@@ -221,7 +251,6 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
     }
 
     public void deconnexion() {
-        Mouchard traceur = new Mouchard();
         Utilisateur user = SessionMBean.getUserAccount();
         Utilitaires.saveOperation(this.mouchardFacadeLocal, "Déconnexion", user);
         try {
@@ -357,6 +386,33 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
             e.printStackTrace();
             return new LineChartModel();
         }
+    }
+
+    public String findPersonnelFermetture() {
+        String result = "";
+        try {
+            if (this.journee.getUtilisateurFermetture() != null) {
+                Utilisateur u = this.utilisateurFacadeLocal.find(this.journee.getUtilisateurFermetture().getIdutilisateur());
+                if (u != null && u.getIdpersonnel() != null) {
+                    result = "" + u.getIdpersonnel().getNom() + " " + u.getIdpersonnel().getPrenom();
+                }
+            }
+        } catch (Exception e) {
+            result = "";
+        }
+        return result;
+    }
+
+    public void calculTotal() {
+
+    }
+
+    public void calculMontantRegle() {
+
+    }
+
+    public void calculMontantReste() {
+
     }
 
     public Utilisateur getUtilisateur() {

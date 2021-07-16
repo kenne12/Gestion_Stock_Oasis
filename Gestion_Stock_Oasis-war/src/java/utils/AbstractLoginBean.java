@@ -1,8 +1,13 @@
 package utils;
 
 import entities.Annee;
+import entities.AnneeMois;
+import entities.Journee;
+import entities.Livraisonclient;
+import entities.Livraisonfournisseur;
 import entities.Magasin;
 import entities.Parametrage;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,7 +15,9 @@ import javax.ejb.EJB;
 import org.primefaces.model.chart.LineChartModel;
 import sessions.AnneeFacadeLocal;
 import sessions.AnneeMoisFacadeLocal;
+import sessions.JourneeFacadeLocal;
 import sessions.LivraisonclientFacadeLocal;
+import sessions.LivraisonfournisseurFacadeLocal;
 import sessions.MagasinFacadeLocal;
 import sessions.MenuFacadeLocal;
 import sessions.MouchardFacadeLocal;
@@ -39,6 +46,8 @@ public class AbstractLoginBean {
 
     @EJB
     protected AnneeMoisFacadeLocal anneeMoisFacadeLocal;
+    protected AnneeMois anneeMois = new AnneeMois();
+    protected List<AnneeMois> anneeMoises = new ArrayList<>();
 
     @EJB
     protected MenuFacadeLocal menuFacadeLocal;
@@ -48,6 +57,15 @@ public class AbstractLoginBean {
 
     @EJB
     protected LivraisonclientFacadeLocal livraisonclientFacadeLocal;
+    protected List<Livraisonclient> livraisonclients = new ArrayList<>();
+
+    @EJB
+    protected LivraisonfournisseurFacadeLocal livraisonfournisseurFacadeLocal;
+    protected List<Livraisonfournisseur> livraisonfournisseurs = new ArrayList<>();
+
+    @EJB
+    protected JourneeFacadeLocal journeeFacadeLocal;
+    protected Journee journee = new Journee();
 
     @EJB
     protected MouchardFacadeLocal mouchardFacadeLocal;
@@ -55,7 +73,7 @@ public class AbstractLoginBean {
 
     protected LineChartModel lineModel;
 
-    protected Date date = new Date();
+    protected Date date = Date.from(Instant.now());
 
     protected String confirmPassword = "";
 
@@ -142,6 +160,34 @@ public class AbstractLoginBean {
 
     public void setLineModel(LineChartModel lineModel) {
         this.lineModel = lineModel;
+    }
+
+    public Journee getJournee() {
+        return journee;
+    }
+
+    public void setJournee(Journee journee) {
+        this.journee = journee;
+    }
+
+    public List<Livraisonclient> getLivraisonclients() {
+        return livraisonclients;
+    }
+
+    public AnneeMois getAnneeMois() {
+        return anneeMois;
+    }
+
+    public void setAnneeMois(AnneeMois anneeMois) {
+        this.anneeMois = anneeMois;
+    }
+
+    public List<AnneeMois> getAnneeMoises() {
+        return anneeMoises;
+    }
+
+    public List<Livraisonfournisseur> getLivraisonfournisseurs() {
+        return livraisonfournisseurs;
     }
 
 }

@@ -26,13 +26,12 @@ public class LignelivraisonclientFacade extends AbstractFacade<Lignelivraisoncli
     @Override
     public Long nextVal() {
         Query query = this.em.createQuery("SELECT MAX(l.idlignelivraisonclient) FROM Lignelivraisonclient l");
-        Long result = (Long) query.getSingleResult();
-        if (result == null) {
-            result = 1L;
-        } else {
-            result += 1L;
+        List list = query.getResultList();
+        if(list.isEmpty()){
+            return 1L;
+        }else{
+            return (Long) list.get(0) + 1l;
         }
-        return result;
     }
 
     @Override
