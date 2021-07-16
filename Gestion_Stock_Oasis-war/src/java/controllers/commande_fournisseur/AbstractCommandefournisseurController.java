@@ -171,11 +171,7 @@ public class AbstractCommandefournisseurController {
     }
 
     public List<Commandefournisseur> getCommandefournisseurs() {
-        try {
-            this.commandefournisseurs = this.commandefournisseurFacadeLocal.findAllRange();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        this.commandefournisseurs = this.commandefournisseurFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin() , SessionMBean.getMois().getDateDebut() , SessionMBean.getMois().getDateFin());
         return this.commandefournisseurs;
     }
 

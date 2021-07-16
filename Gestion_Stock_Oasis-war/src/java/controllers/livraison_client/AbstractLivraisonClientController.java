@@ -133,7 +133,7 @@ public class AbstractLivraisonClientController {
     }
 
     public List<Livraisonclient> getLivraisonclients() {
-        this.livraisonclients = this.livraisonclientFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getAnnee().getDateDebut(), SessionMBean.getAnnee().getDateFin());
+        this.livraisonclients = this.livraisonclientFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getMois().getDateDebut(), SessionMBean.getMois().getDateFin());
         return this.livraisonclients;
     }
 

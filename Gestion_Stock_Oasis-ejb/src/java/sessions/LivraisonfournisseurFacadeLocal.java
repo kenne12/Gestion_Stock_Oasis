@@ -1,5 +1,6 @@
 package sessions;
 
+import entities.AnneeMois;
 import entities.Livraisonfournisseur;
 import java.util.Date;
 import java.util.List;
@@ -24,11 +25,13 @@ public interface LivraisonfournisseurFacadeLocal {
 
     public Long nextVal();
 
-    public List<Livraisonfournisseur> findAllRange();
+    Long nextVal(int idMagasin, AnneeMois anneeMois);
 
-    public List<Livraisonfournisseur> findAllRange(boolean livraisonDirecte);
+    public List<Livraisonfournisseur> findAllRange(int idMagasin);
+
+    public List<Livraisonfournisseur> findAllRange(int idMagasin, boolean livraisonDirecte);
 
     public List<Livraisonfournisseur> findAllRange(int idMagasin, Date dateDebut, Date dateFin, boolean livraisonDirecte);
-    
+
     List<Livraisonfournisseur> findAllRange(int idMagasin, Date dateDebut, Date dateFin);
 }

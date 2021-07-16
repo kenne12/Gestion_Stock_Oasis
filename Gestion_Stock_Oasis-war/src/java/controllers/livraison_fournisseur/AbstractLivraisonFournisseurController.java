@@ -195,10 +195,6 @@ public class AbstractLivraisonFournisseurController {
         return this.commandefournisseurs;
     }
 
-    public void setCommandefournisseurs(List<Commandefournisseur> commandefournisseurs) {
-        this.commandefournisseurs = commandefournisseurs;
-    }
-
     public Lignecommandefournisseur getLignecommandefournisseur() {
         return this.lignecommandefournisseur;
     }
@@ -209,10 +205,6 @@ public class AbstractLivraisonFournisseurController {
 
     public List<Lignecommandefournisseur> getLignecommandefournisseurs() {
         return this.lignecommandefournisseurs;
-    }
-
-    public void setLignecommandefournisseurs(List<Lignecommandefournisseur> lignecommandefournisseurs) {
-        this.lignecommandefournisseurs = lignecommandefournisseurs;
     }
 
     public Livraisonfournisseur getLivraisonfournisseur() {
@@ -226,7 +218,7 @@ public class AbstractLivraisonFournisseurController {
 
     public List<Livraisonfournisseur> getLivraisonfournisseurs() {
         try {
-            this.livraisonfournisseurs = this.livraisonfournisseurFacadeLocal.findAllRange(false);
+            this.livraisonfournisseurs = this.livraisonfournisseurFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), false);
         } catch (Exception e) {
             e.printStackTrace();
         }

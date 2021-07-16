@@ -43,7 +43,6 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
             }
             RequestContext.getCurrentInstance().execute("PF('CommandeCreateDialog').show()");
             this.mode = "Create";
-            //this.magasin = new Magasin();
             this.magasinarticle = new Magasinarticle();
 
             this.client = new Client(0);
@@ -160,7 +159,6 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
             this.lignedemande.setMontant(this.magasinarticle.getIdarticle().getPrixunit());
             this.lignedemande.setQuantite(1.0);
             this.lignedemande.setQuantitemultiple(1.0);
-            //this.magasin = this.magasinarticle.getIdmagasin();
             this.libelle_article = this.magasinarticle.getIdarticle().getLibelle();
             this.lignedemande.setMarge(0);
             this.lignedemande.setPrixAchat(this.magasinarticle.getIdarticle().getCoutachat());
@@ -177,16 +175,19 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
 
                     updateTotal();
 
-                    this.demande.setIddemande(this.demandeFacadeLocal.nextVal());
+                    String code = "C-" + SessionMBean.getAnnee().getNom() + "-" + SessionMBean.getMois().getIdmois().getNom().toUpperCase().substring(0, 3);
+                    Long nextCommande = demandeFacadeLocal.nextVal(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getMois());
+                    code = Utilitaires.genererCodeDemande(code, nextCommande);
+
                     this.demande.setClient(this.client);
-                    this.demande.setTauxsatisfaction(0.0);
-                    this.demande.setCode("D" + Utilitaires.genererCodeDemande("", this.demande.getIddemande()));
+                    this.demande.setTauxsatisfaction(0d);
+                    this.demande.setCode(code);
                     this.demande.setMagasin(magasin);
                     this.demande.setIdUtilisateur(SessionMBean.getUserAccount().getIdutilisateur());
-                    this.demandeFacadeLocal.create(this.demande);
-                    Utilitaires.saveOperation(this.mouchardFacadeLocal, "Enregistrement de la commande : " + this.client.getNom() + " ; Code : " + this.demande.getCode(), SessionMBean.getUserAccount());
 
                     this.ut.begin();
+                    this.demande.setIddemande(this.demandeFacadeLocal.nextVal());
+                    this.demandeFacadeLocal.create(this.demande);
 
                     for (Lignedemande ld : this.lignedemandes) {
                         ld.setIdlignedemande(this.lignedemandeFacadeLocal.nextVal());
@@ -202,7 +203,7 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
                     Utilitaires.saveOperation(this.mouchardFacadeLocal, "Enregistrement de la commande : " + this.demande.getCode(), SessionMBean.getUserAccount());
 
                     this.ut.commit();
-                    this.demande = null;
+                    this.demande = new Demande();
                     this.lignedemandes.clear();
                     this.detail = this.supprimer = this.modifier = this.imprimer = true;
                     JsfUtil.addSuccessMessage(message);
@@ -212,7 +213,7 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
                 } else {
                     notifyError("liste_magasinarticle_vide");
                 }
-            } else if (this.client != null) {
+            } else if (this.demande != null) {
                 this.ut.begin();
 
                 this.client = clientFacadeLocal.find(client.getIdclient());

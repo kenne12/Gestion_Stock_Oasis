@@ -1,5 +1,6 @@
 package sessions;
 
+import entities.AnneeMois;
 import entities.Demande;
 import java.util.Date;
 import java.util.List;
@@ -33,6 +34,23 @@ public class DemandeFacade extends AbstractFacade<Demande> implements DemandeFac
             result = result + 1L;
         }
         return result;
+    }
+    
+    @Override
+    public Long nextVal(int idMagasin, AnneeMois anneeMois) {
+        try {
+            Query query = this.em.createQuery("SELECT COUNT(d.iddemande) FROM Demande d WHERE d.datedemande BETWEEN :dateDebut AND :dateFin AND d.magasin.idmagasin =:idMagasin");
+            query.setParameter("dateDebut", anneeMois.getDateDebut()).setParameter("dateFin", anneeMois.getDateFin()).setParameter("idMagasin", idMagasin);
+            List list = query.getResultList();
+            if (list.isEmpty()) {
+                return 1L;
+            } else {
+                return ((Long) list.get(0)) + 1;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 1L;
+        }
     }
 
     @Override

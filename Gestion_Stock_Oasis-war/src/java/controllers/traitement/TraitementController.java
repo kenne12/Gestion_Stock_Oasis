@@ -370,18 +370,18 @@ public class TraitementController extends AbstractTraitementController implement
                     /* 402 */ RequestContext.getCurrentInstance().execute("PF('LivraisonClientCreateDialog').hide()");
                     /* 403 */ this.demandes_1 = this.demandeFacadeLocal.findAllRange();
                 } else {
-                    /* 405 */ notifyError("liste_article_vide");
+                    notifyError("liste_article_vide");
                 }
             } else if (this.livraisonclient != null) {
                 this.ut.commit();
                 this.lignedemandes.clear();
-                /* 412 */ this.demandes.clear();
-                /* 413 */ this.demande = new Demande();
-                /* 414 */ this.livraisonclient = null;
-                /* 415 */ this.supprimer = (this.modifier = this.imprimer = Boolean.valueOf(true));
+                this.demandes.clear();
+                this.demande = new Demande();
+                this.livraisonclient = null;
+                this.supprimer = (this.modifier = this.imprimer = Boolean.valueOf(true));
 
-                /* 417 */ notifySuccess();
-                /* 418 */ RequestContext.getCurrentInstance().execute("PF('LignelivraisonclientCreateDialog').hide()");
+                notifySuccess();
+                RequestContext.getCurrentInstance().execute("PF('LignelivraisonclientCreateDialog').hide()");
             } else {
                 notifyError("not_row_selected");
             }

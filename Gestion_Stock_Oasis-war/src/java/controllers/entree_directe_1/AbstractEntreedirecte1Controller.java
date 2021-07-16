@@ -121,19 +121,19 @@ public class AbstractEntreedirecte1Controller {
     }
 
     public void setArticle(Article article) {
-        /* 134 */ this.article = article;
+        this.article = article;
     }
 
     public List<Article> getArticles() {
-        /* 138 */ return this.articles;
+        return this.articles;
     }
 
     public void setArticles(List<Article> articles) {
-        /* 142 */ this.articles = articles;
+        this.articles = articles;
     }
 
     public Fournisseur getFournisseur() {
-        /* 146 */ return this.fournisseur;
+        return this.fournisseur;
     }
 
     public void setFournisseur(Fournisseur fournisseur) {
@@ -155,12 +155,8 @@ public class AbstractEntreedirecte1Controller {
     }
 
     public List<Livraisonfournisseur> getLivraisonfournisseurs() {
-        this.livraisonfournisseurs = this.livraisonfournisseurFacadeLocal.findAllRange(true);
+        this.livraisonfournisseurs = this.livraisonfournisseurFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), true);
         return this.livraisonfournisseurs;
-    }
-
-    public void setLivraisonfournisseurs(List<Livraisonfournisseur> livraisonfournisseurs) {
-        this.livraisonfournisseurs = livraisonfournisseurs;
     }
 
     public Lignelivraisonfournisseur getLignelivraisonfournisseur() {
@@ -192,19 +188,19 @@ public class AbstractEntreedirecte1Controller {
     }
 
     public Boolean getImprimer() {
-        /* 221 */ return this.imprimer;
+        return this.imprimer;
     }
 
     public Boolean getSupprimer() {
-        /* 229 */ return this.supprimer;
+        return this.supprimer;
     }
 
     public Famille getFamille() {
-        /* 237 */ return this.famille;
+        return this.famille;
     }
 
     public void setFamille(Famille famille) {
-        /* 241 */ this.famille = famille;
+        this.famille = famille;
     }
 
     public List<Famille> getFamilles() {
@@ -221,7 +217,7 @@ public class AbstractEntreedirecte1Controller {
     }
 
     public Double getTotal() {
-        /* 262 */ return this.total;
+        return this.total;
     }
 
     public void setTotal(Double total) {

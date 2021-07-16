@@ -29,7 +29,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
 
     @PostConstruct
     private void init() {
-        this.livraisonclients = this.livraisonclientFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getAnnee().getDateDebut(), SessionMBean.getAnnee().getDateFin());
+        this.livraisonclients = this.livraisonclientFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getMois().getDateDebut(), SessionMBean.getMois().getDateFin());
     }
 
     public void updateCalculTva() {
@@ -192,7 +192,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
                 code = Utilitaires.genererCodeFacture(code, nextFacture);
 
                 this.livraisonclient.setCode(code);
-                this.livraisonclient.setIdlivraisonclient(livraisonclientFacadeLocal.nextVal());
+                
                 this.livraisonclient.setClient(this.client);
                 this.livraisonclient.setIdmagasin(this.magasin);
                 this.livraisonclient.setMontant(this.total);
@@ -213,6 +213,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
                     livraisonclient.setReste(livraisonclient.getMontantTtc() - livraisonclient.getAvanceInitiale());
                 }
                 this.livraisonclient.setIdmagasin(SessionMBean.getMagasin());
+                this.livraisonclient.setIdlivraisonclient(livraisonclientFacadeLocal.nextVal());
                 this.livraisonclientFacadeLocal.create(this.livraisonclient);
 
                 for (Lignelivraisonclient llc : this.lignelivraisonclients) {

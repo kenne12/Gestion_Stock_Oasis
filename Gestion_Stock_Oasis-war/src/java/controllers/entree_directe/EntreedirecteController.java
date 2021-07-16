@@ -30,7 +30,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
     @PostConstruct
     private void init() {
         this.magasins = SessionMBean.getMagasins();
-        this.livraisonfournisseurs = this.livraisonfournisseurFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getAnnee().getDateDebut(), SessionMBean.getAnnee().getDateFin(), true);
+        this.livraisonfournisseurs = this.livraisonfournisseurFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getMois().getDateDebut(), SessionMBean.getMois().getDateFin(), true);
     }
 
     public void prepareCreate() {
@@ -213,10 +213,9 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                     this.mvtstock.setDatemvt(this.livraisonfournisseur.getDatelivraison());
                     this.mvtstockFacadeLocal.create(this.mvtstock);
 
-                    this.livraisonfournisseur.setIdlivraisonfournisseur(this.livraisonfournisseurFacadeLocal.nextVal());
-                    String code = "LIV";
-                    Long nextPayement = this.livraisonfournisseur.getIdlivraisonfournisseur();
-                    code = Utilitaires.genererCodeStock(code, nextPayement);
+                    String code = "S-" + SessionMBean.getAnnee().getNom() + "-" + SessionMBean.getMois().getIdmois().getNom().toUpperCase().substring(0, 3);
+                    Long nextStock = livraisonfournisseurFacadeLocal.nextVal(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getMois());
+                    code = Utilitaires.genererCodeStock(code, nextStock);
 
                     this.livraisonfournisseur.setCode(code);
                     this.livraisonfournisseur.setIdfournisseur(this.fournisseur);
@@ -225,6 +224,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                     this.livraisonfournisseur.setIdmvtstock(this.mvtstock);
                     this.livraisonfournisseur.setIdmagasin(SessionMBean.getMagasin());
                     this.livraisonfournisseur.setIdUtilisateur(SessionMBean.getUserAccount().getIdutilisateur());
+                    this.livraisonfournisseur.setIdlivraisonfournisseur(livraisonfournisseurFacadeLocal.nextVal());
                     this.livraisonfournisseurFacadeLocal.create(this.livraisonfournisseur);
                     double qteAvant = 0;
                     for (Lignelivraisonfournisseur llf : this.lignelivraisonfournisseurs) {

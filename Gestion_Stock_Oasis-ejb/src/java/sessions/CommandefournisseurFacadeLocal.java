@@ -1,29 +1,35 @@
 package sessions;
 
+import entities.AnneeMois;
 import entities.Commandefournisseur;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
 
 @Local
 public interface CommandefournisseurFacadeLocal {
 
-    public void create(Commandefournisseur paramCommandefournisseur);
+    public void create(Commandefournisseur commandefournisseur);
 
-    public void edit(Commandefournisseur paramCommandefournisseur);
+    public void edit(Commandefournisseur commandefournisseur);
 
-    public void remove(Commandefournisseur paramCommandefournisseur);
+    public void remove(Commandefournisseur commandefournisseur);
 
-    public Commandefournisseur find(Object paramObject);
+    public Commandefournisseur find(Object object);
 
     public List<Commandefournisseur> findAll();
 
-    public List<Commandefournisseur> findRange(int[] paramArrayOfInt);
+    public List<Commandefournisseur> findRange(int[] arrayOfInt);
 
     public int count();
 
     public Long nextVal();
 
-    public List<Commandefournisseur> findAllRange();
+    Long nextVal(int idMagasin, AnneeMois anneeMois);
 
-    public List<Commandefournisseur> findByLivre(boolean paramBoolean);
+    public List<Commandefournisseur> findAllRange(int idMagasin);
+
+    List<Commandefournisseur> findAllRange(int idMagasin, Date dateDebut, Date dateFin);
+
+    public List<Commandefournisseur> findByLivre(int idMagasin, boolean livre);
 }

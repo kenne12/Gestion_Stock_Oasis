@@ -73,6 +73,10 @@ public class Commandefournisseur implements Serializable {
     @Column(name = "idutilisateur")
     private int idUtilisateur;
 
+    @JoinColumn(name = "idmagasin", referencedColumnName = "idmagasin")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Magasin magasin;
+
     public Commandefournisseur() {
     }
 
@@ -158,6 +162,14 @@ public class Commandefournisseur implements Serializable {
 
     public void setIdUtilisateur(int idUtilisateur) {
         this.idUtilisateur = idUtilisateur;
+    }
+
+    public Magasin getMagasin() {
+        return magasin;
+    }
+
+    public void setMagasin(Magasin magasin) {
+        this.magasin = magasin;
     }
 
     @XmlTransient

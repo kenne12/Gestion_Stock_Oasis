@@ -323,9 +323,10 @@ public class LivraisonClientController extends AbstractLivraisonClientController
                     this.mvtstock.setType(" ");
                     this.mvtstockFacadeLocal.create(this.mvtstock);
 
-                    String code = "LIV";
-                    this.livraisonclient.setIdlivraisonclient(this.livraisonclientFacadeLocal.nextVal());
-                    code = Utilitaires.genererCodeDemande(code, this.livraisonclient.getIdlivraisonclient());
+                    String code = "F-" + SessionMBean.getAnnee().getNom() + "-" + SessionMBean.getMois().getIdmois().getNom().toUpperCase().substring(0, 3);
+                    Long nextFacture = this.livraisonclientFacadeLocal.nextVal(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getMois());
+                    code = Utilitaires.genererCodeFacture(code, nextFacture);
+
                     this.livraisonclient.setCode(code);
                     this.livraisonclient.setMontant(this.total);
                     this.livraisonclient.setLivraisondirecte(false);
@@ -345,6 +346,7 @@ public class LivraisonClientController extends AbstractLivraisonClientController
                         livraisonclient.setMontantPaye(livraisonclient.getAvanceInitiale());
                     }
 
+                    this.livraisonclient.setIdlivraisonclient(this.livraisonclientFacadeLocal.nextVal());
                     this.livraisonclient.setIdmagasin(demande.getMagasin());
                     this.livraisonclientFacadeLocal.create(this.livraisonclient);
 

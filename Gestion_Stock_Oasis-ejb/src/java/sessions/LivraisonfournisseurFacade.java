@@ -1,5 +1,6 @@
 package sessions;
 
+import entities.AnneeMois;
 import entities.Livraisonfournisseur;
 import java.util.Date;
 import java.util.List;
@@ -26,23 +27,43 @@ public class LivraisonfournisseurFacade extends AbstractFacade<Livraisonfourniss
     @Override
     public Long nextVal() {
         Query query = this.em.createQuery("SELECT MAX(l.idlivraisonfournisseur) FROM Livraisonfournisseur l");
-        Long result = (Long) query.getSingleResult();
-        if (result == null) {
-            result = 1L;
+        List list = query.getResultList();
+        if (list.isEmpty()) {
+            return 1L;
         } else {
-            result = (result + 1L);
+            return ((Long) list.get(0)) + 1;
         }
-        return result;
     }
 
     @Override
-    public List<Livraisonfournisseur> findAllRange() {
-        return this.em.createQuery("SELECT l FROM Livraisonfournisseur l ORDER BY l.datelivraison DESC").getResultList();
+    public Long nextVal(int idMagasin, AnneeMois anneeMois) {
+        try {
+            Query query = this.em.createQuery("SELECT COUNT(l.idlivraisonfournisseur) FROM Livraisonfournisseur l WHERE l.datelivraison BETWEEN :dateDebut AND :dateFin AND l.idmagasin.idmagasin=:idMagasin");
+            query.setParameter("dateDebut", anneeMois.getDateDebut()).setParameter("dateFin", anneeMois.getDateFin()).setParameter("idMagasin", idMagasin);
+            List list = query.getResultList();
+            if (list.isEmpty()) {
+                return 1L;
+            } else {
+                return ((Long) list.get(0)) + 1;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 1L;
+        }
     }
 
     @Override
-    public List<Livraisonfournisseur> findAllRange(boolean livraisonDirecte) {
-        return this.em.createQuery("SELECT l FROM Livraisonfournisseur l WHERE l.livraisondirecte=:livraisonDirecte ORDER BY l.datelivraison DESC").setParameter("livraisonDirecte", livraisonDirecte).getResultList();
+    public List<Livraisonfournisseur> findAllRange(int idMagasin) {
+        return this.em.createQuery("SELECT l FROM Livraisonfournisseur l ORDER BY l.idlivraisonfournisseur DESC, l.datelivraison DESC")
+                .setParameter("idMagasin", idMagasin)
+                .getResultList();
+    }
+
+    @Override
+    public List<Livraisonfournisseur> findAllRange(int idMagasin, boolean livraisonDirecte) {
+        return this.em.createQuery("SELECT l FROM Livraisonfournisseur l WHERE l.livraisondirecte=:livraisonDirecte AND l.idmagasin.idmagasin=:idMagasin ORDER BY l.datelivraison DESC")
+                .setParameter("livraisonDirecte", livraisonDirecte).setParameter("idMagasin", idMagasin)
+                .getResultList();
     }
 
     @Override

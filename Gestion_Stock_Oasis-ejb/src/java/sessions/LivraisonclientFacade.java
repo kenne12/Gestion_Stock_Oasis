@@ -24,21 +24,6 @@ public class LivraisonclientFacade extends AbstractFacade<Livraisonclient> imple
         super(Livraisonclient.class);
     }
 
-    /*@Override
-     public Long nextVal2(){
-     Query query =  em.createQuery("SELECT l.idlivraisonclient, MAX(l.idlivraisonclient) FROM Livraisonclient l GROUP BY l.idlivraisonclient", Object[].class);
-      
-     if(query.getResultList().isEmpty()){
-     return 1L;
-     }
-     Long result = 0l;
-     query.getResultList().stream()
-     .forEach(e -> {
-              
-     result = (long) e[1];
-            
-     });
-     }*/
     @Override
     public Long nextVal() {
         Query query = this.em.createQuery("SELECT MAX(l.idlivraisonclient) FROM Livraisonclient l");

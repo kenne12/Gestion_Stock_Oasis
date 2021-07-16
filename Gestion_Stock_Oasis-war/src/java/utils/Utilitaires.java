@@ -248,30 +248,28 @@ public class Utilitaires {
 
     public static String genererCodeDemande(String code, Long nextPayement) {
         if (nextPayement < 10L) {
-            code = code + "00000" + nextPayement.toString();
+            code = code + "-0000" + nextPayement.toString();
         } else if ((nextPayement >= 10L) && (nextPayement < 100L)) {
-            code = code + "0000" + nextPayement.toString();
+            code = code + "-000" + nextPayement.toString();
         } else if ((nextPayement >= 100L) && (nextPayement < 1000L)) {
-            code = code + "000" + nextPayement.toString();
+            code = code + "-00" + nextPayement.toString();
         } else if ((nextPayement >= 1000L) && (nextPayement < 10000L)) {
-            code = code + "00" + nextPayement.toString();
-        } else if ((nextPayement >= 10000L) && (nextPayement < 100000L)) {
-            code = code + "0" + nextPayement.toString();
-        } else if ((nextPayement >= 100000L) && (nextPayement < 1000000L)) {
-            code = code + "" + nextPayement.toString();
+            code = code + "-0" + nextPayement.toString();
+        } else {
+            code = code + "-" + nextPayement.toString();
         }
         return code;
     }
 
     public static String genererCodeStock(String code, Long nextPayement) {
         if (nextPayement < 10L) {
-            code = code + "000" + nextPayement.toString();
+            code = code + "-000" + nextPayement.toString();
         } else if ((nextPayement >= 10L) && (nextPayement < 100L)) {
-            code = code + "00" + nextPayement.toString();
+            code = code + "-00" + nextPayement.toString();
         } else if ((nextPayement >= 100L) && (nextPayement < 1000L)) {
-            code = code + "0" + nextPayement.toString();
+            code = code + "-0" + nextPayement.toString();
         } else {
-            code = code + "" + nextPayement.toString();
+            code = code + "-" + nextPayement.toString();
         }
         return code;
     }
