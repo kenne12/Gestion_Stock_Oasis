@@ -7,6 +7,7 @@ package sessions;
 
 import entities.Versement;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -34,14 +35,18 @@ public class VersementFacade extends AbstractFacade<Versement> implements Versem
 
     @Override
     public Long nextVal() {
-        Query query = this.em.createQuery("SELECT MAX(v.idversement) FROM Versement v");
-        Long result = (Long) query.getSingleResult();
-        if (result == null) {
-            result = 1L;
-        } else {
-            result = result + 1L;
+        try {
+            Query query = this.em.createQuery("SELECT MAX(v.idversement) FROM Versement v");
+            Long result = (Long) query.getSingleResult();
+            if (result == null) {
+                result = 1L;
+            } else {
+                result = result + 1L;
+            }
+            return result;
+        } catch (Exception e) {
+            return 1L;
         }
-        return result;
     }
 
     @Override
@@ -61,17 +66,16 @@ public class VersementFacade extends AbstractFacade<Versement> implements Versem
     }
 
     @Override
-    public Long nextVal(int idMagasin, LocalDate dateDebut, LocalDate dateFin) {
-        Query query = this.em.createQuery("SELECT MAX(v.idversement) FROM Versement v WHERE v.livraisonclient.idmagasin.idmagasin=:idMagasin AND v.dateOperation BETWEEN :dateDebut AND :dateFin")
-                .setParameter("dateDebut", dateDebut)
-                .setParameter("dateFin", dateFin);
-        Long result = (Long) query.getSingleResult();
-        if (result == null) {
-            result = 1L;
+    public Long nextVal(int idMagasin, Date dateDebut, Date dateFin) {
+        Query query = this.em.createQuery("SELECT COUNT(v.idversement) FROM Versement v WHERE v.livraisonclient.idmagasin.idmagasin=:idMagasin AND v.dateOperation BETWEEN :dateDebut AND :dateFin")
+                .setParameter("dateDebut", dateDebut).setParameter("dateFin", dateFin).setParameter("idMagasin", idMagasin);
+
+        List list = query.getResultList();
+        if (list.isEmpty()) {
+            return 1L;
         } else {
-            result += 1L;
+            return ((long) list.get(0)) + 1L;
         }
-        return result;
     }
 
     @Override

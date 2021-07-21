@@ -24,14 +24,18 @@ public class LignecommandefournisseurFacade extends AbstractFacade<Lignecommande
 
     @Override
     public Long nextVal() {
-        Query query = this.em.createQuery("SELECT MAX(l.idlignecommandefournisseur) FROM Lignecommandefournisseur l");
-        Long result = (Long) query.getSingleResult();
-        if (result == null) {
-            result = 1l;
-        } else {
-            result = result + 1L;
+        try {
+            Query query = this.em.createQuery("SELECT MAX(l.idlignecommandefournisseur) FROM Lignecommandefournisseur l");
+            Long result = (Long) query.getSingleResult();
+            if (result == null) {
+                result = 1l;
+            } else {
+                result = result + 1L;
+            }
+            return result;
+        } catch (Exception e) {
+            return 1L;
         }
-        return result;
     }
 
     @Override

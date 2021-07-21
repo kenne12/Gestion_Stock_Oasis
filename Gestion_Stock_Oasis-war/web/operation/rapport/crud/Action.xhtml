@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:form id="actionsForm">
+
+        <div class="footer-section">
+
+            <br/>
+            <center>
+                <h:panelGrid columns="10">
+
+                    <p:outputLabel value="#{langue.exercice}" />
+                    <p:selectOneMenu value="#{recetteController.annee.idannee}">
+                        <f:selectItem itemLabel="#{langue.choisir}" />
+                        <f:selectItems value="#{recetteController.annees}" var="an" itemLabel="#{an.nom}" itemValue="#{an.idannee}"/>
+                        <p:ajax listener="#{recetteController.updateMois()}" update="mois"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="#{langue.mois}" />
+                    <p:selectOneMenu id="mois" value="#{recetteController.anneeMois.idAnneeMois}">
+                        <f:selectItem itemLabel="#{langue.choisir}" />
+                        <f:selectItems value="#{recetteController.listMois}" var="item" itemLabel="#{item.idmois.nom}" itemValue="#{item.idAnneeMois}"/>
+                    </p:selectOneMenu>
+                    
+                    <p:outputLabel value="#{langue.magasin}" />
+                    <p:selectOneMenu id="magasin" value="#{recetteController.magasin.idmagasin}">
+                        <f:selectItem itemLabel="#{langue.choisir}" />
+                        <f:selectItems value="#{recetteController.magasins}" var="item" itemLabel="#{item.nom}" itemValue="#{item.idmagasin}"/>
+                    </p:selectOneMenu>
+                    
+                    <p:commandButton id="afficher" icon="ui-icon-refresh"  
+                                     value="Afficher" actionListener="#{recetteController.afficher()}"
+                                     update=":RapportListerForm" />
+                                     
+                    <p:commandButton id="update" icon="ui-icon-calculator"  
+                                     value="Concilier" actionListener="#{recetteController.conciliate()}"
+                                     update=":notify1,:RapportListerForm" />
+                                     
+                    <p:commandButton id="imprimer" icon="ui-icon-print"  
+                                     actionListener="#{recetteController.printRecette()}"
+                                     update=":RapportImprimerForm" />
+                                       
+                </h:panelGrid>
+            </center>
+        </div>
+
+    </h:form>
+</ui:composition>

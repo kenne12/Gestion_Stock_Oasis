@@ -18,7 +18,7 @@ public class VersementController extends AbstractVersementController implements 
 
     public void prepareCreate() {
         try {
-            if (!Utilitaires.isAccess((48L))) {
+            if (!Utilitaires.isAccess(28L)) {
                 notifyError("acces_refuse");
 
                 return;
@@ -26,7 +26,7 @@ public class VersementController extends AbstractVersementController implements 
             this.mode = "Create";
             this.livraisonclient = new Livraisonclient();
             this.versement = new Versement();
-            this.versement.setDateOperation(Date.from(Instant.now()));
+            this.versement.setDateOperation(SessionMBean.getDateOuverture());
             this.livraisonclients = this.livraisonclientFacadeLocal.findByIdmagasinNonRegle(SessionMBean.getMagasin().getIdmagasin());
             this.showClient = false;
             RequestContext.getCurrentInstance().execute("PF('VersementCreerDialog').show()");
@@ -42,7 +42,7 @@ public class VersementController extends AbstractVersementController implements 
 
                 return;
             }
-            if (!Utilitaires.isAccess(48L)) {
+            if (!Utilitaires.isAccess(28L)) {
                 notifyError("acces_refuse");
                 return;
             }
@@ -66,16 +66,12 @@ public class VersementController extends AbstractVersementController implements 
         try {
             if (this.mode.equals("Create")) {
 
-                this.versement.setIdversement(this.versementFacadeLocal.nextVal());
-                this.versement.setHeure(new Date());
+                this.versement.setHeure(Date.from(Instant.now()));
                 this.versement.setLivraisonclient(livraisonclient);
                 this.versement.setIdUtilisateur(SessionMBean.getUserAccount().getIdutilisateur());
 
-                /*String code = "V-" + SessionMBean.getMois().getIdannee().getNom() + "-" + SessionMBean.getMois().getIdmois().getNom().toUpperCase().substring(0, 3);
-                 Long nextPayement = this.versementFacadeLocal.nextVal(SessionMBean.getMois().getDateDebut(), SessionMBean.getMois().getDateFin());
-                 code = Utilitaires.genererCodeStock(code, nextPayement);*/
-                String code = "V-";
-                Long nextPayement = this.versementFacadeLocal.nextVal(SessionMBean.getMagasin().getIdmagasin());
+                String code = "V-" + SessionMBean.getMois().getIdannee().getNom() + "-" + SessionMBean.getMois().getIdmois().getNom().toUpperCase().substring(0, 3);
+                Long nextPayement = versementFacadeLocal.nextVal(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getMois().getDateDebut(), SessionMBean.getMois().getDateFin());
                 code = Utilitaires.genererCodeStock(code, nextPayement);
 
                 this.ut.begin();
@@ -88,6 +84,7 @@ public class VersementController extends AbstractVersementController implements 
 
                 this.versement.setReste(this.livraisonclient.getReste());
                 this.versement.setCode(code);
+                this.versement.setIdversement(this.versementFacadeLocal.nextVal());
                 this.versementFacadeLocal.create(this.versement);
 
                 this.livraisonclientFacadeLocal.edit(this.livraisonclient);
@@ -95,7 +92,7 @@ public class VersementController extends AbstractVersementController implements 
                 Utilitaires.saveOperation(this.mouchardFacadeLocal, "Enregistrement du versement -> client : " + this.versement.getLivraisonclient().getClient().getNom() + " ; Montant : " + this.versement.getMontant() + " ; Code : " + this.versement.getCode(), SessionMBean.getUserAccount());
                 this.ut.commit();
 
-                this.versement = null;
+                this.versement = new Versement();
                 this.livraisonclient = new Livraisonclient();
                 RequestContext.getCurrentInstance().execute("PF('VersementCreerDialog').hide()");
                 notifySuccess();

@@ -40,6 +40,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Livraisonfournisseur.findByCode", query = "SELECT l FROM Livraisonfournisseur l WHERE l.code = :code"),
     @NamedQuery(name = "Livraisonfournisseur.findByLivraisondirecte", query = "SELECT l FROM Livraisonfournisseur l WHERE l.livraisondirecte = :livraisondirecte")})
 public class Livraisonfournisseur implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -70,7 +71,9 @@ public class Livraisonfournisseur implements Serializable {
 
     @Column(name = "idutilisateur")
     private int idUtilisateur;
-    
+
+    private boolean comptabilise;
+
     public Livraisonfournisseur() {
     }
 
@@ -165,7 +168,14 @@ public class Livraisonfournisseur implements Serializable {
     public void setIdUtilisateur(int idUtilisateur) {
         this.idUtilisateur = idUtilisateur;
     }
-    
+
+    public boolean isComptabilise() {
+        return comptabilise;
+    }
+
+    public void setComptabilise(boolean comptabilise) {
+        this.comptabilise = comptabilise;
+    }
 
     @XmlTransient
     public List<Lignelivraisonfournisseur> getLignelivraisonfournisseurList() {
@@ -200,5 +210,5 @@ public class Livraisonfournisseur implements Serializable {
     public String toString() {
         return "entities.Livraisonfournisseur[ idlivraisonfournisseur=" + idlivraisonfournisseur + " ]";
     }
-    
+
 }

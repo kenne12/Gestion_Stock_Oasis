@@ -42,7 +42,7 @@ public class ArticleController extends AbstractArticleController implements Seri
     }
 
     public void prepareCreate() {
-        if (!Utilitaires.isAccess(13L)) {
+        if (!Utilitaires.isAccess(25L)) {
             notifyError("acces_refuse");
             return;
         }
@@ -92,7 +92,7 @@ public class ArticleController extends AbstractArticleController implements Seri
     public void prepareEdit() {
         this.mode = "Edit";
         try {
-            if (!Utilitaires.isAccess((14L))) {
+            if (!Utilitaires.isAccess(25L)) {
                 notifyError("acces_refuse");
                 return;
             }
@@ -161,7 +161,7 @@ public class ArticleController extends AbstractArticleController implements Seri
                     return;
                 }
 
-                this.article.setIdarticle(this.articleFacadeLocal.nextVal());
+                this.article.setIdarticle(articleFacadeLocal.nextVal());
 
                 if (this.famille.getIdfamille() != null) {
                     this.article.setIdfamille(this.famille);
@@ -219,7 +219,7 @@ public class ArticleController extends AbstractArticleController implements Seri
                         obj1.setIdmagasinlot(this.magasinlotFacadeLocal.nextVal());
                         obj1.setIdmagasinarticle(obj);
                         obj1.setIdlot(this.lot);
-                        obj1.setQuantite(0.0);
+                        obj1.setQuantite(0d);
                         obj1.setUnite(this.article.getUnite());
                         obj1.setQuantitemultiple(0.0);
                         obj1.setQuantitereduite(0.0);
@@ -329,7 +329,7 @@ public class ArticleController extends AbstractArticleController implements Seri
     public void delete() {
         try {
             if (this.article != null) {
-                if (!Utilitaires.isAccess(15L)) {
+                if (!Utilitaires.isAccess(25L)) {
                     notifyError("acces_refuse");
                     return;
                 }
@@ -387,7 +387,7 @@ public class ArticleController extends AbstractArticleController implements Seri
 
     public void printInventory() {
         try {
-            if (!Utilitaires.isAccess(31L)) {
+            if (!Utilitaires.isAccess(25L)) {
                 notifyError("acces_refuse");
                 return;
             }
@@ -402,7 +402,7 @@ public class ArticleController extends AbstractArticleController implements Seri
 
     public void printSousStock() {
         try {
-            if (!Utilitaires.isAccess(30L)) {
+            if (!Utilitaires.isAccess(25l)) {
                 notifyError("acces_refuse");
                 return;
             }

@@ -7,6 +7,7 @@ package sessions;
 
 import entities.Versement;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -37,7 +38,7 @@ public interface VersementFacadeLocal {
 
     public List<Versement> findByIdmagasinTwodates(int idMagasin, LocalDate dateDebut, LocalDate dateFin);
 
-    public Long nextVal(int idMagasin, LocalDate dateDebut, LocalDate dateFin);
+    public Long nextVal(int idMagasin, Date dateDebut, Date dateFin);
 
     public Long nextVal(int idMagasin);
 

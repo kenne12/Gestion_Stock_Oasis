@@ -43,6 +43,11 @@ public class LivraisonFournisseurController extends AbstractLivraisonFournisseur
 
     public void prepareCreate() {
         try {
+            if (Utilitaires.isDayClosed()) {
+                notifyError("journee_cloturee");
+                return;
+            }
+
             if (!Utilitaires.isAccess((52L))) {
                 notifyError("acces_refuse");
                 return;
@@ -325,6 +330,12 @@ public class LivraisonFournisseurController extends AbstractLivraisonFournisseur
         try {
             if (this.livraisonfournisseur != null) {
                 if (!this.livraisonfournisseur.getLivraisondirecte()) {
+
+                    if (Utilitaires.isDayClosed()) {
+                        notifyError("journee_cloturee");
+                        return;
+                    }
+
                     if (!Utilitaires.isAccess((53L))) {
                         notifyError("acces_refuse");
                         this.detail = (this.supprimer = this.modifier = this.imprimer = (true));

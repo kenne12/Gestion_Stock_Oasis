@@ -1,6 +1,7 @@
 package sessions;
 
 import entities.Transfert;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -13,7 +14,7 @@ public abstract interface TransfertFacadeLocal {
 
     public void remove(Transfert transfert);
 
-    public Transfert find(Object objet);
+    public Transfert find(Object object);
 
     public List<Transfert> findAll();
 
@@ -23,11 +24,17 @@ public abstract interface TransfertFacadeLocal {
 
     public Long nextVal();
 
-    public List<Transfert> findAllRange();
-
     public List<Transfert> findByIdMagasinBidirection(int idMagasin);
 
     public List<Transfert> findByIdMagasinSource(int idMagasin);
 
+    public List<Transfert> findByIdMagasinSource(int idMagasin, Date dateDebut, Date dateFin);
+
+    public List<Transfert> findByIdMagasinSource(int idMagasin, Date date);
+
     public List<Transfert> findByIdMagasinDestination(int idMagasin);
+
+    public List<Transfert> findByIdMagasinDestination(int idMagasin, Date dateDebut, Date dateFin);
+
+    public List<Transfert> findByIdMagasinDestination(int idMagasin, Date date);
 }

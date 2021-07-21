@@ -26,27 +26,30 @@ public class DemandeFacade extends AbstractFacade<Demande> implements DemandeFac
 
     @Override
     public Long nextVal() {
-        Query query = this.em.createQuery("SELECT MAX(d.iddemande) FROM Demande d");
-        Long result = (Long) query.getSingleResult();
-        if (result == null) {
-            result = 1L;
-        } else {
-            result = result + 1L;
+        try {
+            Query query = this.em.createQuery("SELECT MAX(d.iddemande) FROM Demande d");
+            Long result = (Long) query.getSingleResult();
+            if (result == null) {
+                result = 1L;
+            } else {
+                result = result + 1L;
+            }
+            return result;
+        } catch (Exception e) {
+            return 1L;
         }
-        return result;
     }
-    
+
     @Override
     public Long nextVal(int idMagasin, AnneeMois anneeMois) {
         try {
             Query query = this.em.createQuery("SELECT COUNT(d.iddemande) FROM Demande d WHERE d.datedemande BETWEEN :dateDebut AND :dateFin AND d.magasin.idmagasin =:idMagasin");
             query.setParameter("dateDebut", anneeMois.getDateDebut()).setParameter("dateFin", anneeMois.getDateFin()).setParameter("idMagasin", idMagasin);
             List list = query.getResultList();
-            if (list.isEmpty()) {
-                return 1L;
-            } else {
+            if (list != null) {
                 return ((Long) list.get(0)) + 1;
             }
+            return 1L;
         } catch (Exception e) {
             e.printStackTrace();
             return 1L;

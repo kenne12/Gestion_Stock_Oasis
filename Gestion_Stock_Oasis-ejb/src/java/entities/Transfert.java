@@ -64,6 +64,8 @@ public class Transfert implements Serializable {
     @Column(name = "idutilisateur")
     private int idUtilisateur;
 
+    private boolean comptabilise;
+
     public Transfert() {
     }
 
@@ -142,6 +144,14 @@ public class Transfert implements Serializable {
 
     public void setIdmvtstock(Mvtstock idmvtstock) {
         this.idmvtstock = idmvtstock;
+    }
+
+    public boolean isComptabilise() {
+        return comptabilise;
+    }
+
+    public void setComptabilise(boolean comptabilise) {
+        this.comptabilise = comptabilise;
     }
 
     @Override

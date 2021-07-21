@@ -30,7 +30,7 @@ public class LotController extends AbstractLotController implements Serializable
     }
 
     public void prepareCreate() {
-        if (!Utilitaires.isAccess(38L)) {
+        if (!Utilitaires.isAccess(24L)) {
             notifyError("acces_refuse");
             return;
         }
@@ -52,7 +52,7 @@ public class LotController extends AbstractLotController implements Serializable
     }
 
     public void prepareEdit() {
-        if (!Utilitaires.isAccess(39L)) {
+        if (!Utilitaires.isAccess(24L)) {
             notifyError("acces_refuse");
             return;
         }
@@ -144,7 +144,7 @@ public class LotController extends AbstractLotController implements Serializable
     public void delete() {
         try {
             if (this.lot != null) {
-                if (!Utilitaires.isAccess(40L)) {
+                if (!Utilitaires.isAccess(24L)) {
                     notifyError("acces_refuse");
                     return;
                 }

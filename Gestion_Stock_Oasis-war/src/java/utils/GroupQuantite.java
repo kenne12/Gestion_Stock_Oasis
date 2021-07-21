@@ -8,10 +8,10 @@ public class GroupQuantite {
     double unite;
 
     public GroupQuantite() {
-        /* 20 */ this.quantite = 0.0D;
-        /* 21 */ this.quantiteMultiple = 0.0D;
-        /* 22 */ this.quantiteReduite = 0.0D;
-        /* 23 */ this.unite = 0.0D;
+        /* 20 */ this.quantite = 0;
+        /* 21 */ this.quantiteMultiple = 0;
+        /* 22 */ this.quantiteReduite = 0;
+        /* 23 */ this.unite = 0;
     }
 
     public GroupQuantite(double quantite, double quantiteMultiple, double quantiteReduite, double unite) {

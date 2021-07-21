@@ -11,8 +11,10 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import entities.Annee;
+import entities.AnneeMois;
 import entities.Article;
 import entities.Demande;
+import entities.Journee;
 import entities.Lignedemande;
 import entities.Lignelivraisonclient;
 import entities.Lignelivraisonfournisseur;
@@ -1308,6 +1310,81 @@ public class PrintUtils {
 
             rapport.add((Element) table);
 
+            rapport.close();
+        } catch (DocumentException ex) {
+            Logger.getLogger(utils.PrintUtils.class.getName()).log(Level.SEVERE, (String) null, (Throwable) ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(utils.PrintUtils.class.getName()).log(Level.SEVERE, (String) null, ex);
+        }
+        return fileName;
+    }
+
+    public static String printRecette(AnneeMois anneeMois, List<Journee> journees) {
+        String fileName = "";
+        try {
+            Date date = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            fileName = "Recette_" + anneeMois.getIdmois().getNom() + "_" + anneeMois.getIdannee().getNom() + ".pdf";
+            Document rapport = new Document();
+            PdfWriter.getInstance(rapport, new FileOutputStream(Utilitaires.path + "/reports/stock/" + fileName));
+            rapport.open();
+            float[] widths = {0.3F, 2.0F, 1.0f, 1.0f , 1.0f, 1.0f, 1.0f};
+            PdfPTable table = new PdfPTable(widths);
+            table.setWidthPercentage(100f);
+
+            createEntete(rapport, SessionMBean.getParametrage());
+
+            rapport.add(new Paragraph(" "));
+
+            Paragraph titre = new Paragraph("RAPPORT MENSUEL " + anneeMois.getIdmois().getNom() + "_" + anneeMois.getIdannee().getNom(), new Font(Font.FontFamily.TIMES_ROMAN, 14.0F, 5));
+            titre.setAlignment(1);
+            rapport.add(titre);
+
+            Paragraph periode = new Paragraph("Imprimé le : " + sdf.format(date), new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 2));
+            periode.setAlignment(1);
+            rapport.add(periode);
+
+            rapport.add(new Paragraph(" "));
+
+            table.addCell(createPdfPCell("N°", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
+            table.addCell(createPdfPCell("Date", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
+            table.addCell(createPdfPCell("Recette", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
+            table.addCell(createPdfPCell("Transfert\nSortant", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
+            table.addCell(createPdfPCell("Bord", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
+            table.addCell(createPdfPCell("Appro", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
+            table.addCell(createPdfPCell("Transfert\nEntrant", 2, new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0)));
+
+            int compteur = 1;
+
+            double totalRecette = 0d;
+            double totalBord = 0d;
+            double totalAppro = 0d;
+            double transfertEntrant = 0;
+            double transfertSortant = 0;
+            for (Journee j : journees) {
+                totalRecette += j.getMontantVendu();
+                totalBord += j.getBord();
+                totalAppro += j.getMontantEntre();
+                transfertEntrant += j.getTransfertEntrant();
+                transfertSortant += j.getTransfertSortant();
+
+                table.addCell(createPdfPCell("" + compteur, 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell("" + sdf.format(j.getDateJour()), 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(( j.getMontantVendu())), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney((j.getTransfertSortant())), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney((j.getBord())), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney((j.getMontantEntre())), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney((j.getTransfertEntrant())), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                compteur++;
+            }
+
+            table.addCell(createPdfPCell("Totaux", 2, 2, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0)));
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney((totalRecette)), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney((transfertSortant)), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney((totalBord)), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney((totalAppro)), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney((transfertEntrant)), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
+            rapport.add((Element) table);
             rapport.close();
         } catch (DocumentException ex) {
             Logger.getLogger(utils.PrintUtils.class.getName()).log(Level.SEVERE, (String) null, (Throwable) ex);

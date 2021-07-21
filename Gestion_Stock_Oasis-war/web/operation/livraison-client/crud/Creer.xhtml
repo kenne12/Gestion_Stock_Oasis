@@ -40,7 +40,7 @@
                             <p:outputLabel  value="#{livraisonClientController.livraisonclient.client.nom}"/>
 
                             <p:outputLabel value="#{langue.date_demande}" for="date_commande" />
-                            <p:calendar pattern="dd/MM/yyyy" disabled="true" id="date_commande" value="#{livraisonClientController.demande.datedemande}" navigator="true" requiredMessage="#{langue.valeur_obligatoire}">
+                            <p:calendar  pattern="dd/MM/yyyy" disabled="true" id="date_commande" value="#{livraisonClientController.demande.datedemande}" navigator="true" requiredMessage="#{langue.valeur_obligatoire}">
                                 <p:ajax/>  
                             </p:calendar>
 

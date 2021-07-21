@@ -26,13 +26,18 @@ public class CommandefournisseurFacade extends AbstractFacade<Commandefournisseu
 
     @Override
     public Long nextVal() {
-        Query query = this.em.createQuery("SELECT MAX(c.idcommandefournisseur) FROM Commandefournisseur c");
-        List list = query.getResultList();
-        if (!list.isEmpty()) {
+        try {
+            Query query = this.em.createQuery("SELECT MAX(c.idcommandefournisseur) FROM Commandefournisseur c");
+            List list = query.getResultList();
+            if (!list.isEmpty()) {
+                return 1L;
+            } else {
+                return ((long) list.get(0) + 1);
+            }
+        } catch (Exception e) {
             return 1L;
-        } else {
-            return ((long) list.get(0) + 1);
         }
+
     }
 
     @Override
@@ -41,13 +46,11 @@ public class CommandefournisseurFacade extends AbstractFacade<Commandefournisseu
             Query query = this.em.createQuery("SELECT COUNT(c.idcommandefournisseur) FROM Commandefournisseur c WHERE c.datecommande BETWEEN :dateDebut AND :dateFin AND c.magasin.idmagasin=:idMagasin");
             query.setParameter("dateDebut", anneeMois.getDateDebut()).setParameter("dateFin", anneeMois.getDateFin()).setParameter("idMagasin", idMagasin);
             List list = query.getResultList();
-            if (list.isEmpty()) {
-                return 1L;
-            } else {
+            if (!list.isEmpty()) {
                 return ((Long) list.get(0)) + 1;
             }
+            return 1L;
         } catch (Exception e) {
-            e.printStackTrace();
             return 1L;
         }
     }
@@ -58,9 +61,9 @@ public class CommandefournisseurFacade extends AbstractFacade<Commandefournisseu
                 .setParameter("idMagasin", idMagasin)
                 .getResultList();
     }
-    
+
     @Override
-    public List<Commandefournisseur> findAllRange(int idMagasin , Date dateDebut , Date dateFin) {
+    public List<Commandefournisseur> findAllRange(int idMagasin, Date dateDebut, Date dateFin) {
         return this.em.createQuery("SELECT c FROM Commandefournisseur c WHERE c.magasin.idmagasin=:idMagasin AND c.datecommande BETWEEN :dateDebut AND :dateFin ORDER BY c.idcommandefournisseur DESC, c.datecommande")
                 .setParameter("idMagasin", idMagasin).setParameter("dateDebut", dateDebut).setParameter("dateFin", dateFin)
                 .getResultList();
@@ -69,7 +72,7 @@ public class CommandefournisseurFacade extends AbstractFacade<Commandefournisseu
     @Override
     public List<Commandefournisseur> findByLivre(int idMagasin, boolean livree) {
         Query query = this.em.createQuery("SELECT c FROM Commandefournisseur c WHERE c.magasin.idmagasin=:idMagasin AND c.livre=:livree ORDER BY c.idcommandefournisseur DESC");
-        query.setParameter("livree", livree).setParameter("idMagasin", livree);
+        query.setParameter("livree", livree).setParameter("idMagasin", idMagasin);
         return query.getResultList();
     }
 }

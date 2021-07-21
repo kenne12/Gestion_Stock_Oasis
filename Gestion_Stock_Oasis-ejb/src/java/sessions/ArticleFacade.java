@@ -24,27 +24,31 @@ public class ArticleFacade extends AbstractFacade<Article> implements ArticleFac
 
     @Override
     public Long nextVal() {
-        Query query = this.em.createQuery("SELECT MAX(a.idarticle) FROM Article a");
-        Long result = (Long) query.getSingleResult();
-        if (result == null) {
-            result = 1L;
-        } else {
-            result = (result + 1L);
+        try {
+            Query query = this.em.createQuery("SELECT MAX(a.idarticle) FROM Article a");
+            Long result = (Long) query.getSingleResult();
+            if (result == null) {
+                return 1L;
+            }
+            return (result + 1L);
+        } catch (Exception e) {
+            return 1L;
         }
-        return result;
     }
 
     @Override
     public Long nextValByIdstructure(int idStructure) {
-        Query query = this.em.createQuery("SELECT MAX(a.idarticle) FROM Article a WHERE a.parametrage.id=:idParametre")
-                .setParameter("idParametre", idStructure);
-        Long result = (Long) query.getSingleResult();
-        if (result == null) {
-            result = 1L;
-        } else {
-            result = (result + 1L);
+        try {
+            Query query = this.em.createQuery("SELECT MAX(a.idarticle) FROM Article a WHERE a.parametrage.id=:idParametre")
+                    .setParameter("idParametre", idStructure);
+            Long result = (Long) query.getSingleResult();
+            if (result == null) {
+                return 1L;
+            }
+            return (result + 1L);
+        } catch (Exception e) {
+            return 1L;
         }
-        return result;
     }
 
     @Override
@@ -56,13 +60,17 @@ public class ArticleFacade extends AbstractFacade<Article> implements ArticleFac
 
     @Override
     public Article findByCode(int idStructure, String code) {
-        Query query = this.em.createQuery("SELECT a FROM Article a WHERE a.code=:code ANd a.parametrage.id=:id");
-        query.setParameter("code", code).setParameter("id", idStructure);
-        List list = query.getResultList();
-        if (!list.isEmpty()) {
-            return (Article) list.get(0);
+        try {
+            Query query = this.em.createQuery("SELECT a FROM Article a WHERE a.code=:code ANd a.parametrage.id=:id");
+            query.setParameter("code", code).setParameter("id", idStructure);
+            List list = query.getResultList();
+            if (!list.isEmpty()) {
+                return (Article) list.get(0);
+            }
+            return null;
+        } catch (Exception e) {
+            return null;
         }
-        return null;
     }
 
     @Override

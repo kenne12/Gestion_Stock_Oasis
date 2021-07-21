@@ -44,7 +44,7 @@
                             </h:panelGroup>
 
                             <p:outputLabel value="Date" for="date" />
-                            <p:calendar pattern="dd/MM/yyyy" required="true" id="date" mindate="#{sortiedirectController.annee.dateDebut}" maxdate="#{sortiedirectController.annee.dateFin}" 
+                            <p:calendar disabled="true" pattern="dd/MM/yyyy" required="true" id="date" mindate="#{sortiedirectController.annee.dateDebut}" maxdate="#{sortiedirectController.annee.dateFin}" 
                                         value="#{sortiedirectController.livraisonclient.datelivraison}" navigator="true" requiredMessage="#{langue.valeur_obligatoire}">
                                 <p:ajax/>  
                             </p:calendar>

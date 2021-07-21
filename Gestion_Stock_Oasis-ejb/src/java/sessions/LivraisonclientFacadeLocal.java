@@ -23,7 +23,7 @@ public interface LivraisonclientFacadeLocal {
 
     public int count();
 
-    public Long nextVal();
+    public Long nextValue();
 
     Long nextVal(int idMagasin, AnneeMois anneeMois);
 

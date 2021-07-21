@@ -99,7 +99,10 @@ public class AbstractAlerteController {
     }
 
     public List<Commandefournisseur> getCommandefournisseurs() {
-        this.commandefournisseurs = this.commandefournisseurFacadeLocal.findByLivre(SessionMBean.getMagasin().getIdmagasin(), false);
+        commandefournisseurs.clear();
+        if(SessionMBean.getMagasin()!=null){
+            this.commandefournisseurs = this.commandefournisseurFacadeLocal.findByLivre(SessionMBean.getMagasin().getIdmagasin(), false);
+        }
         return this.commandefournisseurs;
     }
 

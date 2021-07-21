@@ -38,7 +38,7 @@ public class AnneeMoisFacade extends AbstractFacade<AnneeMois> implements AnneeM
     @Override
     public List<AnneeMois> findByAnneeEtat(int idAnnee, boolean etat) throws Exception {
         Query query = this.em.createQuery("SELECT a FROM AnneeMois a WHERE a.idannee.idannee=:annee AND a.etat=:etat ORDER BY a.idmois.idmois");
-        query.setParameter("annee", idAnnee).setParameter("etat", (etat));
+        query.setParameter("annee", idAnnee).setParameter("etat", etat);
         return query.getResultList();
     }
 

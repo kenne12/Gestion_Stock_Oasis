@@ -4,9 +4,11 @@ import entities.Annee;
 import entities.AnneeMois;
 import entities.Journee;
 import entities.Livraisonclient;
+import entities.Livraisonfournisseur;
 import entities.Magasin;
 import entities.Menu;
 import entities.Privilege;
+import entities.Transfert;
 import entities.Utilisateur;
 import java.io.IOException;
 import java.io.Serializable;
@@ -76,7 +78,9 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
                     Annee an = anneeFacadeLocal.findOneDefault();
                     if (an != null) {
                         this.annee = an;
+                        session.setAttribute("annee_default", annee);
                         anneeMoises = anneeMoisFacadeLocal.findByAnneeEtat(an.getIdannee(), true);
+                        session.setAttribute("list_mois_default", anneeMoises);
                     }
 
                     filterDate(date);
@@ -180,12 +184,14 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
                 session.setAttribute("magasin", magasin);
             }
             journee = initJour(magasin);
+            session.setAttribute("journee", journee);
             initPrivilegeMap();
             this.intDefaultMonth(annee, session);
             this.initUserPrivilege(utilisateur.getIdutilisateur(), session);
             this.showSessionPanel = false;
             Utilitaires.saveOperation(this.mouchardFacadeLocal, "Connexion", this.utilisateur);
 
+            //createLineModels(magasins, anneeMois);
             redirect("/index.html");
         }
     }
@@ -198,25 +204,28 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
     }
 
     private Journee initJour(Magasin magasin) {
-        Journee journee = journeeFacadeLocal.findByIdMagasinDate(magasin.getIdmagasin(), new Date());
-        if (journee == null) {
-            journee = new Journee();
-            journee.setIdjournee(journeeFacadeLocal.nextVal());
-            journee.setMagasin(magasin);
-            journee.setHeureOuverture(Date.from(Instant.now()));
-            journee.setDateJour(Date.from(Instant.now()));
-            journee.setUtilisateurOuverture(utilisateur);
-            journee.setOuverte(true);
-            journee.setFermee(false);
-            journeeFacadeLocal.create(journee);
+        Journee journee = journeeFacadeLocal.findByIdMagasinDate(magasin.getIdmagasin(), date);
+        if (journee != null) {
+            return journee;
         }
+
+        journee = new Journee();
+        journee.setIdjournee(journeeFacadeLocal.nextVal());
+        journee.setMagasin(magasin);
+        journee.setHeureOuverture(Date.from(Instant.now()));
+        journee.setDateJour(date);
+        journee.setUtilisateurOuverture(utilisateur);
+        journee.setOuverte(true);
+        journee.setFermee(false);
+        journee.setAnneeMois(anneeMois);
+        journeeFacadeLocal.create(journee);
         return journee;
     }
 
     public void updateCalendar() {
         try {
-            if (this.anneeMois.getIdAnneeMois() != 0) {
-                this.anneeMois = this.anneeMoisFacadeLocal.find(this.anneeMois.getIdAnneeMois());
+            if (anneeMois.getIdAnneeMois() != 0) {
+                anneeMois = this.anneeMoisFacadeLocal.find(anneeMois.getIdAnneeMois());
                 return;
             }
             JsfUtil.addErrorMessage("Veuillez sélectionner une année");
@@ -225,8 +234,33 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
         }
     }
 
+    private void closeTransfert(List<Transfert> transferts) {
+        for (Transfert t : transferts) {
+            t.setComptabilise(true);
+            transfertFacadeLocal.edit(t);
+        }
+    }
+
     public void closeSession() {
         try {
+            journee.setFermee(true);
+            journee.setUtilisateurFermetture(utilisateur);
+            journee.setHeureFermetture(Date.from(Instant.now()));
+            journeeFacadeLocal.edit(journee);
+
+            for (Livraisonclient l : livraisonclients) {
+                l.setComptabilise(true);
+                livraisonclientFacadeLocal.edit(l);
+            }
+
+            for (Livraisonfournisseur l : livraisonfournisseurFs) {
+                l.setComptabilise(true);
+                livraisonfournisseurFacadeLocal.edit(l);
+            }
+
+            this.closeTransfert(transfertSortants);
+
+            this.redirect("/index.html");
             this.routine.feedBack("information", "/resources/tool_images/success.png", this.routine.localizeMessage("operation_reussie"));
             RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
         } catch (Exception e) {
@@ -235,10 +269,61 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
         }
     }
 
+    private void sommeTransfert(String mode, List<Transfert> transferts, Journee journee) {
+        double montant = 0;
+        if (!transferts.isEmpty()) {
+            for (Transfert t : transferts) {
+                montant += t.getMontanttotal();
+            }
+        }
+        if (mode.equals("sortant")) {
+            journee.setTransfertSortant(montant);
+        } else {
+            journee.setTransfertEntrant(montant);
+        }
+    }
+
+    private void sommeApprovisionnement(List<Livraisonfournisseur> livraisonfournisseurs, Journee journee) {
+        journee.setMontantVendu(0);
+        if (!livraisonfournisseurs.isEmpty()) {
+            double total = 0;
+            for (Livraisonfournisseur l : livraisonfournisseurs) {
+                total += l.getMontant();
+            }
+            journee.setMontantEntre(total);
+        }
+    }
+
+    private double sommeRecette(List<Livraisonclient> livraisonclients, Journee journee) {
+        double reste = 0;
+        if (!livraisonclients.isEmpty()) {
+            double total = 0;
+            double marge = 0;
+            for (Livraisonclient l : livraisonclients) {
+                total += l.getMontantTtc();
+                reste += l.getReste();
+                marge += l.getMarge();
+            }
+            journee.setMontantVendu(total);
+            journee.setBord(marge);
+        }
+        return reste;
+    }
+
     public void updateFermetture() {
         try {
-            if (Utilitaires.isAccess(40L)) {
+            if (Utilitaires.isAccess(34L)) {
                 livraisonclients = livraisonclientFacadeLocal.findByIdmagasinAndDate(SessionMBean.getMagasin().getIdmagasin(), date);
+                livraisonfournisseurFs = livraisonfournisseurFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), date);
+
+                transfertEntrants = transfertFacadeLocal.findByIdMagasinDestination(SessionMBean.getMagasin().getIdmagasin(), date);
+                transfertSortants = transfertFacadeLocal.findByIdMagasinSource(SessionMBean.getMagasin().getIdmagasin(), date);
+                sommeApprovisionnement(livraisonfournisseurFs, journee);
+
+                sommeTransfert("sortant", transfertSortants, journee);
+                sommeTransfert("entrant", transfertEntrants, journee);
+                sommeRecette(livraisonclients, journee);
+
                 RequestContext.getCurrentInstance().execute("PF('FermettureCreerDialog').show()");
                 return;
             }
@@ -325,7 +410,7 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
 
     public void updateCompte() {
         try {
-            if ((!this.utilisateur.getPassword().equals("")) || (!this.utilisateur.getPassword().equals(null))) {
+            if ((!this.utilisateur.getPassword().equals("")) || (!Objects.equals(this.utilisateur.getPassword(), null))) {
                 if (this.utilisateur.getPassword().equals(this.confirmPassword)) {
                     this.utilisateur.setPassword(new ShaHash().hash(this.confirmPassword));
                     this.utilisateurFacadeLocal.edit(this.utilisateur);
@@ -353,9 +438,9 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
         }
     }
 
-    private void createLineModels() {
-        this.lineModel = initLinearModel();
-        this.lineModel.setTitle("Courbe évolutive des ventes et approvisionnement");
+    private void createLineModels(List<Magasin> magasins, AnneeMois mois) {
+        this.lineModel = initLinearModel(magasins, mois);
+        this.lineModel.setTitle("Courbe évolutive des ventes par magasin");
         this.lineModel.setLegendPosition("e");
         this.lineModel.getAxes().put(AxisType.X, new CategoryAxis("Mois"));
         this.lineModel.getAxes().put(AxisType.Y, new CategoryAxis("Montant"));
@@ -363,15 +448,15 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
         yAxis.setMin(0);
     }
 
-    private LineChartModel initLinearModel() {
+    private LineChartModel initLinearModel(List<Magasin> magasins, AnneeMois mois) {
         try {
             LineChartModel model = new LineChartModel();
-            DateFormat sdf = new SimpleDateFormat("MM-yyyy");
+            DateFormat sdf = new SimpleDateFormat("dd");
             for (Magasin m : magasins) {
                 LineChartSeries series1 = new LineChartSeries();
                 series1.setLabel(m.getNom());
 
-                for (Journee j : journeeFacadeLocal.findByTwoDates(SessionMBean.getMois().getDateDebut(), SessionMBean.getMois().getDateFin())) {
+                for (Journee j : journeeFacadeLocal.findByIdmagasinTwoDates(m.getIdmagasin(), mois.getDateDebut(), mois.getDateFin())) {
                     Integer somme = 0;
                     List<Livraisonclient> livraisonclients = livraisonclientFacadeLocal.findByIdmagasinAndDate(m.getIdmagasin(), j.getDateJour());
                     for (Livraisonclient l : livraisonclients) {
@@ -403,16 +488,19 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
         return result;
     }
 
-    public void calculTotal() {
-
+    public String returnTotalRecette() {
+        return "" + JsfUtil.formaterStringMoney(journee.getMontantVendu());
     }
 
-    public void calculMontantRegle() {
-
+    public String returnTotalTransfert(String mode) {
+        if (mode.equals("sortant")) {
+            return "" + JsfUtil.formaterStringMoney(journee.getTransfertSortant());
+        }
+        return "" + JsfUtil.formaterStringMoney(journee.getTransfertEntrant());
     }
 
-    public void calculMontantReste() {
-
+    public String returnTotalAppro() {
+        return "" + JsfUtil.formaterStringMoney(journee.getMontantEntre());
     }
 
     public Utilisateur getUtilisateur() {

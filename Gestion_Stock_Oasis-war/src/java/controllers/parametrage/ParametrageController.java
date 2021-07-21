@@ -27,7 +27,7 @@ public class ParametrageController extends AbstractParametrageController impleme
 
     public void save() {
         try {
-            if (!Utilitaires.isAccess((41L))) {
+            if (!Utilitaires.isAccess((31L))) {
                 this.routine.feedBack("information", "/resources/tool_images/error.png", this.routine.localizeMessage("acces_refuse"));
                 RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
                 return;
@@ -44,7 +44,7 @@ public class ParametrageController extends AbstractParametrageController impleme
 
     public void prepareUpload() {
         try {
-            if (!Utilitaires.isAccess((41L))) {
+            if (!Utilitaires.isAccess((31L))) {
                 this.routine.feedBack("information", "/resources/tool_images/error.png", this.routine.localizeMessage("acces_refuse"));
                 RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
                 return;

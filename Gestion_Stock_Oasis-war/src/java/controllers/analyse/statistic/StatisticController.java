@@ -259,7 +259,7 @@ public class StatisticController extends AbstractStatisticController implements 
                 this.livraisonclients = this.livraisonclientFacadeLocal.findByIdmagasinAndDate(SessionMBean.getMagasin().getIdmagasin(), date);
                 ajaxHide();
                 if (!this.livraisonclients.isEmpty()) {
-                    this.imprimer = Boolean.valueOf(false);
+                    this.imprimer = false;
                     notifySuccess();
                 } else {
                     notifyFail();
@@ -332,7 +332,7 @@ public class StatisticController extends AbstractStatisticController implements 
 
     public void print() {
         try {
-            if (!Utilitaires.isAccess(Long.valueOf(26L))) {
+            if (!Utilitaires.isAccess(26L)) {
                 this.routine.feedBack("information", "/resources/tool_images/error.png", this.routine.localizeMessage("acces_refuse"));
                 RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
                 this.livraisonclient = null;

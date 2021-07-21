@@ -33,7 +33,7 @@
                             </p:selectOneMenu> 
 
                             <p:outputLabel value="#{langue.date_demande}" for="date_commande" />
-                            <p:calendar pattern="dd/MM/yyyy" disabled="false" required="true" id="date_commande" value="#{commandePersonnelController.demande.datedemande}" navigator="true" requiredMessage="#{langue.valeur_obligatoire}">
+                            <p:calendar pattern="dd/MM/yyyy" disabled="true" required="true" id="date_commande" value="#{commandePersonnelController.demande.datedemande}" navigator="true" requiredMessage="#{langue.valeur_obligatoire}">
                                 <p:ajax/>  
                             </p:calendar>
 

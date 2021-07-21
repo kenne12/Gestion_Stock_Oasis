@@ -16,7 +16,7 @@ public class MagasinController extends AbstractMagasinController
 
     public void prepareCreate() {
         try {
-            if (!Utilitaires.isAccess(23L)) {
+            if (!Utilitaires.isAccess(12L)) {
                 signalError("acces_refuse");
                 return;
             }
@@ -31,7 +31,7 @@ public class MagasinController extends AbstractMagasinController
 
     public void prepareEdit() {
         try {
-            if (!Utilitaires.isAccess(24L)) {
+            if (!Utilitaires.isAccess(12L)) {
                 signalError("acces_refuse");
                 return;
             }
@@ -70,7 +70,7 @@ public class MagasinController extends AbstractMagasinController
     public void delete() {
         try {
             if (this.magasin != null) {
-                if (!Utilitaires.isAccess(25L)) {
+                if (!Utilitaires.isAccess(12L)) {
                     signalError("acces_refuse");
                     return;
                 }

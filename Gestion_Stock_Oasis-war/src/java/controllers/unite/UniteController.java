@@ -17,7 +17,7 @@ public class UniteController extends AbstractUniteController implements Serializ
 
     public void prepareCreate() {
         try {
-            if (!Utilitaires.isAccess(28L)) {
+            if (!Utilitaires.isAccess(15L)) {
                 signalError("acces_refuse");
                 return;
             }
@@ -33,7 +33,7 @@ public class UniteController extends AbstractUniteController implements Serializ
 
     public void prepareEdit() {
         try {
-            if (!Utilitaires.isAccess(28L)) {
+            if (!Utilitaires.isAccess(15L)) {
                 signalError("acces_refuse");
                 return;
             }
@@ -75,7 +75,7 @@ public class UniteController extends AbstractUniteController implements Serializ
     public void delete() {
         try {
             if (this.unite != null) {
-                if (!Utilitaires.isAccess((28L))) {
+                if (!Utilitaires.isAccess((15L))) {
                     signalError("acces_refuse");
                     return;
                 }

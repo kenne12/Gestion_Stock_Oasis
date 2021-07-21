@@ -7,11 +7,11 @@ import javax.ejb.Local;
 @Local
 public interface LignetransfertFacadeLocal {
 
-    public void create(Lignetransfert paramLignetransfert);
+    public void create(Lignetransfert lignetransfert);
 
-    public void edit(Lignetransfert paramLignetransfert);
+    public void edit(Lignetransfert lignetransfert);
 
-    public void remove(Lignetransfert paramLignetransfert);
+    public void remove(Lignetransfert lignetransfert);
 
     public Lignetransfert find(Object paramObject);
 

@@ -223,7 +223,7 @@ public class Utilitaires {
         if (SessionMBean.getAccess().isEmpty()) {
             return false;
         }
-        if (SessionMBean.getAccess().contains(Long.valueOf(1L))) {
+        if (SessionMBean.getAccess().contains((1L))) {
             return true;
         }
         if (SessionMBean.getAccess().contains(menu)) {
@@ -233,7 +233,7 @@ public class Utilitaires {
     }
 
     public static boolean isDayClosed() {
-        return false;
+        return SessionMBean.getJournee().isFermee();
     }
 
     public static void permuteDate(Date date1, Date date2) {

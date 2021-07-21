@@ -25,13 +25,17 @@ public class LivraisonclientFacade extends AbstractFacade<Livraisonclient> imple
     }
 
     @Override
-    public Long nextVal() {
-        Query query = this.em.createQuery("SELECT MAX(l.idlivraisonclient) FROM Livraisonclient l");
-        List list = query.getResultList();
-        if (list.isEmpty()) {
-            return 1L;
-        } else {
-            return (Long) list.get(0) + 1;
+    public Long nextValue() {
+        try {
+            Query query = this.em.createQuery("SELECT MAX(l.idlivraisonclient) FROM Livraisonclient l");
+            List list = query.getResultList();
+            if (list != null) {
+                return ((Long) list.get(0)) + 1L;
+            } else {
+                return 1L;
+            }
+        } catch (Exception e) {
+            return 1l;
         }
     }
 

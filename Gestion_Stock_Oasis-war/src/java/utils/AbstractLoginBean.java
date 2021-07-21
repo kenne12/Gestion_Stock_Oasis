@@ -7,6 +7,7 @@ import entities.Livraisonclient;
 import entities.Livraisonfournisseur;
 import entities.Magasin;
 import entities.Parametrage;
+import entities.Transfert;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,6 +24,7 @@ import sessions.MenuFacadeLocal;
 import sessions.MouchardFacadeLocal;
 import sessions.ParametrageFacadeLocal;
 import sessions.PrivilegeFacadeLocal;
+import sessions.TransfertFacadeLocal;
 import sessions.UtilisateurmagasinFacadeLocal;
 
 public class AbstractLoginBean {
@@ -60,8 +62,14 @@ public class AbstractLoginBean {
     protected List<Livraisonclient> livraisonclients = new ArrayList<>();
 
     @EJB
+    protected TransfertFacadeLocal transfertFacadeLocal;
+    protected List<Transfert> transfertSortants = new ArrayList<>();
+    protected List<Transfert> transfertEntrants = new ArrayList<>();
+
+    @EJB
     protected LivraisonfournisseurFacadeLocal livraisonfournisseurFacadeLocal;
     protected List<Livraisonfournisseur> livraisonfournisseurs = new ArrayList<>();
+    protected List<Livraisonfournisseur> livraisonfournisseurFs = new ArrayList<>();
 
     @EJB
     protected JourneeFacadeLocal journeeFacadeLocal;
@@ -188,6 +196,18 @@ public class AbstractLoginBean {
 
     public List<Livraisonfournisseur> getLivraisonfournisseurs() {
         return livraisonfournisseurs;
+    }
+
+    public List<Transfert> getTransfertSortants() {
+        return transfertSortants;
+    }
+
+    public List<Transfert> getTransfertEntrants() {
+        return transfertEntrants;
+    }
+
+    public List<Livraisonfournisseur> getLivraisonfournisseurFs() {
+        return livraisonfournisseurFs;
     }
 
 }

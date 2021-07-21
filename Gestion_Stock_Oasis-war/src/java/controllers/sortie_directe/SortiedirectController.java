@@ -43,7 +43,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
                 return;
             }
 
-            if (!Utilitaires.isAccess(23L)) {
+            if (!Utilitaires.isAccess(27L)) {
                 notifyError("acces_refuse");
                 return;
             }
@@ -52,9 +52,9 @@ public class SortiedirectController extends AbstractSortiedirectController imple
             this.client = new Client();
             this.magasinarticle = new Magasinarticle();
             this.livraisonclient = new Livraisonclient();
-            this.livraisonclient.setDatelivraison(Date.from(Instant.now()));
+            this.livraisonclient.setDatelivraison(SessionMBean.getJournee().getDateJour());
             this.livraisonclient.setModePayement("PAYE_COMPTANT");
-            this.livraisonclient.setMontant(0.0);
+            this.livraisonclient.setMontant(0d);
             this.livraisonclient.setTauxRemise(SessionMBean.getParametrage().getTauxRemise());
             this.livraisonclient.setTauxTva(SessionMBean.getParametrage().getTauxTva());
             clientToSave = new Client();
@@ -97,7 +97,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
                     return;
                 }
 
-                if (!Utilitaires.isAccess(24L)) {
+                if (!Utilitaires.isAccess(27L)) {
                     notifyError("acces_refuse");
                     this.livraisonclient = null;
                     return;
@@ -192,7 +192,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
                 code = Utilitaires.genererCodeFacture(code, nextFacture);
 
                 this.livraisonclient.setCode(code);
-                
+
                 this.livraisonclient.setClient(this.client);
                 this.livraisonclient.setIdmagasin(this.magasin);
                 this.livraisonclient.setMontant(this.total);
@@ -213,7 +213,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
                     livraisonclient.setReste(livraisonclient.getMontantTtc() - livraisonclient.getAvanceInitiale());
                 }
                 this.livraisonclient.setIdmagasin(SessionMBean.getMagasin());
-                this.livraisonclient.setIdlivraisonclient(livraisonclientFacadeLocal.nextVal());
+                this.livraisonclient.setIdlivraisonclient(livraisonclientFacadeLocal.nextValue());
                 this.livraisonclientFacadeLocal.create(this.livraisonclient);
 
                 for (Lignelivraisonclient llc : this.lignelivraisonclients) {
@@ -367,7 +367,13 @@ public class SortiedirectController extends AbstractSortiedirectController imple
         try {
             if (this.livraisonclient != null) {
                 if (this.livraisonclient.getLivraisondirecte()) {
-                    if (!Utilitaires.isAccess(25L)) {
+
+                    if (Utilitaires.isDayClosed()) {
+                        notifyError("journee_cloturee");
+                        return;
+                    }
+
+                    if (!Utilitaires.isAccess(27L)) {
                         notifyError("acces_refuse");
                         this.supprimer = this.modifier = this.imprimer = true;
                         this.livraisonclient = new Livraisonclient();

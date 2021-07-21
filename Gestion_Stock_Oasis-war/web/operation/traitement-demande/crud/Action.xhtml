@@ -9,14 +9,9 @@
 
         <div class="footer-section">
 
-            <!--<p:commandButton id="creer"  icon="ui-icon-plus"   
-                             value="Nouvelle Validation" 
-                             actionListener="#{traitementController.prepareCreate()}"
-                             update=":LivraisonClientCreateForm,:notify1"/>-->
-
             <p:commandButton id="detail"   
                              icon="ui-icon-search" 
-                             value="Afficher / Actualiser" 
+                             value="#{langue.afficher} / #{langue.actualiser}" 
                              update=":LivraisonClientListerForm" 
                              actionListener="#{traitementController.afficherDemande()}" /> 
 

@@ -10,11 +10,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import org.primefaces.context.RequestContext;
-import sessions.MagasinFacadeLocal;
-import sessions.PersonnelFacadeLocal;
-import sessions.QualiteFacadeLocal;
 import utils.Printer;
-import utils.Routine;
 import utils.SessionMBean;
 import utils.Utilitaires;
 
@@ -30,7 +26,7 @@ public class PersonnelController extends AbstractPersonnelController
 
     public void prepareCreate() {
         try {
-            if (!Utilitaires.isAccess((27L))) {
+            if (!Utilitaires.isAccess((14L))) {
                 notifyError("acces_refuse");
                 return;
             }
@@ -54,7 +50,7 @@ public class PersonnelController extends AbstractPersonnelController
 
     public void prepareEdit() {
         try {
-            if (!Utilitaires.isAccess((27L))) {
+            if (!Utilitaires.isAccess((14L))) {
                 /*  68 */ notifyError("acces_refuse");
                 /*  69 */ return;
             }
@@ -84,7 +80,7 @@ public class PersonnelController extends AbstractPersonnelController
 
                 /*  96 */ Utilitaires.saveOperation(this.mouchardFacadeLocal, "Enregistrement du personnel : " + this.personnel.getNom() + " " + this.personnel.getPrenom(), SessionMBean.getUserAccount());
                 /*  97 */ this.personnel = null;
-                /*  98 */ this.modifier = (this.supprimer = this.detail = Boolean.valueOf(true));
+                /*  98 */ this.modifier = (this.supprimer = this.detail = (true));
                 /*  99 */ RequestContext.getCurrentInstance().execute("PF('PersonnelCreerDialog').hide()");
                 /* 100 */ notifySuccess();
             } else if (this.personnel != null) {
@@ -105,7 +101,7 @@ public class PersonnelController extends AbstractPersonnelController
     public void delete() {
         try {
             if (this.personnel != null) {
-                if (!Utilitaires.isAccess((27L))) {
+                if (!Utilitaires.isAccess((14L))) {
                     notifyError("acces_refuse");
                     return;
                 }
@@ -125,7 +121,7 @@ public class PersonnelController extends AbstractPersonnelController
 
     public void print() {
         try {
-            if (!Utilitaires.isAccess(Long.valueOf(27L))) {
+            if (!Utilitaires.isAccess(Long.valueOf(14L))) {
                 /* 143 */ notifyError("acces_refuse");
                 /* 144 */ return;
             }

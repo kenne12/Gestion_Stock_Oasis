@@ -93,18 +93,6 @@ public class AbstractStatisticController {
         return this.clients;
     }
 
-    public void setClients(List<Client> clients) {
-        this.clients = clients;
-    }
-
-    public LivraisonclientFacadeLocal getLivraisonclientFacadeLocal() {
-        return this.livraisonclientFacadeLocal;
-    }
-
-    public void setLivraisonclientFacadeLocal(LivraisonclientFacadeLocal livraisonclientFacadeLocal) {
-        this.livraisonclientFacadeLocal = livraisonclientFacadeLocal;
-    }
-
     public Livraisonclient getLivraisonclient() {
         return this.livraisonclient;
     }
@@ -117,48 +105,24 @@ public class AbstractStatisticController {
         return this.livraisonclients;
     }
 
-    public void setLivraisonclients(List<Livraisonclient> livraisonclients) {
-        this.livraisonclients = livraisonclients;
-    }
-
-    public MouchardFacadeLocal getMouchardFacadeLocal() {
-        return this.mouchardFacadeLocal;
-    }
-
-    public void setMouchardFacadeLocal(MouchardFacadeLocal mouchardFacadeLocal) {
-        this.mouchardFacadeLocal = mouchardFacadeLocal;
-    }
-
-    public PrivilegeFacadeLocal getPrivilegeFacadeLocal() {
-        return this.privilegeFacadeLocal;
-    }
-
-    public void setPrivilegeFacadeLocal(PrivilegeFacadeLocal privilegeFacadeLocal) {
-        this.privilegeFacadeLocal = privilegeFacadeLocal;
-    }
-
     public Boolean getImprimer() {
         return this.imprimer;
     }
 
-    public void setImprimer(Boolean imprimer) {
-        /* 154 */ this.imprimer = imprimer;
-    }
-
     public Double getCout_quantite() {
-        /* 158 */ return this.cout_quantite;
+        return this.cout_quantite;
     }
 
     public void setCout_quantite(Double cout_quantite) {
-        /* 162 */ this.cout_quantite = cout_quantite;
+        this.cout_quantite = cout_quantite;
     }
 
     public Double getTotal() {
-        /* 166 */ return this.total;
+        return this.total;
     }
 
     public void setTotal(Double total) {
-        /* 170 */ this.total = total;
+        this.total = total;
     }
 
     public Annee getAnnee() {
@@ -194,10 +158,6 @@ public class AbstractStatisticController {
         return this.anneeMoises;
     }
 
-    public void setAnneeMoises(List<AnneeMois> anneeMoises) {
-        this.anneeMoises = anneeMoises;
-    }
-
     public String getFileName() {
         return this.fileName;
     }
@@ -227,54 +187,54 @@ public class AbstractStatisticController {
     }
 
     public Date getDateDebut() {
-        /* 239 */ return this.dateDebut;
+        return this.dateDebut;
     }
 
     public void setDateDebut(Date dateDebut) {
-        /* 243 */ this.dateDebut = dateDebut;
+        this.dateDebut = dateDebut;
     }
 
     public Date getDateFin() {
-        /* 247 */ return this.dateFin;
+        return this.dateFin;
     }
 
     public void setDateFin(Date dateFin) {
-        /* 251 */ this.dateFin = dateFin;
+        this.dateFin = dateFin;
     }
 
     public int getDate_interval() {
-        /* 255 */ return this.date_interval;
+        return this.date_interval;
     }
 
     public void setDate_interval(int date_interval) {
-        /* 259 */ this.date_interval = date_interval;
+        this.date_interval = date_interval;
     }
 
     public String getPrintDialogTitle() {
-        /* 263 */ return this.printDialogTitle;
+        return this.printDialogTitle;
     }
 
     public LineChartModel getLineModel1() {
-        /* 267 */ return this.lineModel1;
+        return this.lineModel1;
     }
 
     public void setLineModel1(LineChartModel lineModel1) {
-        /* 271 */ this.lineModel1 = lineModel1;
+        this.lineModel1 = lineModel1;
     }
 
     public LineChartModel getLineModel2() {
-        /* 275 */ return this.lineModel2;
+        return this.lineModel2;
     }
 
     public void setLineModel2(LineChartModel lineModel2) {
-        /* 279 */ this.lineModel2 = lineModel2;
+        this.lineModel2 = lineModel2;
     }
 
     public BarChartModel getBarModel() {
-        /* 283 */ return this.barModel;
+        return this.barModel;
     }
 
     public void setBarModel(BarChartModel barModel) {
-        /* 287 */ this.barModel = barModel;
+        this.barModel = barModel;
     }
 }

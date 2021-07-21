@@ -15,7 +15,7 @@ public class FournisseurController extends AbstractFournisseurController impleme
 
     public void prepareCreate() {
         try {
-            if (!Utilitaires.isAccess(14L)) {
+            if (!Utilitaires.isAccess(11L)) {
                 signalError("acces_refuse");
                 return;
             }
@@ -33,7 +33,7 @@ public class FournisseurController extends AbstractFournisseurController impleme
 
     public void prepareEdit() {
         try {
-            if (!Utilitaires.isAccess(15L)) {
+            if (!Utilitaires.isAccess(11L)) {
                 signalError("acces_refuse");
                 return;
             }
@@ -71,7 +71,7 @@ public class FournisseurController extends AbstractFournisseurController impleme
     public void delete() {
         try {
             if (this.fournisseur != null) {
-                if (!Utilitaires.isAccess(16L)) {
+                if (!Utilitaires.isAccess(11L)) {
                     signalError("acces_refuse");
                     return;
                 }

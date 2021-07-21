@@ -21,17 +21,22 @@ import utils.Utilitaires;
 @ManagedBean
 @SessionScoped
 public class CommandefournisseurController extends AbstractCommandefournisseurController implements Serializable {
-    
+
     @PostConstruct
     private void init() {
     }
-    
+
     public void updateCalculTva() {
         updateTotal();
     }
-    
+
     public void prepareCreate() {
         try {
+            if (Utilitaires.isDayClosed()) {
+                notifyError("journee_cloturee");
+                return;
+            }
+
             if (!Utilitaires.isAccess((34L))) {
                 notifyError("acces_refuse");
                 return;
@@ -40,10 +45,10 @@ public class CommandefournisseurController extends AbstractCommandefournisseurCo
             this.mode = "Create";
             this.article = new Article();
             this.fournisseur = new Fournisseur();
-            
+
             this.commandefournisseur = new Commandefournisseur();
             this.lignecommandefournisseurs.clear();
-            
+
             this.commandefournisseur.setCode("-");
             this.commandefournisseur.setDatecommande(new Date());
             this.commandefournisseur.setDateprevlivrasion(new Date());
@@ -56,45 +61,50 @@ public class CommandefournisseurController extends AbstractCommandefournisseurCo
             RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
         }
     }
-    
+
     public void prepareCreateCommande() {
         this.famille = new Famille();
         this.article = new Article();
         this.lignecommandefournisseur = new Lignecommandefournisseur();
         this.lignecommandefournisseur.setUnite(1d);
-        
+
         this.cout_quantite = 0d;
         RequestContext.getCurrentInstance().execute("PF('ArticleCreateDialog').show()");
     }
-    
+
     public void prepareEdit() {
         try {
             if (this.commandefournisseur == null) {
                 notifyError("not_row_selected");
                 return;
             }
-            
+
+            if (Utilitaires.isDayClosed()) {
+                notifyError("journee_cloturee");
+                return;
+            }
+
             if (this.commandefournisseur.getLivre()) {
                 notifyError("commande_deja_livree");
                 return;
             }
-            
+
             if (!Utilitaires.isAccess(35L)) {
                 notifyError("acces_refuse");
                 this.commandefournisseur = null;
                 return;
             }
-            
+
             this.mode = "Edit";
             this.lignecommandefournisseurs = this.lignecommandefournisseurFacadeLocal.findByCommande(this.commandefournisseur.getIdcommandefournisseur());
             this.total = this.commandefournisseur.getMontant();
-            
+
             RequestContext.getCurrentInstance().execute("PF('CommandeCreateDialog').show()");
         } catch (Exception e) {
             notifyFail(e);
         }
     }
-    
+
     public void prepareview() {
         try {
             if (this.commandefournisseur != null) {
@@ -111,7 +121,7 @@ public class CommandefournisseurController extends AbstractCommandefournisseurCo
             notifyFail(e);
         }
     }
-    
+
     public void filterArticle() {
         try {
             this.articles.clear();
@@ -124,47 +134,47 @@ public class CommandefournisseurController extends AbstractCommandefournisseurCo
             e.printStackTrace();
         }
     }
-    
+
     public void create() {
         try {
             String message;
             if ("Create".equals(this.mode)) {
                 if (!this.lignecommandefournisseurs.isEmpty()) {
                     message = "";
-                    
+
                     updateTotal();
-                    
+
                     this.commandefournisseur.setIdfournisseur(this.fournisseur);
                     this.commandefournisseur.setPaye(false);
                     this.commandefournisseur.setLivre(false);
                     this.commandefournisseur.setMontant(this.total);
                     this.commandefournisseur.setIdUtilisateur(SessionMBean.getUserAccount().getIdutilisateur());
                     this.commandefournisseur.setMagasin(SessionMBean.getMagasin());
-                    
+
                     String code = "C-" + SessionMBean.getAnnee().getNom() + "-" + SessionMBean.getMois().getIdmois().getNom().toUpperCase().substring(0, 3);
                     Long nextCommande = commandefournisseurFacadeLocal.nextVal(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getMois());
                     code = Utilitaires.genererCodeDemande(code, nextCommande);
-                    
+
                     this.ut.begin();
-                    
+
                     this.commandefournisseur.setCode(code);
                     this.commandefournisseur.setIdcommandefournisseur(this.commandefournisseurFacadeLocal.nextVal());
                     this.commandefournisseurFacadeLocal.create(this.commandefournisseur);
-                    
+
                     for (Lignecommandefournisseur lcf : this.lignecommandefournisseurs) {
                         lcf.setIdlignecommandefournisseur(this.lignecommandefournisseurFacadeLocal.nextVal());
                         lcf.setIdcommandefournisseur(this.commandefournisseur);
                         this.lignecommandefournisseurFacadeLocal.create(lcf);
                     }
-                    
+
                     Utilitaires.saveOperation(this.mouchardFacadeLocal, "Enregistrement de la commande fournisseur : " + this.commandefournisseur.getCode(), SessionMBean.getUserAccount());
-                    
+
                     this.ut.commit();
                     this.commandefournisseur = null;
                     this.lignecommandefournisseurs.clear();
                     this.detail = (this.supprimer = this.modifier = this.imprimer = true);
                     JsfUtil.addSuccessMessage(message);
-                    
+
                     notifySuccess();
                     RequestContext.getCurrentInstance().execute("PF('CommandeCreateDialog').hide()");
                 } else {
@@ -173,9 +183,9 @@ public class CommandefournisseurController extends AbstractCommandefournisseurCo
             } else if (this.commandefournisseur != null) {
                 updateTotal();
                 this.ut.begin();
-                
+
                 this.commandefournisseurFacadeLocal.edit(this.commandefournisseur);
-                
+
                 if (!this.lignecommandefournisseurs.isEmpty()) {
                     for (Lignecommandefournisseur lcf : this.lignecommandefournisseurs) {
                         if (lcf.getIdlignecommandefournisseur() != 0L) {
@@ -187,12 +197,12 @@ public class CommandefournisseurController extends AbstractCommandefournisseurCo
                         }
                     }
                 }
-                
+
                 this.ut.commit();
                 this.commandefournisseur = null;
                 this.lignecommandefournisseurs.clear();
                 this.detail = (this.supprimer = this.modifier = this.imprimer = true);
-                
+
                 notifySuccess();
                 RequestContext.getCurrentInstance().execute("PF('CommandeCreateDialog').hide()");
             } else {
@@ -202,24 +212,30 @@ public class CommandefournisseurController extends AbstractCommandefournisseurCo
             notifyFail(e);
         }
     }
-    
+
     public void delete() {
         try {
             if (this.commandefournisseur != null) {
+
+                if (Utilitaires.isDayClosed()) {
+                    notifyError("journee_cloturee");
+                    return;
+                }
+
                 if (this.commandefournisseur.getLivre()) {
                     notifyError("commande_deja_livree");
                     return;
                 }
-                
+
                 if (!Utilitaires.isAccess(36L)) {
                     notifyError("acces_refuse");
                     this.detail = this.supprimer = this.modifier = this.imprimer = true;
                     this.commandefournisseur = null;
                     return;
                 }
-                
+
                 this.ut.begin();
-                
+
                 List<Lignecommandefournisseur> temp = this.lignecommandefournisseurFacadeLocal.findByCommande(this.commandefournisseur.getIdcommandefournisseur());
                 if (!temp.isEmpty()) {
                     for (Lignecommandefournisseur lcf : temp) {
@@ -239,27 +255,27 @@ public class CommandefournisseurController extends AbstractCommandefournisseurCo
             notifyFail(e);
         }
     }
-    
+
     public void initPrinter(Commandefournisseur c) {
         this.commandefournisseur = c;
         print();
     }
-    
+
     public void initEdit(Commandefournisseur c) {
         this.commandefournisseur = c;
         prepareEdit();
     }
-    
+
     public void initView(Commandefournisseur c) {
         this.commandefournisseur = c;
         prepareview();
     }
-    
+
     public void initDelete(Commandefournisseur c) {
         this.commandefournisseur = c;
         delete();
     }
-    
+
     public void print() {
         try {
             if (!Utilitaires.isAccess((37L))) {
@@ -267,7 +283,7 @@ public class CommandefournisseurController extends AbstractCommandefournisseurCo
                 this.commandefournisseur = null;
                 return;
             }
-            
+
             if (this.commandefournisseur != null) {
                 RequestContext.getCurrentInstance().execute("PF('FactureImprimerDialog').show()");
             } else {
@@ -277,14 +293,14 @@ public class CommandefournisseurController extends AbstractCommandefournisseurCo
             notifyFail(e);
         }
     }
-    
+
     public void addArticle() {
         try {
             Lignecommandefournisseur l = this.lignecommandefournisseur;
             l.setIdlignecommandefournisseur((0L));
-            
+
             l.setIdarticle(this.article);
-            
+
             boolean drapeau = false;
             int i = 0;
             for (Lignecommandefournisseur lcf : this.lignecommandefournisseurs) {
@@ -294,7 +310,7 @@ public class CommandefournisseurController extends AbstractCommandefournisseurCo
                 }
                 i++;
             }
-            
+
             if (!drapeau) {
                 Unite u = this.unite;
                 l.setIdunite(u);
@@ -313,12 +329,12 @@ public class CommandefournisseurController extends AbstractCommandefournisseurCo
             RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
         }
     }
-    
+
     public void removeArticle(int index) {
         try {
             boolean trouve = false;
             this.ut.begin();
-            
+
             Lignecommandefournisseur lcf = (Lignecommandefournisseur) this.lignecommandefournisseurs.get(index);
             if (lcf.getIdlignecommandefournisseur() != 0L) {
                 trouve = true;
@@ -326,7 +342,7 @@ public class CommandefournisseurController extends AbstractCommandefournisseurCo
                 Utilitaires.saveOperation(this.mouchardFacadeLocal, "Suppression de l'article : " + lcf.getIdarticle().getLibelle() + " quantité : " + lcf.getQuantite() + " dans la commande : " + this.commandefournisseur.getCode(), SessionMBean.getUserAccount());
             }
             this.lignecommandefournisseurs.remove(index);
-            
+
             updateTotal();
             if (trouve) {
                 this.commandefournisseurFacadeLocal.edit(this.commandefournisseur);
@@ -338,7 +354,7 @@ public class CommandefournisseurController extends AbstractCommandefournisseurCo
             JsfUtil.addErrorMessage(this.routine.localizeMessage("echec_operation"));
         }
     }
-    
+
     public Double calculTotal() {
         Double resultat = 0d;
         int i = 0;
@@ -351,7 +367,7 @@ public class CommandefournisseurController extends AbstractCommandefournisseurCo
         this.commandefournisseur.setMontant(resultat);
         return resultat;
     }
-    
+
     public void updateTotal() {
         try {
             this.total = calculTotal();
@@ -359,7 +375,7 @@ public class CommandefournisseurController extends AbstractCommandefournisseurCo
             e.printStackTrace();
         }
     }
-    
+
     public void updateTotaux() {
         try {
             this.cout_quantite = 0d;
@@ -376,7 +392,7 @@ public class CommandefournisseurController extends AbstractCommandefournisseurCo
             this.cout_quantite = 0d;
         }
     }
-    
+
     public void updatedata() {
         try {
             if (this.article != null) {
@@ -390,7 +406,7 @@ public class CommandefournisseurController extends AbstractCommandefournisseurCo
             e.printStackTrace();
         }
     }
-    
+
     public void updatedataLot() {
         try {
             if (this.lot != null) {
@@ -400,18 +416,18 @@ public class CommandefournisseurController extends AbstractCommandefournisseurCo
             e.printStackTrace();
         }
     }
-    
+
     public void notifyError(String message) {
         this.routine.feedBack("avertissement", "/resources/tool_images/warning.jpeg", this.routine.localizeMessage(message));
         RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
     }
-    
+
     public void notifySuccess() {
         RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
         this.routine.feedBack("information", "/resources/tool_images/success.png", this.routine.localizeMessage("operation_reussie"));
         RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
     }
-    
+
     public void notifyFail(Exception e) {
         RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
         this.routine.catchException(e, this.routine.localizeMessage("echec_operation"));

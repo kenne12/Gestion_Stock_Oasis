@@ -37,7 +37,12 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
 
     public void prepareCreate() {
         try {
-            if (!Utilitaires.isAccess(30L)) {
+            if (Utilitaires.isDayClosed()) {
+                notifyError("journee_cloturee");
+                return;
+            }
+
+            if (!Utilitaires.isAccess(16L)) {
                 notifyError("acces_refuse");
                 return;
             }
@@ -54,8 +59,8 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
             this.demande.setValidee(false);
             this.demande.setMontant(0.0);
             this.demande.setMotif("-");
-            this.demande.setDatedemande(Date.from(Instant.now()));
-            this.demande.setDateprevlivraison(Date.from(Instant.now()));
+            this.demande.setDatedemande(SessionMBean.getJournee().getDateJour());
+            this.demande.setDateprevlivraison(SessionMBean.getJournee().getDateJour());
             this.demande.setComplete(false);
             this.magasinarticles.clear();
 
@@ -71,7 +76,6 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
 
     public void prepareCreateCommande() {
         this.famille = new Famille();
-        //this.magasin = new Magasin();
         this.unite = new Unite();
         this.magasinarticle = new Magasinarticle();
         this.lignedemande = new Lignedemande();
@@ -88,12 +92,17 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
                 return;
             }
 
+            if (Utilitaires.isDayClosed()) {
+                notifyError("journee_cloturee");
+                return;
+            }
+
             if (this.demande.getValidee()) {
                 notifyError("commande_deja_livree");
                 return;
             }
 
-            if (!Utilitaires.isAccess(31L)) {
+            if (!Utilitaires.isAccess(17L)) {
                 notifyError("acces_refuse");
                 this.demande = null;
                 return;
@@ -275,12 +284,18 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
     public void delete() {
         try {
             if (this.demande != null) {
+
+                if (Utilitaires.isDayClosed()) {
+                    notifyError("journee_cloturee");
+                    return;
+                }
+
                 if (this.demande.getValidee()) {
                     notifyError("commande_deja_livree");
                     return;
                 }
 
-                if (!Utilitaires.isAccess(32L)) {
+                if (!Utilitaires.isAccess(18L)) {
                     notifyError("acces_refuse");
                     this.detail = (this.supprimer = this.modifier = this.imprimer = true);
                     this.client = new Client();
@@ -335,7 +350,7 @@ public class CommandePersonnelController extends AbstractCommandePersonnelContro
 
     public void print() {
         try {
-            if (!Utilitaires.isAccess(33L)) {
+            if (!Utilitaires.isAccess(19L)) {
                 notifyError("acces_refuse");
                 this.demande = null;
                 return;

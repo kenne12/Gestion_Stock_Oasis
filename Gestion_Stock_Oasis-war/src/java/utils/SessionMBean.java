@@ -2,6 +2,7 @@ package utils;
 
 import entities.Annee;
 import entities.AnneeMois;
+import entities.Journee;
 import entities.Magasin;
 import entities.Parametrage;
 import entities.Utilisateur;
@@ -85,6 +86,14 @@ public class SessionMBean {
         return null;
     }
 
+    public static Annee getAnneeDefault() {
+        HttpSession session = getSession();
+        if (session != null) {
+            return (Annee) session.getAttribute("annee_default");
+        }
+        return null;
+    }
+
     public static Magasin getMagasin() {
         HttpSession session = getSession();
         if (session != null) {
@@ -100,7 +109,7 @@ public class SessionMBean {
         }
         return null;
     }
-    
+
     public static AnneeMois getMois() {
         HttpSession session = getSession();
         if (session != null) {
@@ -108,7 +117,7 @@ public class SessionMBean {
         }
         return null;
     }
-    
+
     public static AnneeMois getDefaultMonth() {
         HttpSession session = getSession();
         if (session != null) {
@@ -117,10 +126,26 @@ public class SessionMBean {
         return null;
     }
 
+    public static List<AnneeMois> getListDefaultMonths() {
+        HttpSession session = getSession();
+        if (session != null) {
+            return (List<AnneeMois>) session.getAttribute("list_mois_default");
+        }
+        return null;
+    }
+
     public static List<Magasin> getMagasins() {
         HttpSession session = getSession();
         if (session != null) {
             return (List<Magasin>) session.getAttribute("magasins");
+        }
+        return null;
+    }
+
+    public static Journee getJournee() {
+        HttpSession session = getSession();
+        if (session != null) {
+            return (Journee) session.getAttribute("journee");
         }
         return null;
     }

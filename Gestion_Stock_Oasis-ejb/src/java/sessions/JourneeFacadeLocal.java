@@ -31,16 +31,16 @@ public interface JourneeFacadeLocal {
 
     int count();
 
-    Long nextVal();
+    public Long nextVal();
 
-    List<Journee> findByInterval(Date dateDebut, Date dateFin);
+    public List<Journee> findByInterval(Date dateDebut, Date dateFin);
 
-    List<Journee> findByIdMois(int idMois);
+    public List<Journee> findByIdMois(int idMois);
 
-    Journee findByIdMagasinDate(int idMagasin, Date date);
+    public Journee findByIdMagasinDate(int idMagasin, Date date);
 
     public List<Journee> findByIdmagasinTwoDates(int idMagasin, Date dateDebut, Date dateFin);
-    
+
     public List<Journee> findByTwoDates(Date dateDebut, Date dateFin);
 
 }

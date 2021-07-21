@@ -39,7 +39,13 @@ public class TransfertController extends AbstractTransertController implements S
 
     public void prepareCreate() {
         try {
-            if (!Utilitaires.isAccess(43L)) {
+
+            if (Utilitaires.isDayClosed()) {
+                notifyError("journee_cloturee");
+                return;
+            }
+
+            if (!Utilitaires.isAccess(29L)) {
                 notifyError("acces_refuse");
                 return;
             }
@@ -107,7 +113,7 @@ public class TransfertController extends AbstractTransertController implements S
 
             this.showSelectorCommand = true;
 
-            if (!Utilitaires.isAccess(49L)) {
+            if (!Utilitaires.isAccess(29L)) {
                 notifyError("acces_refuse");
                 this.transfert = null;
                 return;
@@ -435,7 +441,13 @@ public class TransfertController extends AbstractTransertController implements S
     public void delete() {
         try {
             if (this.transfert != null) {
-                if (!Utilitaires.isAccess((43L))) {
+
+                if (Utilitaires.isDayClosed()) {
+                    notifyError("journee_cloturee");
+                    return;
+                }
+
+                if (!Utilitaires.isAccess(29L)) {
                     notifyError("acces_refuse");
                     this.detail = (this.supprimer = this.modifier = this.imprimer = (true));
                     this.transfert = null;
@@ -520,7 +532,7 @@ public class TransfertController extends AbstractTransertController implements S
 
     public void print() {
         try {
-            if (!Utilitaires.isAccess(43L)) {
+            if (!Utilitaires.isAccess(29L)) {
                 notifyError("acces_refuse");
                 this.transfert = null;
                 return;

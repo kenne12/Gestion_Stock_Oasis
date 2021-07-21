@@ -35,7 +35,13 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
 
     public void prepareCreate() {
         try {
-            if (!Utilitaires.isAccess(46L)) {
+
+            if (Utilitaires.isDayClosed()) {
+                notifyError("journee_cloturee");
+                return;
+            }
+
+            if (!Utilitaires.isAccess(33L)) {
                 notifyError("acces_refuse");
                 return;
             }
@@ -46,7 +52,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
             this.fournisseur = new Fournisseur();
             this.fournisseurToSave = new Fournisseur();
             this.livraisonfournisseur = new Livraisonfournisseur();
-            this.livraisonfournisseur.setDatelivraison(Date.from(Instant.now()));
+            this.livraisonfournisseur.setDatelivraison(SessionMBean.getJournee().getDateJour());
             this.lignelivraisonfournisseurs.clear();
             this.magasinarticles = this.magasinarticleFacadeLocal.findByIdmagasinProductIsActif(this.magasin.getIdmagasin(), true);
             RequestContext.getCurrentInstance().execute("PF('StockCreateDialog').show()");
@@ -79,12 +85,18 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
 
     public void prepareEdit() {
         try {
+
+            if (Utilitaires.isDayClosed()) {
+                notifyError("journee_cloturee");
+                return;
+            }
+
             if (!this.livraisonfournisseur.getLivraisondirecte()) {
                 notifyError("livraison_directe");
                 return;
             }
 
-            if (!Utilitaires.isAccess(46L)) {
+            if (!Utilitaires.isAccess(33L)) {
                 notifyError("acces_refuse");
                 return;
             }
@@ -432,7 +444,13 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
     public void delete() {
         try {
             if (this.livraisonfournisseur != null) {
-                if (!Utilitaires.isAccess(47L)) {
+
+                if (Utilitaires.isDayClosed()) {
+                    notifyError("journee_cloturee");
+                    return;
+                }
+
+                if (!Utilitaires.isAccess(33L)) {
                     notifyError("acces_refuse");
                     return;
                 }

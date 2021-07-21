@@ -33,5 +33,7 @@ public interface LivraisonfournisseurFacadeLocal {
 
     public List<Livraisonfournisseur> findAllRange(int idMagasin, Date dateDebut, Date dateFin, boolean livraisonDirecte);
 
-    List<Livraisonfournisseur> findAllRange(int idMagasin, Date dateDebut, Date dateFin);
+    public List<Livraisonfournisseur> findAllRange(int idMagasin, Date dateDebut, Date dateFin);
+
+    public List<Livraisonfournisseur> findAllRange(int idMagasin, Date date);
 }

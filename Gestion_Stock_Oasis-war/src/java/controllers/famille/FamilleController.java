@@ -33,7 +33,7 @@ public class FamilleController extends AbstractFamilleController implements Seri
     
     public void prepareEdit() {
         try {
-            if (!Utilitaires.isAccess(11L)) {
+            if (!Utilitaires.isAccess(10L)) {
                 signalError("acces_refuse");
                 return;
             }
@@ -71,7 +71,7 @@ public class FamilleController extends AbstractFamilleController implements Seri
     public void delete() {
         try {
             if (this.famille != null) {
-                if (!Utilitaires.isAccess(12L)) {
+                if (!Utilitaires.isAccess(10L)) {
                     signalError("acces_refuse");
                     return;
                 }

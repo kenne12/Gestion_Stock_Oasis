@@ -26,12 +26,16 @@ public class LivraisonfournisseurFacade extends AbstractFacade<Livraisonfourniss
 
     @Override
     public Long nextVal() {
-        Query query = this.em.createQuery("SELECT MAX(l.idlivraisonfournisseur) FROM Livraisonfournisseur l");
-        List list = query.getResultList();
-        if (list.isEmpty()) {
+        try {
+            Query query = this.em.createQuery("SELECT MAX(l.idlivraisonfournisseur) FROM Livraisonfournisseur l");
+            List list = query.getResultList();
+            if (list != null) {
+                return ((Long) list.get(0)) + 1;
+            } else {
+                return 1L;
+            }
+        } catch (Exception e) {
             return 1L;
-        } else {
-            return ((Long) list.get(0)) + 1;
         }
     }
 
@@ -41,10 +45,10 @@ public class LivraisonfournisseurFacade extends AbstractFacade<Livraisonfourniss
             Query query = this.em.createQuery("SELECT COUNT(l.idlivraisonfournisseur) FROM Livraisonfournisseur l WHERE l.datelivraison BETWEEN :dateDebut AND :dateFin AND l.idmagasin.idmagasin=:idMagasin");
             query.setParameter("dateDebut", anneeMois.getDateDebut()).setParameter("dateFin", anneeMois.getDateFin()).setParameter("idMagasin", idMagasin);
             List list = query.getResultList();
-            if (list.isEmpty()) {
-                return 1L;
-            } else {
+            if (list != null) {
                 return ((Long) list.get(0)) + 1;
+            } else {
+                return 1L;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -82,6 +86,14 @@ public class LivraisonfournisseurFacade extends AbstractFacade<Livraisonfourniss
                 .setParameter("idMagasin", idMagasin)
                 .setParameter("dateDebut", dateDebut)
                 .setParameter("dateFin", dateFin)
+                .getResultList();
+    }
+
+    @Override
+    public List<Livraisonfournisseur> findAllRange(int idMagasin, Date date) {
+        return this.em.createQuery("SELECT l FROM Livraisonfournisseur l WHERE l.idmagasin.idmagasin=:idMagasin AND l.datelivraison=:date ORDER BY l.datelivraison DESC , l.idcommandefournisseur DESC")
+                .setParameter("idMagasin", idMagasin)
+                .setParameter("date", date)
                 .getResultList();
     }
 }

@@ -24,14 +24,19 @@ public class LignetransfertFacade extends AbstractFacade<Lignetransfert> impleme
 
     @Override
     public Long nextVal() {
-        Query query = this.em.createQuery("SELECT MAX(l.idlignetransfert) FROM Lignetransfert l");
-        Long result = (Long) query.getSingleResult();
-        if (result == null) {
-            result = 1L;
-        } else {
-            result += 1L;
+        try {
+            Query query = this.em.createQuery("SELECT MAX(l.idlignetransfert) FROM Lignetransfert l");
+            Long result = (Long) query.getSingleResult();
+            if (result == null) {
+                result = 1L;
+            } else {
+                result += 1L;
+            }
+            return result;
+
+        } catch (Exception e) {
+            return 1L;
         }
-        return result;
     }
 
     @Override

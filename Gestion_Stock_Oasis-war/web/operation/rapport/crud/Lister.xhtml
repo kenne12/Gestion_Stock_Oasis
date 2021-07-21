@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <h:form id="RapportListerForm">
+
+        <p:messages id="growl" closable="true">
+            <p:effect type="pulsate" event="load" delay="50" />
+        </p:messages>
+
+        <p:separator/>
+        <p:panel header="Rapport d'activité périodique">
+
+            <p:dataTable id="datalist"
+                         value="#{recetteController.journees}"
+                         var="item"
+                         paginator="true"
+                         rows="31"
+                         style="width: 100%"
+                         rowsPerPageTemplate="10,20,30,40,50">
+
+                <p:column style="width: 25%;text-align: center">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.date}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.dateJour}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+                
+                <p:column filterBy="#{item.montantVendu}" style="width: 15%">
+                    <f:facet name="header">
+                        <h:outputText value="Recette"/>
+                    </f:facet>
+                    <h:outputText value="#{item.montantVendu}">
+                        <f:convertNumber />
+                    </h:outputText>
+                </p:column>
+
+                <p:column filterBy="#{item.transfertSortant}" style="width: 10%">
+                    <f:facet name="header">
+                        <h:outputText value="Transf Sortant"/>
+                    </f:facet>
+                    <h:outputText value="#{item.transfertSortant}">
+                        <f:convertNumber />
+                    </h:outputText>
+                </p:column>
+
+                <p:column filterBy="#{item.montantEntre}" style="width: 15%">
+                    <f:facet name="header">
+                        <h:outputText value="Appr"/>
+                    </f:facet>
+                    <h:outputText value="#{item.montantEntre}">
+                        <f:convertNumber />
+                    </h:outputText>
+                </p:column>
+                
+                <p:column filterBy="#{item.transfertEntrant}" style="width: 10%">
+                    <f:facet name="header">
+                        <h:outputText value="Appr"/>
+                    </f:facet>
+                    <h:outputText value="#{item.transfertEntrant}">
+                        <f:convertNumber />
+                    </h:outputText>
+                </p:column>
+                
+                <p:column filterBy="#{item.bord}" style="width: 10%">
+                    <f:facet name="header">
+                        <h:outputText value="Marge"/>
+                    </f:facet>
+                    <h:outputText value="#{item.bord}">
+                        <f:convertNumber />
+                    </h:outputText>
+                </p:column>
+                
+                <p:column style="width: 10%;text-align: center">
+                    <f:facet name="header">
+                        <h:outputText value="Cloturé ?"/>
+                    </f:facet>
+                    <h:selectBooleanCheckbox value="#{item.fermee}" />
+                </p:column>
+
+            </p:dataTable>
+
+        </p:panel>
+    </h:form>
+
+    <!-- ****************************************Information************************************************************************************************************************************************************************************************************** -->
+
+    <p:dialog id="notify1" widgetVar="NotifyDialog1" height="220" width="600" resizable="true" modal="true" style="text-align: center; font-size: 14px; font-family: Cambria;">
+        <f:facet name="header">
+            <h:outputText style="font-family: Cambria; font-size: 14px;" value="#{recetteController.routine.titleNotify}" />
+        </f:facet>
+        <h:form id="NotifyForm1">
+            <h:graphicImage id="nt_img" url="#{recetteController.routine.iconMessage}" style="cursor:pointer" />
+
+            <hr size="3" style="background-color: cornflowerblue;"/>
+
+            <h:outputText id="nt_msg" value="#{recetteController.routine.message}"/>
+
+            <hr size="3" style="background-color: cornflowerblue; margin-top: 5%;"/>
+
+            <p:commandButton style="font-family: Cambria; font-size: 14px;" value="#{langue.valider}" onclick="PF('NotifyDialog1').hide()" type="button" immediate="true"/>
+
+            <hr size="3" style="background-color: cornflowerblue;"/>
+        </h:form>
+    </p:dialog>
+
+    <!-- ****************************************Information************************************************************************************************************************************************************************************************************** -->
+</ui:composition>

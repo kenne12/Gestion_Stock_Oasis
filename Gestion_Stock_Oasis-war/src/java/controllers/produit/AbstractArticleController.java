@@ -194,27 +194,27 @@ public class AbstractArticleController {
     }
 
     public String getFileName() {
-        /* 207 */ return this.fileName;
+        return this.fileName;
     }
 
     public void setFileName(String fileName) {
-        /* 211 */ this.fileName = fileName;
+        this.fileName = fileName;
     }
 
     public String getFileName1() {
-        /* 215 */ return this.fileName1;
+        return this.fileName1;
     }
 
     public void setFileName1(String fileName1) {
-        /* 219 */ this.fileName1 = fileName1;
+        this.fileName1 = fileName1;
     }
 
     public List<Article> getArticles1() {
-        /* 224 */ return this.articles1;
+        return this.articles1;
     }
 
     public void setArticles1(List<Article> articles1) {
-        /* 228 */ this.articles1 = articles1;
+        this.articles1 = articles1;
     }
 
     public String getFileName2() {
@@ -222,7 +222,7 @@ public class AbstractArticleController {
     }
 
     public void setFileName2(String fileName2) {
-        /* 236 */ this.fileName2 = fileName2;
+        this.fileName2 = fileName2;
     }
 
     public Boolean getSession() {

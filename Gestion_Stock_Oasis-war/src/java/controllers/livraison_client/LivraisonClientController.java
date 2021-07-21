@@ -41,7 +41,13 @@ public class LivraisonClientController extends AbstractLivraisonClientController
 
     public void prepareCreate() {
         try {
-            if (!Utilitaires.isAccess(41L)) {
+
+            if (Utilitaires.isDayClosed()) {
+                notifyError("journee_cloturee");
+                return;
+            }
+
+            if (!Utilitaires.isAccess(26L)) {
                 notifyError("acces_refuse");
                 return;
             }
@@ -50,7 +56,7 @@ public class LivraisonClientController extends AbstractLivraisonClientController
 
             this.livraisonclient = new Livraisonclient();
             this.livraisonclient.setClient(new Client());
-            this.livraisonclient.setDatelivraison(Date.from(Instant.now()));
+            this.livraisonclient.setDatelivraison(SessionMBean.getJournee().getDateJour());
             this.livraisonclient.setModePayement("PAYE_COMPTANT");
             this.livraisonclient.setMontant(0d);
 
@@ -93,7 +99,7 @@ public class LivraisonClientController extends AbstractLivraisonClientController
                     return;
                 }
 
-                if (!Utilitaires.isAccess(41L)) {
+                if (!Utilitaires.isAccess(26L)) {
                     notifyError("acces_refuse");
                     this.demande = null;
                     return;
@@ -346,7 +352,7 @@ public class LivraisonClientController extends AbstractLivraisonClientController
                         livraisonclient.setMontantPaye(livraisonclient.getAvanceInitiale());
                     }
 
-                    this.livraisonclient.setIdlivraisonclient(this.livraisonclientFacadeLocal.nextVal());
+                    this.livraisonclient.setIdlivraisonclient(this.livraisonclientFacadeLocal.nextValue());
                     this.livraisonclient.setIdmagasin(demande.getMagasin());
                     this.livraisonclientFacadeLocal.create(this.livraisonclient);
 
@@ -426,7 +432,13 @@ public class LivraisonClientController extends AbstractLivraisonClientController
         try {
             if (this.livraisonclient != null) {
                 if (!this.livraisonclient.getLivraisondirecte()) {
-                    if (!Utilitaires.isAccess(41L)) {
+
+                    if (Utilitaires.isDayClosed()) {
+                        notifyError("journee_cloturee");
+                        return;
+                    }
+
+                    if (!Utilitaires.isAccess(26L)) {
                         notifyError("acces_refuse");
                         this.detail = this.supprimer = this.modifier = this.imprimer = true;
                         this.livraisonclient = null;
@@ -529,7 +541,7 @@ public class LivraisonClientController extends AbstractLivraisonClientController
 
     public void print() {
         try {
-            if (!Utilitaires.isAccess(42L)) {
+            if (!Utilitaires.isAccess(26L)) {
                 notifyError("acces_refuse");
                 this.livraisonclient = null;
                 return;

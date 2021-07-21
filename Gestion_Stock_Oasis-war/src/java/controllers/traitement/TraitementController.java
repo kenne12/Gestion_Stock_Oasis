@@ -309,7 +309,7 @@ public class TraitementController extends AbstractTraitementController implement
                     /* 341 */ this.mvtstockFacadeLocal.create(this.mvtstock);
 
                     /* 343 */ String code = "LIV";
-                    /* 344 */ this.livraisonclient.setIdlivraisonclient(this.livraisonclientFacadeLocal.nextVal());
+                    /* 344 */ this.livraisonclient.setIdlivraisonclient(this.livraisonclientFacadeLocal.nextValue());
                     /* 345 */ code = Utilitaires.genererCodeDemande(code, this.livraisonclient.getIdlivraisonclient());
                     /* 346 */ this.livraisonclient.setCode(code);
                     /* 347 */ this.livraisonclient.setMontant(this.total);

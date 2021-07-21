@@ -71,9 +71,7 @@ public class JsfUtil {
                 }
                 return true;
             }
-
         }
-
         return false;
     }
 

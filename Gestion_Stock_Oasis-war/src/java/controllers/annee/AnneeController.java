@@ -22,7 +22,7 @@ public class AnneeController extends AbstractAnneCtrl implements AnneeInterfaceC
 
     public void prepareCreate() {
         try {
-            if (!Utilitaires.isAccess(33L)) {
+            if (!Utilitaires.isAccess(32L)) {
                 this.routine.feedBack("information", "/resources/tool_images/error.png", this.routine.localizeMessage("acces_refuse"));
                 RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
             } else {
@@ -38,7 +38,7 @@ public class AnneeController extends AbstractAnneCtrl implements AnneeInterfaceC
 
     public void prepareEdit() {
         try {
-            if (!Utilitaires.isAccess(34L)) {
+            if (!Utilitaires.isAccess(32L)) {
                 this.routine.feedBack("information", "/resources/tool_images/error.png", this.routine.localizeMessage("acces_refuse"));
                 RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
             } else {
@@ -100,7 +100,7 @@ public class AnneeController extends AbstractAnneCtrl implements AnneeInterfaceC
     @Override
     public void supprimer() {
         try {
-            if (!Utilitaires.isAccess(35L)) {
+            if (!Utilitaires.isAccess(32L)) {
                 this.routine.feedBack("information", "/resources/tool_images/error.png", this.routine.localizeMessage("acces_refuse"));
                 RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
                 return;

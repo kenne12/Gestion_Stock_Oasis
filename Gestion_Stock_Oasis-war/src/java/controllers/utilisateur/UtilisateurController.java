@@ -135,10 +135,10 @@ public class UtilisateurController extends AbstractUtilisateurController impleme
                     this.utilisateurmagasinFacadeLocal.create(um);
                 }
 
-                savePrivile(new Menu(30));
-                savePrivile(new Menu(31));
-                savePrivile(new Menu(32));
-                savePrivile(new Menu(33));
+                savePrivile(new Menu(16));
+                savePrivile(new Menu(17));
+                savePrivile(new Menu(18));
+                savePrivile(new Menu(19));
 
                 Utilitaires.saveOperation(this.mouchardFacadeLocal, "Enregistrement de l'utilisateur : " + this.utilisateur.getNom() + " " + this.utilisateur.getPrenom(), SessionMBean.getUserAccount());
                 this.utilisateur = new Utilisateur();
@@ -173,7 +173,7 @@ public class UtilisateurController extends AbstractUtilisateurController impleme
 
     public void reinitialiseAccount(Utilisateur utilisateur) {
         try {
-            if (!Utilitaires.isAccess(47L)) {
+            if (!Utilitaires.isAccess(8L)) {
                 signalError("acces_refuse");
                 return;
             }
@@ -213,17 +213,17 @@ public class UtilisateurController extends AbstractUtilisateurController impleme
     public void changeStatus(Utilisateur utilisateur, String mode) {
         try {
             if (mode.equals("activer")) {
-                if (!Utilitaires.isAccess((6L))) {
+                if (!Utilitaires.isAccess(6L)) {
                     signalError("acces_refuse");
                     return;
                 }
 
-                utilisateur.setActif((true));
+                utilisateur.setActif(true);
                 this.utilisateurFacadeLocal.edit(utilisateur);
                 Utilitaires.saveOperation(this.mouchardFacadeLocal, "Activation du compte de l'utilisateur : " + utilisateur.getNom() + " " + utilisateur.getPrenom(), SessionMBean.getUserAccount());
                 JsfUtil.addSuccessMessage("Operation réussie");
             } else {
-                if (!Utilitaires.isAccess((7L))) {
+                if (!Utilitaires.isAccess(7L)) {
                     signalError("acces_refuse");
                     return;
                 }
