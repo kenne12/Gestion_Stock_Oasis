@@ -27,7 +27,6 @@
 
                             <p:outputLabel value="#{langue.magasin}" for="magasin" />
                             <p:selectOneMenu disabled="#{!inventaireGlobalController.mode.equals('Create')}" id="magasin" value="#{inventaireGlobalController.magasin.idmagasin}" >
-                                <!--<f:selectItem itemLabel="#{langue.magasin_central}" itemValue="0" />-->
                                 <f:selectItem itemLabel="#{langue.choisir}" itemValue="" />
                                 <f:selectItems value="#{inventaireGlobalController.magasins}" var="mag" itemLabel="#{mag.nom}" itemValue="#{mag.idmagasin}"/>
                                 <p:ajax update="display,datalist1" listener="#{inventaireGlobalController.updateData()}"/>
@@ -77,7 +76,7 @@
                                  rowKey="#{item.idligneinventaire}"
                                  rows="#{inventaireGlobalController.ligneinventaires.size()}"
                                  rowsPerPageTemplate="10,20,30,40,50"
-                                 style="width: 98%;margin-left: 1%"
+                                 style="width: 98%;margin-left: 1%;font-size: 10px"
                                  rowIndexVar="index"
                                  emptyMessage="#{langue.tableau_vide}"
                                  widgetVar="fonctionTable"
@@ -95,7 +94,7 @@
                             <h:outputText value="#{item.idlot.idarticle.libelle}"/>
                         </p:column>
 
-                        <p:column style="width: 20%" filterBy="#{item.idlot.numero}" >
+                        <p:column style="width: 17%" filterBy="#{item.idlot.numero}" >
                             <f:facet name="header">
                                 <h:outputText value="#{langue.lot}"/>
                             </f:facet>
@@ -116,7 +115,7 @@
                             <h:outputText id="ecart" value="#{item.ecart}"/>
                         </p:column>
 
-                        <p:column style="width: 10%;text-align: center" >
+                        <p:column style="width: 13%;text-align: center" >
                             <f:facet name="header">
                                 <h:outputText value="#{langue.action}"/>
                             </f:facet>
@@ -149,7 +148,7 @@
                             <h:outputText value="#{langue.articles_inventaire}"/>
                         </f:facet> 
 
-                        <p:column style="width: 35%" filterBy="#{item.idlot.idarticle.libelle}">
+                        <p:column style="width: 27%" filterBy="#{item.idlot.idarticle.libelle}">
                             <f:facet name="header">
                                 <h:outputText value="#{langue.article}"/>
                             </f:facet>
@@ -163,18 +162,31 @@
                             <h:outputText value="#{item.idlot.numero}"/>
                         </p:column>
 
-                        <p:column style="width: 9%" filterBy="#{item.qtetheorique}" >
+                        <p:column style="width: 8%" filterBy="#{item.qtetheorique}" >
                             <f:facet name="header">
                                 <h:outputText value="#{langue.qte_theorique}"/>
                             </f:facet>
                             <h:outputText value="#{item.qtetheorique}"/>
                         </p:column>
+                        
+                        <p:column style="width: 15%;text-align: center" headerText="Mode">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{item.mode_comptage}"/></f:facet>
+                                <f:facet name="input">
+                                    <h:selectOneMenu value="#{item.mode_comptage}">
+                                        <f:selectItem itemLabel="Décompte En Gros" itemValue="DECOMPTE_EN_GROS" />
+                                        <f:selectItem itemLabel="Décompte En Détail" itemValue="DECOMPTE_EN_DETAIL" />
+                                        <p:ajax update="ecart" listener="#{inventaireGlobalController.updateModeleDecompte(index)}" />
+                                    </h:selectOneMenu>                                   
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
 
-                        <p:column style="width: 9%;text-align: center" headerText="#{langue.qte_physique}">
+                        <p:column style="width: 8%;text-align: center" headerText="#{langue.qte_physique}">
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputText value="#{item.qtephysique}"/></f:facet>
-                                <f:facet  name="input">
-                                    <p:inputText required="true" disabled="#{inventaireGlobalController.editQuantite}" value="#{item.qtephysique}">                                             
+                                <f:facet name="input">
+                                    <p:inputText required="true" disabled="#{inventaireGlobalController.editQuantite}" value="#{item.quantite}">                                             
                                         <p:ajax event="keyup" listener="#{inventaireGlobalController.updateEcart(index)}" update="ecart"/>
                                     </p:inputText>
                                 </f:facet>
@@ -188,7 +200,7 @@
                             <h:outputText id="ecart" value="#{item.ecart}"/>
                         </p:column>
 
-                        <p:column style="width: 20%;" headerText="#{langue.justificatif}">
+                        <p:column style="width: 17%;" headerText="#{langue.justificatif}">
                             <p:cellEditor>
                                 <f:facet name="output">
                                     <h:outputText value="#{item.observation}"/>

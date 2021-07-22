@@ -67,16 +67,16 @@ public class MagasinlotFacade extends AbstractFacade<Magasinlot> implements Maga
     }
 
     @Override
-    public List<Magasinlot> findByIdmagasinEtatIsTrue(int idmagasin) {
+    public List<Magasinlot> findByIdmagasinEtatIsTrue(int idMagasin) {
         Query query = this.em.createQuery("SELECT m FROM Magasinlot m WHERE m.idmagasinarticle.idmagasin.idmagasin=:idmagasin AND m.etat=true ORDER BY m.idlot.idarticle.libelle , m.idlot.dateenregistrement DESC");
-        query.setParameter("idmagasin", idmagasin);
+        query.setParameter("idmagasin", idMagasin);
         return query.getResultList();
     }
 
     @Override
-    public List<Magasinlot> findByIdlot(long idlot) {
+    public List<Magasinlot> findByIdlot(long idLot) {
         Query query = this.em.createQuery("SELECT m FROM Magasinlot m WHERE m.idlot.idlot=:idlot ORDER BY m.idmagasinarticle.idmagasin.nom");
-        query.setParameter("idlot", idlot);
+        query.setParameter("idlot", idLot);
         return query.getResultList();
     }
 

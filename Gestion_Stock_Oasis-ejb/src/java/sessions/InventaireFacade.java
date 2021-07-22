@@ -24,14 +24,16 @@ public class InventaireFacade extends AbstractFacade<Inventaire> implements Inve
 
     @Override
     public Long nextVal() {
-        Query query = this.em.createQuery("SELECT MAX(i.idinventaire) FROM Inventaire i");
-        Long result = (Long) query.getSingleResult();
-        if (result == null) {
-            result = 1L;
-        } else {
-            result += 1L;
+        try {
+            Query query = this.em.createQuery("SELECT MAX(i.idinventaire) FROM Inventaire i");
+            Long result = (Long) query.getSingleResult();
+            if (result == null) {
+                return 1L;
+            }
+            return (result + 1L);
+        } catch (Exception e) {
+            return 1L;
         }
-        return result;
     }
 
     @Override

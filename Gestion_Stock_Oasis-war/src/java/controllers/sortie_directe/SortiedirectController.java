@@ -597,23 +597,24 @@ public class SortiedirectController extends AbstractSortiedirectController imple
 
     public void updateTotaux() {
         try {
-            this.lignelivraisonclient.setMontant(0.0);
-            if ((this.lignelivraisonclient.getQuantite() != null) && (this.lignelivraisonclient.getMontant() != null)) {
-                if (this.lignelivraisonclient.getUnite() != null) {
+            lignelivraisonclient.setMontant(0.0);
+            if ((lignelivraisonclient.getQuantite() != null) && (lignelivraisonclient.getMontant() != null)) {
+                if (lignelivraisonclient.getUnite() != null) {
                     if (lignelivraisonclient.getModeVente().equals("VENTE_EN_GROS")) {
                         lignelivraisonclient.setUnite(magasinarticle.getIdarticle().getUnite());
-                        this.lignelivraisonclient.setQuantitemultiple((this.lignelivraisonclient.getUnite() * this.lignelivraisonclient.getQuantite()));
+                        lignelivraisonclient.setQuantitemultiple(lignelivraisonclient.getUnite() * lignelivraisonclient.getQuantite());
+                        lignelivraisonclient.setMontant(lignelivraisonclient.getPrixUnitaire() * lignelivraisonclient.getQuantite());
                     } else {
-                        this.lignelivraisonclient.setUnite(1d);
-                        this.lignelivraisonclient.setQuantitemultiple(this.lignelivraisonclient.getQuantite());
+                        lignelivraisonclient.setUnite(1d);
+                        lignelivraisonclient.setQuantitemultiple(lignelivraisonclient.getQuantite());
+                        lignelivraisonclient.setMontant(lignelivraisonclient.getPrixUnitaire() * lignelivraisonclient.getQuantite());
                     }
-                    this.lignelivraisonclient.setQuantitereduite((this.lignelivraisonclient.getQuantitemultiple() / this.magasinarticle.getIdarticle().getUnite()));
+                    lignelivraisonclient.setQuantitereduite((lignelivraisonclient.getQuantitemultiple() / magasinarticle.getIdarticle().getUnite()));
                 }
-                this.lignelivraisonclient.setMontant(this.lignelivraisonclient.getPrixUnitaire() * this.lignelivraisonclient.getQuantitemultiple());
             }
         } catch (Exception e) {
             e.printStackTrace();
-            this.lignelivraisonclient.setMontant(0d);
+            lignelivraisonclient.setMontant(0d);
         }
     }
 

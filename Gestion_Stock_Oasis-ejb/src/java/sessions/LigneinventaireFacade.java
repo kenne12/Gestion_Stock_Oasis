@@ -24,14 +24,16 @@ public class LigneinventaireFacade extends AbstractFacade<Ligneinventaire> imple
 
     @Override
     public Long nextVal() {
-        Query query = this.em.createQuery("SELECT MAX(l.idligneinventaire) FROM Ligneinventaire l");
-        Long result = (Long) query.getSingleResult();
-        if (result == null) {
-            result = 1L;
-        } else {
-            result = (result + 1L);
+        try {
+            Query query = this.em.createQuery("SELECT MAX(l.idligneinventaire) FROM Ligneinventaire l");
+            Long result = (Long) query.getSingleResult();
+            if (result == null) {
+                return 1L;
+            }
+            return (result + 1L);
+        } catch (Exception e) {
+            return 1L;
         }
-        return result;
     }
 
     @Override

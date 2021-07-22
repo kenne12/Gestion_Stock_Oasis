@@ -24,14 +24,16 @@ public class UtilisateurFacade extends AbstractFacade<Utilisateur> implements Ut
 
     @Override
     public Integer nextVal() {
-        Query query = this.em.createQuery("SELECT MAX(u.idutilisateur) FROM Utilisateur u");
-        Integer result = (Integer) query.getSingleResult();
-        if (result == null) {
-            result = 1;
-        } else {
-            result += 1;
+        try {
+            Query query = this.em.createQuery("SELECT MAX(u.idutilisateur) FROM Utilisateur u");
+            Integer result = (Integer) query.getSingleResult();
+            if (result == null) {
+                return 1;
+            }
+            return (result + 1);
+        } catch (Exception e) {
+            return 1;
         }
-        return result;
     }
 
     @Override

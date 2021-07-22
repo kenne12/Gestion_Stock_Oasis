@@ -8,6 +8,7 @@ import entities.Magasin;
 import entities.Magasinarticle;
 import entities.Magasinlot;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -24,77 +25,77 @@ import utils.Utilitaires;
 @ManagedBean
 @SessionScoped
 public class InventaireGlobalController extends AbstractInventaireGlobalController implements Serializable {
-
+    
     @PostConstruct
     private void init() {
     }
-
+    
     public Boolean checkPeremption(Lot lot) {
         return Utilitaires.checkPeremption(lot);
     }
-
+    
     public void prepareCreate() {
         try {
             if (!Utilitaires.isAccess(44L)) {
                 notifyError("acces_refuse");
                 return;
             }
-
+            
             this.mode = "Create";
             this.valideBtn = this.routine.localizeMessage("valider");
             this.editQuantite = false;
-
+            
             this.inventaire = new Inventaire();
             this.inventaire.setDateinventaire(new Date());
             this.inventaire.setCentral(false);
             this.inventaire.setAllarticle(true);
-
+            
             this.ligneinventaires.clear();
             this.ligneinventaires_1.clear();
             this.articles.clear();
             this.magasinarticles.clear();
             this.magasinlots.clear();
-
+            
             this.magasin = new Magasin();
-
-            this.inventaire.setCode(Utilitaires.genererCodeInventaire("INV-", this.inventaireFacadeLocal.nextVal()));
-
+            
+            this.inventaire.setCode(Utilitaires.genererCodeInventaire("INV-", inventaireFacadeLocal.nextVal()));
+            
             RequestContext.getCurrentInstance().execute("PF('InventaireCreateDialog').show()");
         } catch (Exception e) {
             this.routine.catchException(e, this.routine.localizeMessage("echec_operation"));
             RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
         }
     }
-
+    
     public void prepareCreatePartial() {
         try {
             if (!Utilitaires.isAccess(44L)) {
                 notifyError("acces_refuse");
                 return;
             }
-
+            
             this.mode = "Create";
             this.valideBtn = ("" + this.routine.localizeMessage("valider"));
             this.showSelectArticle = false;
-
+            
             this.inventaire = new Inventaire();
             this.inventaire.setDateinventaire(new Date());
-
+            
             this.ligneinventaires.clear();
             this.articles.clear();
-
+            
             String code = "INV-";
             Long nextPayement = this.inventaireFacadeLocal.nextVal();
             code = Utilitaires.genererCodeInventaire(code, nextPayement);
             this.inventaire.setCode(code);
-
+            
             RequestContext.getCurrentInstance().execute("PF('InventaireCreateDialog').show()");
         } catch (Exception e) {
             this.routine.catchException(e, this.routine.localizeMessage("echec_operation"));
             RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
         }
     }
-
+    
     public void prepareAddArticle() {
         try {
             if ("Create".equals(this.mode)) {
@@ -107,7 +108,7 @@ public class InventaireGlobalController extends AbstractInventaireGlobalControll
                     this.ligneinventaires.clear();
                     this.selectedMagasinlots.clear();
                 }
-
+                
                 RequestContext.getCurrentInstance().execute("PF('ArticleCreateDialog').show()");
                 return;
             }
@@ -121,25 +122,25 @@ public class InventaireGlobalController extends AbstractInventaireGlobalControll
             notifyFail(e);
         }
     }
-
+    
     public void prepareEdit() {
         try {
             if (this.inventaire == null) {
                 notifyError("not_row_selected");
                 return;
             }
-
+            
             if (!Utilitaires.isAccess(44L)) {
                 notifyError("acces_refuse");
                 this.inventaire = null;
                 return;
             }
-
+            
             if (this.inventaire.getEtat()) {
                 notifyError("inventaire_validee");
                 return;
             }
-
+            
             this.mode = "Edit";
             this.editQuantite = false;
             this.showSelectArticle = true;
@@ -150,7 +151,7 @@ public class InventaireGlobalController extends AbstractInventaireGlobalControll
             } else {
                 this.ligneinventaires_1 = this.ligneinventaireFacadeLocal.findByIdInventaire(this.inventaire.getIdinventaire());
             }
-
+            
             this.articles.clear();
             if (!this.inventaire.getEtat()) {
                 this.showSelectArticle = false;
@@ -160,25 +161,25 @@ public class InventaireGlobalController extends AbstractInventaireGlobalControll
             notifyFail(e);
         }
     }
-
+    
     public void prepareValidate() {
         try {
             if (this.inventaire == null) {
                 notifyError("not_row_selected");
                 return;
             }
-
+            
             if (!Utilitaires.isAccess(45L)) {
                 notifyError("acces_refuse");
                 this.inventaire = null;
                 return;
             }
-
+            
             if (this.inventaire.getEtat()) {
                 notifyError("inventaire_validee");
                 return;
             }
-
+            
             this.mode = "Validate";
             this.editQuantite = true;
             this.showSelectArticle = true;
@@ -198,7 +199,7 @@ public class InventaireGlobalController extends AbstractInventaireGlobalControll
             notifyFail(e);
         }
     }
-
+    
     public void prepareview() {
         try {
             if (this.inventaire != null) {
@@ -215,21 +216,20 @@ public class InventaireGlobalController extends AbstractInventaireGlobalControll
             notifyFail(e);
         }
     }
-
+    
     public void updateData() {
         try {
             if (this.magasin.getIdmagasin() == 0) {
                 this.inventaire.setCentral(true);
             } else {
                 this.inventaire.setCentral(false);
-                System.err.println("magasin non central");
             }
             updateArticle();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
+    
     public void updateArticle() {
         try {
             if (this.magasin.getIdmagasin() == 0) {
@@ -249,7 +249,7 @@ public class InventaireGlobalController extends AbstractInventaireGlobalControll
             e.printStackTrace();
         }
     }
-
+    
     private void insertLotToTable() {
         for (Lot l : this.lots) {
             if (!ifExistLot(this.ligneinventaires, l)) {
@@ -264,7 +264,7 @@ public class InventaireGlobalController extends AbstractInventaireGlobalControll
             }
         }
     }
-
+    
     private void insertMagasinLotToTable() {
         this.magasinlots = this.magasinlotFacadeLocal.findByIdmagasinEtatIsTrue(this.magasin.getIdmagasin());
         this.ligneinventaires_1.clear();
@@ -274,57 +274,66 @@ public class InventaireGlobalController extends AbstractInventaireGlobalControll
                 li.setIdligneinventaire(0L);
                 li.setIdlot(m.getIdlot());
                 li.setIdmagasinlot(m);
-                li.setQtephysique(m.getQuantitemultiple());
-                li.setQtetheorique(m.getQuantitemultiple());
-                li.setEcart(0.0);
+                li.setQtephysique(m.getQuantitereduite());
+                li.setQtetheorique(m.getQuantitereduite());
+                
+                li.setQtephysiqueMultiple(m.getQuantitemultiple());
+                li.setQtetheoriqueMultiple(m.getQuantitemultiple());
+                li.setQuantite(m.getQuantitereduite());
+                
+                li.setEcart(0d);
+                li.setMode_comptage("DECOMPTE_EN_GROS");
+                li.setPrixUnitaire(m.getIdmagasinarticle().getIdarticle().getPrixunit());
+                li.setUnite(m.getIdmagasinarticle().getIdarticle().getUnite());
+                li.setIdunite(m.getIdmagasinarticle().getIdarticle().getIdunite());
                 li.setObservation("-");
                 this.ligneinventaires_1.add(li);
             }
         }
     }
-
+    
     public void create() {
         try {
             if ("Create".equals(this.mode)) {
                 if (!this.ligneinventaires_1.isEmpty()) {
                     this.ut.begin();
-
-                    this.mvtstock.setIdmvtstock(this.mvtstockFacadeLocal.nextVal());
+                    
+                    this.mvtstock.setIdmvtstock(mvtstockFacadeLocal.nextVal());
                     this.mvtstock.setClient(" ");
                     this.mvtstock.setFournisseur(" ");
                     this.mvtstock.setMagasin(" ");
                     this.mvtstock.setType(" ");
-                    this.mvtstock.setCode(Utilitaires.genererCodeStock("MVT", this.mvtstock.getIdmvtstock()));
+                    this.mvtstock.setCode(Utilitaires.genererCodeStock("MVT", mvtstock.getIdmvtstock()));
                     this.mvtstock.setDatemvt(this.inventaire.getDateinventaire());
                     this.mvtstockFacadeLocal.create(this.mvtstock);
-
-                    this.inventaire.setIdinventaire(this.inventaireFacadeLocal.nextVal());
+                    
+                    this.inventaire.setIdinventaire(inventaireFacadeLocal.nextVal());
                     this.inventaire.setEtat(false);
                     this.inventaire.setIdmagasin(this.magasin);
                     this.inventaire.setIdmvtstock(this.mvtstock);
                     this.inventaireFacadeLocal.create(this.inventaire);
-
+                    
                     if (this.magasin.getIdmagasin() != 0) {
                         for (Ligneinventaire li : this.ligneinventaires_1) {
-                            li.setIdligneinventaire(this.ligneinventaireFacadeLocal.nextVal());
+                            li.setIdligneinventaire(ligneinventaireFacadeLocal.nextVal());
                             li.setIdinventaire(this.inventaire);
-                            this.ligneinventaireFacadeLocal.create(li);
+                            ligneinventaireFacadeLocal.create(li);
                         }
                     } else {
-                        for (Ligneinventaire li : this.ligneinventaires) {
-                            li.setIdligneinventaire(this.ligneinventaireFacadeLocal.nextVal());
+                        for (Ligneinventaire li : ligneinventaires) {
+                            li.setIdligneinventaire(ligneinventaireFacadeLocal.nextVal());
                             li.setIdinventaire(this.inventaire);
-                            this.ligneinventaireFacadeLocal.create(li);
+                            ligneinventaireFacadeLocal.create(li);
                         }
                     }
-
+                    
                     Utilitaires.saveOperation(this.mouchardFacadeLocal, "Enregistrement de l'inventaire : " + this.inventaire.getCode(), SessionMBean.getUserAccount());
-
+                    
                     this.ut.commit();
-                    this.inventaire = null;
+                    this.inventaire = new Inventaire();
                     this.ligneinventaires_1.clear();
-                    this.detail = (this.imprimer = true);
-
+                    this.detail = this.imprimer = true;
+                    
                     notifySuccess();
                     RequestContext.getCurrentInstance().execute("PF('InventaireCreateDialog').hide()");
                 } else {
@@ -334,42 +343,42 @@ public class InventaireGlobalController extends AbstractInventaireGlobalControll
                 if (this.inventaire != null) {
                     this.ut.begin();
                     this.inventaireFacadeLocal.edit(this.inventaire);
-
+                    
                     if (!this.ligneinventaires.isEmpty()) {
                         for (Ligneinventaire li : this.ligneinventaires_1) {
                             this.ligneinventaireFacadeLocal.edit(li);
                         }
                     }
-
+                    
                     this.ut.commit();
-                    this.inventaire = null;
+                    this.inventaire = new Inventaire();
                     this.ligneinventaires_1.clear();
-                    this.detail = (this.imprimer = true);
-
+                    this.detail = this.imprimer = true;
+                    
                     notifySuccess();
                     RequestContext.getCurrentInstance().execute("PF('InventaireCreateDialog').hide()");
                 } else {
                     notifyError("not_row_selected");
                 }
-
+                
             } else if (this.inventaire != null) {
                 this.ut.begin();
-
+                
                 this.inventaire.setEtat((true));
                 this.inventaireFacadeLocal.edit(this.inventaire);
-
+                
                 if (this.inventaire.getCentral().equals(false)) {
                     if (!this.ligneinventaires_1.isEmpty()) {
                         for (Ligneinventaire li : this.ligneinventaires_1) {
                             Magasinlot ml = magasinlotFacadeLocal.find(li.getIdmagasinlot().getIdmagasinlot());
-                            double qteAvant = ml.getQuantitemultiple();
+                            double qteAvant = ml.getQuantitereduite();
                             if (li.getEcart() == 0.0) {
                                 li.setObservation("Normal");
                             } else if (li.getEcart() > 0.0) {
-
+                                
                                 updateMagasinArticle(li.getIdmagasinlot().getIdmagasinarticle().getIdmagasinarticle(), li.getEcart(), "+");
                                 Magasinlot mla = updateMagasinLot(li.getIdmagasinlot().getIdmagasinlot(), li.getEcart(), "+");
-
+                                
                                 Lignemvtstock lmvts = new Lignemvtstock();
                                 lmvts.setIdlignemvtstock(this.lignemvtstockFacadeLocal.nextVal());
                                 lmvts.setIdmvtstock(this.inventaire.getIdmvtstock());
@@ -378,40 +387,42 @@ public class InventaireGlobalController extends AbstractInventaireGlobalControll
                                 lmvts.setClient(" ");
                                 lmvts.setFournisseur("ECART INVENTAIRE");
                                 lmvts.setQteentree(li.getEcart());
-                                lmvts.setQtesortie(0.0);
+                                lmvts.setQtesortie(0d);
                                 lmvts.setQteAvant(qteAvant);
-                                lmvts.setReste(mla.getQuantitemultiple());
+                                lmvts.setReste(mla.getQuantitereduite());
                                 lmvts.setType("ENTREE");
                                 lmvts.setMagasin(mla.getIdmagasinarticle().getIdmagasin().getNom());
+                                lmvts.setLigneinventaire(li);
                                 this.lignemvtstockFacadeLocal.create(lmvts);
                             } else {
                                 updateMagasinArticle(li.getIdmagasinlot().getIdmagasinarticle().getIdmagasinarticle(), li.getEcart(), "-");
                                 Magasinlot mla = updateMagasinLot(li.getIdmagasinlot().getIdmagasinlot(), li.getEcart(), "-");
-
+                                
                                 Lignemvtstock lmvts = new Lignemvtstock();
                                 lmvts.setIdlignemvtstock(this.lignemvtstockFacadeLocal.nextVal());
                                 lmvts.setIdmvtstock(this.inventaire.getIdmvtstock());
                                 lmvts.setIdlot(li.getIdlot());
                                 lmvts.setClient(" ");
                                 lmvts.setFournisseur("ECART INVENTAIRE");
-                                lmvts.setQteentree(0.0);
+                                lmvts.setQteentree(0d);
                                 lmvts.setQteAvant(qteAvant);
                                 lmvts.setQtesortie(Math.abs(li.getEcart()));
-                                lmvts.setReste(mla.getQuantitemultiple());
+                                lmvts.setReste(mla.getQuantitereduite());
                                 lmvts.setType("SORTIE");
                                 lmvts.setMagasin(mla.getIdmagasinarticle().getIdmagasin().getNom());
+                                lmvts.setLigneinventaire(li);
                                 this.lignemvtstockFacadeLocal.create(lmvts);
                             }
                             this.ligneinventaireFacadeLocal.edit(li);
                         }
                     }
                 }
-
+                
                 this.ut.commit();
-                this.inventaire = null;
+                this.inventaire = new Inventaire();
                 this.ligneinventaires_1.clear();
                 this.detail = (this.imprimer = true);
-
+                
                 notifySuccess();
                 RequestContext.getCurrentInstance().execute("PF('InventaireCreateDialog').hide()");
             } else {
@@ -421,36 +432,36 @@ public class InventaireGlobalController extends AbstractInventaireGlobalControll
             notifyFail(e);
         }
     }
-
+    
     private void updateMagasinArticle(long idmagasinArticle, double ecart, String signe) {
         Magasinarticle magasinarticle = this.magasinarticleFacadeLocal.find(Long.valueOf(idmagasinArticle));
         if (signe.equals("-")) {
             double vabs = Math.abs(ecart);
-            magasinarticle.setQuantitemultiple((magasinarticle.getQuantitemultiple() - vabs));
+            magasinarticle.setQuantitemultiple(magasinarticle.getQuantitemultiple() - (vabs * magasinarticle.getIdarticle().getUnite()));
             magasinarticle.setQuantitereduite((magasinarticle.getQuantitereduite() - vabs));
-            magasinarticle.setQuantite((magasinarticle.getQuantite() - vabs));
+            magasinarticle.setQuantite((magasinarticle.getQuantitereduite() - vabs));
         } else {
-            magasinarticle.setQuantitemultiple((magasinarticle.getQuantitemultiple() + ecart));
+            magasinarticle.setQuantitemultiple(magasinarticle.getQuantitemultiple() + (ecart * magasinarticle.getIdarticle().getUnite()));
             magasinarticle.setQuantitereduite((magasinarticle.getQuantitereduite() + ecart));
-            magasinarticle.setQuantite((magasinarticle.getQuantite() + ecart));
+            magasinarticle.setQuantite((magasinarticle.getQuantitereduite() + ecart));
         }
         this.magasinarticleFacadeLocal.edit(magasinarticle);
     }
-
+    
     public Magasinlot updateMagasinLot(long idmagasinLot, double ecart, String signe) {
         Magasinlot magasinlot = this.magasinlotFacadeLocal.find(Long.valueOf(idmagasinLot));
         if (signe.equals("+")) {
-            magasinlot.setQuantitemultiple((magasinlot.getQuantitemultiple() + ecart));
+            magasinlot.setQuantitemultiple(magasinlot.getQuantitemultiple() + (ecart * magasinlot.getIdlot().getIdarticle().getUnite()));
             magasinlot.setQuantitereduite((magasinlot.getQuantitereduite() + ecart));
-            magasinlot.setQuantite((magasinlot.getQuantite() + ecart));
+            magasinlot.setQuantite((magasinlot.getQuantitereduite() + ecart));
         } else {
             double vabs = Math.abs(ecart);
-            magasinlot.setQuantitemultiple((magasinlot.getQuantitemultiple() - vabs));
+            magasinlot.setQuantitemultiple(magasinlot.getQuantitemultiple() - (vabs * magasinlot.getIdlot().getIdarticle().getUnite()));
             magasinlot.setQuantitereduite((magasinlot.getQuantitereduite() - vabs));
-            magasinlot.setQuantite((magasinlot.getQuantite() - vabs));
+            magasinlot.setQuantite((magasinlot.getQuantitereduite() - vabs));
         }
         try {
-            if ((magasinlot.getIdlot().getDateperemption().after(new Date())) || (magasinlot.getIdlot().getDateperemption().equals(new Date()))) {
+            if ((magasinlot.getIdlot().getDateperemption().after(Date.from(Instant.now()))) || (magasinlot.getIdlot().getDateperemption().equals(Date.from(Instant.now())))) {
                 magasinlot.setEtat(false);
             }
         } catch (Exception e) {
@@ -458,35 +469,35 @@ public class InventaireGlobalController extends AbstractInventaireGlobalControll
         this.magasinlotFacadeLocal.edit(magasinlot);
         return magasinlot;
     }
-
+    
     public void delete() {
         try {
             if (this.inventaire == null) {
                 notifyError("not_row_selected");
                 return;
             }
-
+            
             if (!Utilitaires.isAccess(44L)) {
                 notifyError("acces_refuse");
                 this.detail = (this.imprimer = true);
                 this.inventaire = new Inventaire();
                 return;
             }
-
+            
             if (this.inventaire.getEtat()) {
                 notifyError("inventaire_validee");
                 this.detail = (this.imprimer = true);
                 this.inventaire = new Inventaire();
                 return;
             }
-
+            
             this.ut.begin();
-
+            
             this.lignemvtstockFacadeLocal.deleteByIdmvt(this.inventaire.getIdmvtstock().getIdmvtstock());
             this.ligneinventaireFacadeLocal.removeByIdInventaire(this.inventaire.getIdinventaire());
             this.inventaireFacadeLocal.remove(this.inventaire);
             this.mvtstockFacadeLocal.remove(this.inventaire.getIdmvtstock());
-
+            
             this.ut.commit();
             Utilitaires.saveOperation(this.mouchardFacadeLocal, "Annulation de l'inventaire : " + this.inventaire.getCode(), SessionMBean.getUserAccount());
             this.inventaire = null;
@@ -496,7 +507,7 @@ public class InventaireGlobalController extends AbstractInventaireGlobalControll
             notifyFail(e);
         }
     }
-
+    
     public void annuler() {
         try {
             if (this.inventaire == null) {
@@ -504,21 +515,21 @@ public class InventaireGlobalController extends AbstractInventaireGlobalControll
                 notifyError("not_row_selected");
                 return;
             }
-
+            
             if (!Utilitaires.isAccess(45L)) {
                 this.detail = (this.imprimer = true);
                 notifyError("acces_refuse");
                 this.inventaire = null;
                 return;
             }
-
+            
             if (!this.inventaire.getEtat()) {
                 notifyError("inventaire_non_validee");
                 return;
             }
-
+            
             this.ut.begin();
-
+            
             List<Ligneinventaire> temp = this.ligneinventaireFacadeLocal.findByIdInventaire(this.inventaire.getIdinventaire());
             if (!temp.isEmpty()) {
                 for (Ligneinventaire li : temp) {
@@ -543,27 +554,27 @@ public class InventaireGlobalController extends AbstractInventaireGlobalControll
             notifyFail(e);
         }
     }
-
+    
     public void initPrinter(Inventaire i) {
         this.inventaire = i;
         print();
     }
-
+    
     public void initEdit(Inventaire i) {
         this.inventaire = i;
         prepareEdit();
     }
-
+    
     public void initView(Inventaire i) {
         this.inventaire = i;
         prepareview();
     }
-
+    
     public void initDelete(Inventaire i) {
         this.inventaire = i;
         delete();
     }
-
+    
     public void print() {
         try {
             if (!Utilitaires.isAccess(44L)) {
@@ -571,7 +582,7 @@ public class InventaireGlobalController extends AbstractInventaireGlobalControll
                 this.inventaire = null;
                 return;
             }
-
+            
             if (this.inventaire != null) {
                 Map paramp = new HashMap();
                 paramp.put("idinventaire", this.inventaire.getIdinventaire());
@@ -584,7 +595,7 @@ public class InventaireGlobalController extends AbstractInventaireGlobalControll
             notifyFail(e);
         }
     }
-
+    
     public void addProduit() {
         try {
             if ((this.magasin.getIdmagasin() != null) && (this.magasin.getIdmagasin() != 0)) {
@@ -621,7 +632,7 @@ public class InventaireGlobalController extends AbstractInventaireGlobalControll
             notifyFail(e);
         }
     }
-
+    
     public boolean ifExistLot(List<Ligneinventaire> ligneinventaires, Lot lot) {
         boolean result = false;
         for (Ligneinventaire l : ligneinventaires) {
@@ -632,7 +643,7 @@ public class InventaireGlobalController extends AbstractInventaireGlobalControll
         }
         return result;
     }
-
+    
     public boolean ifExistLot(List<Ligneinventaire> ligneinventaires, Magasinlot magasinlot) {
         boolean result = false;
         for (Ligneinventaire l : ligneinventaires) {
@@ -643,12 +654,12 @@ public class InventaireGlobalController extends AbstractInventaireGlobalControll
         }
         return result;
     }
-
+    
     public void removeProduit(int index) {
         try {
             boolean trouve = false;
             this.ut.begin();
-
+            
             Ligneinventaire li = (Ligneinventaire) this.ligneinventaires.get(index);
             if (li.getIdligneinventaire() != 0L) {
                 trouve = true;
@@ -670,7 +681,7 @@ public class InventaireGlobalController extends AbstractInventaireGlobalControll
             JsfUtil.addErrorMessage(this.routine.localizeMessage("echec_operation"));
         }
     }
-
+    
     public void updateEcart(int index) {
         if (this.magasin.getIdmagasin() != 0) {
             updateEcartLine(index);
@@ -678,31 +689,68 @@ public class InventaireGlobalController extends AbstractInventaireGlobalControll
         }
         updateEcartLine(index);
     }
-
+    
+    public void updateModeleDecompte(int index) {
+        if (magasin.getIdmagasin() != 0) {
+            updateModeleLine(index);
+            return;
+        }
+    }
+    
     private void updateEcartLine(int index) {
         try {
             try {
-                (this.ligneinventaires_1.get(index)).setEcart(((this.ligneinventaires_1.get(index)).getQtephysique() - (this.ligneinventaires_1.get(index)).getQtetheorique()));
+                if (ligneinventaires_1.get(index).getMode_comptage().equals("DECOMPTE_EN_GROS")) {
+                    ligneinventaires_1.get(index).setQtephysiqueMultiple(ligneinventaires_1.get(index).getQuantite() * ligneinventaires_1.get(index).getUnite());
+                    ligneinventaires_1.get(index).setQtephysique(ligneinventaires_1.get(index).getQuantite());
+                    ligneinventaires_1.get(index).setEcart(((ligneinventaires_1.get(index)).getQtephysique() - (ligneinventaires_1.get(index)).getQtetheorique()));
+                } else {
+                    ligneinventaires_1.get(index).setQtephysiqueMultiple(ligneinventaires_1.get(index).getQuantite());
+                    ligneinventaires_1.get(index).setQtephysique(ligneinventaires_1.get(index).getQuantite() / ligneinventaires_1.get(index).getIdmagasinlot().getIdmagasinarticle().getIdarticle().getUnite());
+                    ligneinventaires_1.get(index).setEcart(((ligneinventaires_1.get(index)).getQtephysique() - (ligneinventaires_1.get(index)).getQtetheorique()));
+                }
             } catch (Exception e) {
-                (this.ligneinventaires_1.get(index)).setEcart(0.0);
-                (this.ligneinventaires_1.get(index)).setQtephysique((this.ligneinventaires_1.get(index)).getIdmagasinlot().getQuantitemultiple());
+                ligneinventaires_1.get(index).setEcart(0d);
+                ligneinventaires_1.get(index).setQtephysique((ligneinventaires_1.get(index)).getIdmagasinlot().getQuantitereduite());
+                ligneinventaires_1.get(index).setQtephysiqueMultiple((ligneinventaires_1.get(index)).getIdmagasinlot().getQuantitemultiple());
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
+    
+    private void updateModeleLine(int index) {
+        try {
+            try {
+                if (ligneinventaires_1.get(index).getMode_comptage().equals("DECOMPTE_EN_GROS")) {
+                    ligneinventaires_1.get(index).setUnite(ligneinventaires_1.get(index).getIdmagasinlot().getIdmagasinarticle().getIdarticle().getUnite());
+                    ligneinventaires_1.get(index).setPrixUnitaire(ligneinventaires_1.get(index).getIdmagasinlot().getIdmagasinarticle().getIdarticle().getPrixunit());
+                } else {
+                    ligneinventaires_1.get(index).setUnite(1);
+                    ligneinventaires_1.get(index).setPrixUnitaire(ligneinventaires_1.get(index).getIdmagasinlot().getIdmagasinarticle().getIdarticle().getPrixVenteDetail());
+                }
+                this.updateEcart(index);
+            } catch (Exception e) {
+                ligneinventaires_1.get(index).setEcart(0d);
+                ligneinventaires_1.get(index).setQtephysique((ligneinventaires_1.get(index)).getIdmagasinlot().getQuantitereduite());
+                ligneinventaires_1.get(index).setQtephysiqueMultiple((ligneinventaires_1.get(index)).getIdmagasinlot().getQuantitemultiple());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
     public void notifyError(String message) {
         this.routine.feedBack("avertissement", "/resources/tool_images/warning.jpeg", this.routine.localizeMessage(message));
         RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
     }
-
+    
     public void notifySuccess() {
         RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
         this.routine.feedBack("information", "/resources/tool_images/success.png", this.routine.localizeMessage("operation_reussie"));
         RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
     }
-
+    
     public void notifyFail(Exception e) {
         RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
         this.routine.catchException(e, this.routine.localizeMessage("echec_operation"));

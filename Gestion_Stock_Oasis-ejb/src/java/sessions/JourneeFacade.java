@@ -35,14 +35,16 @@ public class JourneeFacade extends AbstractFacade<Journee> implements JourneeFac
 
     @Override
     public Long nextVal() {
-        Query query = this.em.createQuery("SELECT MAX(j.idjournee) FROM Journee j");
-        Long result = (Long) query.getSingleResult();
-        if (result == null) {
-            result = 1L;
-        } else {
-            result += 1L;
+        try {
+            Query query = this.em.createQuery("SELECT MAX(j.idjournee) FROM Journee j");
+            Long result = (Long) query.getSingleResult();
+            if (result == null) {
+                return 1L;
+            }
+            return (result + 1L);
+        } catch (Exception e) {
+            return 1L;
         }
-        return result;
     }
 
     @Override

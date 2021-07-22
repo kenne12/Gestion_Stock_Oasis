@@ -7,6 +7,7 @@ package entities;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -32,6 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Ligneinventaire.findByEcart", query = "SELECT l FROM Ligneinventaire l WHERE l.ecart = :ecart"),
     @NamedQuery(name = "Ligneinventaire.findByObservation", query = "SELECT l FROM Ligneinventaire l WHERE l.observation = :observation")})
 public class Ligneinventaire implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -41,6 +43,19 @@ public class Ligneinventaire implements Serializable {
     private Double qtetheorique;
     private Double qtephysique;
     private Double ecart;
+    @Column(name = "prix_unitaire")
+    private double prixUnitaire;
+    @Column(name = "montant_total")
+    private double montantTotal;
+
+    @Column(name = "qtetheorique_multiple")
+    private double qtetheoriqueMultiple;
+
+    @Column(name = "qtephysique_multiple")
+    private double qtephysiqueMultiple;
+
+    private double quantite;
+
     @Size(max = 100)
     private String observation;
     @JoinColumn(name = "idinventaire", referencedColumnName = "idinventaire")
@@ -52,6 +67,15 @@ public class Ligneinventaire implements Serializable {
     @JoinColumn(name = "idmagasinlot", referencedColumnName = "idmagasinlot")
     @ManyToOne(fetch = FetchType.LAZY)
     private Magasinlot idmagasinlot;
+
+    private double unite;
+
+    @JoinColumn(name = "idunite", referencedColumnName = "idunite")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Unite idunite;
+
+    @Column(name = "mode_comptage", length = 20)
+    private String mode_comptage;
 
     public Ligneinventaire() {
     }
@@ -124,6 +148,70 @@ public class Ligneinventaire implements Serializable {
         this.idmagasinlot = idmagasinlot;
     }
 
+    public String getMode_comptage() {
+        return mode_comptage;
+    }
+
+    public void setMode_comptage(String mode_comptage) {
+        this.mode_comptage = mode_comptage;
+    }
+
+    public double getPrixUnitaire() {
+        return prixUnitaire;
+    }
+
+    public void setPrixUnitaire(double prixUnitaire) {
+        this.prixUnitaire = prixUnitaire;
+    }
+
+    public double getMontantTotal() {
+        return montantTotal;
+    }
+
+    public void setMontantTotal(double montantTotal) {
+        this.montantTotal = montantTotal;
+    }
+
+    public double getQtetheoriqueMultiple() {
+        return qtetheoriqueMultiple;
+    }
+
+    public void setQtetheoriqueMultiple(double qtetheoriqueMultiple) {
+        this.qtetheoriqueMultiple = qtetheoriqueMultiple;
+    }
+
+    public double getQtephysiqueMultiple() {
+        return qtephysiqueMultiple;
+    }
+
+    public void setQtephysiqueMultiple(double qtephysiqueMultiple) {
+        this.qtephysiqueMultiple = qtephysiqueMultiple;
+    }
+
+    public Unite getIdunite() {
+        return idunite;
+    }
+
+    public void setIdunite(Unite idunite) {
+        this.idunite = idunite;
+    }
+
+    public double getUnite() {
+        return unite;
+    }
+
+    public void setUnite(double unite) {
+        this.unite = unite;
+    }
+
+    public double getQuantite() {
+        return quantite;
+    }
+
+    public void setQuantite(double quantite) {
+        this.quantite = quantite;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -148,5 +236,5 @@ public class Ligneinventaire implements Serializable {
     public String toString() {
         return "entities.Ligneinventaire[ idligneinventaire=" + idligneinventaire + " ]";
     }
-    
+
 }

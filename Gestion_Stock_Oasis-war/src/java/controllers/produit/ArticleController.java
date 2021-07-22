@@ -99,6 +99,13 @@ public class ArticleController extends AbstractArticleController implements Seri
             if (this.article != null) {
                 this.showLot = false;
                 this.famille = this.article.getIdfamille();
+                try {
+                    if (article.getIdunite() == null) {
+                        article.setIdunite(new Unite());
+                    }
+                } catch (Exception e) {
+                    article.setIdunite(new Unite());
+                }
                 this.selectedMagasins.clear();
                 List<Magasinarticle> listMa = this.magasinarticleFacadeLocal.findByIdarticle(this.article.getIdarticle());
                 if (!listMa.isEmpty()) {
@@ -334,18 +341,18 @@ public class ArticleController extends AbstractArticleController implements Seri
                     return;
                 }
 
-                List<Lignedemande> listLd = this.lignedemandeFacadeLocal.findByIdarticle(this.article.getIdarticle());
+                List<Lignedemande> listLd = this.lignedemandeFacadeLocal.findByIdarticle(article.getIdarticle());
                 List<Lignelivraisonfournisseur> listLlf = this.lignelivraisonfournisseurFacadeLocal.findByIdarticle(this.article.getIdarticle());
                 List<Lignetransfert> llt = lignetransfertFacadeLocal.findByIdarticle(article.getIdarticle());
                 if (listLd.isEmpty() && listLlf.isEmpty() && llt.isEmpty()) {
                     this.ut.begin();
-                    this.magasinlotFacadeLocal.removeAllByIdarticle(this.article.getIdarticle());
-                    this.magasinarticleFacadeLocal.removeAllByIdarticle(this.article.getIdarticle());
+                    this.magasinlotFacadeLocal.removeAllByIdarticle(article.getIdarticle());
+                    this.magasinarticleFacadeLocal.removeAllByIdarticle(article.getIdarticle());
 
                     this.articleFacadeLocal.remove(this.article);
                     Utilitaires.saveOperation(this.mouchardFacadeLocal, "Suppresion de l'article : " + this.article.getLibelle(), SessionMBean.getUserAccount());
                     this.ut.commit();
-                    this.article = null;
+                    this.article = new Article();
                     notifySuccess();
                 } else {
                     notifyError("cet_article_associe_a_plusieurs_demande");

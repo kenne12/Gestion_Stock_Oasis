@@ -41,12 +41,10 @@
                 
             </p:commandButton>
 
-            <p:commandButton id="imprimer" icon="ui-icon-print"
-                             ajax="false"
+            <p:commandButton id="imprimer" icon="ui-icon-print" ajax="false"                             
                              value="#{langue['Conv.Imprimer']}" actionListener="#{articleController.print()}"
-                             update=":ArticleImprimerForm,:notify1" disabled="#{articleController.imprimer}"
-                             />
-
+                             update=":ArticleImprimerForm,:notify1" disabled="#{articleController.imprimer}" />
+                             
         </div>
 
     </h:form>

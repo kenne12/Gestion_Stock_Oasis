@@ -68,6 +68,22 @@ public class Lignemvtstock implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     private Mvtstock idmvtstock;
 
+    @JoinColumn(name = "idlignelivraisonfournisseur", referencedColumnName = "idlignelivraisonfournisseur")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Lignelivraisonfournisseur lignelivraisonfournisseur;
+
+    @JoinColumn(name = "idlignelivraisonclient", referencedColumnName = "idlignelivraisonclient")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Lignelivraisonclient lignelivraisonclient;
+
+    @JoinColumn(name = "idlignetransfert", referencedColumnName = "idlignetransfert")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Lignetransfert lignetransfert;
+
+    @JoinColumn(name = "idligneinventaire", referencedColumnName = "idligneinventaire")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Ligneinventaire ligneinventaire;
+
     public Lignemvtstock() {
     }
 
@@ -177,6 +193,38 @@ public class Lignemvtstock implements Serializable {
 
     public void setQteAvant(Double qteAvant) {
         this.qteAvant = qteAvant;
+    }
+
+    public Lignelivraisonfournisseur getLignelivraisonfournisseur() {
+        return lignelivraisonfournisseur;
+    }
+
+    public void setLignelivraisonfournisseur(Lignelivraisonfournisseur lignelivraisonfournisseur) {
+        this.lignelivraisonfournisseur = lignelivraisonfournisseur;
+    }
+
+    public Lignelivraisonclient getLignelivraisonclient() {
+        return lignelivraisonclient;
+    }
+
+    public void setLignelivraisonclient(Lignelivraisonclient lignelivraisonclient) {
+        this.lignelivraisonclient = lignelivraisonclient;
+    }
+
+    public Lignetransfert getLignetransfert() {
+        return lignetransfert;
+    }
+
+    public void setLignetransfert(Lignetransfert lignetransfert) {
+        this.lignetransfert = lignetransfert;
+    }
+
+    public Ligneinventaire getLigneinventaire() {
+        return ligneinventaire;
+    }
+
+    public void setLigneinventaire(Ligneinventaire ligneinventaire) {
+        this.ligneinventaire = ligneinventaire;
     }
 
     @Override

@@ -177,15 +177,11 @@ public class AbstractInventaireGlobalController {
 
     public void setInventaire(Inventaire inventaire) {
         this.inventaire = inventaire;
-        this.supprimer = (this.detail = this.imprimer = inventaire == null);
+        this.supprimer = this.detail = this.imprimer = inventaire == null;
     }
 
     public List<Inventaire> getInventaires() {
-        try {
-            this.inventaires = this.inventaireFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        this.inventaires = this.inventaireFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin());
         return this.inventaires;
     }
 
