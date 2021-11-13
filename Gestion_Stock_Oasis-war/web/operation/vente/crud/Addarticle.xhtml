@@ -28,23 +28,15 @@
                         <p:selectOneMenu id="famille" required="false" filter="true" filterMatchMode="contains"  value="#{sortiedirectController.famille.idfamille}">
                             <f:selectItem itemLabel="#{langue.choisir}" itemValue="#{null}"/>
                             <f:selectItems value="#{sortiedirectController.familles}" var="fml" itemLabel="#{fml.nom}" itemValue="#{fml.idfamille}"/>
-                            <p:ajax update="produit,lot" listener="#{sortiedirectController.filterArticle()}"/>
+                            <p:ajax update="lot" listener="#{sortiedirectController.filterArticle()}"/>
                         </p:selectOneMenu>
                         <p:message for="famille"/>
-
-                        <p:outputLabel value="#{langue.articles}" for="produit"/>
-                        <p:selectOneMenu required="true" id="produit" filter="true" filterMatchMode="contains"  value="#{sortiedirectController.magasinarticle}" converter="magasinarticleConverter">
-                            <f:selectItem itemLabel="#{langue.choisir}" itemValue="#{null}"/>
-                            <f:selectItems value="#{sortiedirectController.magasinarticles}" var="prd" itemLabel="#{prd.idarticle.libelle}" itemValue="#{prd}"/>
-                            <p:ajax update="sr,cu,famille,lot,qt,qpu,quantite,mt,mode" listener="#{sortiedirectController.updatedata()}"/>
-                        </p:selectOneMenu>
-                        <p:message for="produit"/>
 
                         <p:outputLabel value="#{langue.lots}" for="lot"/>
                         <p:selectOneMenu required="true" id="lot" filter="true" filterMatchMode="contains"  value="#{sortiedirectController.magasinlot}" converter="magasinlotConverter">
                             <f:selectItem itemLabel="#{langue.choisir}" itemValue="#{null}"/>
-                            <f:selectItems value="#{sortiedirectController.magasinlots}" var="lot" itemLabel="#{lot.idlot.numero}" itemValue="#{lot}"/>
-                            <p:ajax update="cu,sr,qt,qpu,quantite,mt,mode" listener="#{sortiedirectController.updatedataLot()}"/>
+                            <f:selectItems value="#{sortiedirectController.magasinlots}" var="lot" itemLabel="#{lot.idlot.idarticle.libelle} #{lot.idlot.numero}" itemValue="#{lot}"/>
+                            <p:ajax update="cu,sr,qt,qpu,quantite,mt,mode,famille" listener="#{sortiedirectController.updatedataLot()}"/>
                         </p:selectOneMenu>
                         <p:message for="lot"/>
                         

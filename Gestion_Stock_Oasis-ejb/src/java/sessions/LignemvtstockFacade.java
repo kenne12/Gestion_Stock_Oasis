@@ -26,13 +26,11 @@ public class LignemvtstockFacade extends AbstractFacade<Lignemvtstock> implement
     @Override
     public Long nextVal() {
         Query query = this.em.createQuery("SELECT MAX(l.idlignemvtstock) FROM Lignemvtstock l");
-        Long result = (Long) query.getSingleResult();
-        if (result == null) {
-            result = 1L;
-        } else {
-            result = result + 1L;
-        }
-        return result;
+        try {
+            return ((Long) query.getResultList().get(0) + 1);
+        } catch (Exception e) {
+            return 1L;
+        }        
     }
 
     @Override
@@ -72,5 +70,23 @@ public class LignemvtstockFacade extends AbstractFacade<Lignemvtstock> implement
             return (Lignemvtstock) list.get(0);
         }
         return null;
+    }
+
+    @Override
+    public Lignemvtstock findByIdmvtIdLot(long idMvt, long idLot, long idLlc) {
+        Query query = this.em.createQuery("SELECT l FROM Lignemvtstock l WHERE l.idmvtstock.idmvtstock=:idMvt AND l.idlot.idlot=:idLot AND l.lignelivraisonclient.idlignelivraisonclient=:idLlc");
+        query.setParameter("idMvt", idMvt).setParameter("idLot", idLot).setParameter("idLlc", idLlc);
+        List list = query.getResultList();
+        if (!list.isEmpty()) {
+            return (Lignemvtstock) list.get(0);
+        }
+        return null;
+    }
+    
+    @Override
+    public void deleteByIdarticle(long idarticle){
+        em.createQuery("DELETE FROM Lignemvtstock l WHERE l.idmagasinlot.idlot.idarticle.idarticle=:idArticle")
+                .setParameter("idArticle", idarticle)
+                .executeUpdate();
     }
 }

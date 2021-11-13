@@ -28,7 +28,9 @@ public interface LignelivraisonfournisseurFacadeLocal {
 
     public List<Lignelivraisonfournisseur> findByIdarticle(long idArticle);
 
-    List<Lignelivraisonfournisseur> findByIdLot(long idMagasinLot, Date dateDebut, Date dateFin);
+    public List<Lignelivraisonfournisseur> findByIdLot(long idMagasinLot, Date dateDebut, Date dateFin);
 
-    List<Lignelivraisonfournisseur> findByIdMagasin(int idMagasin, Date dateDebut, Date dateFin);
+    public List<Lignelivraisonfournisseur> findByIdMagasin(int idMagasin, Date dateDebut, Date dateFin);
+
+    public void deleteByIdarticle(long idarticle);
 }

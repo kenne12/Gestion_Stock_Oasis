@@ -7,21 +7,21 @@ import javax.ejb.Local;
 @Local
 public interface MouchardFacadeLocal {
 
-    public void create(Mouchard paramMouchard);
+    public void create(Mouchard mouchard);
 
-    public void edit(Mouchard paramMouchard);
+    public void edit(Mouchard mouchard);
 
-    public void remove(Mouchard paramMouchard);
+    public void remove(Mouchard mouchard);
 
-    public Mouchard find(Object paramObject);
+    public Mouchard find(Object object);
 
     public List<Mouchard> findAll();
 
-    public List<Mouchard> findRange(int[] paramArrayOfInt);
+    public List<Mouchard> findRange(int[] arrayOfInt);
 
-    public int count();
+    int count();
 
-    public Long nextVal();
+    Long nextVal();
 
-    public void deleteByIdutilisateur(int idutilisateur);
+    void deleteByIdutilisateur(int idutilisateur);
 }

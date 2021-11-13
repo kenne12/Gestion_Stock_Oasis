@@ -346,8 +346,35 @@ public class Utilitaires {
     }
 
     public static List<Magasin> returMagasinByUser(MagasinFacadeLocal magasinFacadeLocal, UtilisateurmagasinFacadeLocal umfl, Personnel personnel) {
-        List<Magasin> magasins = magasinFacadeLocal.findAllRange(personnel.getIdmagasin().getParametrage().getId());
-
+        
+        List<Utilisateurmagasin> listUtilisateurMagasin = umfl.findByIdutilisateur(SessionMBean.getUserAccount().getIdutilisateur());        
+        List<Magasin> listGetByUser = new ArrayList<>();
+        
+        
+        listUtilisateurMagasin.forEach( um->{
+                listGetByUser.add(um.getIdmagasin());
+        });
+        
+        
+        if(!listGetByUser.contains(personnel.getIdmagasin())){
+            listGetByUser.add(personnel.getIdmagasin());
+        }
+        
+        boolean flag = false;
+        for(Magasin m : listGetByUser){
+            if(m.getCentral()){
+                flag = true;
+               break;
+            }
+        }
+        
+        if(flag){
+            listGetByUser.clear();
+            listGetByUser.addAll(magasinFacadeLocal.findAllRange(personnel.getIdmagasin().getParametrage().getId()));
+        }
+       
+        
+        /*List<Magasin> magasins = magasinFacadeLocal.findAllRange(personnel.getIdmagasin().getParametrage().getId());
         List<Magasin> listMagasin = new ArrayList();
         listMagasin.add(personnel.getIdmagasin());
         for (Magasin m : magasins) {
@@ -355,15 +382,15 @@ public class Utilitaires {
                 listMagasin.add(m);
             }
         }
-        List<Utilisateurmagasin> listUtilisateurMagasin = umfl.findByIdutilisateur(SessionMBean.getUserAccount().getIdutilisateur());
+        
         if (!listUtilisateurMagasin.isEmpty()) {
             for (Utilisateurmagasin um : listUtilisateurMagasin) {
                 if (!listMagasin.contains(um.getIdmagasin())) {
                     listMagasin.add(um.getIdmagasin());
                 }
             }
-        }
-        return listMagasin;
+        }*/
+        return listGetByUser;
     }
 
     public static List<Projet> searchProjetctByMagasin(ProjetFacadeLocal pfl, List<Magasin> magasins) {

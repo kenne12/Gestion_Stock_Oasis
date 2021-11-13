@@ -14,7 +14,8 @@
                   modal="true" resizable="false" 
                   appendTo="@(body)" 
                   width="#{structureController.windowHeight}%"
-                  height="550px"
+                  height="600px"
+
                   header="#{langue['Titre.Dlg.Creation']} : #{langue.structure}" 
                   closeOnEscape="true">
 
@@ -57,99 +58,108 @@
                             </div>
                         </div>
 
-                        <div class="col-md-3" jsf:rendered="#{structureController.mode.equals('Create')}">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    #{langue.boutique_centrale}
+                        <div class="col-md-#{structureController.column}">
+
+                            <div class="row">
+
+                                <div class="col-md-6" jsf:rendered="#{structureController.mode.equals('Create')}">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            #{langue.boutique_centrale}
+                                        </div>
+
+                                        <div class="panel-body">
+
+                                            <h:panelGrid columns="3" columnClasses ="column">
+
+                                                <p:outputLabel value="#{langue.nom}" for="nom_magasin" />
+                                                <p:inputTextarea style="width: 270px" cols="250" rows="3" id="nom_magasin" value="#{structureController.magasin.nom}" required="true" 
+                                                                 requiredMessage="#{langue['Conv.Nom']}: #{langue['Conv.ValeurRequise']}"/>
+                                                <p:message for="nom_magasin"/>
+
+                                                <p:outputLabel value="#{langue.code}" for="code_magasin" />
+                                                <p:inputText id="code_magasin" style="width: 150px" value="#{structureController.magasin.code}" required="true" 
+                                                             requiredMessage="#{langue.code} : #{langue['Conv.ValeurRequise']}"/>
+                                                <p:message for="code_magasin"/>
+
+                                            </h:panelGrid>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div class="panel-body">
+                                <div class="col-md-6" jsf:rendered="#{structureController.mode.equals('Create')}">
 
-                                    <h:panelGrid columns="3" columnClasses ="column">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            #{langue.personnel}
+                                        </div>
 
-                                        <p:outputLabel value="#{langue.nom}" for="nom_magasin" />
-                                        <p:inputTextarea style="width: 270px" cols="250" rows="3" id="nom_magasin" value="#{structureController.magasin.nom}" required="true" 
-                                                         requiredMessage="#{langue['Conv.Nom']}: #{langue['Conv.ValeurRequise']}"/>
-                                        <p:message for="nom_magasin"/>
+                                        <div class="panel-body">
 
-                                        <p:outputLabel value="#{langue.code}" for="code_magasin" />
-                                        <p:inputText id="code_magasin" style="width: 150px" value="#{structureController.magasin.code}" required="true" 
-                                                     requiredMessage="#{langue.code} : #{langue['Conv.ValeurRequise']}"/>
-                                        <p:message for="code_magasin"/>
+                                            <h:panelGrid columns="3" columnClasses ="column">
 
-                                    </h:panelGrid>
+                                                <p:outputLabel value="#{langue.poste}" for="poste"/>
+                                                <p:selectOneMenu id="poste" value="#{structureController.personnel.idqualite.idqualite}" required="true" requiredMessage="#{langue.valeur_obligatoire}">
+                                                    <f:selectItem itemLabel="#{langue.choisir}" itemValue=""/>
+                                                    <f:selectItems value="#{personnelController.qualites}" var="qlty" itemLabel="#{qlty.nom}" itemValue="#{qlty.idqualite}"/>
+                                                </p:selectOneMenu>
+                                                <p:message for="poste"/>
+
+                                                <p:outputLabel value="#{langue.nom}" for="nom" />
+                                                <p:inputText id="nom" value="#{structureController.personnel.nom}" required="true" style="width: 270px"
+                                                             requiredMessage="#{langue['Conv.Nom']}: #{langue['Conv.ValeurRequise']}">
+                                                    <p:ajax/>   
+                                                </p:inputText>
+                                                <p:message for="nom"/>
+
+                                                <p:outputLabel value="#{langue.prenom}" for="prenom" />
+                                                <p:inputText id="prenom" value="#{structureController.personnel.prenom}" style="width: 270px" >                                    
+                                                    <p:ajax/>   
+                                                </p:inputText>
+                                                <p:message for="prenom"/>
+
+                                            </h:panelGrid>
+                                        </div>
+                                    </div>
                                 </div>
+
+                                <div class="col-md-12" jsf:rendered="#{structureController.mode.equals('Create')}">
+
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            #{langue.utilisateur}
+                                        </div>
+
+                                        <div class="panel-body">
+
+                                            <h:panelGrid columns="3" columnClasses ="column">
+
+                                                <p:outputLabel value="#{langue.login}" for="login" />
+                                                <p:inputText id="login" value="#{structureController.utilisateur.login}" required="true" 
+                                                             requiredMessage="#{langue.valeur_obligatoire}" style="width: 250px"/>
+                                                <p:message for="login" id="msg_login"/>
+
+                                                <p:outputLabel rendered="#{structureController.mode.equals('Create')}" value="#{langue.password}" for="password" />
+                                                <h:inputSecret rendered="#{structureController.mode.equals('Create')}" id="password" value="#{structureController.utilisateur.password}" required="true" 
+                                                               requiredMessage="#{langue.valeur_obligatoire}" style="width: 250px"/>
+                                                <p:message  rendered="#{structureController.mode.equals('Create')}" for="password" id="msg_password"/>
+
+                                                <p:outputLabel value="#{langue.theme}" for="theme"/>
+                                                <p:selectOneMenu id="theme" value="#{structureController.utilisateur.theme}" required="true" requiredMessage="#{langue.valeur_obligatoire}" filter="true">
+                                                    <f:selectItem itemLabel="#{langue.choisir}" itemValue=""/>
+                                                    <f:selectItems value="#{themes.themes}" var="item" itemLabel="#{item}" itemValue="#{item}"/>
+                                                </p:selectOneMenu>
+                                                <p:message for="theme" id="msg_theme"/>
+
+                                            </h:panelGrid>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
+
                         </div>
 
-                        <div class="col-md-3" jsf:rendered="#{structureController.mode.equals('Create')}">
-
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                     #{langue.personnel}
-                                </div>
-
-                                <div class="panel-body">
-
-                                    <h:panelGrid columns="3" columnClasses ="column">
-
-                                        <p:outputLabel value="#{langue.poste}" for="poste"/>
-                                        <p:selectOneMenu id="poste" value="#{structureController.personnel.idqualite.idqualite}" required="true" requiredMessage="#{langue.valeur_obligatoire}">
-                                            <f:selectItem itemLabel="#{langue.choisir}" itemValue=""/>
-                                            <f:selectItems value="#{personnelController.qualites}" var="qlty" itemLabel="#{qlty.nom}" itemValue="#{qlty.idqualite}"/>
-                                        </p:selectOneMenu>
-                                        <p:message for="poste"/>
-
-                                        <p:outputLabel value="#{langue.nom}" for="nom" />
-                                        <p:inputText id="nom" value="#{structureController.personnel.nom}" required="true" style="width: 270px"
-                                                     requiredMessage="#{langue['Conv.Nom']}: #{langue['Conv.ValeurRequise']}">
-                                            <p:ajax/>   
-                                        </p:inputText>
-                                        <p:message for="nom"/>
-
-                                        <p:outputLabel value="#{langue.prenom}" for="prenom" />
-                                        <p:inputText id="prenom" value="#{structureController.personnel.prenom}" style="width: 270px" >                                    
-                                            <p:ajax/>   
-                                        </p:inputText>
-                                        <p:message for="prenom"/>
-
-                                    </h:panelGrid>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3" jsf:rendered="#{structureController.mode.equals('Create')}">
-
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    #{langue.utilisateur}
-                                </div>
-
-                                <div class="panel-body">
-
-                                    <h:panelGrid columns="3" columnClasses ="column">
-
-                                        <p:outputLabel value="#{langue.login}" for="login" />
-                                        <p:inputText id="login" value="#{structureController.utilisateur.login}" required="true" 
-                                                     requiredMessage="#{langue.valeur_obligatoire}" style="width: 250px"/>
-                                        <p:message for="login" id="msg_login"/>
-
-                                        <p:outputLabel rendered="#{structureController.mode.equals('Create')}" value="#{langue.password}" for="password" />
-                                        <h:inputSecret rendered="#{structureController.mode.equals('Create')}" id="password" value="#{structureController.utilisateur.password}" required="true" 
-                                                       requiredMessage="#{langue.valeur_obligatoire}" style="width: 250px"/>
-                                        <p:message  rendered="#{structureController.mode.equals('Create')}" for="password" id="msg_password"/>
-
-                                        <p:outputLabel value="#{langue.theme}" for="theme"/>
-                                        <p:selectOneMenu id="theme" value="#{structureController.utilisateur.theme}" required="true" requiredMessage="#{langue.valeur_obligatoire}" filter="true">
-                                            <f:selectItem itemLabel="#{langue.choisir}" itemValue=""/>
-                                            <f:selectItems value="#{themes.themes}" var="item" itemLabel="#{item}" itemValue="#{item}"/>
-                                        </p:selectOneMenu>
-                                        <p:message for="theme" id="msg_theme"/>
-
-                                    </h:panelGrid>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                     <p:separator/>

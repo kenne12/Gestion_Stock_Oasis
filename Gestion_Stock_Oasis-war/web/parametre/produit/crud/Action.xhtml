@@ -34,17 +34,34 @@
                              update=":ArticleListerForm:datalist,:actionsForm,:notify1"
                              disabled="#{articleController.supprimer}"
                              actionListener="#{articleController.delete()}">
-                
+
                 <p:confirm header="#{langue['Titre.Dlg.Confirm']}"
                            message="#{langue['Message.Confirm.Supprimer']}?"
                            icon="ui-icon-alert"/>
-                
+
+            </p:commandButton>
+
+            <p:commandButton id="supprimer_2" 
+                             icon="ui-icon-trash"  
+                             value="Suppression Complete" 
+                             update=":ArticleListerForm:datalist,:actionsForm,:notify1"
+                             disabled="#{articleController.supprimer}"
+                             actionListener="#{articleController.delete2()}">
+
+                <p:confirm header="#{langue['Titre.Dlg.Confirm']}"
+                           message="#{langue['Message.Confirm.Supprimer']}?"
+                           icon="ui-icon-alert"/>
+
             </p:commandButton>
 
             <p:commandButton id="imprimer" icon="ui-icon-print" ajax="false"                             
                              value="#{langue['Conv.Imprimer']}" actionListener="#{articleController.print()}"
                              update=":ArticleImprimerForm,:notify1" disabled="#{articleController.imprimer}" />
-                             
+
+            <p:commandButton  icon="fa fa-image"                              
+                              value="Synchroniser" actionListener="#{articleController.synchronisePicture()}"
+                              update=":ArticleListerForm:datalist" onclick="PF('AjaxNotifyDialog').show()" />
+
         </div>
 
     </h:form>

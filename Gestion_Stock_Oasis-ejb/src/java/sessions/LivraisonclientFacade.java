@@ -26,14 +26,9 @@ public class LivraisonclientFacade extends AbstractFacade<Livraisonclient> imple
 
     @Override
     public Long nextValue() {
+        Query query = this.em.createQuery("SELECT MAX(l.idlivraisonclient) FROM Livraisonclient l");
         try {
-            Query query = this.em.createQuery("SELECT MAX(l.idlivraisonclient) FROM Livraisonclient l");
-            List list = query.getResultList();
-            if (list != null) {
-                return ((Long) list.get(0)) + 1L;
-            } else {
-                return 1L;
-            }
+            return ((Long) query.getResultList().get(0)) + 1L;
         } catch (Exception e) {
             return 1l;
         }
@@ -44,14 +39,8 @@ public class LivraisonclientFacade extends AbstractFacade<Livraisonclient> imple
         try {
             Query query = this.em.createQuery("SELECT COUNT(l.idlivraisonclient) FROM Livraisonclient l WHERE l.datelivraison BETWEEN :dateDebut AND :dateFin AND l.idmagasin.idmagasin=:idMagasin");
             query.setParameter("dateDebut", anneeMois.getDateDebut()).setParameter("dateFin", anneeMois.getDateFin()).setParameter("idMagasin", idMagasin);
-            List list = query.getResultList();
-            if (list.isEmpty()) {
-                return 1L;
-            } else {
-                return (Long) list.get(0) + 1;
-            }
+            return (Long) query.getResultList().get(0) + 1;
         } catch (Exception e) {
-            e.printStackTrace();
             return 1L;
         }
     }
@@ -119,6 +108,13 @@ public class LivraisonclientFacade extends AbstractFacade<Livraisonclient> imple
                 .setParameter("idMagasin", idMagasin)
                 .setParameter("idClient", idClient)
                 .getResultList();
+    }
+
+    @Override
+    public void deleteLivraison(long id) {
+        em.createQuery("DELETE FROM Livraisonclient l WHERE l.idlivraisonclient=:id")
+                .setParameter("id", id)
+                .executeUpdate();
     }
 
 }

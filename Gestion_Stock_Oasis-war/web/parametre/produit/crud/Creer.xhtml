@@ -14,7 +14,7 @@
                   appendTo="@(body)" 
                   header="#{langue['Titre.Dlg.Creation']} : #{langue.article}" 
                   closeOnEscape="true"
-                  height="600px"
+                  height="700px"
                   width="80%">
 
             <h:form id="form_btn">
@@ -23,9 +23,7 @@
                         <center>
                             <p:commandButton value="Group" icon="ui-icon-plus" actionListener="#{familleController.prepareCreate()}" update=":FamilleCreerForm" />
 
-
                             <p:commandButton value="Unité" icon="ui-icon-plus" actionListener="#{uniteController.prepareCreate()}" update=":UniteCreerForm" />
-
                         </center>
                     </div>
                 </div>
@@ -50,7 +48,7 @@
 
                                         <p:outputLabel value="#{langue.groupe}" for="famille"/>
                                         <p:selectOneMenu filter="true" filterMatchMode="contains" id="famille" value="#{articleController.famille.idfamille}" rendered="true" required="#{langue.valeur_obligatoire}">
-                                            <f:selectItem itemLabel="#{langue.choisir}" itemValue=""/>
+                                            <f:selectItem itemLabel="#{langue.choisir}" itemValue="0"/>
                                             <f:selectItems value="#{articleController.familles}" var="f" itemLabel="#{f.nom}" itemValue="#{f.idfamille}" />
                                             <p:ajax/>
                                         </p:selectOneMenu>
@@ -99,7 +97,7 @@
                                         <p:message for="prix"/>
 
                                         <p:outputLabel value="#{langue.unite} En Gros" for="unite_en_gros"/>
-                                        <p:selectOneMenu filter="true" filterMatchMode="contains" id="unite_en_gros" value="#{articleController.article.idunite.idunite}" required="#{langue.valeur_obligatoire}">
+                                        <p:selectOneMenu filter="true" filterMatchMode="contains" id="unite_en_gros" value="#{articleController.unite.idunite}" required="#{langue.valeur_obligatoire}">
                                             <f:selectItem itemLabel="#{langue.choisir}" itemValue="0"/>
                                             <f:selectItems value="#{articleController.unites}" var="u" itemLabel="#{u.libelle}" itemValue="#{u.idunite}" />
                                             <p:ajax/>

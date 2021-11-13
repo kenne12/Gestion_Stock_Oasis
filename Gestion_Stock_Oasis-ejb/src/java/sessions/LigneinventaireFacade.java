@@ -49,4 +49,11 @@ public class LigneinventaireFacade extends AbstractFacade<Ligneinventaire> imple
         query.setParameter("idinventaire", (idinventaire));
         query.executeUpdate();
     }
+    
+    @Override
+    public void deleteByIdarticle(long idarticle){
+        em.createQuery("DELETE FROM Ligneinventaire l WHERE l.idmagasinlot.idmagasinarticle.idarticle.idarticle=:idArticle")
+                .setParameter("idArticle", idarticle)
+                .executeUpdate();
+    }
 }

@@ -25,14 +25,13 @@ public class LotFacade extends AbstractFacade<Lot> implements LotFacadeLocal {
 
     @Override
     public Long nextVal() {
-        Query query = this.em.createQuery("SELECT MAX(l.idlot) FROM Lot l");
-        Long result = (Long) query.getSingleResult();
-        if (result == null) {
-            result = 1L;
-        } else {
-            result = result + 1L;
+        try {
+            Query query = this.em.createQuery("SELECT MAX(l.idlot) FROM Lot l");
+            return ((Long) query.getResultList().get(0) + 1);
+        } catch (Exception e) {
+            return 1L;
         }
-        return result;
+
     }
 
     @Override
@@ -149,5 +148,12 @@ public class LotFacade extends AbstractFacade<Lot> implements LotFacadeLocal {
         Query query = this.em.createQuery("SELECT l FROM Lot l WHERE l.idarticle.perissable=true AND l.etat=true AND :date>=l.dateperemption AND l.idarticle.parametrage.id=:id ORDER BY l.idarticle.libelle, l.numero");
         query.setParameter("date", date).setParameter("id", idStructure);
         return query.getResultList();
+    }
+
+    @Override
+    public void deleteByIdarticle(long idarticle) {
+        em.createQuery("DELETE FROM Lot l WHERE l.idarticle.idarticle=:idArticle")
+                .setParameter("idArticle", idarticle)
+                .executeUpdate();
     }
 }

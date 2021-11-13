@@ -34,6 +34,10 @@
                 <p:ajax event="rowUnselect" update=":ArticleListerForm:ArticleDataTableContextMenu, :actionsForm"/>
                 <p:ajax event="rowDblselect" onsuccess="document.getElementById('ArticleListerForm:viewButton').click();"/>
 
+                <p:column style="width: 5%;" >
+                    <h:graphicImage height="30" width="30" value="/photos/products/#{item.photo}"/>
+                </p:column>
+
                 <p:column style="width: 17%; text-align: left; word-break: break-all" filterBy="#{item.idfamille.nom}" filterMatchMode="contains">
                     <f:facet name="header">
                         <h:outputText value="#{langue.categorie}"/>
@@ -41,14 +45,14 @@
                     <h:outputText value="#{item.idfamille.nom}"/>
                 </p:column>
 
-                <p:column style="width: 22%; text-align: left" filterBy="#{item.libelle}" filterMatchMode="contains">
+                <p:column style="width: 20%; text-align: left" filterBy="#{item.libelle}" filterMatchMode="contains">
                     <f:facet name="header">
                         <h:outputText value="#{langue.libelle}"/>
                     </f:facet>
                     <h:outputText value="#{item.libelle}"/>
                 </p:column>
 
-                <p:column style="width: 17%; text-align: left" filterBy="#{item.code}" filterMatchMode="contains">
+                <p:column style="width: 13%; text-align: left" filterBy="#{item.code}" filterMatchMode="contains">
                     <f:facet name="header">
                         <h:outputText value="#{langue.code}"/>
                     </f:facet>
@@ -73,7 +77,7 @@
                     </h:outputText>
                 </p:column>
 
-                <p:column style="width: 8% ;">
+                <p:column style="width: 6% ;">
                     <f:facet name="header">
                         <h:outputText value="#{langue.quantite}"/>
                     </f:facet>
@@ -82,7 +86,7 @@
                     </h:outputText>
                 </p:column>
 
-                <p:column style="width: 8% ;">
+                <p:column style="width: 6% ;">
                     <f:facet name="header">
                         <h:outputText value="#{langue.stock_critic}"/>
                     </f:facet>
@@ -91,11 +95,22 @@
                     </h:outputText>
                 </p:column>
 
-                <p:column style="width: 6%">
+                <p:column style="width: 5%">
                     <f:facet name="header">
                         <h:outputText value="#{langue.etat}"/>
                     </f:facet>
                     <h:selectBooleanCheckbox disabled="true" value="#{item.etat}"/>
+                </p:column>
+
+                <p:column style="width: 7%;text-align: center" >
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.action}"/>
+                    </f:facet>
+
+                    <p:commandButton icon="ui-icon-image">
+                        <p:ajax event="click" listener="#{articleController.prepareUploadPhoto(item)}" update=":PhotoProduitForm,:notify1"/>
+                    </p:commandButton>
+
                 </p:column>
 
             </p:dataTable>

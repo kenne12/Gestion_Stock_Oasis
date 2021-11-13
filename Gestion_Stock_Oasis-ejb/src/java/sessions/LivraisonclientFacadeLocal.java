@@ -23,24 +23,26 @@ public interface LivraisonclientFacadeLocal {
 
     public int count();
 
-    public Long nextValue();
+    Long nextValue();
 
     Long nextVal(int idMagasin, AnneeMois anneeMois);
 
-    public List<Livraisonclient> findAllRange();
+    List<Livraisonclient> findAllRange();
 
-    public Livraisonclient findByIddemande(long idDemande);
+    Livraisonclient findByIddemande(long idDemande);
 
-    public List<Livraisonclient> findAllRange(int idMagasin, Date dateDebut, Date dateFin);
+    List<Livraisonclient> findAllRange(int idMagasin, Date dateDebut, Date dateFin);
 
-    public List<Livraisonclient> findByIdmagasinNonRegle(int idMagasin);
+    List<Livraisonclient> findByIdmagasinNonRegle(int idMagasin);
 
-    public List<Livraisonclient> findByIdmagasin(int idMagasin);
+    List<Livraisonclient> findByIdmagasin(int idMagasin);
 
-    public List<Livraisonclient> findByIdmagasinAndDate(int idMagasin, Date date);
+    List<Livraisonclient> findByIdmagasinAndDate(int idMagasin, Date date);
 
-    public List<Livraisonclient> findByIdmagasinAndIdclientAndDate(int idMagasin, int idClient, Date date);
+    List<Livraisonclient> findByIdmagasinAndIdclientAndDate(int idMagasin, int idClient, Date date);
 
-    public List<Livraisonclient> findByIdmagasinAndIdclientTwoDates(int idMagasin, int idClient, Date dateDebut, Date dateFin);
+    List<Livraisonclient> findByIdmagasinAndIdclientTwoDates(int idMagasin, int idClient, Date dateDebut, Date dateFin);
+    
+    void deleteLivraison(long id);
 
 }

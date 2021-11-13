@@ -2,6 +2,7 @@ package utils;
 
 import entities.Annee;
 import entities.AnneeMois;
+import entities.Article;
 import entities.Journee;
 import entities.Magasin;
 import entities.Parametrage;
@@ -146,6 +147,14 @@ public class SessionMBean {
         HttpSession session = getSession();
         if (session != null) {
             return (Journee) session.getAttribute("journee");
+        }
+        return null;
+    }
+
+    public static Article getProductToUpLoadPhoto() {
+        HttpSession session = getSession();
+        if (session != null) {
+            return (Article) session.getAttribute("product_to_upload_photo");
         }
         return null;
     }

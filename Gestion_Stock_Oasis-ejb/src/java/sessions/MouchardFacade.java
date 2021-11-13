@@ -23,14 +23,12 @@ public class MouchardFacade extends AbstractFacade<Mouchard> implements Mouchard
 
     @Override
     public Long nextVal() {
-        Query query = this.em.createQuery("SELECT MAX(m.idmouchard) FROM Mouchard m");
-        Long result = (Long) query.getSingleResult();
-        if (result == null) {
-            result = 1L;
-        } else {
-            result += 1L;
+        try {
+            Query query = this.em.createQuery("SELECT MAX(m.idmouchard) FROM Mouchard m");
+            return (Long) query.getResultList().get(0) + 1;
+        } catch (Exception e) {
+            return 1L;
         }
-        return result;
     }
 
     @Override

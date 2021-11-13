@@ -1328,7 +1328,7 @@ public class PrintUtils {
             Document rapport = new Document();
             PdfWriter.getInstance(rapport, new FileOutputStream(Utilitaires.path + "/reports/stock/" + fileName));
             rapport.open();
-            float[] widths = {0.3F, 2.0F, 1.0f, 1.0f , 1.0f, 1.0f, 1.0f};
+            float[] widths = {0.3F, 2.0F, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
             PdfPTable table = new PdfPTable(widths);
             table.setWidthPercentage(100f);
 
@@ -1370,20 +1370,20 @@ public class PrintUtils {
 
                 table.addCell(createPdfPCell("" + compteur, 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
                 table.addCell(createPdfPCell("" + sdf.format(j.getDateJour()), 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
-                table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(( j.getMontantVendu())), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
-                table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney((j.getTransfertSortant())), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
-                table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney((j.getBord())), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
-                table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney((j.getMontantEntre())), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
-                table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney((j.getTransfertEntrant())), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(((int) j.getMontantVendu())), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(((int) j.getTransfertSortant())), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(((int) j.getBord())), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(((int) j.getMontantEntre())), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(((int) j.getTransfertEntrant())), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
                 compteur++;
             }
 
             table.addCell(createPdfPCell("Totaux", 2, 2, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0)));
-            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney((totalRecette)), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
-            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney((transfertSortant)), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
-            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney((totalBord)), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
-            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney((totalAppro)), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
-            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney((transfertEntrant)), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(((int) totalRecette)), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(((int) transfertSortant)), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(((int) totalBord)), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(((int) totalAppro)), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(((int) transfertEntrant)), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
             rapport.add((Element) table);
             rapport.close();
         } catch (DocumentException ex) {

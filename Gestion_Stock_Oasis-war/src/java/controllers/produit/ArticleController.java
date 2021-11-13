@@ -1,5 +1,6 @@
 package controllers.produit;
 
+import com.google.common.io.Files;
 import entities.Article;
 import entities.Famille;
 import entities.Fournisseur;
@@ -11,6 +12,9 @@ import entities.Magasin;
 import entities.Magasinarticle;
 import entities.Magasinlot;
 import entities.Unite;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Date;
@@ -21,8 +25,10 @@ import java.util.Objects;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.FileUploadEvent;
 import utils.JsfUtil;
 import utils.PrintUtils;
 import utils.Printer;
@@ -39,6 +45,8 @@ public class ArticleController extends AbstractArticleController implements Seri
         this.famille = new Famille();
         this.password.add("momo1234");
         this.password.add("kenne1234");
+        this.article = new Article();
+        this.article.setIdunite(new Unite(0l));
     }
 
     public void prepareCreate() {
@@ -79,6 +87,7 @@ public class ArticleController extends AbstractArticleController implements Seri
         this.article.setPrixunit(0d);
         this.article.setQuantitereduite(0d);
         this.article.setQuantitemultiple(0d);
+        this.unite = new Unite(0l);
         article.setCode(Utilitaires.genererCodeArticle("ARTICLE_", articleFacadeLocal.nextValByIdstructure(SessionMBean.getParametrage().getId())));
 
         List listMag = this.magasins;
@@ -99,13 +108,7 @@ public class ArticleController extends AbstractArticleController implements Seri
             if (this.article != null) {
                 this.showLot = false;
                 this.famille = this.article.getIdfamille();
-                try {
-                    if (article.getIdunite() == null) {
-                        article.setIdunite(new Unite());
-                    }
-                } catch (Exception e) {
-                    article.setIdunite(new Unite());
-                }
+                this.unite = this.article.getIdunite();
                 this.selectedMagasins.clear();
                 List<Magasinarticle> listMa = this.magasinarticleFacadeLocal.findByIdarticle(this.article.getIdarticle());
                 if (!listMa.isEmpty()) {
@@ -162,6 +165,11 @@ public class ArticleController extends AbstractArticleController implements Seri
     public void create() {
         try {
 
+            if (this.famille.getIdfamille() == 0 || unite.getIdunite() == 0l || article.getIdUniteDetail() == 0) {
+                notifyError("veuillez_verifier_le_formulaire");
+                return;
+            }
+
             if (this.mode.equals("Create")) {
                 if (this.articleFacadeLocal.findByCode(SessionMBean.getMagasin().getParametrage().getId(), this.article.getCode()) != null) {
                     notifyError("code_article_existant");
@@ -170,15 +178,13 @@ public class ArticleController extends AbstractArticleController implements Seri
 
                 this.article.setIdarticle(articleFacadeLocal.nextVal());
 
-                if (this.famille.getIdfamille() != null) {
-                    this.article.setIdfamille(this.famille);
-                }
+                this.article.setIdfamille(this.famille);
 
                 article.setUnitesortie(1.0);
                 article.setParametrage(SessionMBean.getMagasin().getParametrage());
                 article.setQuantitevirtuelle(0d);
                 article.setUniteentree(0d);
-                article.setIdunite(uniteFacadeLocal.find(article.getIdunite().getIdunite()));
+                article.setIdunite(uniteFacadeLocal.find(unite.getIdunite()));
 
                 this.ut.begin();
 
@@ -260,7 +266,7 @@ public class ArticleController extends AbstractArticleController implements Seri
                 if (!Objects.equals(this.famille.getIdfamille(), p.getIdfamille().getIdfamille())) {
                     this.article.setIdfamille(this.familleFacadeLocal.find(this.famille.getIdfamille()));
                 }
-                article.setIdunite(uniteFacadeLocal.find(article.getIdunite().getIdunite()));
+                article.setIdunite(uniteFacadeLocal.find(unite.getIdunite()));
 
                 this.ut.begin();
                 this.articleFacadeLocal.edit(this.article);
@@ -287,7 +293,6 @@ public class ArticleController extends AbstractArticleController implements Seri
 
                 this.modifier = this.supprimer = this.detail = true;
                 article = new Article();
-                article.setIdunite(new Unite());
 
                 RequestContext.getCurrentInstance().execute("PF('ArticleCreerDialog').hide()");
                 notifySuccess();
@@ -348,15 +353,51 @@ public class ArticleController extends AbstractArticleController implements Seri
                     this.ut.begin();
                     this.magasinlotFacadeLocal.removeAllByIdarticle(article.getIdarticle());
                     this.magasinarticleFacadeLocal.removeAllByIdarticle(article.getIdarticle());
-
+                    lotFacadeLocal.deleteByIdarticle(article.getIdarticle());
                     this.articleFacadeLocal.remove(this.article);
                     Utilitaires.saveOperation(this.mouchardFacadeLocal, "Suppresion de l'article : " + this.article.getLibelle(), SessionMBean.getUserAccount());
                     this.ut.commit();
                     this.article = new Article();
+                    this.article.setIdunite(new Unite(0L));
                     notifySuccess();
                 } else {
                     notifyError("cet_article_associe_a_plusieurs_demande");
                 }
+            } else {
+                notifyError("not_row_selected");
+            }
+        } catch (Exception e) {
+            notifyFail(e);
+        }
+    }
+
+    public void delete2() {
+        try {
+            if (this.article != null) {
+                if (!Utilitaires.isAccess(25L)) {
+                    notifyError("acces_refuse");
+                    return;
+                }
+
+                //this.ut.begin();
+                lignemvtstockFacadeLocal.deleteByIdarticle(article.getIdarticle());
+                lignetransfertFacadeLocal.deleteByIdarticle(article.getIdarticle());
+                lignedemandeFacadeLocal.deleteByIdarticle(article.getIdarticle());
+                lignelivraisonfournisseurFacadeLocal.deleteByIdarticle(article.getIdarticle());
+                lignelivraisonclientFacadeLocal.deleteByIdarticle(article.getIdarticle());
+                ligneinventaireFacadeLocal.deleteByIdarticle(article.getIdarticle());
+
+                this.magasinlotFacadeLocal.removeAllByIdarticle(article.getIdarticle());
+                this.magasinarticleFacadeLocal.removeAllByIdarticle(article.getIdarticle());
+                lotFacadeLocal.deleteByIdarticle(article.getIdarticle());
+
+                this.articleFacadeLocal.remove(this.article);
+                Utilitaires.saveOperation(this.mouchardFacadeLocal, "Suppresion de l'article : " + this.article.getLibelle(), SessionMBean.getUserAccount());
+                //this.ut.commit();
+                this.article = new Article();
+                this.article.setIdunite(new Unite(0L));
+                notifySuccess();
+
             } else {
                 notifyError("not_row_selected");
             }
@@ -418,6 +459,107 @@ public class ArticleController extends AbstractArticleController implements Seri
             RequestContext.getCurrentInstance().execute("PF('StockImprimerDialog').show()");
         } catch (Exception e) {
             notifyFail(e);
+        }
+    }
+
+    public void prepareUploadPhoto(Article item) {
+        this.article = item;
+        this.filename = item.getPhoto();
+        File f1 = new File(Utilitaires.path + "" + this.imageDir + "/" + item.getPhoto());
+        if (!f1.isFile()) {
+            File f2 = new File(SessionMBean.getParametrage().getRepertoireImageProduct() + File.separatorChar + "" + item.getPhoto());
+            if (f2.exists()) {
+                try {
+                    Files.copy(f2, f1);
+                    filename = item.getPhoto();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        HttpSession session = SessionMBean.getSession();
+        session.setAttribute("product_to_upload_photo", item);
+        RequestContext.getCurrentInstance().execute("PF('PhotoProduitDialog').show()");
+    }
+
+    public void handleFileUpload(FileUploadEvent event) {
+        try {
+            if ((event.getFile() == null) || (event.getFile().getFileName() == null) || (event.getFile().getFileName().equals(""))) {
+                this.routine.feedBack("avertissement", "/resources/tool_images/error.png", this.routine.localizeMessage("nom_image_incorrect"));
+                RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
+                return;
+            }
+
+            if (!Utilitaires.estExtensionImage(Utilitaires.getExtension(event.getFile().getFileName()))) {
+                this.routine.feedBack("avertissement", "/resources/tool_images/error.png", this.routine.localizeMessage("fichier_non_pris_en_charge"));
+                RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
+                return;
+            }
+
+            article = SessionMBean.getProductToUpLoadPhoto();
+            String nom = "image_product_" + article.getCode().toLowerCase() + "_" + article.getIdarticle() + "." + Utilitaires.getExtension(event.getFile().getFileName());
+
+            FileOutputStream out = new FileOutputStream(Utilitaires.path + "" + this.imageDir + "/" + nom, true);
+
+            byte[] bytes = event.getFile().getContents();
+            out.write(bytes);
+
+            this.filename = nom;
+            this.article.setPhoto(nom);
+            this.articleFacadeLocal.edit(this.article);
+
+            this.routine.feedBack("information", "/resources/tool_images/success.png", this.routine.localizeMessage("operation_reussie"));
+
+            File f1 = new File(Utilitaires.path + "" + this.imageDir + File.separatorChar + nom);
+            File f2 = new File(SessionMBean.getParametrage().getRepertoireImageProduct() + File.separatorChar + "" + nom);
+            //File f3 = new File(System.getProperty("user.dir") + File.separatorChar + "gescom" + File.separatorChar + "photo_products" + File.separatorChar + nom);
+            Files.copy(f1, f2);
+            //Files.copy(f1, f3);
+            RequestContext.getCurrentInstance().execute("PF('PhotoProduitDialog').hide()");
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("product_to_upload_photo");
+
+            article = new Article();
+            article.setIdUniteDetail(0l);
+        } catch (IOException ex) {
+            this.routine.catchException(ex, this.routine.localizeMessage("echec_operation"));
+            RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
+        }
+    }
+
+    public void closeUploadDialog() {
+
+        article = new Article();
+        article.setIdUniteDetail(0l);
+
+        RequestContext.getCurrentInstance().execute("PF('PhotoProduitDialog').hide()");
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("product_to_upload_photo");
+    }
+
+    public void synchronisePicture() {
+        for (Article a : articles) {
+            if (!a.getPhoto().contains("article.jpeg")) {
+                File f1 = new File(Utilitaires.path + "" + this.imageDir + "/" + a.getPhoto());
+                if (!f1.isFile()) {
+                    File f2 = new File(SessionMBean.getParametrage().getRepertoireImageProduct() + File.separatorChar + "" + a.getPhoto());
+                    if (f2.exists()) {
+                        try {
+                            Files.copy(f2, f1);
+                            filename = a.getPhoto();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+        RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
+        this.redirect("/parametre/produit/produit.html");
+    }
+    
+    private void redirect(String link) {
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + link);
+        } catch (Exception e) {
         }
     }
 }

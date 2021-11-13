@@ -241,14 +241,14 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                     double qteAvant = 0;
                     for (Lignelivraisonfournisseur llf : this.lignelivraisonfournisseurs) {
                         Lot lotTemp = this.lotFacadeLocal.findByCode(llf.getIdmagasinlot().getIdmagasinarticle().getIdarticle().getIdarticle(), llf.getIdlot().getNumero());
-                        Double resteMvt = 0.0;
+                        Double resteMvt = 0d;
                         boolean createLot = false;
                         if (lotTemp == null) {
                             lotTemp = llf.getIdlot();
                             lotTemp.setIdlot(this.lotFacadeLocal.nextVal());
-                            lotTemp.setQuantite(0.0);
-                            lotTemp.setQuantitemultiple(0.0);
-                            lotTemp.setQuantitereduite(0.0);
+                            lotTemp.setQuantite(0d);
+                            lotTemp.setQuantitemultiple(0d);
+                            lotTemp.setQuantitereduite(0d);
                             lotTemp.setEtat(true);
                             lotTemp.setPrixachat(llf.getPrixachat());
                             lotTemp.setPrixunitaire(llf.getPrixachat());
@@ -327,6 +327,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                         lmvts.setClient(" ");
                         lmvts.setType("ENTREE");
                         lmvts.setMagasin(llf.getIdmagasinlot().getIdmagasinarticle().getIdmagasin().getNom());
+                        lmvts.setLignelivraisonfournisseur(llf);
                         this.lignemvtstockFacadeLocal.create(lmvts);
                     }
 
@@ -360,13 +361,13 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                             if (!Objects.equals(llf.getQuantite(), llfOld.getQuantite())) {
 
                                 Magasinarticle ma = this.magasinarticleFacadeLocal.find(llfOld.getIdmagasinlot().getIdmagasinarticle().getIdmagasinarticle());
-                                ma.setQuantite((ma.getQuantitereduite() - llfOld.getQuantitereduite()) + llf.getQuantitereduite());
+                                ma.setQuantite((ma.getQuantite() - llfOld.getQuantitereduite()) + llf.getQuantitereduite());
                                 ma.setQuantitemultiple((ma.getQuantitemultiple() - llfOld.getQuantitemultiple()) + llf.getQuantitemultiple());
                                 ma.setQuantitereduite((ma.getQuantitereduite() - llfOld.getQuantitereduite()) + llf.getQuantitereduite());
                                 this.magasinarticleFacadeLocal.edit(ma);
 
                                 Magasinlot ml = this.magasinlotFacadeLocal.find(llfOld.getIdmagasinlot().getIdmagasinlot());
-                                ml.setQuantite((ml.getQuantitereduite() - llfOld.getQuantitereduite()) + llf.getQuantitereduite());
+                                ml.setQuantite((ml.getQuantite() - llfOld.getQuantitereduite()) + llf.getQuantitereduite());
                                 ml.setQuantitemultiple((ml.getQuantitemultiple() - llfOld.getQuantitemultiple()) + llf.getQuantitemultiple());
                                 ml.setQuantitereduite((ml.getQuantitereduite() - llfOld.getQuantitereduite()) + llf.getQuantitereduite());
                                 this.magasinlotFacadeLocal.edit(ml);
@@ -389,7 +390,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                             this.lignelivraisonfournisseurFacadeLocal.create(llf);
 
                             Magasinarticle ma = this.magasinarticleFacadeLocal.find(llf.getIdmagasinlot().getIdmagasinarticle().getIdmagasinarticle());
-                            ma.setQuantite((ma.getQuantitereduite() - llf.getQuantitereduite()) + llf.getQuantitereduite());
+                            ma.setQuantite((ma.getQuantite() - llf.getQuantitereduite()) + llf.getQuantitereduite());
                             ma.setQuantitemultiple((ma.getQuantitemultiple() - llf.getQuantitemultiple()) + llf.getQuantitemultiple());
                             ma.setQuantitereduite((ma.getQuantitereduite() - llf.getQuantitereduite()) + llf.getQuantitereduite());
                             this.magasinarticleFacadeLocal.edit(ma);
@@ -412,6 +413,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                             lmvts.setMagasin("MAGASIN CENTRAL");
                             lmvts.setClient(" ");
                             lmvts.setReste(mlTemp.getQuantitereduite());
+                            lmvts.setLignelivraisonfournisseur(llf);
                             this.lignemvtstockFacadeLocal.create(lmvts);
                         }
                     }

@@ -11,7 +11,7 @@
                   widgetVar="StockCreateDialog" modal="true" 
                   resizable="true" appendTo="@(body)" 
                   width="95%"
-                  height="600"
+                  height="700"
                   header="CREER / MODIFIER UN NOUVEL APPROVISIONNEMENT EN STOCK">
             <h:form id="StockCreateForm">
                 <h:panelGroup id="display">
@@ -126,7 +126,7 @@
 
                         <p:column style="width: 8%;text-align: center" >
                             <f:facet name="header">
-                                <h:outputText value="#{langue.qte_par_unite}"/>
+                                <h:outputText value="QR"/>
                             </f:facet>
                             <h:outputText value="#{item.unite}">
                                 <f:convertNumber />

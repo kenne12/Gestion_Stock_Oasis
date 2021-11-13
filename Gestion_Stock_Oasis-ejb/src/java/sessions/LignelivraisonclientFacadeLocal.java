@@ -20,17 +20,19 @@ public interface LignelivraisonclientFacadeLocal {
 
     public List<Lignelivraisonclient> findRange(int[] range);
 
-    public int count();
+    int count();
 
-    public Long nextVal();
+    Long nextVal();
 
-    public List<Lignelivraisonclient> findByIdlivraisonclient(long idLivraisonClient);
+    List<Lignelivraisonclient> findByIdlivraisonclient(long idLivraisonClient);
 
-    public List<Lignelivraisonclient> findAllRange();
+    List<Lignelivraisonclient> findAllRange();
 
     List<Lignelivraisonclient> findByIdMagasin(int idMagasin, Date dateDebut, Date dateFin);
 
-    public List<Lignelivraisonclient> findByIdArticle(long idarticle);
+    List<Lignelivraisonclient> findByIdArticle(long idarticle);
 
     List<Lignelivraisonclient> findByIdLot(long idMagasinLot, Date dateDebut, Date dateFin);
+
+    void deleteByIdarticle(long idarticle);
 }

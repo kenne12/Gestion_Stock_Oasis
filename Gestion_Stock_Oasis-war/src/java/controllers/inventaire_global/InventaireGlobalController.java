@@ -439,11 +439,11 @@ public class InventaireGlobalController extends AbstractInventaireGlobalControll
             double vabs = Math.abs(ecart);
             magasinarticle.setQuantitemultiple(magasinarticle.getQuantitemultiple() - (vabs * magasinarticle.getIdarticle().getUnite()));
             magasinarticle.setQuantitereduite((magasinarticle.getQuantitereduite() - vabs));
-            magasinarticle.setQuantite((magasinarticle.getQuantitereduite() - vabs));
+            magasinarticle.setQuantite((magasinarticle.getQuantite() - vabs));
         } else {
             magasinarticle.setQuantitemultiple(magasinarticle.getQuantitemultiple() + (ecart * magasinarticle.getIdarticle().getUnite()));
             magasinarticle.setQuantitereduite((magasinarticle.getQuantitereduite() + ecart));
-            magasinarticle.setQuantite((magasinarticle.getQuantitereduite() + ecart));
+            magasinarticle.setQuantite((magasinarticle.getQuantite() + ecart));
         }
         this.magasinarticleFacadeLocal.edit(magasinarticle);
     }
@@ -453,12 +453,12 @@ public class InventaireGlobalController extends AbstractInventaireGlobalControll
         if (signe.equals("+")) {
             magasinlot.setQuantitemultiple(magasinlot.getQuantitemultiple() + (ecart * magasinlot.getIdlot().getIdarticle().getUnite()));
             magasinlot.setQuantitereduite((magasinlot.getQuantitereduite() + ecart));
-            magasinlot.setQuantite((magasinlot.getQuantitereduite() + ecart));
+            magasinlot.setQuantite((magasinlot.getQuantite() + ecart));
         } else {
             double vabs = Math.abs(ecart);
             magasinlot.setQuantitemultiple(magasinlot.getQuantitemultiple() - (vabs * magasinlot.getIdlot().getIdarticle().getUnite()));
             magasinlot.setQuantitereduite((magasinlot.getQuantitereduite() - vabs));
-            magasinlot.setQuantite((magasinlot.getQuantitereduite() - vabs));
+            magasinlot.setQuantite((magasinlot.getQuantite() - vabs));
         }
         try {
             if ((magasinlot.getIdlot().getDateperemption().after(Date.from(Instant.now()))) || (magasinlot.getIdlot().getDateperemption().equals(Date.from(Instant.now())))) {

@@ -26,4 +26,6 @@ public interface LignedemandeFacadeLocal {
     public List<Lignedemande> findByIddemande(long idDemande);
 
     public List<Lignedemande> findByIdarticle(long idArticle);
+
+    void deleteByIdarticle(long idarticle);
 }

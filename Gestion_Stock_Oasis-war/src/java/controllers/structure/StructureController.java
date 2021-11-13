@@ -58,7 +58,7 @@ public class StructureController extends AbstractStructureController implements 
             this.mode = "Create";
             
             this.setWindowHeight(95);
-            this.setColumn(3);
+            this.setColumn(6);
             
             parametrage = new Parametrage();
             parametrage.setNomStructure("-");

@@ -24,14 +24,12 @@ public class FournisseurFacade extends AbstractFacade<Fournisseur> implements Fo
 
     @Override
     public Integer nextVal() {
-        Query query = this.em.createQuery("SELECT MAX(f.idfournisseur) FROM Fournisseur f");
-        Integer result = (Integer) query.getSingleResult();
-        if (result == null) {
-            result = 1;
-        } else {
-            result = result + 1;
+        try {
+            Query query = this.em.createQuery("SELECT MAX(f.idfournisseur) FROM Fournisseur f");
+            return ((Integer) query.getResultList().get(0) + 1);
+        } catch (Exception e) {
+            return 1;
         }
-        return result;
     }
 
     @Override

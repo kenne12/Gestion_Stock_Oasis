@@ -52,4 +52,6 @@ public interface LotFacadeLocal {
             throws Exception;
 
     public List<Lot> findAllPeremptionIsActif(int idStructure, Date date);
+    
+    public void deleteByIdarticle(long idarticle);
 }

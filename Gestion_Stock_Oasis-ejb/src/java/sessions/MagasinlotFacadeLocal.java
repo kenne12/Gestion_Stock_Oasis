@@ -28,7 +28,7 @@ public interface MagasinlotFacadeLocal {
 
     public Magasinlot findByIdmagasinIdlot(int idmagasin, long idlot);
 
-    List<Magasinlot> findByIdMagasin(int idMagasin);
+    public List<Magasinlot> findByIdMagasin(int idMagasin);
 
     public List<Magasinlot> findByIdmagasinEtatIsTrue(int idMagasin);
 
@@ -46,5 +46,9 @@ public interface MagasinlotFacadeLocal {
 
     public List<Magasinlot> findByIdmagasinQtyNotNull(int idmagasin);
 
-    List<Magasinlot> findByIdMagasinIdArticle(long idMagasinArticle);
+    public List<Magasinlot> findByIdMagasinIdArticle(long idMagasinArticle);
+
+    public List<Magasinlot> findByIdMagasinAndEtatGtZero(int idMagasin, boolean etat);
+
+    public List<Magasinlot> findByIdmagasinAndFamilleAndEtatGtzero(int idMagasin, long idFamille, boolean etat);
 }

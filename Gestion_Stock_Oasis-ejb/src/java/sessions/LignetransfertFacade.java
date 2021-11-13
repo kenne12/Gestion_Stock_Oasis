@@ -52,4 +52,11 @@ public class LignetransfertFacade extends AbstractFacade<Lignetransfert> impleme
         query.setParameter("idarticle", idarticle);
         return query.getResultList();
     }
+    
+    @Override
+    public void deleteByIdarticle(long idarticle){
+        em.createQuery("DELETE FROM Lignetransfert l WHERE l.idmagasinlot.idlot.idarticle.idarticle=:idArticle")
+                .setParameter("idArticle", idarticle)
+                .executeUpdate();
+    }
 }

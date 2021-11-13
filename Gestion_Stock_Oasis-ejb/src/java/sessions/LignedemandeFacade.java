@@ -47,4 +47,11 @@ public class LignedemandeFacade extends AbstractFacade<Lignedemande> implements 
         query.setParameter("idarticle", idArticle);
         return query.getResultList();
     }
+    
+    @Override
+    public void deleteByIdarticle(long idarticle){
+        em.createQuery("DELETE FROM Lignedemande l WHERE l.idmagasinarticle.idarticle.idarticle=:idArticle")
+                .setParameter("idArticle", idarticle)
+                .executeUpdate();
+    }
 }

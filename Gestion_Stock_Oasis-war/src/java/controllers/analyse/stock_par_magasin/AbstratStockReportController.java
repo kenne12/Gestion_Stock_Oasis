@@ -1,10 +1,12 @@
 package controllers.analyse.stock_par_magasin;
 
+import entities.Article;
 import entities.Magasin;
 import entities.Magasinlot;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
+import sessions.ArticleFacadeLocal;
 import sessions.MagasinFacadeLocal;
 import sessions.MagasinlotFacadeLocal;
 import sessions.UtilisateurmagasinFacadeLocal;
@@ -18,6 +20,14 @@ public class AbstratStockReportController {
     protected MagasinFacadeLocal magasinFacadeLocal;
     protected Magasin magasin = new Magasin();
     protected List<Magasin> magasins = new ArrayList();
+
+    @EJB
+    protected ArticleFacadeLocal articleFacadeLocal;
+    protected Article article = new Article();
+
+    protected String chemin_replicated_images = SessionMBean.getParametrage().getRepertoireLogo();
+    protected String filename = "";
+    protected String imageDir = "/photos/products";
 
     @EJB
     protected MagasinlotFacadeLocal magasinlotFacadeLocal;
@@ -63,6 +73,22 @@ public class AbstratStockReportController {
 
     public Routine getRoutine() {
         return routine;
+    }
+
+    public Article getArticle() {
+        return article;
+    }
+
+    public void setArticle(Article article) {
+        this.article = article;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 
 }

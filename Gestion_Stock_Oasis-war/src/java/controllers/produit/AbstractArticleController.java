@@ -15,8 +15,10 @@ import sessions.ArticleFacadeLocal;
 import sessions.FamilleFacadeLocal;
 import sessions.FournisseurFacadeLocal;
 import sessions.LignedemandeFacadeLocal;
+import sessions.LigneinventaireFacadeLocal;
 import sessions.LignelivraisonclientFacadeLocal;
 import sessions.LignelivraisonfournisseurFacadeLocal;
+import sessions.LignemvtstockFacadeLocal;
 import sessions.LignetransfertFacadeLocal;
 import sessions.LotFacadeLocal;
 import sessions.MagasinFacadeLocal;
@@ -62,6 +64,7 @@ public class AbstractArticleController {
     @EJB
     protected UniteFacadeLocal uniteFacadeLocal;
     protected List<Unite> unites = new ArrayList();
+    protected Unite unite = new Unite(0l);
 
     @EJB
     protected LotFacadeLocal lotFacadeLocal;
@@ -79,6 +82,16 @@ public class AbstractArticleController {
 
     @EJB
     protected LignelivraisonclientFacadeLocal lignelivraisonclientFacadeLocal;
+
+    @EJB
+    protected LigneinventaireFacadeLocal ligneinventaireFacadeLocal;
+
+    @EJB
+    protected LignemvtstockFacadeLocal lignemvtstockFacadeLocal;
+
+    protected String chemin_replicated_images = SessionMBean.getParametrage().getRepertoireLogo();
+    protected String filename = "";
+    protected String imageDir = "/photos/products";
 
     @EJB
     protected MouchardFacadeLocal mouchardFacadeLocal;
@@ -307,4 +320,29 @@ public class AbstractArticleController {
     public void setSelectedMagasins(List<Magasin> selectedMagasins) {
         this.selectedMagasins = selectedMagasins;
     }
+
+    public String getChemin_replicated_images() {
+        return chemin_replicated_images;
+    }
+
+    public void setChemin_replicated_images(String chemin_replicated_images) {
+        this.chemin_replicated_images = chemin_replicated_images;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
+    public Unite getUnite() {
+        return unite;
+    }
+
+    public void setUnite(Unite unite) {
+        this.unite = unite;
+    }
+
 }

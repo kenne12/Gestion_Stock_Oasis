@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <h:form id="StockListerForm">
+
+        <p:messages id="growl" closable="true">
+            <p:effect type="pulsate" event="load" delay="50" />
+        </p:messages>
+
+        <p:separator/>
+        <p:panel header="#{langue['Conv.ListeDes']} : #{langue.articles}">
+
+            <div class="row">
+
+                <ui:repeat value="#{stockReportController.magasinlots}" var="item">
+
+                    <div class="col-md-3">
+
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h6>#{item.idlot.idarticle.libelle}</h6>   
+                            </div>
+
+                            <div class="panel-body">
+                                <div class="row">
+                                    <dir class="col-md-6">
+                                        <h:graphicImage id="add_photo_image" height="80" width="100" value="/photos/products/#{item.idlot.idarticle.photo}"/>
+                                    </dir>
+                                    <div class="col-md-6">
+
+                                        <div class="row">
+                                            <h5>#{item.idlot.idarticle.idfamille.code}</h5>
+                                        </div>
+
+                                        <div class="row">
+                                            <h5>#{item.idlot.idarticle.code}</h5>
+                                        </div>
+
+                                        <div class="row">
+                                            <h:outputText style="font-size: 14px" value="#{item.idlot.idarticle.prixVenteDetail}">
+                                                <f:convertNumber />
+                                            </h:outputText>
+                                            /
+                                            <h:outputText style="font-size: 14px" value="#{item.idlot.idarticle.prixunit}">
+                                                <f:convertNumber />
+                                            </h:outputText>
+                                        </div>
+
+                                        <div class="row">
+                                            <h:outputText style="font-size: 14px" value="#{item.quantitemultiple}">
+                                                <f:convertNumber />
+                                            </h:outputText>
+                                            /
+                                            <h:outputText style="font-size: 14px" value="#{item.quantitereduite}">
+                                                <f:convertNumber />
+                                            </h:outputText>
+                                        </div>
+
+                                    </div>
+                                </div>                                     
+                            </div>
+
+                            <div class="panel-footer">
+                                <p:commandButton icon="fa fa-photo" update=":PhotoProduitForm" actionListener="#{stockReportController.prepareUploadPhoto(item.idlot.idarticle)}" ></p:commandButton>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </ui:repeat>
+
+            </div>
+
+        </p:panel>
+    </h:form>
+
+    <!-- ****************************************Information************************************************************************************************************************************************************************************************************** -->
+
+    <p:dialog id="notify1" widgetVar="NotifyDialog1" height="220" width="600" resizable="true" modal="true" style="text-align: center; font-size: 14px; font-family: Cambria;">
+        <f:facet name="header">
+            <h:outputText style="font-family: Cambria; font-size: 14px;" value="#{produitController.routine.titleNotify}" />
+        </f:facet>
+        <h:form id="NotifyForm1">
+            <h:graphicImage id="nt_img" url="#{stockReportController.routine.iconMessage}" style="cursor:pointer" />
+
+            <hr size="3" style="background-color: cornflowerblue;"/>
+
+            <h:outputText id="nt_msg" value="#{stockReportController.routine.message}"/>
+
+            <hr size="3" style="background-color: cornflowerblue; margin-top: 5%;"/>
+
+            <p:commandButton style="font-family: Cambria; font-size: 14px;" value="#{langue.valider}" onclick="PF('NotifyDialog1').hide()" type="button" immediate="true"/>
+
+            <hr size="3" style="background-color: cornflowerblue;"/>
+        </h:form>
+    </p:dialog>
+
+    <!-- ****************************************Information************************************************************************************************************************************************************************************************************** -->
+</ui:composition>

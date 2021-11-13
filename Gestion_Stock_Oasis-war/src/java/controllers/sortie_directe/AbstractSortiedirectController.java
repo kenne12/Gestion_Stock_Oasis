@@ -6,7 +6,6 @@ import entities.Famille;
 import entities.Lignelivraisonclient;
 import entities.Livraisonclient;
 import entities.Magasin;
-import entities.Magasinarticle;
 import entities.Magasinlot;
 import entities.Mvtstock;
 import entities.Unite;
@@ -69,8 +68,6 @@ public class AbstractSortiedirectController {
 
     @EJB
     protected MagasinarticleFacadeLocal magasinarticleFacadeLocal;
-    protected Magasinarticle magasinarticle = new Magasinarticle();
-    protected List<Magasinarticle> magasinarticles = new ArrayList();
 
     @EJB
     protected MagasinFacadeLocal magasinFacadeLocal;
@@ -78,8 +75,6 @@ public class AbstractSortiedirectController {
 
     @EJB
     protected UniteFacadeLocal uniteFacadeLocal;
-    protected Unite unite = new Unite();
-    protected List<Unite> unites = new ArrayList();
 
     protected Annee annee = SessionMBean.getAnnee();
 
@@ -185,33 +180,8 @@ public class AbstractSortiedirectController {
         return this.magasinlots;
     }
 
-    public Magasinarticle getMagasinarticle() {
-        return this.magasinarticle;
-    }
-
-    public void setMagasinarticle(Magasinarticle magasinarticle) {
-        this.magasinarticle = magasinarticle;
-    }
-
-    public List<Magasinarticle> getMagasinarticles() {
-        return this.magasinarticles;
-    }
-
     public Magasin getMagasin() {
         return this.magasin;
-    }
-
-    public Unite getUnite() {
-        return this.unite;
-    }
-
-    public void setUnite(Unite unite) {
-        this.unite = unite;
-    }
-
-    public List<Unite> getUnites() {
-        this.unites = this.uniteFacadeLocal.findByStructure(SessionMBean.getParametrage().getId());
-        return this.unites;
     }
 
     public Client getClient() {

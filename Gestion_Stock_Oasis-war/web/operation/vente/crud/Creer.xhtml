@@ -13,7 +13,7 @@
                   resizable="true" 
                   appendTo="@(body)"
                   width="90%"
-                  height="600"
+                  height="700"
                   header="#{langue.creer_modifier_sortie_directe}">
 
 
@@ -89,11 +89,10 @@
                                  paginator="true"
                                  editable="true" 
                                  rowKey="#{item.idlignelivraisonclient}"
-                                 rows="15"
-                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 rows="#{sortiedirectController.lignelivraisonclients.size()}"                                 
                                  style="width: 98%;margin-left: 1%"
                                  rowIndexVar="index"
-                                 emptyMessage="#{msg.Vide}"
+                                 emptyMessage="#{langue.tableau_vide}"
                                  widgetVar="fonctionTable"
                                  draggableColumns="true"
                                  resizableColumns="true">

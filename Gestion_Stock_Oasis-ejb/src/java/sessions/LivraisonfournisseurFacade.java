@@ -28,12 +28,7 @@ public class LivraisonfournisseurFacade extends AbstractFacade<Livraisonfourniss
     public Long nextVal() {
         try {
             Query query = this.em.createQuery("SELECT MAX(l.idlivraisonfournisseur) FROM Livraisonfournisseur l");
-            List list = query.getResultList();
-            if (list != null) {
-                return ((Long) list.get(0)) + 1;
-            } else {
-                return 1L;
-            }
+            return ((Long) query.getResultList().get(0)) + 1;
         } catch (Exception e) {
             return 1L;
         }

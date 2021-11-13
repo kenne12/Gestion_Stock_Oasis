@@ -23,17 +23,17 @@ public interface LivraisonfournisseurFacadeLocal {
 
     public int count();
 
-    public Long nextVal();
+    Long nextVal();
 
     Long nextVal(int idMagasin, AnneeMois anneeMois);
 
-    public List<Livraisonfournisseur> findAllRange(int idMagasin);
+    List<Livraisonfournisseur> findAllRange(int idMagasin);
 
-    public List<Livraisonfournisseur> findAllRange(int idMagasin, boolean livraisonDirecte);
+    List<Livraisonfournisseur> findAllRange(int idMagasin, boolean livraisonDirecte);
 
-    public List<Livraisonfournisseur> findAllRange(int idMagasin, Date dateDebut, Date dateFin, boolean livraisonDirecte);
+    List<Livraisonfournisseur> findAllRange(int idMagasin, Date dateDebut, Date dateFin, boolean livraisonDirecte);
 
-    public List<Livraisonfournisseur> findAllRange(int idMagasin, Date dateDebut, Date dateFin);
+    List<Livraisonfournisseur> findAllRange(int idMagasin, Date dateDebut, Date dateFin);
 
-    public List<Livraisonfournisseur> findAllRange(int idMagasin, Date date);
+    List<Livraisonfournisseur> findAllRange(int idMagasin, Date date);
 }

@@ -25,6 +25,8 @@ public interface LignetransfertFacadeLocal {
 
     public List<Lignetransfert> findByIdTransfert(long paramLong);
 
-    List<Lignetransfert> findByIdarticle(long idarticle);
+    public List<Lignetransfert> findByIdarticle(long idarticle);
+
+    public void deleteByIdarticle(long idarticle);
 
 }

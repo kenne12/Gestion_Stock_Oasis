@@ -28,10 +28,16 @@ public interface LignemvtstockFacadeLocal {
 
     public void deleteByIdmvt(long idMvt);
 
-    public List<Lignemvtstock> findByIdarticleIntevalDate(long paramLong, Date paramDate1, Date paramDate2);
+    public List<Lignemvtstock> findByIdarticleIntevalDate(long idarticle, Date dateDebut, Date dateFin);
 
     public List<Lignemvtstock> findByIdmagasinIntevalDate(int idmagasin, Date dateDebut, Date dateFin);
 
-    Lignemvtstock findByIdmvtIdLot(long idMvt, long idLot);
+    public Lignemvtstock findByIdmvtIdLot(long idMvt, long idLot);
+
+    public Lignemvtstock findByIdmvtIdLot(long idMvt, long idLot, long idLlc);
+    
+    void deleteByIdarticle(long idarticle);
+    
+    
 
 }

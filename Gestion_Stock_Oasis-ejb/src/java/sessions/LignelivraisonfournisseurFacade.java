@@ -25,12 +25,11 @@ public class LignelivraisonfournisseurFacade extends AbstractFacade<Lignelivrais
 
     @Override
     public Long nextVal() {
-        Query query = this.em.createQuery("SELECT MAX(l.idlignelivraisonfournisseur) FROM Lignelivraisonfournisseur l");
-        List list = query.getResultList();
-        if (list != null) {
-            return ((Long) list.get(0)) + 1;
-        } else {
-            return 1L;
+        try {
+            Query query = this.em.createQuery("SELECT MAX(l.idlignelivraisonfournisseur) FROM Lignelivraisonfournisseur l");
+            return ((Long) query.getResultList().get(0) + 1);
+        } catch (Exception e) {
+            return 1l;
         }
     }
 
@@ -60,5 +59,12 @@ public class LignelivraisonfournisseurFacade extends AbstractFacade<Lignelivrais
         Query query = em.createQuery("SELECT l FROM Lignelivraisonfournisseur l WHERE l.idmagasinlot.idmagasinarticle.idmagasin.idmagasin=:idMagasin AND l.idlivraisonfournisseur.datelivraison BETWEEN :dateDebut AND :dateFin");
         query.setParameter("idMagasin", idMagasin).setParameter("dateDebut", dateDebut).setParameter("dateFin", dateFin);
         return query.getResultList();
+    }
+
+    @Override
+    public void deleteByIdarticle(long idarticle) {
+        em.createQuery("DELETE FROM Lignelivraisonfournisseur l WHERE l.idmagasinlot.idmagasinarticle.idarticle.idarticle=:idArticle")
+                .setParameter("idArticle", idarticle)
+                .executeUpdate();
     }
 }

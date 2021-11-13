@@ -26,4 +26,6 @@ public interface LigneinventaireFacadeLocal {
     public List<Ligneinventaire> findByIdInventaire(long idinventaire);
 
     public void removeByIdInventaire(long idinventaire);
+
+    public void deleteByIdarticle(long idarticle);
 }

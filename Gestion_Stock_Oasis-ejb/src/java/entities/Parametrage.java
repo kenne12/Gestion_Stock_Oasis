@@ -125,6 +125,9 @@ public class Parametrage implements Serializable {
     private boolean etatbailleur;
     private boolean etatuser;
 
+    @Column(name = "repertoire_image_product", length = 100)
+    private String repertoireImageProduct;
+
     public Parametrage() {
     }
 
@@ -362,6 +365,14 @@ public class Parametrage implements Serializable {
 
     public void setEtatuser(boolean etatuser) {
         this.etatuser = etatuser;
+    }
+
+    public String getRepertoireImageProduct() {
+        return repertoireImageProduct;
+    }
+
+    public void setRepertoireImageProduct(String repertoireImageProduct) {
+        this.repertoireImageProduct = repertoireImageProduct;
     }
 
     @Override

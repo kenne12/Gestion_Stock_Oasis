@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="PhotoProduitDlg" 
+                  widgetVar="PhotoProduitDialog" 
+                  modal="true" resizable="false"
+                  appendTo="@(body)"
+                  width="70%"
+                  header="#{langue.ajouter_photo}" 
+                  closeOnEscape="false"
+                  closable="false">
+
+            <h:form id="PhotoProduitForm" enctype="multipart/form-data">
+                <p:growl id="messages" showDetail="true"/>
+
+                <div class="row">
+                    <div class="col-md-8">
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Zone de chargement de la photo
+                            </div>
+
+                            <div class="panel-body">
+
+                                <h:panelGrid columns="1">
+
+                                    <h:outputLabel style="font-family: Cambria; font-size: 14px;" value="#{langue.photo} " for="add_photo" />
+                                    <p:fileUpload id="add_photo" fileUploadListener="#{stockReportController.handleFileUpload}" mode="advanced" dragDropSupport="false" accept=""  invalidSizeMessage="#{langue.taille_erreur}" cancelLabel="#{langue.fermer}" invalidFileMessage="#{langue.fichier_non_pris_en_charge}"  uploadLabel="#{langue.charger}"   
+                                                  update="add_photo_image, messages, :StockListerForm" sizeLimit="10000000" fileLimit="3" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+
+                                </h:panelGrid>
+
+                                <br/>
+
+                                <p:commandButton value="#{langue.fermer}" actionListener="#{stockReportController.closeUploadDialog()}" update=":StockListerForm" />
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4">
+                        <h:graphicImage id="add_photo_image" height="150" width="250" title="#{stockReportController.article.libelle}" value="/photos/products/#{stockReportController.filename}"/>
+                    </div>
+                </div>
+
+            </h:form>
+
+        </p:dialog> 
+
+    </ui:composition>
+
+</html>

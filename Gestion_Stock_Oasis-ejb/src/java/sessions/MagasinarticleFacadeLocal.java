@@ -13,7 +13,7 @@ public interface MagasinarticleFacadeLocal {
 
     public void remove(Magasinarticle magasinarticle);
 
-    public Magasinarticle find(Object id);
+    public Magasinarticle find(Object object);
 
     public List<Magasinarticle> findAll();
 
@@ -23,15 +23,15 @@ public interface MagasinarticleFacadeLocal {
 
     public Long nextVal();
 
-    public List<Magasinarticle> findByIdmagasin(int paramInt, boolean paramBoolean);
+    public List<Magasinarticle> findByIdmagasin(int idMagasin, boolean etat);
 
-    public List<Magasinarticle> findByIdmagasinProductIsActif(int paramInt, boolean paramBoolean);
+    public List<Magasinarticle> findByIdmagasinProductIsActif(int idMagasin, boolean etat);
 
-    public Magasinarticle findByIdmagasinIdarticle(int idmagasin, long paramLong);
+    public Magasinarticle findByIdmagasinIdarticle(int idmagasin, long idArticle);
 
-    public List<Magasinarticle> findByIdmagasinIsavailable(int idmagasin, boolean paramBoolean);
+    public List<Magasinarticle> findByIdmagasinIsavailable(int idmagasin, boolean etat);
 
-    public List<Magasinarticle> findByIdmagasinIdfamille(int idmagasin, long paramLong, boolean paramBoolean);
+    public List<Magasinarticle> findByIdmagasinIdfamille(int idmagasin, long idFamille, boolean etat);
 
     public List<Magasinarticle> findByIdmagasinIdfamilleIsavailable(int paramInt, long paramLong, boolean paramBoolean);
 
