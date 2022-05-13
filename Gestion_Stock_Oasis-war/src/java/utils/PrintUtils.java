@@ -1095,15 +1095,15 @@ public class PrintUtils {
                 table.addCell(createPdfPCell("" + ml.getIdlot().getNumero(), 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
                 table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(ml.getIdlot().getIdarticle().getPrixunit()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
                 table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(ml.getQuantite().intValue()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
-                Double value = (ml.getIdlot().getIdarticle().getPrixunit() * ml.getQuantite());
+                Double value = Math.ceil(ml.getIdlot().getIdarticle().getPrixunit() * ml.getQuantite());
                 montantTotal += value;
                 table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(value), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
                 compteur++;
             }
 
             table.addCell(createPdfPCell("Totaux", 4, 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0)));
-            table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(quantite), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
-            table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney((montantTotal.intValue())), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
+            table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(Math.ceil(quantite)), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
+            table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(Math.ceil(montantTotal)), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));
 
             rapport.add((Element) table);
 
