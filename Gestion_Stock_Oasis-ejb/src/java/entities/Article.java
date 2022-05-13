@@ -6,6 +6,7 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -32,36 +33,66 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Article.findAll", query = "SELECT a FROM Article a"),
-    @NamedQuery(name = "Article.findByIdarticle", query = "SELECT a FROM Article a WHERE a.idarticle = :idarticle"),
-    @NamedQuery(name = "Article.findByCode", query = "SELECT a FROM Article a WHERE a.code = :code"),
-    @NamedQuery(name = "Article.findByLibelle", query = "SELECT a FROM Article a WHERE a.libelle = :libelle"),
-    @NamedQuery(name = "Article.findByDescription", query = "SELECT a FROM Article a WHERE a.description = :description"),
-    @NamedQuery(name = "Article.findByCoutachat", query = "SELECT a FROM Article a WHERE a.coutachat = :coutachat"),
-    @NamedQuery(name = "Article.findByPoids", query = "SELECT a FROM Article a WHERE a.poids = :poids"),
-    @NamedQuery(name = "Article.findByPrixunit", query = "SELECT a FROM Article a WHERE a.prixunit = :prixunit"),
-    @NamedQuery(name = "Article.findByTva", query = "SELECT a FROM Article a WHERE a.tva = :tva"),
-    @NamedQuery(name = "Article.findByQuantitestock", query = "SELECT a FROM Article a WHERE a.quantitestock = :quantitestock"),
-    @NamedQuery(name = "Article.findByQuantitemin", query = "SELECT a FROM Article a WHERE a.quantitemin = :quantitemin"),
-    @NamedQuery(name = "Article.findByQuantitealerte", query = "SELECT a FROM Article a WHERE a.quantitealerte = :quantitealerte"),
-    @NamedQuery(name = "Article.findByQuantiteavarie", query = "SELECT a FROM Article a WHERE a.quantiteavarie = :quantiteavarie"),
-    @NamedQuery(name = "Article.findByQuantitepv", query = "SELECT a FROM Article a WHERE a.quantitepv = :quantitepv"),
-    @NamedQuery(name = "Article.findByQuantiteminpv", query = "SELECT a FROM Article a WHERE a.quantiteminpv = :quantiteminpv"),
-    @NamedQuery(name = "Article.findByQuantitealertepv", query = "SELECT a FROM Article a WHERE a.quantitealertepv = :quantitealertepv"),
-    @NamedQuery(name = "Article.findByPhoto", query = "SELECT a FROM Article a WHERE a.photo = :photo"),
-    @NamedQuery(name = "Article.findByPhotoRelatif", query = "SELECT a FROM Article a WHERE a.photoRelatif = :photoRelatif"),
-    @NamedQuery(name = "Article.findByDateEnregistre", query = "SELECT a FROM Article a WHERE a.dateEnregistre = :dateEnregistre"),
-    @NamedQuery(name = "Article.findByDerniereModif", query = "SELECT a FROM Article a WHERE a.derniereModif = :derniereModif"),
-    @NamedQuery(name = "Article.findByPerissable", query = "SELECT a FROM Article a WHERE a.perissable = :perissable"),
-    @NamedQuery(name = "Article.findByUnite", query = "SELECT a FROM Article a WHERE a.unite = :unite"),
-    @NamedQuery(name = "Article.findByEtat", query = "SELECT a FROM Article a WHERE a.etat = :etat"),
-    @NamedQuery(name = "Article.findByFabricant", query = "SELECT a FROM Article a WHERE a.fabricant = :fabricant"),
-    @NamedQuery(name = "Article.findByNbjralerte", query = "SELECT a FROM Article a WHERE a.nbjralerte = :nbjralerte"),
-    @NamedQuery(name = "Article.findByQuantitemultiple", query = "SELECT a FROM Article a WHERE a.quantitemultiple = :quantitemultiple"),
-    @NamedQuery(name = "Article.findByUnitesortie", query = "SELECT a FROM Article a WHERE a.unitesortie = :unitesortie"),
-    @NamedQuery(name = "Article.findByQuantitereduite", query = "SELECT a FROM Article a WHERE a.quantitereduite = :quantitereduite"),
-    @NamedQuery(name = "Article.findByUniteentree", query = "SELECT a FROM Article a WHERE a.uniteentree = :uniteentree"),
-    @NamedQuery(name = "Article.findByQuantitevirtuelle", query = "SELECT a FROM Article a WHERE a.quantitevirtuelle = :quantitevirtuelle"),
+    @NamedQuery(name = "Article.findAll", query = "SELECT a FROM Article a")
+    ,
+    @NamedQuery(name = "Article.findByIdarticle", query = "SELECT a FROM Article a WHERE a.idarticle = :idarticle")
+    ,
+    @NamedQuery(name = "Article.findByCode", query = "SELECT a FROM Article a WHERE a.code = :code")
+    ,
+    @NamedQuery(name = "Article.findByLibelle", query = "SELECT a FROM Article a WHERE a.libelle = :libelle")
+    ,
+    @NamedQuery(name = "Article.findByDescription", query = "SELECT a FROM Article a WHERE a.description = :description")
+    ,
+    @NamedQuery(name = "Article.findByCoutachat", query = "SELECT a FROM Article a WHERE a.coutachat = :coutachat")
+    ,
+    @NamedQuery(name = "Article.findByPoids", query = "SELECT a FROM Article a WHERE a.poids = :poids")
+    ,
+    @NamedQuery(name = "Article.findByPrixunit", query = "SELECT a FROM Article a WHERE a.prixunit = :prixunit")
+    ,
+    @NamedQuery(name = "Article.findByTva", query = "SELECT a FROM Article a WHERE a.tva = :tva")
+    ,
+    @NamedQuery(name = "Article.findByQuantitestock", query = "SELECT a FROM Article a WHERE a.quantitestock = :quantitestock")
+    ,
+    @NamedQuery(name = "Article.findByQuantitemin", query = "SELECT a FROM Article a WHERE a.quantitemin = :quantitemin")
+    ,
+    @NamedQuery(name = "Article.findByQuantitealerte", query = "SELECT a FROM Article a WHERE a.quantitealerte = :quantitealerte")
+    ,
+    @NamedQuery(name = "Article.findByQuantiteavarie", query = "SELECT a FROM Article a WHERE a.quantiteavarie = :quantiteavarie")
+    ,
+    @NamedQuery(name = "Article.findByQuantitepv", query = "SELECT a FROM Article a WHERE a.quantitepv = :quantitepv")
+    ,
+    @NamedQuery(name = "Article.findByQuantiteminpv", query = "SELECT a FROM Article a WHERE a.quantiteminpv = :quantiteminpv")
+    ,
+    @NamedQuery(name = "Article.findByQuantitealertepv", query = "SELECT a FROM Article a WHERE a.quantitealertepv = :quantitealertepv")
+    ,
+    @NamedQuery(name = "Article.findByPhoto", query = "SELECT a FROM Article a WHERE a.photo = :photo")
+    ,
+    @NamedQuery(name = "Article.findByPhotoRelatif", query = "SELECT a FROM Article a WHERE a.photoRelatif = :photoRelatif")
+    ,
+    @NamedQuery(name = "Article.findByDateEnregistre", query = "SELECT a FROM Article a WHERE a.dateEnregistre = :dateEnregistre")
+    ,
+    @NamedQuery(name = "Article.findByDerniereModif", query = "SELECT a FROM Article a WHERE a.derniereModif = :derniereModif")
+    ,
+    @NamedQuery(name = "Article.findByPerissable", query = "SELECT a FROM Article a WHERE a.perissable = :perissable")
+    ,
+    @NamedQuery(name = "Article.findByUnite", query = "SELECT a FROM Article a WHERE a.unite = :unite")
+    ,
+    @NamedQuery(name = "Article.findByEtat", query = "SELECT a FROM Article a WHERE a.etat = :etat")
+    ,
+    @NamedQuery(name = "Article.findByFabricant", query = "SELECT a FROM Article a WHERE a.fabricant = :fabricant")
+    ,
+    @NamedQuery(name = "Article.findByNbjralerte", query = "SELECT a FROM Article a WHERE a.nbjralerte = :nbjralerte")
+    ,
+    @NamedQuery(name = "Article.findByQuantitemultiple", query = "SELECT a FROM Article a WHERE a.quantitemultiple = :quantitemultiple")
+    ,
+    @NamedQuery(name = "Article.findByUnitesortie", query = "SELECT a FROM Article a WHERE a.unitesortie = :unitesortie")
+    ,
+    @NamedQuery(name = "Article.findByQuantitereduite", query = "SELECT a FROM Article a WHERE a.quantitereduite = :quantitereduite")
+    ,
+    @NamedQuery(name = "Article.findByUniteentree", query = "SELECT a FROM Article a WHERE a.uniteentree = :uniteentree")
+    ,
+    @NamedQuery(name = "Article.findByQuantitevirtuelle", query = "SELECT a FROM Article a WHERE a.quantitevirtuelle = :quantitevirtuelle")
+    ,
     @NamedQuery(name = "Article.findByQuantitesecurite", query = "SELECT a FROM Article a WHERE a.quantitesecurite = :quantitesecurite")})
 public class Article implements Serializable {
 
@@ -74,19 +105,19 @@ public class Article implements Serializable {
     private String code;
     @Size(max = 254)
     private String libelle;
-    @Size(max = 2147483647)
+    @Size(max = 254)
     private String description;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    private Double coutachat;
-    private Double poids;
-    private Double prixunit;
+    private double coutachat;
+    private double poids;
+    private double prixunit;
     private boolean tva;
-    private Double quantitestock;
-    private Integer quantitemin;
-    private Double quantitealerte;
-    private Integer quantiteavarie;
-    private Integer quantitepv;
-    private Integer quantiteminpv;
+    private double quantitestock;
+    private int quantitemin;
+    private double quantitealerte;
+    private int quantiteavarie;
+    private int quantitepv;
+    private int quantiteminpv;
     private int quantitealertepv;
     @Size(max = 254)
     private String photo;
@@ -100,23 +131,23 @@ public class Article implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date derniereModif;
     private Boolean perissable;
-    private Double unite;
+    private double unite;
     private Boolean etat;
     @Size(max = 100)
     private String fabricant;
-    private Integer nbjralerte;
-    private Double quantitemultiple;
-    private Double unitesortie;
-    private Double quantitereduite;
-    private Double uniteentree;
-    private Double quantitevirtuelle;
-    private Double quantitesecurite;
+    private int nbjralerte;
+    private double quantitemultiple;
+    private double unitesortie;
+    private double quantitereduite;
+    private double uniteentree;
+    private double quantitevirtuelle;
+    private double quantitesecurite;
     @OneToMany(mappedBy = "idarticle", fetch = FetchType.LAZY)
-    private List<Lot> lotList;
+    private List<Lot> lotList = new ArrayList<>();
     @OneToMany(mappedBy = "idarticle", fetch = FetchType.LAZY)
-    private List<Magasinarticle> magasinarticleList;
+    private List<Magasinarticle> magasinarticleList = new ArrayList<>();
     @OneToMany(mappedBy = "idarticle", fetch = FetchType.LAZY)
-    private List<Lignecommandefournisseur> lignecommandefournisseurList;
+    private List<Lignecommandefournisseur> lignecommandefournisseurList = new ArrayList<>();
     @JoinColumn(name = "idfamille", referencedColumnName = "idfamille")
     @ManyToOne(fetch = FetchType.LAZY)
     private Famille idfamille;
@@ -136,13 +167,39 @@ public class Article implements Serializable {
     @Column(name = "prix_vente_detail")
     private double prixVenteDetail;
 
-    public Article() {
+    private void initConstructor() {
         idunite = new Unite();
         idfamille = new Famille();
+        parametrage = new Parametrage();
+        idUniteDetail = 0l;
+        quantitemultiple = 0;
+        unitesortie = 1;
+        quantitereduite = 0;
+        uniteentree = 0;
+        quantitevirtuelle = 0;
+        quantitesecurite = 0;
+
+        quantitestock = 0;
+        quantitemin = 0;
+        quantitealerte = 0;
+        quantiteavarie = 0;
+        quantitepv = 0;
+        quantiteminpv = 0;
+        quantitealertepv = 0;
+
+        coutachat = 0;
+        poids = 0;
+        unite = 1;
+    }
+
+    public Article() {
+        super();
+        this.initConstructor();
     }
 
     public Article(Long idarticle) {
         this.idarticle = idarticle;
+        this.initConstructor();
     }
 
     public Long getIdarticle() {
@@ -185,67 +242,67 @@ public class Article implements Serializable {
         this.coutachat = coutachat;
     }
 
-    public Double getPoids() {
+    public double getPoids() {
         return poids;
     }
 
-    public void setPoids(Double poids) {
+    public void setPoids(double poids) {
         this.poids = poids;
     }
 
-    public Double getPrixunit() {
+    public double getPrixunit() {
         return prixunit;
     }
 
-    public void setPrixunit(Double prixunit) {
+    public void setPrixunit(double prixunit) {
         this.prixunit = prixunit;
     }
 
-    public Double getQuantitestock() {
+    public double getQuantitestock() {
         return quantitestock;
     }
 
-    public void setQuantitestock(Double quantitestock) {
+    public void setQuantitestock(double quantitestock) {
         this.quantitestock = quantitestock;
     }
 
-    public Integer getQuantitemin() {
+    public int getQuantitemin() {
         return quantitemin;
     }
 
-    public void setQuantitemin(Integer quantitemin) {
+    public void setQuantitemin(int quantitemin) {
         this.quantitemin = quantitemin;
     }
 
-    public Double getQuantitealerte() {
+    public double getQuantitealerte() {
         return quantitealerte;
     }
 
-    public void setQuantitealerte(Double quantitealerte) {
+    public void setQuantitealerte(double quantitealerte) {
         this.quantitealerte = quantitealerte;
     }
 
-    public Integer getQuantiteavarie() {
+    public int getQuantiteavarie() {
         return quantiteavarie;
     }
 
-    public void setQuantiteavarie(Integer quantiteavarie) {
+    public void setQuantiteavarie(int quantiteavarie) {
         this.quantiteavarie = quantiteavarie;
     }
 
-    public Integer getQuantitepv() {
+    public int getQuantitepv() {
         return quantitepv;
     }
 
-    public void setQuantitepv(Integer quantitepv) {
+    public void setQuantitepv(int quantitepv) {
         this.quantitepv = quantitepv;
     }
 
-    public Integer getQuantiteminpv() {
+    public int getQuantiteminpv() {
         return quantiteminpv;
     }
 
-    public void setQuantiteminpv(Integer quantiteminpv) {
+    public void setQuantiteminpv(int quantiteminpv) {
         this.quantiteminpv = quantiteminpv;
     }
 
@@ -297,11 +354,11 @@ public class Article implements Serializable {
         this.perissable = perissable;
     }
 
-    public Double getUnite() {
+    public double getUnite() {
         return unite;
     }
 
-    public void setUnite(Double unite) {
+    public void setUnite(double unite) {
         this.unite = unite;
     }
 
@@ -329,51 +386,51 @@ public class Article implements Serializable {
         this.nbjralerte = nbjralerte;
     }
 
-    public Double getQuantitemultiple() {
+    public double getQuantitemultiple() {
         return quantitemultiple;
     }
 
-    public void setQuantitemultiple(Double quantitemultiple) {
+    public void setQuantitemultiple(double quantitemultiple) {
         this.quantitemultiple = quantitemultiple;
     }
 
-    public Double getUnitesortie() {
+    public double getUnitesortie() {
         return unitesortie;
     }
 
-    public void setUnitesortie(Double unitesortie) {
+    public void setUnitesortie(double unitesortie) {
         this.unitesortie = unitesortie;
     }
 
-    public Double getQuantitereduite() {
+    public double getQuantitereduite() {
         return quantitereduite;
     }
 
-    public void setQuantitereduite(Double quantitereduite) {
+    public void setQuantitereduite(double quantitereduite) {
         this.quantitereduite = quantitereduite;
     }
 
-    public Double getUniteentree() {
+    public double getUniteentree() {
         return uniteentree;
     }
 
-    public void setUniteentree(Double uniteentree) {
+    public void setUniteentree(double uniteentree) {
         this.uniteentree = uniteentree;
     }
 
-    public Double getQuantitevirtuelle() {
+    public double getQuantitevirtuelle() {
         return quantitevirtuelle;
     }
 
-    public void setQuantitevirtuelle(Double quantitevirtuelle) {
+    public void setQuantitevirtuelle(double quantitevirtuelle) {
         this.quantitevirtuelle = quantitevirtuelle;
     }
 
-    public Double getQuantitesecurite() {
+    public double getQuantitesecurite() {
         return quantitesecurite;
     }
 
-    public void setQuantitesecurite(Double quantitesecurite) {
+    public void setQuantitesecurite(double quantitesecurite) {
         this.quantitesecurite = quantitesecurite;
     }
 

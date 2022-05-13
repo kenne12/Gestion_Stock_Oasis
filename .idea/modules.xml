@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/Gestion_Stock_Oasis.iml" filepath="$PROJECT_DIR$/.idea/Gestion_Stock_Oasis.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Gestion_Stock_Oasis-ejb/src/Gestion_Stock_Oasis-ejb.iml" filepath="$PROJECT_DIR$/Gestion_Stock_Oasis-ejb/src/Gestion_Stock_Oasis-ejb.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Gestion_Stock_Oasis-war/Gestion_Stock_Oasis-war.iml" filepath="$PROJECT_DIR$/Gestion_Stock_Oasis-war/Gestion_Stock_Oasis-war.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Gestion_Stock_Oasis-ejb/build/build.iml" filepath="$PROJECT_DIR$/Gestion_Stock_Oasis-ejb/build/build.iml" />
+    </modules>
+  </component>
+</project>

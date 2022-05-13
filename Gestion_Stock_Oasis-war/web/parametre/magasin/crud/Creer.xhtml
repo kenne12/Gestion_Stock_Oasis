@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:composition>
 
@@ -31,6 +32,25 @@
                         <p:outputLabel value="#{langue.central} ?" for="central" />
                         <h:selectBooleanCheckbox value="#{magasinController.magasin.central}" id="central" />
                         <p:message for="central"/>
+
+                        <p:outputLabel value="Mode Entré par defaut" for="me_default" />
+                        <p:selectOneMenu autoWidth="false" style="width: 400px"  required="true" id="me_default" 
+                                         value="#{magasinController.magasin.modeEntreDefault}" requiredMessage="#{langue.valeur_obligatoire}">
+                            <f:selectItem itemLabel="VENTE EN GROS" itemValue="VENTE_EN_GROS"/>
+                            <f:selectItem itemLabel="VENTE EN DETAIL" itemValue="VENTE_EN_DETAIL"/>                                   
+                            <p:ajax />
+                        </p:selectOneMenu> 
+                        <p:message for="me_default"/>
+                        
+                        <p:outputLabel value="Mode Sorti par defaut" for="ms_default" />
+                        <p:selectOneMenu autoWidth="false" style="width: 400px"  required="true" id="ms_default" 
+                                         value="#{magasinController.magasin.modeSortiDefault}" requiredMessage="#{langue.valeur_obligatoire}">
+                            
+                            <f:selectItem itemLabel="VENTE EN DETAIL" itemValue="VENTE_EN_DETAIL"/>
+                            <f:selectItem itemLabel="VENTE EN GROS" itemValue="VENTE_EN_GROS"/>                                      
+                            <p:ajax />
+                        </p:selectOneMenu> 
+                        <p:message for="ms_default"/>
 
                     </h:panelGrid>
 

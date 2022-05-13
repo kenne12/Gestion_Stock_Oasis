@@ -60,38 +60,21 @@ public class ArticleController extends AbstractArticleController implements Seri
         this.famille = new Famille();
         this.article = new Article();
         this.lot = new Lot();
-        this.article.setQuantitestock(0d);
-        this.article.setQuantitealerte(0d);
         this.article.setPerissable(false);
         this.article.setEtat(true);
-        this.article.setUnite(0d);
         this.article.setPhoto("article.jpeg");
         this.article.setPhotoRelatif("article.jpeg");
         this.article.setDateEnregistre(Date.from(Instant.now()));
         this.article.setDerniereModif(Date.from(Instant.now()));
         this.article.setDescription("-");
-        this.article.setUnite(1d);
-        this.article.setQuantitemultiple(0d);
         this.article.setNbjralerte(30);
         this.article.setPhotoRelatif("article.jpeg");
         this.article.setFabricant("-");
-        this.article.setPoids(0d);
-        this.article.setQuantitemin(0);
-        this.article.setQuantiteavarie(0);
-        this.article.setQuantiteminpv(0);
-        this.article.setQuantitepv(0);
-        this.article.setQuantitesecurite(0d);
         this.article.setNbjralerte(30);
-        this.article.setUnitesortie(1d);
-        this.article.setCoutachat(0d);
-        this.article.setPrixunit(0d);
-        this.article.setQuantitereduite(0d);
-        this.article.setQuantitemultiple(0d);
         this.unite = new Unite(0l);
         article.setCode(Utilitaires.genererCodeArticle("ARTICLE_", articleFacadeLocal.nextValByIdstructure(SessionMBean.getParametrage().getId())));
-
-        List listMag = this.magasins;
-        this.selectedMagasins = listMag;
+        this.setIsSelectAll(false);
+        this.selectedMagasins.clear();
         this.showLot = false;
         this.showUser = SessionMBean.getParametrage().isEtatuser();
         this.showBailleur = SessionMBean.getParametrage().isEtatbailleur();
@@ -110,11 +93,11 @@ public class ArticleController extends AbstractArticleController implements Seri
                 this.famille = this.article.getIdfamille();
                 this.unite = this.article.getIdunite();
                 this.selectedMagasins.clear();
-                List<Magasinarticle> listMa = this.magasinarticleFacadeLocal.findByIdarticle(this.article.getIdarticle());
-                if (!listMa.isEmpty()) {
-                    for (Magasinarticle ma : listMa) {
-                        this.selectedMagasins.add(ma.getIdmagasin());
-                    }
+                List<Magasinarticle> listArticles = this.magasinarticleFacadeLocal.findByIdarticle(this.article.getIdarticle());
+                if (!listArticles.isEmpty()) {
+                    listArticles.stream().forEach(item -> {
+                        this.selectedMagasins.add(item.getIdmagasin());
+                    });
                 }
 
                 RequestContext.getCurrentInstance().execute("PF('ArticleCreerDialog').show()");
@@ -148,7 +131,7 @@ public class ArticleController extends AbstractArticleController implements Seri
 
     public void updatePrixDetail() {
         try {
-            if (article.getUnite() != null && article.getUnite() != 1) {
+            if (article.getUnite() != 1) {
                 article.setPrixAchatDetail(article.getCoutachat() / article.getUnite());
                 article.setPrixVenteDetail(article.getPrixunit() / article.getUnite());
             } else {
@@ -159,6 +142,13 @@ public class ArticleController extends AbstractArticleController implements Seri
             article.setPrixVenteDetail(article.getPrixunit());
             article.setPrixAchatDetail(article.getCoutachat());
             article.setUnite(1d);
+        }
+    }
+
+    public void selectAllStore() {
+        selectedMagasins.clear();
+        if (isSelectAll) {
+            selectedMagasins.addAll(magasins);
         }
     }
 
@@ -194,16 +184,11 @@ public class ArticleController extends AbstractArticleController implements Seri
                 this.lot.setIdarticle(this.article);
                 this.lot.setPrixunitaire(this.article.getPrixunit());
                 this.lot.setPrixachat(this.article.getCoutachat());
-                this.lot.setUnitesortie(0.0);
-                this.lot.setQuantite(0.0);
-                this.lot.setQuantitemultiple(0.0);
-                this.lot.setQuantite(0.0);
-                this.lot.setQuantitereduite(0.0);
+                this.lot.setUnitesortie(article.getUnitesortie());
                 this.lot.setDateenregistrement(new Date());
                 this.lot.setUniteentree(1.0);
                 this.lot.setQuantitesecurite(this.article.getQuantitesecurite());
                 this.lot.setEtat(true);
-                lot.setQuantitevirtuelle(0d);
 
                 if (!showLot) {
                     lot.setDatefabrication(null);
@@ -220,10 +205,6 @@ public class ArticleController extends AbstractArticleController implements Seri
                     obj.setIdmagasin(m);
                     obj.setEtat(true);
                     obj.setUnite(this.article.getUnite());
-                    obj.setQuantite(0.0);
-                    obj.setQuantitemultiple(0.0);
-                    obj.setQuantitereduite(0.0);
-                    obj.setQuantitevirtuelle(0.0);
                     obj.setQuantitesecurite(this.article.getQuantitesecurite());
                     this.magasinarticleFacadeLocal.create(obj);
 
@@ -232,12 +213,7 @@ public class ArticleController extends AbstractArticleController implements Seri
                         obj1.setIdmagasinlot(this.magasinlotFacadeLocal.nextVal());
                         obj1.setIdmagasinarticle(obj);
                         obj1.setIdlot(this.lot);
-                        obj1.setQuantite(0d);
                         obj1.setUnite(this.article.getUnite());
-                        obj1.setQuantitemultiple(0.0);
-                        obj1.setQuantitereduite(0.0);
-                        obj1.setQuantitevirtuelle(0.0);
-                        obj1.setQuantitesecurite(0.0);
                         obj1.setEtat(true);
                         obj1.setQuantitesecurite(this.article.getQuantitesecurite());
                         this.magasinlotFacadeLocal.create(obj1);
@@ -247,7 +223,7 @@ public class ArticleController extends AbstractArticleController implements Seri
                 Utilitaires.saveOperation(this.mouchardFacadeLocal, "Enregistrement de l'article : " + this.article.getLibelle(), SessionMBean.getUserAccount());
 
                 this.ut.commit();
-                this.fournisseur = null;
+                this.fournisseur = new Fournisseur();
                 this.famille = new Famille();
                 this.article = new Article();
                 this.modifier = this.supprimer = this.detail = true;
@@ -281,11 +257,6 @@ public class ArticleController extends AbstractArticleController implements Seri
                         ma.setIdmagasin(m);
                         ma.setIdarticle(this.article);
                         ma.setEtat(true);
-                        ma.setQuantite(0.0);
-                        ma.setQuantitemultiple(0.0);
-                        ma.setQuantitereduite(0.0);
-                        ma.setQuantitesecurite(0.0);
-                        ma.setQuantitevirtuelle(0.0);
                         ma.setUnite(this.article.getUnite());
                         this.magasinarticleFacadeLocal.create(ma);
                     }
@@ -461,6 +432,13 @@ public class ArticleController extends AbstractArticleController implements Seri
             notifyFail(e);
         }
     }
+    
+    
+    public void prepareEditLotPrice(Article item) {
+        List<Lot> lots = item.getLotList();
+        this.article = item;
+        RequestContext.getCurrentInstance().execute("PF('EditPriceProduitDialog').show()");
+    }
 
     public void prepareUploadPhoto(Article item) {
         this.article = item;
@@ -534,6 +512,12 @@ public class ArticleController extends AbstractArticleController implements Seri
         RequestContext.getCurrentInstance().execute("PF('PhotoProduitDialog').hide()");
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("product_to_upload_photo");
     }
+    
+    public void closeEditPriceDialog() {
+        article = new Article();
+
+        RequestContext.getCurrentInstance().execute("PF('EditPriceProduitDialog').hide()");
+    }
 
     public void synchronisePicture() {
         for (Article a : articles) {
@@ -555,7 +539,7 @@ public class ArticleController extends AbstractArticleController implements Seri
         RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
         this.redirect("/parametre/produit/produit.html");
     }
-    
+
     private void redirect(String link) {
         try {
             FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + link);

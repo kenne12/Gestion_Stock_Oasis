@@ -5,12 +5,16 @@
  */
 package entities;
 
+import enumeration.ModePayement;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -32,11 +36,16 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Livraisonclient.findAll", query = "SELECT l FROM Livraisonclient l"),
-    @NamedQuery(name = "Livraisonclient.findByIdlivraisonclient", query = "SELECT l FROM Livraisonclient l WHERE l.idlivraisonclient = :idlivraisonclient"),
-    @NamedQuery(name = "Livraisonclient.findByLivraisondirecte", query = "SELECT l FROM Livraisonclient l WHERE l.livraisondirecte = :livraisondirecte"),
-    @NamedQuery(name = "Livraisonclient.findByMontant", query = "SELECT l FROM Livraisonclient l WHERE l.montant = :montant"),
-    @NamedQuery(name = "Livraisonclient.findByCode", query = "SELECT l FROM Livraisonclient l WHERE l.code = :code"),
+    @NamedQuery(name = "Livraisonclient.findAll", query = "SELECT l FROM Livraisonclient l")
+    ,
+    @NamedQuery(name = "Livraisonclient.findByIdlivraisonclient", query = "SELECT l FROM Livraisonclient l WHERE l.idlivraisonclient = :idlivraisonclient")
+    ,
+    @NamedQuery(name = "Livraisonclient.findByLivraisondirecte", query = "SELECT l FROM Livraisonclient l WHERE l.livraisondirecte = :livraisondirecte")
+    ,
+    @NamedQuery(name = "Livraisonclient.findByMontant", query = "SELECT l FROM Livraisonclient l WHERE l.montant = :montant")
+    ,
+    @NamedQuery(name = "Livraisonclient.findByCode", query = "SELECT l FROM Livraisonclient l WHERE l.code = :code")
+    ,
     @NamedQuery(name = "Livraisonclient.findByDatelivraison", query = "SELECT l FROM Livraisonclient l WHERE l.datelivraison = :datelivraison")})
 public class Livraisonclient implements Serializable {
 
@@ -45,9 +54,9 @@ public class Livraisonclient implements Serializable {
     @Basic(optional = false)
     @NotNull
     private Long idlivraisonclient;
-    private Boolean livraisondirecte;
+    private boolean livraisondirecte;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    private Double montant;
+    private double montant;
     @Size(max = 40)
     private String code;
     @Temporal(TemporalType.DATE)
@@ -81,9 +90,12 @@ public class Livraisonclient implements Serializable {
     private double marge;
     @Column(name = "avance_initiale")
     private double avanceInitiale;
-    @Column(name = "mode_payement")
-    private String modePayement;
-    @Column(name = "montant_paye", length = 15)
+
+    @Column(name = "mode_payement", length = 15, nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ModePayement modePayement;
+
+    @Column(name = "montant_paye")
     private double montantPaye;
     private boolean comptabilise;
     private double reste;
@@ -93,6 +105,11 @@ public class Livraisonclient implements Serializable {
     private int idUtilisateur;
 
     public Livraisonclient() {
+        this.initLivraison();
+    }
+
+    private void initLivraison() {
+        lignelivraisonclientList = new ArrayList<>();
         this.client = new Client();
     }
 
@@ -116,11 +133,11 @@ public class Livraisonclient implements Serializable {
         this.livraisondirecte = livraisondirecte;
     }
 
-    public Double getMontant() {
+    public double getMontant() {
         return montant;
     }
 
-    public void setMontant(Double montant) {
+    public void setMontant(double montant) {
         this.montant = montant;
     }
 
@@ -245,11 +262,11 @@ public class Livraisonclient implements Serializable {
         this.avanceInitiale = avanceInitiale;
     }
 
-    public String getModePayement() {
+    public ModePayement getModePayement() {
         return modePayement;
     }
 
-    public void setModePayement(String modePayement) {
+    public void setModePayement(ModePayement modePayement) {
         this.modePayement = modePayement;
     }
 
@@ -293,6 +310,13 @@ public class Livraisonclient implements Serializable {
         this.idUtilisateur = idUtilisateur;
     }
 
+    public void addItem(Lignelivraisonclient lignelivraisonclient) {
+        if (this.lignelivraisonclientList == null) {
+            this.lignelivraisonclientList = new ArrayList<>();
+        }
+        this.lignelivraisonclientList.add(lignelivraisonclient);
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -315,7 +339,7 @@ public class Livraisonclient implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Livraisonclient[ idlivraisonclient=" + idlivraisonclient + " ]";
+        return "Livraisonclient{" + "idlivraisonclient=" + idlivraisonclient + ", livraisondirecte=" + livraisondirecte + ", montant=" + montant + ", code=" + code + ", datelivraison=" + datelivraison + ", iddemande=" + iddemande + ", idmagasin=" + idmagasin + ", idmvtstock=" + idmvtstock + ", lignelivraisonclientList=" + lignelivraisonclientList + ", client=" + client + ", tauxTva=" + tauxTva + ", montantTva=" + montantTva + ", montantTtc=" + montantTtc + ", tauxRemise=" + tauxRemise + ", montantRemise=" + montantRemise + ", montantHt=" + montantHt + ", marge=" + marge + ", avanceInitiale=" + avanceInitiale + ", modePayement=" + modePayement + ", montantPaye=" + montantPaye + ", comptabilise=" + comptabilise + ", reste=" + reste + ", paye=" + paye + ", idUtilisateur=" + idUtilisateur + '}';
     }
 
 }

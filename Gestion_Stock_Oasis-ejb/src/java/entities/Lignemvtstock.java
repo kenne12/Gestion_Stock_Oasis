@@ -26,15 +26,24 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Lignemvtstock.findAll", query = "SELECT l FROM Lignemvtstock l"),
-    @NamedQuery(name = "Lignemvtstock.findByIdlignemvtstock", query = "SELECT l FROM Lignemvtstock l WHERE l.idlignemvtstock = :idlignemvtstock"),
-    @NamedQuery(name = "Lignemvtstock.findByQteentree", query = "SELECT l FROM Lignemvtstock l WHERE l.qteentree = :qteentree"),
-    @NamedQuery(name = "Lignemvtstock.findByQtesortie", query = "SELECT l FROM Lignemvtstock l WHERE l.qtesortie = :qtesortie"),
-    @NamedQuery(name = "Lignemvtstock.findByUnite", query = "SELECT l FROM Lignemvtstock l WHERE l.unite = :unite"),
-    @NamedQuery(name = "Lignemvtstock.findByReste", query = "SELECT l FROM Lignemvtstock l WHERE l.reste = :reste"),
-    @NamedQuery(name = "Lignemvtstock.findByClient", query = "SELECT l FROM Lignemvtstock l WHERE l.client = :client"),
-    @NamedQuery(name = "Lignemvtstock.findByFournisseur", query = "SELECT l FROM Lignemvtstock l WHERE l.fournisseur = :fournisseur"),
-    @NamedQuery(name = "Lignemvtstock.findByType", query = "SELECT l FROM Lignemvtstock l WHERE l.type = :type"),
+    @NamedQuery(name = "Lignemvtstock.findAll", query = "SELECT l FROM Lignemvtstock l")
+    ,
+    @NamedQuery(name = "Lignemvtstock.findByIdlignemvtstock", query = "SELECT l FROM Lignemvtstock l WHERE l.idlignemvtstock = :idlignemvtstock")
+    ,
+    @NamedQuery(name = "Lignemvtstock.findByQteentree", query = "SELECT l FROM Lignemvtstock l WHERE l.qteentree = :qteentree")
+    ,
+    @NamedQuery(name = "Lignemvtstock.findByQtesortie", query = "SELECT l FROM Lignemvtstock l WHERE l.qtesortie = :qtesortie")
+    ,
+    @NamedQuery(name = "Lignemvtstock.findByUnite", query = "SELECT l FROM Lignemvtstock l WHERE l.unite = :unite")
+    ,
+    @NamedQuery(name = "Lignemvtstock.findByReste", query = "SELECT l FROM Lignemvtstock l WHERE l.reste = :reste")
+    ,
+    @NamedQuery(name = "Lignemvtstock.findByClient", query = "SELECT l FROM Lignemvtstock l WHERE l.client = :client")
+    ,
+    @NamedQuery(name = "Lignemvtstock.findByFournisseur", query = "SELECT l FROM Lignemvtstock l WHERE l.fournisseur = :fournisseur")
+    ,
+    @NamedQuery(name = "Lignemvtstock.findByType", query = "SELECT l FROM Lignemvtstock l WHERE l.type = :type")
+    ,
     @NamedQuery(name = "Lignemvtstock.findByMagasin", query = "SELECT l FROM Lignemvtstock l WHERE l.magasin = :magasin")})
 public class Lignemvtstock implements Serializable {
 
@@ -44,12 +53,12 @@ public class Lignemvtstock implements Serializable {
     @NotNull
     private Long idlignemvtstock;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    private Double qteentree;
-    private Double qtesortie;
-    private Double unite;
-    private Double reste;
+    private double qteentree;
+    private double qtesortie;
+    private double unite;
+    private double reste;
     @Column(name = "qteavant")
-    private Double qteAvant;
+    private double qteAvant;
     @Size(max = 70)
     private String client;
     @Size(max = 70)
@@ -99,35 +108,35 @@ public class Lignemvtstock implements Serializable {
         this.idlignemvtstock = idlignemvtstock;
     }
 
-    public Double getQteentree() {
+    public double getQteentree() {
         return qteentree;
     }
 
-    public void setQteentree(Double qteentree) {
+    public void setQteentree(double qteentree) {
         this.qteentree = qteentree;
     }
 
-    public Double getQtesortie() {
+    public double getQtesortie() {
         return qtesortie;
     }
 
-    public void setQtesortie(Double qtesortie) {
+    public void setQtesortie(double qtesortie) {
         this.qtesortie = qtesortie;
     }
 
-    public Double getUnite() {
+    public double getUnite() {
         return unite;
     }
 
-    public void setUnite(Double unite) {
+    public void setUnite(double unite) {
         this.unite = unite;
     }
 
-    public Double getReste() {
+    public double getReste() {
         return reste;
     }
 
-    public void setReste(Double reste) {
+    public void setReste(double reste) {
         this.reste = reste;
     }
 
@@ -187,11 +196,11 @@ public class Lignemvtstock implements Serializable {
         this.idmvtstock = idmvtstock;
     }
 
-    public Double getQteAvant() {
+    public double getQteAvant() {
         return qteAvant;
     }
 
-    public void setQteAvant(Double qteAvant) {
+    public void setQteAvant(double qteAvant) {
         this.qteAvant = qteAvant;
     }
 

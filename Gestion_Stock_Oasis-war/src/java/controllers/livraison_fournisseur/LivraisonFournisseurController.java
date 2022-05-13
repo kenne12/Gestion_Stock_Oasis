@@ -492,7 +492,7 @@ public class LivraisonFournisseurController extends AbstractLivraisonFournisseur
         for (Lignelivraisonfournisseur llf : this.lignelivraisonfournisseurs) {
             resultat += (llf.getIdlot().getIdarticle().getCoutachat() * llf.getQuantite());
             this.lignelivraisonfournisseurs.get(i).setQuantitemultiple((llf.getQuantite() * llf.getUnite()));
-            this.lignelivraisonfournisseurs.get(i).setQuantitereduite(((this.lignelivraisonfournisseurs.get(i)).getQuantitemultiple() / llf.getIdlot().getIdarticle().getUnite().doubleValue()));
+            this.lignelivraisonfournisseurs.get(i).setQuantitereduite(((this.lignelivraisonfournisseurs.get(i)).getQuantitemultiple() / llf.getIdlot().getIdarticle().getUnite()));
             i++;
         }
         return resultat;

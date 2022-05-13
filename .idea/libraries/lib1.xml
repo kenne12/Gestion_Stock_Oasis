@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="lib1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/build/lib/javax.annotation.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/build/lib/javaee-web-api-6.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/build/lib/webservices-api-osgi.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/build/lib/postgresql-9.4-1201.jdbc4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/build/lib/jaxb-api-osgi.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/build/lib/hibernate-jpa-2.1-api-1.0.0.Final.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

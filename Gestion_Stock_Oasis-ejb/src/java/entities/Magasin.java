@@ -5,10 +5,14 @@
  */
 package entities;
 
+import enumeration.ModeEntreSorti;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -28,10 +32,14 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Magasin.findAll", query = "SELECT m FROM Magasin m"),
-    @NamedQuery(name = "Magasin.findByIdmagasin", query = "SELECT m FROM Magasin m WHERE m.idmagasin = :idmagasin"),
-    @NamedQuery(name = "Magasin.findByNom", query = "SELECT m FROM Magasin m WHERE m.nom = :nom"),
-    @NamedQuery(name = "Magasin.findByCode", query = "SELECT m FROM Magasin m WHERE m.code = :code"),
+    @NamedQuery(name = "Magasin.findAll", query = "SELECT m FROM Magasin m")
+    ,
+    @NamedQuery(name = "Magasin.findByIdmagasin", query = "SELECT m FROM Magasin m WHERE m.idmagasin = :idmagasin")
+    ,
+    @NamedQuery(name = "Magasin.findByNom", query = "SELECT m FROM Magasin m WHERE m.nom = :nom")
+    ,
+    @NamedQuery(name = "Magasin.findByCode", query = "SELECT m FROM Magasin m WHERE m.code = :code")
+    ,
     @NamedQuery(name = "Magasin.findByCentral", query = "SELECT m FROM Magasin m WHERE m.central = :central")})
 public class Magasin implements Serializable {
 
@@ -64,6 +72,14 @@ public class Magasin implements Serializable {
     @JoinColumn(name = "idstructure", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Parametrage parametrage;
+
+    @Column(name = "mode_entre_default")
+    @Enumerated(EnumType.STRING)
+    private ModeEntreSorti modeEntreDefault;
+
+    @Column(name = "mode_sorti_default")
+    @Enumerated(EnumType.STRING)
+    private ModeEntreSorti modeSortiDefault;
 
     public Magasin() {
     }
@@ -182,6 +198,22 @@ public class Magasin implements Serializable {
 
     public void setUtilisateurmagasinList(List<Utilisateurmagasin> utilisateurmagasinList) {
         this.utilisateurmagasinList = utilisateurmagasinList;
+    }
+
+    public ModeEntreSorti getModeEntreDefault() {
+        return modeEntreDefault;
+    }
+
+    public void setModeEntreDefault(ModeEntreSorti modeEntreDefault) {
+        this.modeEntreDefault = modeEntreDefault;
+    }
+
+    public ModeEntreSorti getModeSortiDefault() {
+        return modeSortiDefault;
+    }
+
+    public void setModeSortiDefault(ModeEntreSorti modeSortiDefault) {
+        this.modeSortiDefault = modeSortiDefault;
     }
 
     @Override

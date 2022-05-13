@@ -120,6 +120,8 @@ public class AbstractArticleController {
     protected String fileName1 = "";
     protected String fileName2 = "";
 
+    protected boolean isSelectAll = false;
+
     public Boolean getDetail() {
         return this.detail;
     }
@@ -343,6 +345,18 @@ public class AbstractArticleController {
 
     public void setUnite(Unite unite) {
         this.unite = unite;
+    }
+
+    public boolean isIsSelectAll() {
+        return isSelectAll;
+    }
+
+    public void setIsSelectAll(boolean isSelectAll) {
+        this.isSelectAll = isSelectAll;
+    }
+
+    public List<Lot> getLots() {
+        return lots;
     }
 
 }

@@ -8,7 +8,6 @@ import entities.Livraisonclient;
 import entities.Magasin;
 import entities.Magasinlot;
 import entities.Mvtstock;
-import entities.Unite;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Resource;
@@ -52,7 +51,6 @@ public class AbstractSortiedirectController {
     @EJB
     protected LignelivraisonclientFacadeLocal lignelivraisonclientFacadeLocal;
     protected Lignelivraisonclient lignelivraisonclient = new Lignelivraisonclient();
-    protected List<Lignelivraisonclient> lignelivraisonclients = new ArrayList();
 
     @EJB
     protected MvtstockFacadeLocal mvtstockFacadeLocal;
@@ -82,8 +80,6 @@ public class AbstractSortiedirectController {
     protected MouchardFacadeLocal mouchardFacadeLocal;
     protected Routine routine = new Routine();
 
-    protected Double total = 0.0;
-
     protected Boolean detail = true;
     protected Boolean modifier = true;
     protected Boolean consulter = true;
@@ -93,7 +89,6 @@ public class AbstractSortiedirectController {
     protected String fileName = "";
     protected String mode = "";
 
-    //int conteur = 0;
     public Livraisonclient getLivraisonclient() {
         return this.livraisonclient;
     }
@@ -113,10 +108,6 @@ public class AbstractSortiedirectController {
 
     public void setLignelivraisonclient(Lignelivraisonclient lignelivraisonclient) {
         this.lignelivraisonclient = lignelivraisonclient;
-    }
-
-    public List<Lignelivraisonclient> getLignelivraisonclients() {
-        return this.lignelivraisonclients;
     }
 
     public Boolean getDetail() {
@@ -150,14 +141,6 @@ public class AbstractSortiedirectController {
     public List<Famille> getFamilles() {
         this.familles = this.familleFacadeLocal.findAllRange(SessionMBean.getMagasin().getParametrage().getId());
         return this.familles;
-    }
-
-    public Double getTotal() {
-        return this.total;
-    }
-
-    public void setTotal(Double total) {
-        this.total = total;
     }
 
     public String getFileName() {
@@ -208,5 +191,7 @@ public class AbstractSortiedirectController {
     public Annee getAnnee() {
         return annee;
     }
+    
+    
 
 }

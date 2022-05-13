@@ -126,7 +126,7 @@
 
                         <p:column style="width: 8%;text-align: center" >
                             <f:facet name="header">
-                                <h:outputText value="QR"/>
+                                <h:outputText value="U"/>
                             </f:facet>
                             <h:outputText value="#{item.unite}">
                                 <f:convertNumber />
@@ -174,7 +174,7 @@
                         <p:commandButton style="color: red;" icon="ui-icon-close" value="#{langue.annuler}" oncomplete="PF('StockCreateDialog').hide()" partialSubmit="true"/>
                         <p:commandButton actionListener="#{entreedirecteController.create()}" icon="ui-icon-check"                                     
                                          value="#{langue.enregistrer}" update="display,:StockListerForm:datalist,:actionsForm,:notify1"                                      
-                                         onclick="PF('AjaxNotifyDialog').show()"/>
+                                         onclick="PF('AjaxNotifyDialog').show()" />
                     </center>
 
                 </h:panelGroup>

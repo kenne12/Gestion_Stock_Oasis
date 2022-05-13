@@ -84,12 +84,12 @@
                     <br/>
 
                     <p:dataTable id="datalist" 
-                                 value="#{sortiedirectController.lignelivraisonclients}" 
+                                 value="#{sortiedirectController.livraisonclient.lignelivraisonclientList}" 
                                  var="item"                             
                                  paginator="true"
                                  editable="true" 
                                  rowKey="#{item.idlignelivraisonclient}"
-                                 rows="#{sortiedirectController.lignelivraisonclients.size()}"                                 
+                                 rows="#{sortiedirectController.livraisonclient.lignelivraisonclientList.size()}"                                 
                                  style="width: 98%;margin-left: 1%"
                                  rowIndexVar="index"
                                  emptyMessage="#{langue.tableau_vide}"
@@ -179,22 +179,22 @@
                         <p:panelGrid id="info_2" style="" columns="10">
 
                             <p:outputLabel for="total" value="#{langue.total_ht}"/>
-                            <p:outputLabel id="total" value="#{sortiedirectController.livraisonclient.montant}" style="color:red">                               
+                            <p:outputLabel id="total" value="#{sortiedirectController.livraisonclient.montant}" style="color:red;font-size: 20px">                               
                                 <f:convertNumber/>
                             </p:outputLabel>
 
                             <p:outputLabel for="tva" value="#{langue.tva}"/>
-                            <p:outputLabel id="tva" value="#{sortiedirectController.livraisonclient.montantTva}" style="color:red">                               
+                            <p:outputLabel id="tva" value="#{sortiedirectController.livraisonclient.montantTva}" style="color:red;font-size: 20px">                               
                                 <f:convertNumber/>
                             </p:outputLabel>
 
                             <p:outputLabel for="remise" value="#{langue.remise}"/>
-                            <p:outputLabel id="remise" value="#{sortiedirectController.livraisonclient.montantRemise}" style="color:red">                               
+                            <p:outputLabel id="remise" value="#{sortiedirectController.livraisonclient.montantRemise}" style="color:red;font-size: 20px">                               
                                 <f:convertNumber/>
                             </p:outputLabel>
 
                             <p:outputLabel for="montant_ttc" value="#{langue.total_ttc}"/>
-                            <p:outputLabel id="montant_ttc" value="#{sortiedirectController.livraisonclient.montantTtc}" style="color:red">                               
+                            <p:outputLabel id="montant_ttc" value="#{sortiedirectController.livraisonclient.montantTtc}" style="color:red;font-size: 20px">                               
                                 <f:convertNumber/>
                             </p:outputLabel>
 
@@ -207,10 +207,10 @@
                     <p:separator/>
 
                     <center>
-                        <p:commandButton icon="ui-icon-close" value="#{langue.annuler}" oncomplete="PF('SortieDirecteCreateDialog').hide()" partialSubmit="true"/>
+                        <p:commandButton icon="ui-icon-close" value="#{langue.annuler}" onclick="PF('SortieDirecteCreateDialog').hide()" partialSubmit="true"/>
                         <p:commandButton actionListener="#{sortiedirectController.create()}" 
-                                         icon="ui-icon-check" value="#{langue.valider}" update="display,:SortieDirecteListerForm:datalist,:notify1" 
-                                         onclick="PF('AjaxNotifyDialog').show()"/>                        
+                                         icon="ui-icon-check" value="#{langue.valider}" update="display,:SortieDirecteListerForm,:notify1" 
+                                         onclick="PF('AjaxNotifyDialog').show()" oncomplete="PF('AjaxNotifyDialog').hide();PF('SortieDirecteCreateDialog').hide()" />                        
                     </center>
 
                 </h:panelGroup>

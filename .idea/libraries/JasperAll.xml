@@ -1,0 +1,36 @@
+<component name="libraryTable">
+  <library name="JasperAll">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/lib/JasperAll/poi-ooxml-schemas-3.10.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/lib/JasperAll/antlr-2.7.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/lib/JasperAll/jasperreports-fonts-6.1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/lib/JasperAll/commons-collections-3.2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/lib/JasperAll/jxl-2.6.10.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/lib/JasperAll/annotations-4.0.0.Final.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/lib/JasperAll/poi-ooxml-3.10.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/lib/JasperAll/commons-codec-1.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/lib/JasperAll/commons-fileupload-1.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/lib/JasperAll/commons-logging-1.1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/lib/JasperAll/commons-javaflow-20060411.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/lib/JasperAll/groovy-all-2.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/lib/JasperAll/commons-io-2.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/lib/JasperAll/commons-digester-2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/lib/JasperAll/rome-1.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/lib/JasperAll/png-encoder-1.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/lib/JasperAll/atmosphere-runtime-2.1.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/lib/JasperAll/TimesNewRoman.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/lib/JasperAll/commons-beanutils-1.9.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/lib/JasperAll/Cambria.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/lib/JasperAll/poi-3.10.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/lib/JasperAll/iText-2.1.7.js2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/lib/JasperAll/jasperreports-6.1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/lib/JasperAll/log4j-1.2.15.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/lib/JasperAll/jfreechart-1.0.12.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/lib/JasperAll/jasperreports-javaflow-6.1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/lib/JasperAll/jcommon-1.0.15.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-war/lib/JasperAll/dom4j-1.6.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -5,10 +5,13 @@
  */
 package entities;
 
+import enumeration.ModeEntreSorti;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -25,13 +28,20 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Lignelivraisonfournisseur.findAll", query = "SELECT l FROM Lignelivraisonfournisseur l"),
-    @NamedQuery(name = "Lignelivraisonfournisseur.findByIdlignelivraisonfournisseur", query = "SELECT l FROM Lignelivraisonfournisseur l WHERE l.idlignelivraisonfournisseur = :idlignelivraisonfournisseur"),
-    @NamedQuery(name = "Lignelivraisonfournisseur.findByQuantite", query = "SELECT l FROM Lignelivraisonfournisseur l WHERE l.quantite = :quantite"),
-    @NamedQuery(name = "Lignelivraisonfournisseur.findByTauxsatisfaction", query = "SELECT l FROM Lignelivraisonfournisseur l WHERE l.tauxsatisfaction = :tauxsatisfaction"),
-    @NamedQuery(name = "Lignelivraisonfournisseur.findByQuantitemultiple", query = "SELECT l FROM Lignelivraisonfournisseur l WHERE l.quantitemultiple = :quantitemultiple"),
-    @NamedQuery(name = "Lignelivraisonfournisseur.findByUnite", query = "SELECT l FROM Lignelivraisonfournisseur l WHERE l.unite = :unite"),
-    @NamedQuery(name = "Lignelivraisonfournisseur.findByPrixachat", query = "SELECT l FROM Lignelivraisonfournisseur l WHERE l.prixachat = :prixachat"),
+    @NamedQuery(name = "Lignelivraisonfournisseur.findAll", query = "SELECT l FROM Lignelivraisonfournisseur l")
+    ,
+    @NamedQuery(name = "Lignelivraisonfournisseur.findByIdlignelivraisonfournisseur", query = "SELECT l FROM Lignelivraisonfournisseur l WHERE l.idlignelivraisonfournisseur = :idlignelivraisonfournisseur")
+    ,
+    @NamedQuery(name = "Lignelivraisonfournisseur.findByQuantite", query = "SELECT l FROM Lignelivraisonfournisseur l WHERE l.quantite = :quantite")
+    ,
+    @NamedQuery(name = "Lignelivraisonfournisseur.findByTauxsatisfaction", query = "SELECT l FROM Lignelivraisonfournisseur l WHERE l.tauxsatisfaction = :tauxsatisfaction")
+    ,
+    @NamedQuery(name = "Lignelivraisonfournisseur.findByQuantitemultiple", query = "SELECT l FROM Lignelivraisonfournisseur l WHERE l.quantitemultiple = :quantitemultiple")
+    ,
+    @NamedQuery(name = "Lignelivraisonfournisseur.findByUnite", query = "SELECT l FROM Lignelivraisonfournisseur l WHERE l.unite = :unite")
+    ,
+    @NamedQuery(name = "Lignelivraisonfournisseur.findByPrixachat", query = "SELECT l FROM Lignelivraisonfournisseur l WHERE l.prixachat = :prixachat")
+    ,
     @NamedQuery(name = "Lignelivraisonfournisseur.findByQuantitereduite", query = "SELECT l FROM Lignelivraisonfournisseur l WHERE l.quantitereduite = :quantitereduite")})
 public class Lignelivraisonfournisseur implements Serializable {
 
@@ -69,9 +79,15 @@ public class Lignelivraisonfournisseur implements Serializable {
     private Unite idunite;
 
     @Column(name = "mode_vente", length = 15)
-    private String modeVente;
+    @Enumerated(EnumType.STRING)
+    private ModeEntreSorti modeVente;
 
     public Lignelivraisonfournisseur() {
+        this.initConstructor();
+    }
+
+    private void initConstructor() {
+        this.idunite = new Unite();
     }
 
     public Lignelivraisonfournisseur(Long idlignelivraisonfournisseur) {
@@ -190,11 +206,11 @@ public class Lignelivraisonfournisseur implements Serializable {
         this.idunite = idunite;
     }
 
-    public String getModeVente() {
+    public ModeEntreSorti getModeVente() {
         return modeVente;
     }
 
-    public void setModeVente(String modeVente) {
+    public void setModeVente(ModeEntreSorti modeVente) {
         this.modeVente = modeVente;
     }
 

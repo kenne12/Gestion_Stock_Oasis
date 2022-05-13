@@ -191,9 +191,17 @@
                                         <h3>Agences / Dépots de visibilité </h3>
                                     </center>
 
+
                                     <p:separator />
 
                                     <center>
+                                        <h:panelGrid columns="2" columnClasses="column">
+                                            <h:outputLabel value="Sélectionner tout "></h:outputLabel>
+                                            <h:selectBooleanCheckbox value="#{articleController.isSelectAll}" >
+                                                <p:ajax update="grid" listener="#{articleController.selectAllStore()}" />
+                                            </h:selectBooleanCheckbox>
+                                        </h:panelGrid>
+                                        
                                         <p:selectManyCheckbox id="grid" value="#{articleController.selectedMagasins}" layout="grid" columns="1" converter="magasinConverter" required="true">
                                             <f:selectItems value="#{articleController.magasins}" var="item" itemLabel="#{item.nom}" itemValue="#{item}" />
                                         </p:selectManyCheckbox>

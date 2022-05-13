@@ -32,6 +32,10 @@
                         <p:outputLabel value="#{langue.active}" for="etat" />
                         <h:selectBooleanCheckbox id="etat" value="#{anneeController.selectedAnnee.etat}"/>
                         <p:message for="etat"/>
+                        
+                        <p:outputLabel value="Année par défaut" for="default" />
+                        <h:selectBooleanCheckbox id="default" value="#{anneeController.selectedAnnee.defaultYear}"/>
+                        <p:message for="default"/>
 
                     </h:panelGrid>
                     

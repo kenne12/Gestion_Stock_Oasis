@@ -52,7 +52,7 @@ public class TraitementController extends AbstractTraitementController implement
             this.livraisonclient = new Livraisonclient();
             this.client = new Client();
 
-            this.livraisonclient.setMontant(0.0);
+            this.livraisonclient.setMontant(0);
 
             this.lignelivraisonclients.clear();
             this.payement_credit = false;
@@ -185,21 +185,21 @@ public class TraitementController extends AbstractTraitementController implement
                                 c.setIdunite(lcc.getIdunite());
 
                                 if (lSearch.getQuantitemultiple() >= lcc.getQuantitemultiple()) {
-                                    /* 213 */ c.setQuantite(lcc.getQuantite());
-                                    /* 214 */ c.setQuantitemultiple(Double.valueOf(c.getQuantite().doubleValue() * lcc.getUnite().doubleValue()));
-                                    /* 215 */ c.setQuantitereduite(Double.valueOf(c.getQuantitemultiple().doubleValue() / c.getIdmagasinlot().getIdlot().getIdarticle().getUnite().doubleValue()));
-                                    /* 216 */ this.lignelivraisonclients.add(c);
-                                    /* 217 */ qteReste = Double.valueOf(0.0D);
-                                    /* 218 */ sommeQte = Double.valueOf(sommeQte.doubleValue() + lcc.getQuantitemultiple().doubleValue());
-                                    /* 219 */ suffisant = true;
+                                    c.setQuantite(lcc.getQuantite());
+                                    c.setQuantitemultiple(c.getQuantite() * lcc.getUnite());
+                                    c.setQuantitereduite((c.getQuantitemultiple() / c.getIdmagasinlot().getIdlot().getIdarticle().getUnite()));
+                                    this.lignelivraisonclients.add(c);
+                                    qteReste = 0d;
+                                    sommeQte = sommeQte + lcc.getQuantitemultiple();
+                                    suffisant = true;
                                 } else {
-                                    /* 221 */ c.setQuantitemultiple(lSearch.getQuantitemultiple());
-                                    /* 222 */ c.setQuantite(Double.valueOf(c.getQuantitemultiple().doubleValue() / lSearch.getUnite().doubleValue()));
-                                    /* 223 */ c.setQuantitereduite(Double.valueOf(c.getQuantitemultiple().doubleValue() / c.getIdmagasinlot().getIdlot().getIdarticle().getUnite().doubleValue()));
-                                    /* 224 */ qteReste = Double.valueOf(qteDemandee.doubleValue() - lSearch.getQuantitemultiple().doubleValue());
-                                    /* 225 */ this.lignelivraisonclients.add(c);
-                                    /* 226 */ sommeQte = Double.valueOf(sommeQte.doubleValue() + lSearch.getQuantitemultiple().doubleValue());
-                                    /* 227 */ suffisant = false;
+                                    c.setQuantitemultiple(lSearch.getQuantitemultiple());
+                                    c.setQuantite((c.getQuantitemultiple() / lSearch.getUnite()));
+                                    c.setQuantitereduite((c.getQuantitemultiple() / c.getIdmagasinlot().getIdlot().getIdarticle().getUnite()));
+                                    qteReste = qteDemandee - lSearch.getQuantitemultiple();
+                                    this.lignelivraisonclients.add(c);
+                                    sommeQte = sommeQte + lSearch.getQuantitemultiple();
+                                    suffisant = false;
                                 }
                             } else {
                                 suffisant = false;
@@ -219,19 +219,19 @@ public class TraitementController extends AbstractTraitementController implement
 
                                         if (l.getQuantitemultiple() >= qteReste) {
                                             /* 249 */ c.setQuantitemultiple(qteReste);
-                                            /* 250 */ c.setQuantite(Double.valueOf(qteReste.doubleValue() / l.getUnite().doubleValue()));
-                                            /* 251 */ c.setQuantitereduite(Double.valueOf(l.getQuantitemultiple().doubleValue() / l.getIdlot().getIdarticle().getUnite().doubleValue()));
+                                            /* 250 */ c.setQuantite(qteReste / l.getUnite());
+                                            /* 251 */ c.setQuantitereduite(l.getQuantitemultiple() / l.getIdlot().getIdarticle().getUnite());
                                             /* 252 */ this.lignelivraisonclients.add(c);
-                                            /* 253 */ sommeQte = Double.valueOf(sommeQte.doubleValue() + qteReste.doubleValue());
+                                            /* 253 */ sommeQte = sommeQte + qteReste;
                                             /* 254 */ suffisant = true;
                                             /* 255 */ break;
                                         }
                                         qteReste = (qteReste - l.getQuantitemultiple());
                                         c.setQuantitemultiple(l.getQuantitemultiple());
-                                        c.setQuantite(Double.valueOf(l.getQuantitemultiple().doubleValue() / l.getUnite().doubleValue()));
-                                        c.setQuantitereduite(Double.valueOf(l.getQuantitemultiple().doubleValue() / l.getIdlot().getIdarticle().getUnite().doubleValue()));
+                                        c.setQuantite(l.getQuantitemultiple() / l.getUnite().doubleValue());
+                                        c.setQuantitereduite(l.getQuantitemultiple() / l.getIdlot().getIdarticle().getUnite());
                                         this.lignelivraisonclients.add(c);
-                                        sommeQte = Double.valueOf(sommeQte.doubleValue() + l.getQuantitemultiple().doubleValue());
+                                        sommeQte = sommeQte + l.getQuantitemultiple();
                                         suffisant = false;
                                     } else {
                                         suffisant = false;
@@ -240,9 +240,9 @@ public class TraitementController extends AbstractTraitementController implement
                             }
                         }
                     }
-                    Utilitaires.arrondiNDecimales(sommeQte.doubleValue() / qteDemandee.doubleValue() * 100.0D, 2);
-                    ((Lignedemande) this.lignedemandes.get(conteur)).setTauxsatisfaction(Utilitaires.arrondiNDecimales(sommeQte.doubleValue() / qteDemandee.doubleValue() * 100.0D, 2));
-                    pourcentage = Double.valueOf(pourcentage.doubleValue() + Utilitaires.arrondiNDecimales(sommeQte.doubleValue() / qteDemandee.doubleValue() * 100.0D, 2).doubleValue());
+                    Utilitaires.arrondiNDecimales(sommeQte / qteDemandee * 100.0D, 2);
+                    ((Lignedemande) this.lignedemandes.get(conteur)).setTauxsatisfaction(Utilitaires.arrondiNDecimales(sommeQte / qteDemandee * 100.0D, 2));
+                    pourcentage = pourcentage + Utilitaires.arrondiNDecimales(sommeQte.doubleValue() / qteDemandee.doubleValue() * 100.0D, 2).doubleValue();
                     conteur++;
                 }
                 this.demande.setTauxsatisfaction(pourcentage);
@@ -601,7 +601,7 @@ public class TraitementController extends AbstractTraitementController implement
             boolean trouve = false;
             this.ut.begin();
 
-            Lignedemande lcc = (Lignedemande) this.lignedemandes.get(index);
+            Lignedemande lcc =  this.lignedemandes.get(index);
 
             this.lignedemandes.remove(index);
 
@@ -653,19 +653,19 @@ public class TraitementController extends AbstractTraitementController implement
     }
 
     public void notifyError(String message) {
-        /* 711 */ this.routine.feedBack("avertissement", "/resources/tool_images/warning.jpeg", this.routine.localizeMessage(message));
-        /* 712 */ RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
+        this.routine.feedBack("avertissement", "/resources/tool_images/warning.jpeg", this.routine.localizeMessage(message));
+        RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
     }
 
     public void notifySuccess() {
-        /* 716 */ RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
-        /* 717 */ this.routine.feedBack("information", "/resources/tool_images/success.png", this.routine.localizeMessage("operation_reussie"));
-        /* 718 */ RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
+        RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
+        this.routine.feedBack("information", "/resources/tool_images/success.png", this.routine.localizeMessage("operation_reussie"));
+        RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
     }
 
     public void notifyFail(Exception e) {
-        /* 722 */ RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
-        /* 723 */ this.routine.catchException(e, this.routine.localizeMessage("echec_operation"));
-        /* 724 */ RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
+        RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
+        this.routine.catchException(e, this.routine.localizeMessage("echec_operation"));
+        RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
     }
 }

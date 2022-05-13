@@ -71,11 +71,24 @@ public class Magasinlot implements Serializable {
     @OneToMany(mappedBy = "idmagasinlot", fetch = FetchType.LAZY)
     private List<Lignemvtstock> lignemvtstockList;
 
+    
+    private void initConstructor(){
+        this.quantite = 0d;
+        this.quantitemultiple = 0d;
+        this.quantitereduite = 0d;
+        this.quantitevirtuelle = 0d;
+        this.quantitesecurite = 0d;
+        this.unite = 0d;    
+    }
+    
     public Magasinlot() {
+        super();
+        this.initConstructor();
     }
 
     public Magasinlot(Long idmagasinlot) {
         this.idmagasinlot = idmagasinlot;
+        this.initConstructor();
     }
 
     public Long getIdmagasinlot() {

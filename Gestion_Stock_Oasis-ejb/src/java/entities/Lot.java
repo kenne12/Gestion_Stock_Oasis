@@ -31,21 +31,36 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Lot.findAll", query = "SELECT l FROM Lot l"),
-    @NamedQuery(name = "Lot.findByIdlot", query = "SELECT l FROM Lot l WHERE l.idlot = :idlot"),
-    @NamedQuery(name = "Lot.findByNumero", query = "SELECT l FROM Lot l WHERE l.numero = :numero"),
-    @NamedQuery(name = "Lot.findByDatefabrication", query = "SELECT l FROM Lot l WHERE l.datefabrication = :datefabrication"),
-    @NamedQuery(name = "Lot.findByDateperemption", query = "SELECT l FROM Lot l WHERE l.dateperemption = :dateperemption"),
-    @NamedQuery(name = "Lot.findByQuantite", query = "SELECT l FROM Lot l WHERE l.quantite = :quantite"),
-    @NamedQuery(name = "Lot.findByPrixachat", query = "SELECT l FROM Lot l WHERE l.prixachat = :prixachat"),
-    @NamedQuery(name = "Lot.findByPrixunitaire", query = "SELECT l FROM Lot l WHERE l.prixunitaire = :prixunitaire"),
-    @NamedQuery(name = "Lot.findByDateenregistrement", query = "SELECT l FROM Lot l WHERE l.dateenregistrement = :dateenregistrement"),
-    @NamedQuery(name = "Lot.findByEtat", query = "SELECT l FROM Lot l WHERE l.etat = :etat"),
-    @NamedQuery(name = "Lot.findByQuantitemultiple", query = "SELECT l FROM Lot l WHERE l.quantitemultiple = :quantitemultiple"),
-    @NamedQuery(name = "Lot.findByUnitesortie", query = "SELECT l FROM Lot l WHERE l.unitesortie = :unitesortie"),
-    @NamedQuery(name = "Lot.findByQuantitereduite", query = "SELECT l FROM Lot l WHERE l.quantitereduite = :quantitereduite"),
-    @NamedQuery(name = "Lot.findByUniteentree", query = "SELECT l FROM Lot l WHERE l.uniteentree = :uniteentree"),
-    @NamedQuery(name = "Lot.findByQuantitevirtuelle", query = "SELECT l FROM Lot l WHERE l.quantitevirtuelle = :quantitevirtuelle"),
+    @NamedQuery(name = "Lot.findAll", query = "SELECT l FROM Lot l")
+    ,
+    @NamedQuery(name = "Lot.findByIdlot", query = "SELECT l FROM Lot l WHERE l.idlot = :idlot")
+    ,
+    @NamedQuery(name = "Lot.findByNumero", query = "SELECT l FROM Lot l WHERE l.numero = :numero")
+    ,
+    @NamedQuery(name = "Lot.findByDatefabrication", query = "SELECT l FROM Lot l WHERE l.datefabrication = :datefabrication")
+    ,
+    @NamedQuery(name = "Lot.findByDateperemption", query = "SELECT l FROM Lot l WHERE l.dateperemption = :dateperemption")
+    ,
+    @NamedQuery(name = "Lot.findByQuantite", query = "SELECT l FROM Lot l WHERE l.quantite = :quantite")
+    ,
+    @NamedQuery(name = "Lot.findByPrixachat", query = "SELECT l FROM Lot l WHERE l.prixachat = :prixachat")
+    ,
+    @NamedQuery(name = "Lot.findByPrixunitaire", query = "SELECT l FROM Lot l WHERE l.prixunitaire = :prixunitaire")
+    ,
+    @NamedQuery(name = "Lot.findByDateenregistrement", query = "SELECT l FROM Lot l WHERE l.dateenregistrement = :dateenregistrement")
+    ,
+    @NamedQuery(name = "Lot.findByEtat", query = "SELECT l FROM Lot l WHERE l.etat = :etat")
+    ,
+    @NamedQuery(name = "Lot.findByQuantitemultiple", query = "SELECT l FROM Lot l WHERE l.quantitemultiple = :quantitemultiple")
+    ,
+    @NamedQuery(name = "Lot.findByUnitesortie", query = "SELECT l FROM Lot l WHERE l.unitesortie = :unitesortie")
+    ,
+    @NamedQuery(name = "Lot.findByQuantitereduite", query = "SELECT l FROM Lot l WHERE l.quantitereduite = :quantitereduite")
+    ,
+    @NamedQuery(name = "Lot.findByUniteentree", query = "SELECT l FROM Lot l WHERE l.uniteentree = :uniteentree")
+    ,
+    @NamedQuery(name = "Lot.findByQuantitevirtuelle", query = "SELECT l FROM Lot l WHERE l.quantitevirtuelle = :quantitevirtuelle")
+    ,
     @NamedQuery(name = "Lot.findByQuantitesecurite", query = "SELECT l FROM Lot l WHERE l.quantitesecurite = :quantitesecurite")})
 public class Lot implements Serializable {
 
@@ -61,18 +76,18 @@ public class Lot implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date dateperemption;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    private Double quantite;
-    private Double prixachat;
-    private Double prixunitaire;
+    private double quantite;
+    private double prixachat;
+    private double prixunitaire;
     @Temporal(TemporalType.DATE)
     private Date dateenregistrement;
-    private Boolean etat;
-    private Double quantitemultiple;
-    private Double unitesortie;
-    private Double quantitereduite;
-    private Double uniteentree;
-    private Double quantitevirtuelle;
-    private Double quantitesecurite;
+    private boolean etat;
+    private double quantitemultiple;
+    private double unitesortie;
+    private double quantitereduite;
+    private double uniteentree;
+    private double quantitevirtuelle;
+    private double quantitesecurite;
     @OneToMany(mappedBy = "idlot", fetch = FetchType.LAZY)
     private List<Ligneinventaire> ligneinventaireList;
     @JoinColumn(name = "idarticle", referencedColumnName = "idarticle")
@@ -91,6 +106,20 @@ public class Lot implements Serializable {
 
     public Lot() {
         idarticle = new Article();
+        this.init();
+    }
+
+    private void init() {
+        quantitemultiple = 0;
+        unitesortie = 0;
+        quantitereduite = 0;
+        uniteentree = 0;
+        quantitevirtuelle = 0;
+        quantitesecurite = 0;
+        prixachat = 0;
+        prixunitaire = 0;
+        quantite = 0;
+        
     }
 
     public Lot(Long idlot) {
@@ -161,59 +190,59 @@ public class Lot implements Serializable {
         this.dateenregistrement = dateenregistrement;
     }
 
-    public Boolean getEtat() {
+    public boolean getEtat() {
         return etat;
     }
 
-    public void setEtat(Boolean etat) {
+    public void setEtat(boolean etat) {
         this.etat = etat;
     }
 
-    public Double getQuantitemultiple() {
+    public double getQuantitemultiple() {
         return quantitemultiple;
     }
 
-    public void setQuantitemultiple(Double quantitemultiple) {
+    public void setQuantitemultiple(double quantitemultiple) {
         this.quantitemultiple = quantitemultiple;
     }
 
-    public Double getUnitesortie() {
+    public double getUnitesortie() {
         return unitesortie;
     }
 
-    public void setUnitesortie(Double unitesortie) {
+    public void setUnitesortie(double unitesortie) {
         this.unitesortie = unitesortie;
     }
 
-    public Double getQuantitereduite() {
+    public double getQuantitereduite() {
         return quantitereduite;
     }
 
-    public void setQuantitereduite(Double quantitereduite) {
+    public void setQuantitereduite(double quantitereduite) {
         this.quantitereduite = quantitereduite;
     }
 
-    public Double getUniteentree() {
+    public double getUniteentree() {
         return uniteentree;
     }
 
-    public void setUniteentree(Double uniteentree) {
+    public void setUniteentree(double uniteentree) {
         this.uniteentree = uniteentree;
     }
 
-    public Double getQuantitevirtuelle() {
+    public double getQuantitevirtuelle() {
         return quantitevirtuelle;
     }
 
-    public void setQuantitevirtuelle(Double quantitevirtuelle) {
+    public void setQuantitevirtuelle(double quantitevirtuelle) {
         this.quantitevirtuelle = quantitevirtuelle;
     }
 
-    public Double getQuantitesecurite() {
+    public double getQuantitesecurite() {
         return quantitesecurite;
     }
 
-    public void setQuantitesecurite(Double quantitesecurite) {
+    public void setQuantitesecurite(double quantitesecurite) {
         this.quantitesecurite = quantitesecurite;
     }
 

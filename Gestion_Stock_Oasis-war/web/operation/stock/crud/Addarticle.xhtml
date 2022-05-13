@@ -123,9 +123,9 @@
 
                                     <p:outputLabel value="#{langue.unite}" for="unite"/>
                                     <h:panelGroup>
-                                        <p:selectOneMenu required="true" id="unite" filter="true" value="#{entreedirecteController.lignelivraisonfournisseur.idunite}" converter="uniteConverter">
+                                        <p:selectOneMenu required="true" id="unite" filter="true" value="#{entreedirecteController.lignelivraisonfournisseur.idunite.idunite}">
                                             <f:selectItem itemLabel="#{langue.choisir}" itemValue=""/>
-                                            <f:selectItems value="#{entreedirecteController.unites}" var="unit" itemLabel="#{unit.libelle}" itemValue="#{unit}"/>
+                                            <f:selectItems value="#{entreedirecteController.unites}" var="unit" itemLabel="#{unit.libelle}" itemValue="#{unit.idunite}"/>
                                             <p:ajax />
                                         </p:selectOneMenu>
                                         <p:inputText disabled="true" required="true" id="qpu" style="width: 75px" value="#{entreedirecteController.lignelivraisonfournisseur.unite}">                                

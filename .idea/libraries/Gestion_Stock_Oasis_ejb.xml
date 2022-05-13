@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Gestion_Stock_Oasis-ejb">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Gestion_Stock_Oasis-ejb/dist/Gestion_Stock_Oasis-ejb.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

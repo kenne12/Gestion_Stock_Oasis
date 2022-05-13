@@ -44,7 +44,11 @@
                              value="#{langue['Conv.Imprimer']}" 
                              actionListener="#{sortiedirectController.print()}"
                              disabled="#{sortiedirectController.imprimer}"
-                             update=":SortieDirecteImprimerForm,:SortieDirecteImprimerDlg,:notify1"/>  
+                             update=":SortieDirecteImprimerForm,:SortieDirecteImprimerDlg,:notify1"/>
+            
+            <p:commandButton value="Reload" actionListener="#{sortiedirectController.reload()}"
+                             update=":SortieDirecteListerForm:datalist"
+                             icon="ui-icon-refresh" />
 
         </div>
 

@@ -9,6 +9,7 @@ import entities.Lot;
 import entities.Magasinarticle;
 import entities.Magasinlot;
 import entities.Mvtstock;
+import enumeration.ModeEntreSorti;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Date;
@@ -30,7 +31,9 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
     @PostConstruct
     private void init() {
         this.magasins = SessionMBean.getMagasins();
-        this.livraisonfournisseurs = this.livraisonfournisseurFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getMois().getDateDebut(), SessionMBean.getMois().getDateFin(), true);
+        this.livraisonfournisseurs = this.livraisonfournisseurFacadeLocal
+                .findAllRange(SessionMBean.getMagasin().getIdmagasin(),
+                        SessionMBean.getMois().getDateDebut(), SessionMBean.getMois().getDateFin(), true);
     }
 
     public void prepareCreate() {
@@ -48,7 +51,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
 
             this.mode = "Create";
 
-            this.article = null;
+            this.article = new Article();
             this.fournisseur = new Fournisseur();
             this.fournisseurToSave = new Fournisseur();
             this.livraisonfournisseur = new Livraisonfournisseur();
@@ -147,7 +150,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
             lignelivraisonfournisseur.setQuantite(1d);
             lignelivraisonfournisseur.setQuantitemultiple(magasinarticle.getUnite());
             lignelivraisonfournisseur.setPrixachat(magasinarticle.getIdarticle().getCoutachat());
-            this.lignelivraisonfournisseur.setModeVente("VENTE_EN_GROS");
+            this.lignelivraisonfournisseur.setModeVente(ModeEntreSorti.VENTE_EN_GROS);
 
             magasinlots = magasinlotFacadeLocal.findByIdMagasinIdArticle(this.magasinarticle.getIdmagasinarticle());
             if (!magasinlots.isEmpty()) {
@@ -334,9 +337,9 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                     Utilitaires.saveOperation(this.mouchardFacadeLocal, "Enregistrement de l'entrée du stock N° : ", SessionMBean.getUserAccount());
                     this.ut.commit();
 
+                    
+                    this.livraisonfournisseurs = this.livraisonfournisseurFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getMois().getDateDebut(), SessionMBean.getMois().getDateFin(), true);
                     this.livraisonfournisseur = new Livraisonfournisseur();
-                    this.livraisonfournisseurs = this.livraisonfournisseurFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getAnnee().getDateDebut(), SessionMBean.getAnnee().getDateFin(), true);
-
                     notifySuccess();
                     RequestContext.getCurrentInstance().execute("PF('StockCreateDialog').hide()");
                     return;
@@ -481,10 +484,10 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
 
                 Utilitaires.saveOperation(this.mouchardFacadeLocal, "Annulation de l'entrée directe en stock : " + this.livraisonfournisseur.getCode() + " Montant : " + this.livraisonfournisseur.getMontant(), SessionMBean.getUserAccount());
                 this.ut.commit();
+                livraisonfournisseurs.remove(livraisonfournisseur);
 
                 this.livraisonfournisseur = new Livraisonfournisseur();
-                this.livraisonfournisseurs = this.livraisonfournisseurFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getAnnee().getDateDebut(), SessionMBean.getAnnee().getDateFin(), true);
-
+                //this.livraisonfournisseurs = this.livraisonfournisseurFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getAnnee().getDateDebut(), SessionMBean.getAnnee().getDateFin(), true);
                 notifySuccess();
                 return;
             }
@@ -504,9 +507,6 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
             if (this.livraisonfournisseur != null) {
                 livraisonfournisseur.setLignelivraisonfournisseurList(lignelivraisonfournisseurFacadeLocal.findByIdlivraison(livraisonfournisseur.getIdlivraisonfournisseur()));
                 fileName = PrintUtils.printStock(livraisonfournisseur);
-                //Map map = new HashMap();
-                //map.put("idlivraisonfournisseur", this.livraisonfournisseur.getIdlivraisonfournisseur());
-                //Printer.print("/reports/ireport/entree_directe.jasper", map);
                 RequestContext.getCurrentInstance().execute("PF('StockImprimerDialog').show()");
                 return;
             }
@@ -624,7 +624,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
         if (!this.lignelivraisonfournisseurs.isEmpty()) {
             int i = 0;
             for (Lignelivraisonfournisseur llf : lignelivraisonfournisseurs) {
-                if (llf.getModeVente().equals("VENTE_EN_GROS")) {
+                if (llf.getModeVente().equals(ModeEntreSorti.VENTE_EN_GROS)) {
                     lignelivraisonfournisseurs.get(i).setQuantitemultiple(llf.getQuantite() * llf.getUnite());
                     lignelivraisonfournisseurs.get(i).setQuantitereduite((this.lignelivraisonfournisseurs.get(i).getQuantitemultiple() / llf.getIdlot().getIdarticle().getUnite()));
                     lignelivraisonfournisseur.setMontantTotal(llf.getPrixachat() * llf.getQuantite());
@@ -658,7 +658,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                     this.lignelivraisonfournisseur.setQuantitemultiple(this.lignelivraisonfournisseur.getQuantite() * this.lignelivraisonfournisseur.getUnite());
                 }
                 if (this.lignelivraisonfournisseur.getPrixachat() != 0) {
-                    if (lignelivraisonfournisseur.getModeVente().equals("VENTE_EN_GROS")) {
+                    if (lignelivraisonfournisseur.getModeVente().equals(ModeEntreSorti.VENTE_EN_GROS)) {
                         montantTotal = this.lignelivraisonfournisseur.getPrixachat() * this.lignelivraisonfournisseur.getQuantite();
                     } else {
                         montantTotal = this.lignelivraisonfournisseur.getPrixAchatDetail() * this.lignelivraisonfournisseur.getQuantitemultiple();
@@ -673,7 +673,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
 
     public void updatePrixGrosAndDetail() {
         if (magasinarticle != null) {
-            if (lignelivraisonfournisseur.getModeVente().equals("VENTE_EN_GROS")) {
+            if (lignelivraisonfournisseur.getModeVente().equals(ModeEntreSorti.VENTE_EN_GROS)) {
                 lignelivraisonfournisseur.setPrixachat(magasinarticle.getIdarticle().getCoutachat());
                 lignelivraisonfournisseur.setUnite(magasinarticle.getIdarticle().getUnite());
                 lignelivraisonfournisseur.setIdunite(magasinarticle.getIdarticle().getIdunite());

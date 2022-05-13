@@ -6,6 +6,8 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.AbstractList;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Entity;
@@ -44,13 +46,13 @@ public class Magasinarticle implements Serializable {
     @NotNull
     private Long idmagasinarticle;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    private Double quantite;
-    private Double quantitemultiple;
-    private Double unite;
+    private double quantite;
+    private double quantitemultiple;
+    private double unite;
     private Boolean etat;
-    private Double quantitereduite;
-    private Double quantitevirtuelle;
-    private Double quantitesecurite;
+    private double quantitereduite;
+    private double quantitevirtuelle;
+    private double quantitesecurite;
     @JoinColumn(name = "idarticle", referencedColumnName = "idarticle")
     @ManyToOne(fetch = FetchType.LAZY)
     private Article idarticle;
@@ -62,13 +64,27 @@ public class Magasinarticle implements Serializable {
     @OneToMany(mappedBy = "idmagasinarticle", fetch = FetchType.LAZY)
     private List<Magasinlot> magasinlotList;
 
+    
+    private void initConstructor(){
+        this.quantitemultiple = 0;
+        this.quantitereduite = 0;
+        this.quantitesecurite = 0;
+        this.quantite = 0;
+        this.unite = 0;
+        this.magasinlotList = new ArrayList<>();
+        this.lignedemandeList = new ArrayList<>();
+    }
+    
     public Magasinarticle() {
+        super();
         idarticle = new Article();
         idmagasin = new Magasin();
+        this.initConstructor();
     }
 
     public Magasinarticle(Long idmagasinarticle) {
         this.idmagasinarticle = idmagasinarticle;
+        this.initConstructor();
     }
 
     public Long getIdmagasinarticle() {
@@ -79,27 +95,27 @@ public class Magasinarticle implements Serializable {
         this.idmagasinarticle = idmagasinarticle;
     }
 
-    public Double getQuantite() {
+    public double getQuantite() {
         return quantite;
     }
 
-    public void setQuantite(Double quantite) {
+    public void setQuantite(double quantite) {
         this.quantite = quantite;
     }
 
-    public Double getQuantitemultiple() {
+    public double getQuantitemultiple() {
         return quantitemultiple;
     }
 
-    public void setQuantitemultiple(Double quantitemultiple) {
+    public void setQuantitemultiple(double quantitemultiple) {
         this.quantitemultiple = quantitemultiple;
     }
 
-    public Double getUnite() {
+    public double getUnite() {
         return unite;
     }
 
-    public void setUnite(Double unite) {
+    public void setUnite(double unite) {
         this.unite = unite;
     }
 
@@ -115,23 +131,23 @@ public class Magasinarticle implements Serializable {
         return quantitereduite;
     }
 
-    public void setQuantitereduite(Double quantitereduite) {
+    public void setQuantitereduite(double quantitereduite) {
         this.quantitereduite = quantitereduite;
     }
 
-    public Double getQuantitevirtuelle() {
+    public double getQuantitevirtuelle() {
         return quantitevirtuelle;
     }
 
-    public void setQuantitevirtuelle(Double quantitevirtuelle) {
+    public void setQuantitevirtuelle(double quantitevirtuelle) {
         this.quantitevirtuelle = quantitevirtuelle;
     }
 
-    public Double getQuantitesecurite() {
+    public double getQuantitesecurite() {
         return quantitesecurite;
     }
 
-    public void setQuantitesecurite(Double quantitesecurite) {
+    public void setQuantitesecurite(double quantitesecurite) {
         this.quantitesecurite = quantitesecurite;
     }
 

@@ -623,8 +623,8 @@ public class PrintUtils {
                 table.addCell(createPdfPCell(" " + Utilitaires.formatPrenomMaj(llc.getIdlot().getIdarticle().getLibelle()), 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
                 table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(llc.getQuantite()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
                 table.addCell(createPdfPCell(" " + Utilitaires.formatPrenomMaj(llc.getIdunite().getLibelle()), 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
-                table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(llc.getPrixUnitaire().intValue()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
-                table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(llc.getMontant().intValue()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(llc.getPrixUnitaire()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(llc.getMontant()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
             }
 
             table.addCell(createPdfPCell("Total ", 2, 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
@@ -1093,11 +1093,11 @@ public class PrintUtils {
                 table.addCell(createPdfPCell("" + compteur, 2, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0)));
                 table.addCell(createPdfPCell("" + Utilitaires.formatPrenomMaj(ml.getIdlot().getIdarticle().getLibelle()), 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
                 table.addCell(createPdfPCell("" + ml.getIdlot().getNumero(), 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
-                table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(ml.getIdlot().getPrixunitaire()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(ml.getIdlot().getIdarticle().getPrixunit()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
                 table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(ml.getQuantite().intValue()), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
-                Double value = (ml.getIdlot().getPrixunitaire() * ml.getQuantite());
+                Double value = (ml.getIdlot().getIdarticle().getPrixunit() * ml.getQuantite());
                 montantTotal += value;
-                table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney((value.intValue())), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(value), 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
                 compteur++;
             }
 
@@ -1211,7 +1211,7 @@ public class PrintUtils {
                             table.addCell(createPdfPCell(" / ", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
                         }
 
-                        table.addCell(createPdfPCell("" + l.getQteAvant().intValue(), 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                        table.addCell(createPdfPCell("" + l.getQteAvant(), 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
 
                         if (l.getQteentree() == 0d) {
                             table.addCell(createPdfPCell(" / ", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
@@ -1225,7 +1225,7 @@ public class PrintUtils {
                             table.addCell(createPdfPCell(" / ", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
                             table.addCell(createPdfPCell(" / ", 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
                         } else {
-                            table.addCell(createPdfPCell(" " + l.getQtesortie().intValue(), 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
+                            table.addCell(createPdfPCell(" " + l.getQtesortie(), 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
                             table.addCell(createPdfPCell(" " + l.getClient(), 2, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0)));
                         }
 

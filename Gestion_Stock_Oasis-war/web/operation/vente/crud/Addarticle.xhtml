@@ -15,6 +15,8 @@
                   resizable="true" appendTo="@(body)" 
                   header="#{langue.ajouter_un_article}">
             <h:form id="ArticleCreateForm">
+
+
                 <h:panelGroup id="display">
 
                     <p:messages id="growl" closable="true">
@@ -32,27 +34,35 @@
                         </p:selectOneMenu>
                         <p:message for="famille"/>
 
-                        <p:outputLabel value="#{langue.lots}" for="lot"/>
-                        <p:selectOneMenu required="true" id="lot" filter="true" filterMatchMode="contains"  value="#{sortiedirectController.magasinlot}" converter="magasinlotConverter">
+
+                        <p:outputLabel value="#{langue.article}" for="lot"/>
+                        <p:selectOneMenu required="true" id="lot" filter="true" filterMatchMode="contains"  value="#{sortiedirectController.magasinlot.idmagasinlot}">
                             <f:selectItem itemLabel="#{langue.choisir}" itemValue="#{null}"/>
-                            <f:selectItems value="#{sortiedirectController.magasinlots}" var="lot" itemLabel="#{lot.idlot.idarticle.libelle} #{lot.idlot.numero}" itemValue="#{lot}"/>
-                            <p:ajax update="cu,sr,qt,qpu,quantite,mt,mode,famille" listener="#{sortiedirectController.updatedataLot()}"/>
+                            <f:selectItems value="#{sortiedirectController.magasinlots}" var="lot" itemLabel="#{lot.idlot.idarticle.libelle}" itemValue="#{lot.idmagasinlot}"/>
+                            <p:ajax update="display" listener="#{sortiedirectController.updatedataLot()}"/>
                         </p:selectOneMenu>
                         <p:message for="lot"/>
-                        
+
+
                         <p:outputLabel value="Mode" for="mode"/>
                         <p:selectOneMenu required="true" id="mode" filter="true" filterMatchMode="contains" value="#{sortiedirectController.lignelivraisonclient.modeVente}">
-                            <f:selectItem itemLabel="VENTE_EN_GROS" itemValue="VENTE_EN_GROS"/>
-                            <f:selectItem itemLabel="VENTE_EN_DETAIL" itemValue="VENTE_EN_DETAIL"/>
-                            <p:ajax update="sr,cu,famille,lot,qt,qpu,quantite,mt" listener="#{sortiedirectController.updatePrixGrosAndDetail()}"/>
+                            <f:selectItem itemLabel="VENTE EN GROS" itemValue="VENTE_EN_GROS"/>
+                            <f:selectItem itemLabel="VENTE EN DETAIL" itemValue="VENTE_EN_DETAIL"/>
+                            <p:ajax update="display" listener="#{sortiedirectController.updatePrixGrosAndDetail()}"/>
                         </p:selectOneMenu>
                         <p:message for="mode"/>
 
-                        <p:outputLabel value="#{langue.stock_disponible}" for="sr" />
-                        <p:inputText id="sr" disabled="true"  required="true" style="width: 100px;color: blue" value="#{sortiedirectController.magasinlot.quantite}">
+                        <p:outputLabel  value="#{langue.stock_disponible} GROS" for="sr" />
+                        <p:inputText  id="sr" disabled="true"  required="true" style="width: 100px;color: blue" value="#{sortiedirectController.magasinlot.quantite}">
                             <f:convertNumber/>
                         </p:inputText>
-                        <p:message for="sr"/>
+                        <p:message  for="sr"/>
+
+                        <p:outputLabel  value="#{langue.stock_disponible} DETAIL" for="sr_d" />
+                        <p:inputText  id="sr_d" disabled="true"  required="true" style="width: 100px;color: blue" value="#{sortiedirectController.magasinlot.quantitemultiple}">
+                            <f:convertNumber/>
+                        </p:inputText>
+                        <p:message  for="sr_d"/>
 
                         <p:outputLabel value="#{langue.prix_unitaire}" for="cu" />
                         <p:inputText id="cu"  required="true" style="width: 200px" value="#{sortiedirectController.lignelivraisonclient.prixUnitaire}">
@@ -85,7 +95,7 @@
                             <p:ajax/>
                         </p:inputText>
                         <p:message for="mt"/>
-                                                
+
                     </h:panelGrid>
 
                     <p:separator/>

@@ -15,14 +15,14 @@ import utils.JsfUtil;
 public class UniteConverter implements Converter {
 
     @EJB
-    private UniteFacadeLocal ejbFacade;
+    private UniteFacadeLocal uniteFacadeLocal;
 
     @Override
     public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
         if ((value == null) || (value.length() == 0) || (JsfUtil.isDummySelectItem(component, value))) {
             return null;
         }
-        return this.ejbFacade.find(getKey(value));
+        return this.uniteFacadeLocal.find(getKey(value));
     }
 
     Long getKey(String value) {

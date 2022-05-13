@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="EditPriceProduitDlg" 
+                  widgetVar="EditPriceProduitDialog" 
+                  modal="true" resizable="false"
+                  appendTo="@(body)"
+                  width="70%"
+                  closable="false"
+                  header="#{langue.ajouter_photo}" 
+                  closeOnEscape="false">
+
+            <h:form id="EditPriceProduitForm" enctype="multipart/form-data">
+                <p:growl id="messages" showDetail="true"/>
+
+                <div class="row">
+                    <div class="col-md-8">
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Edition des prix magasin
+                            </div>
+
+                            <div class="panel-body">
+
+                                <p:dataTable id="datalist" 
+                                             value="#{articleController.lots}" 
+                                             var="item"                             
+                                             paginator="true"
+                                             editable="true" 
+                                             rowKey="#{item.idlot}"
+                                             rows="#{articleController.lots.size()}"                                 
+                                             style="width: 98%;margin-left: 1%"
+                                             rowIndexVar="index"
+                                             emptyMessage="#{langue.tableau_vide}"
+                                             widgetVar="fonctionTable"
+                                             draggableColumns="true"
+                                             resizableColumns="true">
+
+                                    <f:facet name="header"> 
+                                        <h:outputText value="#{langue.element_de_facture}"/>
+                                    </f:facet> 
+
+                                    <p:column style="width: 30%" filterBy="#{item.idarticle.libelle}" filterMatchMode="contains" >
+                                        <f:facet name="header">
+                                            <h:outputText value="#{langue.article}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.idarticle.libelle}"/>
+                                    </p:column>
+
+                                    <p:column style="width: 29%" filterBy="#{item.numero}" filterMatchMode="contains" >
+                                        <f:facet name="header">
+                                            <h:outputText value="#{langue.lot}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.numero}"/>
+                                    </p:column>
+
+                                    <p:column style="width: 10%;text-align: right" headerText="#{langue.pu}">
+                                        <p:cellEditor>
+                                            <f:facet name="output">
+                                                <h:outputText value="#{item.prixachat}" >
+                                                    <f:convertNumber />
+                                                </h:outputText>    
+                                            </f:facet>
+                                            <f:facet name="input">
+                                                <p:inputText required="true" value="#{item.prixunitaire}">
+                                                    <f:convertNumber />
+                                                    <p:ajax event="keyup"/>
+                                                </p:inputText>
+                                            </f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+
+                                    
+                                </p:dataTable>
+
+                                <br />
+
+                                <p:commandButton value="#{langue.fermer}" actionListener="#{articleController.closeEditPriceDialog()}" update=":actionsForm, :ArticleListerForm" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </h:form>
+
+        </p:dialog> 
+
+    </ui:composition>
+
+</html>

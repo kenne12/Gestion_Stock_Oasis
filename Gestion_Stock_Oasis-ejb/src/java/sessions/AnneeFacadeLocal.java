@@ -32,4 +32,7 @@ public interface AnneeFacadeLocal {
     Annee findOneActive();
 
     Annee findOneDefault();
+
+    void unsetDefaultForOtherYear(Integer idannee);
+  
 }

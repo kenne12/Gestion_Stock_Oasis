@@ -28,6 +28,7 @@ public class AnneeController extends AbstractAnneCtrl implements AnneeInterfaceC
             } else {
                 this.annee = new Annee();
                 this.annee.setEtat(true);
+                this.annee.setDefaultYear(true);
                 RequestContext.getCurrentInstance().execute("PF('AnneeCreerDialog').show()");
             }
         } catch (Exception e) {
@@ -83,10 +84,18 @@ public class AnneeController extends AbstractAnneCtrl implements AnneeInterfaceC
                 RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
             } else {
                 this.anneeFacadeLocal.edit(this.selectedAnnee);
+                
                 Utilitaires.saveOperation(this.mouchardFacadeLocal, "Modification de l'exercice -> " + this.selectedAnnee.getNom(), SessionMBean.getUserAccount());
                 this.modifier = this.detail = this.supprimer = true;
-                this.selectedAnnee = null;
+                
 
+                
+                if(this.selectedAnnee.isDefaultYear()){
+                    anneeFacadeLocal.unsetDefaultForOtherYear(this.selectedAnnee.getIdannee());
+                }
+                
+                this.selectedAnnee = new Annee();
+                
                 RequestContext.getCurrentInstance().execute("PF('AnneeModifierDialog').hide()");
                 this.routine.feedBack("information", "/resources/tool_images/success.png", this.routine.localizeMessage("operation_reussie"));
                 RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");

@@ -5,10 +5,13 @@
  */
 package entities;
 
+import enumeration.ModeEntreSorti;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -25,13 +28,20 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Lignelivraisonclient.findAll", query = "SELECT l FROM Lignelivraisonclient l"),
-    @NamedQuery(name = "Lignelivraisonclient.findByIdlignelivraisonclient", query = "SELECT l FROM Lignelivraisonclient l WHERE l.idlignelivraisonclient = :idlignelivraisonclient"),
-    @NamedQuery(name = "Lignelivraisonclient.findByQuantite", query = "SELECT l FROM Lignelivraisonclient l WHERE l.quantite = :quantite"),
-    @NamedQuery(name = "Lignelivraisonclient.findByTauxsatisfaction", query = "SELECT l FROM Lignelivraisonclient l WHERE l.tauxsatisfaction = :tauxsatisfaction"),
-    @NamedQuery(name = "Lignelivraisonclient.findByQuantitemultiple", query = "SELECT l FROM Lignelivraisonclient l WHERE l.quantitemultiple = :quantitemultiple"),
-    @NamedQuery(name = "Lignelivraisonclient.findByUnite", query = "SELECT l FROM Lignelivraisonclient l WHERE l.unite = :unite"),
-    @NamedQuery(name = "Lignelivraisonclient.findByMontant", query = "SELECT l FROM Lignelivraisonclient l WHERE l.montant = :montant"),
+    @NamedQuery(name = "Lignelivraisonclient.findAll", query = "SELECT l FROM Lignelivraisonclient l")
+    ,
+    @NamedQuery(name = "Lignelivraisonclient.findByIdlignelivraisonclient", query = "SELECT l FROM Lignelivraisonclient l WHERE l.idlignelivraisonclient = :idlignelivraisonclient")
+    ,
+    @NamedQuery(name = "Lignelivraisonclient.findByQuantite", query = "SELECT l FROM Lignelivraisonclient l WHERE l.quantite = :quantite")
+    ,
+    @NamedQuery(name = "Lignelivraisonclient.findByTauxsatisfaction", query = "SELECT l FROM Lignelivraisonclient l WHERE l.tauxsatisfaction = :tauxsatisfaction")
+    ,
+    @NamedQuery(name = "Lignelivraisonclient.findByQuantitemultiple", query = "SELECT l FROM Lignelivraisonclient l WHERE l.quantitemultiple = :quantitemultiple")
+    ,
+    @NamedQuery(name = "Lignelivraisonclient.findByUnite", query = "SELECT l FROM Lignelivraisonclient l WHERE l.unite = :unite")
+    ,
+    @NamedQuery(name = "Lignelivraisonclient.findByMontant", query = "SELECT l FROM Lignelivraisonclient l WHERE l.montant = :montant")
+    ,
     @NamedQuery(name = "Lignelivraisonclient.findByQuantitereduite", query = "SELECT l FROM Lignelivraisonclient l WHERE l.quantitereduite = :quantitereduite")})
 public class Lignelivraisonclient implements Serializable {
 
@@ -41,14 +51,14 @@ public class Lignelivraisonclient implements Serializable {
     @NotNull
     private Long idlignelivraisonclient;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    private Double quantite;
-    private Double tauxsatisfaction;
-    private Double quantitemultiple;
-    private Double unite;
-    private Double montant;
+    private double quantite;
+    private double tauxsatisfaction;
+    private double quantitemultiple;
+    private double unite;
+    private double montant;
     @Column(name = "prixunitaire")
-    private Double prixUnitaire;
-    private Double quantitereduite;
+    private double prixUnitaire;
+    private double quantitereduite;
     private double marge;
     @Column(name = "prixachat")
     private double prixAchat;
@@ -68,7 +78,8 @@ public class Lignelivraisonclient implements Serializable {
     private Unite idunite;
 
     @Column(name = "mode_vente", length = 15)
-    private String modeVente;
+    @Enumerated(EnumType.STRING)
+    private ModeEntreSorti modeVente;
 
     public Lignelivraisonclient() {
     }
@@ -85,51 +96,51 @@ public class Lignelivraisonclient implements Serializable {
         this.idlignelivraisonclient = idlignelivraisonclient;
     }
 
-    public Double getQuantite() {
+    public double getQuantite() {
         return quantite;
     }
 
-    public void setQuantite(Double quantite) {
+    public void setQuantite(double quantite) {
         this.quantite = quantite;
     }
 
-    public Double getTauxsatisfaction() {
+    public double getTauxsatisfaction() {
         return tauxsatisfaction;
     }
 
-    public void setTauxsatisfaction(Double tauxsatisfaction) {
+    public void setTauxsatisfaction(double tauxsatisfaction) {
         this.tauxsatisfaction = tauxsatisfaction;
     }
 
-    public Double getQuantitemultiple() {
+    public double getQuantitemultiple() {
         return quantitemultiple;
     }
 
-    public void setQuantitemultiple(Double quantitemultiple) {
+    public void setQuantitemultiple(double quantitemultiple) {
         this.quantitemultiple = quantitemultiple;
     }
 
-    public Double getUnite() {
+    public double getUnite() {
         return unite;
     }
 
-    public void setUnite(Double unite) {
+    public void setUnite(double unite) {
         this.unite = unite;
     }
 
-    public Double getMontant() {
+    public double getMontant() {
         return montant;
     }
 
-    public void setMontant(Double montant) {
+    public void setMontant(double montant) {
         this.montant = montant;
     }
 
-    public Double getQuantitereduite() {
+    public double getQuantitereduite() {
         return quantitereduite;
     }
 
-    public void setQuantitereduite(Double quantitereduite) {
+    public void setQuantitereduite(double quantitereduite) {
         this.quantitereduite = quantitereduite;
     }
 
@@ -165,11 +176,11 @@ public class Lignelivraisonclient implements Serializable {
         this.idunite = idunite;
     }
 
-    public Double getPrixUnitaire() {
+    public double getPrixUnitaire() {
         return prixUnitaire;
     }
 
-    public void setPrixUnitaire(Double prixUnitaire) {
+    public void setPrixUnitaire(double prixUnitaire) {
         this.prixUnitaire = prixUnitaire;
     }
 
@@ -197,11 +208,11 @@ public class Lignelivraisonclient implements Serializable {
         this.prixVente = prixVente;
     }
 
-    public String getModeVente() {
+    public ModeEntreSorti getModeVente() {
         return modeVente;
     }
 
-    public void setModeVente(String modeVente) {
+    public void setModeVente(ModeEntreSorti modeVente) {
         this.modeVente = modeVente;
     }
 
@@ -227,7 +238,7 @@ public class Lignelivraisonclient implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Lignelivraisonclient[ idlignelivraisonclient=" + idlignelivraisonclient + " ]";
+        return "Lignelivraisonclient{" + "idlignelivraisonclient=" + idlignelivraisonclient + ", quantite=" + quantite + ", tauxsatisfaction=" + tauxsatisfaction + ", quantitemultiple=" + quantitemultiple + ", unite=" + unite + ", montant=" + montant + ", prixUnitaire=" + prixUnitaire + ", quantitereduite=" + quantitereduite + ", marge=" + marge + ", prixAchat=" + prixAchat + ", prixVente=" + prixVente + ", idlivraisonclient=" + idlivraisonclient + ", idlot=" + idlot + ", idmagasinlot=" + idmagasinlot + ", idunite=" + idunite + ", modeVente=" + modeVente + '}';
     }
 
 }

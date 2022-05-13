@@ -24,14 +24,13 @@ public class AnneeFacade extends AbstractFacade<Annee> implements AnneeFacadeLoc
 
     @Override
     public Integer nextVal() {
-        Query query = this.em.createQuery("SELECT MAX(a.idannee) FROM Annee a");
-        Integer result = (Integer) query.getSingleResult();
-        if (result == null) {
-            result = (1);
-        } else {
-            result = result + 1;
+        try {
+            Query query = this.em.createQuery("SELECT MAX(a.idannee) FROM Annee a");
+            Integer result = (Integer) query.getSingleResult();
+            return result == null ? 1 : (result+1);
+        } catch (Exception e) {
+            return 1;
         }
-        return result;
     }
 
     @Override
@@ -71,11 +70,18 @@ public class AnneeFacade extends AbstractFacade<Annee> implements AnneeFacadeLoc
 
     @Override
     public Annee findOneDefault() {
-        List annees = this.em.createQuery("SELECT a FROM Annee a WHERE a.defaultYear=true ORDER BY a.nom")
+        List annees = this.em.createQuery("SELECT a FROM Annee a WHERE a.defaultYear=true ORDER BY a.nom DESC")
                 .getResultList();
         if (!annees.isEmpty()) {
             return (Annee) annees.get(0);
         }
         return null;
+    }
+
+    @Override
+    public void unsetDefaultForOtherYear(Integer idannee) {
+        this.em.createQuery("UPDATE Annee a set a.defaultYear = false WHERE a.idannee!= :idannee")
+                .setParameter("idannee", idannee)
+                .executeUpdate();
     }
 }

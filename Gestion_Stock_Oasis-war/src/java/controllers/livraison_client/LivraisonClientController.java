@@ -9,6 +9,7 @@ import entities.Livraisonclient;
 import entities.Lot;
 import entities.Magasinarticle;
 import entities.Magasinlot;
+import enumeration.ModePayement;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Date;
@@ -57,7 +58,7 @@ public class LivraisonClientController extends AbstractLivraisonClientController
             this.livraisonclient = new Livraisonclient();
             this.livraisonclient.setClient(new Client());
             this.livraisonclient.setDatelivraison(SessionMBean.getJournee().getDateJour());
-            this.livraisonclient.setModePayement("PAYE_COMPTANT");
+            this.livraisonclient.setModePayement(ModePayement.PAYE_COMPTANT);
             this.livraisonclient.setMontant(0d);
 
             this.lignelivraisonclients.clear();
@@ -307,7 +308,7 @@ public class LivraisonClientController extends AbstractLivraisonClientController
                         }
                     }
 
-                    if (livraisonclient.getModePayement().equalsIgnoreCase("PAYE_A_CREDIT")) {
+                    if (livraisonclient.getModePayement().equals(ModePayement.PAYE_A_CREDIT)) {
                         if (livraisonclient.getAvanceInitiale() > livraisonclient.getMontantTtc()) {
                             notifyError("montant_avance_incorrect");
                             return;

@@ -12,7 +12,7 @@
             <p:effect type="pulsate" event="load" delay="50" />
         </p:messages>
 
-        <p:panel header="#{langue['Conv.ListeDes']} : #{langue.magasins}" style="width: 75%;">
+        <p:panel header="#{langue['Conv.ListeDes']} : #{langue.magasins}" style="width: 100%;">
             <p:contextMenu id="MagasinDataTableContextMenu" for="datalist">  
                 <p:menuitem value="#{langue['Conv.Creer']}" onclick="document.getElementById('actionsForm:creer').click();" icon="ui-icon-plus"/>
                 <p:menuitem value="#{langue['Conv.Detail']}" onclick="document.getElementById('actionsForm:detail').click();" icon="ui-icon-search"/>
@@ -40,14 +40,28 @@
                     <h:outputText value="#{item.code}"/>
                 </p:column>
 
-                <p:column filterBy="#{item.nom}" style="width: 70%">
+                <p:column filterBy="#{item.nom}" style="width: 40%">
                     <f:facet name="header">
                         <h:outputText value="#{langue.nom}"/>
                     </f:facet>
                     <h:outputText value="#{item.nom}"/>
                 </p:column>
                 
-                <p:column style="width: 10%;text-align: center">
+                <p:column  style="width: 17%">
+                    <f:facet name="header">
+                        <h:outputText value="ME Défaut"/>
+                    </f:facet>
+                    <h:outputText value="#{item.modeEntreDefault}"/>
+                </p:column>
+                
+                <p:column  style="width: 17%">
+                    <f:facet name="header">
+                        <h:outputText value="MS Défaut"/>
+                    </f:facet>
+                    <h:outputText value="#{item.modeSortiDefault}"/>
+                </p:column>
+                
+                <p:column style="width: 11%;text-align: center">
                     <f:facet name="header">
                         <h:outputText value="#{langue.central} ?"/>
                     </f:facet>

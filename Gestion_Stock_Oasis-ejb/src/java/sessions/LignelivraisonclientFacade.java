@@ -25,9 +25,9 @@ public class LignelivraisonclientFacade extends AbstractFacade<Lignelivraisoncli
 
     @Override
     public Long nextVal() {
-        Query query = this.em.createQuery("SELECT MAX(l.idlignelivraisonclient) FROM Lignelivraisonclient l");
         try {
-            return ((Long) query.getResultList().get(0)) + 1l;
+            Query query = this.em.createQuery("SELECT MAX(l.idlignelivraisonclient) FROM Lignelivraisonclient l");
+            return ((Long) query.getSingleResult()) + 1l;
         } catch (Exception e) {
             return 1L;
         }
@@ -66,9 +66,9 @@ public class LignelivraisonclientFacade extends AbstractFacade<Lignelivraisoncli
         query.setParameter("idLot", idMagasinLot).setParameter("dateDebut", dateDebut).setParameter("dateFin", dateFin);
         return query.getResultList();
     }
-    
+
     @Override
-    public void deleteByIdarticle(long idarticle){
+    public void deleteByIdarticle(long idarticle) {
         em.createQuery("DELETE FROM Lignelivraisonclient l WHERE l.idmagasinlot.idmagasinarticle.idarticle.idarticle=:idArticle")
                 .setParameter("idArticle", idarticle)
                 .executeUpdate();
