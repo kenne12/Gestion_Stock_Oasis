@@ -186,6 +186,14 @@ public class AnalyseRecetteController extends AbstratAnalyseRecetteController im
         return JsfUtil.formaterStringMoney(montant);
     }
 
+    public String formatMoneyAmount(Double value) {
+        return JsfUtil.formaterStringMoney(value.intValue());
+    }
+
+    public String roundAndFormat(double value) {
+        return JsfUtil.formaterStringMoney(Math.ceil(value));
+    }
+
     public void print() {
         try {
             Map m = new HashMap();

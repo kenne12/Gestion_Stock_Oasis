@@ -16,13 +16,13 @@
                 <h:panelGrid columns="6">
 
                     <p:outputLabel for="magasin" value="#{langue.magasin}"/>
-                    <p:selectOneMenu id="magasin" filter="true" filterMatchMode="contains" value="#{analyseRecetteController.magasin}" converter="magasinConverter">
-                        <f:selectItems value="#{analyseRecetteController.magasins}" var="item" itemLabel="#{item.nom}" itemValue="#{item}"/>
+                    <p:selectOneMenu id="magasin" filter="true" filterMatchMode="contains" value="#{analyseRecetteController.magasin.idmagasin}" >
+                        <f:selectItems value="#{analyseRecetteController.magasins}" var="item" itemLabel="#{item.nom}" itemValue="#{item.idmagasin}"/>
                     </p:selectOneMenu>
                     
                     <p:outputLabel value="#{langue.exercice}" for="exercice"/>
-                    <p:selectOneMenu id="exercice" filter="true" filterMatchMode="contains" value="#{analyseRecetteController.annee}" converter="anneeConverter">
-                        <f:selectItems value="#{analyseRecetteController.annees}" var="annee" itemLabel="#{annee.nom}" itemValue="#{annee}"/>
+                    <p:selectOneMenu id="exercice" filter="true" filterMatchMode="contains" value="#{analyseRecetteController.annee.idannee}" >
+                        <f:selectItems value="#{analyseRecetteController.annees}" var="annee" itemLabel="#{annee.nom}" itemValue="#{annee.idannee}"/>
                     </p:selectOneMenu>
                     
                     <p:commandButton id="recherche"

@@ -44,7 +44,7 @@
                         <h:outputText value="#{langue.total}"/>
                     </f:facet>
                     <h:outputText value="#{item.montantTotal}">
-                        <f:convertNumber/>
+                        <f:convertNumber pattern="0"/>
                     </h:outputText>
                 </p:column>
 
@@ -53,7 +53,7 @@
                         <h:outputText value="%"/>
                     </f:facet>
                     <h:outputText value="#{item.pourcentage}">
-                        <f:convertNumber/>
+                        <f:convertNumber pattern="0.0"/>
                     </h:outputText>
                 </p:column>
 
@@ -62,7 +62,7 @@
                         <h:outputText value="JAN"/>
                     </f:facet>
                     <h:outputText value="#{item.valeurJanv}">
-                        <f:convertNumber/>
+                        <f:convertNumber pattern="0"/>
                     </h:outputText>
                 </p:column>
 
@@ -71,7 +71,7 @@
                         <h:outputText value="FEV"/>
                     </f:facet>
                     <h:outputText value="#{item.valeurFev}">
-                        <f:convertNumber/>
+                        <f:convertNumber pattern="0"/>
                     </h:outputText>
                 </p:column>
 
@@ -80,7 +80,7 @@
                         <h:outputText value="MAR"/>
                     </f:facet>
                     <h:outputText value="#{item.valeurMars}">
-                        <f:convertNumber/>
+                        <f:convertNumber pattern="0"/>
                     </h:outputText>
                 </p:column>
 
@@ -89,7 +89,7 @@
                         <h:outputText value="AVR"/>
                     </f:facet>
                     <h:outputText value="#{item.valeurAvr}">
-                        <f:convertNumber/>
+                        <f:convertNumber pattern="0"/>
                     </h:outputText>
                 </p:column>
 
@@ -98,7 +98,7 @@
                         <h:outputText value="MAI"/>
                     </f:facet>
                     <h:outputText value="#{item.valeurMai}">
-                        <f:convertNumber/>
+                        <f:convertNumber pattern="0"/>
                     </h:outputText>
                 </p:column>
 
@@ -107,7 +107,7 @@
                         <h:outputText value="JUIN"/>
                     </f:facet>
                     <h:outputText value="#{item.valeurJuin}">
-                        <f:convertNumber/>
+                        <f:convertNumber pattern="0"/>
                     </h:outputText>
                 </p:column>
 
@@ -116,7 +116,7 @@
                         <h:outputText value="JUIL"/>
                     </f:facet>
                     <h:outputText value="#{item.valeurJuil}">
-                        <f:convertNumber/>
+                        <f:convertNumber pattern="0"/>
                     </h:outputText>
                 </p:column>
 
@@ -125,7 +125,7 @@
                         <h:outputText value="AOU"/>
                     </f:facet>
                     <h:outputText value="#{item.valeurAout}">
-                        <f:convertNumber/>
+                        <f:convertNumber pattern="0"/>
                     </h:outputText>
                 </p:column>
 
@@ -134,7 +134,7 @@
                         <h:outputText value="SEP"/>
                     </f:facet>
                     <h:outputText value="#{item.valeurSept}">
-                        <f:convertNumber/>
+                        <f:convertNumber pattern="0"/>
                     </h:outputText>
                 </p:column>
 
@@ -143,7 +143,7 @@
                         <h:outputText value="OCT"/>
                     </f:facet>
                     <h:outputText value="#{item.valeurOct}">
-                        <f:convertNumber/>
+                        <f:convertNumber pattern="0"/>
                     </h:outputText>
                 </p:column>
 
@@ -152,7 +152,7 @@
                         <h:outputText value="NOV"/>
                     </f:facet>
                     <h:outputText value="#{item.valeurNov}">
-                        <f:convertNumber/>
+                        <f:convertNumber pattern="0"/>
                     </h:outputText>
                 </p:column>
 
@@ -161,27 +161,27 @@
                         <h:outputText value="DEC"/>
                     </f:facet>
                     <h:outputText value="#{item.valeurDec}">
-                        <f:convertNumber/>
+                        <f:convertNumber pattern="0"/>
                     </h:outputText>
                 </p:column>
 
                 <p:columnGroup type="footer">
                     <p:row>
                         <p:column colspan="2" style="text-align:right" footerText="Totaux" />        
-                        <p:column style="text-align: right" footerText="#{analyseDepenseController.formatMoney(analyseDepenseController.montantTotal)}"/>
-                        <p:column style="text-align: right" footerText="#{analyseDepenseController.formatMoney(analyseDepenseController.pourcentage)}"/>
-                        <p:column style="text-align: right" footerText="#{analyseDepenseController.formatMoney(analyseDepenseController.valeurJanv)}" />
-                        <p:column style="text-align: right" footerText="#{analyseDepenseController.formatMoney(analyseDepenseController.valeurFev)}" />
-                        <p:column style="text-align: right" footerText="#{analyseDepenseController.formatMoney(analyseDepenseController.valeurMars)}" />
-                        <p:column style="text-align: right" footerText="#{analyseDepenseController.formatMoney(analyseDepenseController.valeurAvr)}" />
-                        <p:column style="text-align: right" footerText="#{analyseDepenseController.formatMoney(analyseDepenseController.valeurMai)}" />
-                        <p:column style="text-align: right" footerText="#{analyseDepenseController.formatMoney(analyseDepenseController.valeurJuin)}" />
-                        <p:column style="text-align: right" footerText="#{analyseDepenseController.formatMoney(analyseDepenseController.valeurJuil)}" />
-                        <p:column style="text-align: right" footerText="#{analyseDepenseController.formatMoney(analyseDepenseController.valeurAout)}" />
-                        <p:column style="text-align: right" footerText="#{analyseDepenseController.formatMoney(analyseDepenseController.valeurSept)}" />
-                        <p:column style="text-align: right" footerText="#{analyseDepenseController.formatMoney(analyseDepenseController.valeurOct)}" />
-                        <p:column style="text-align: right" footerText="#{analyseDepenseController.formatMoney(analyseDepenseController.valeurNov)}" />
-                        <p:column style="text-align: right" footerText="#{analyseDepenseController.formatMoney(analyseDepenseController.valeurDec)}" />
+                        <p:column style="text-align: right" footerText="#{analyseDepenseController.formatMoneyAmount(analyseDepenseController.montantTotal)}"/>
+                        <p:column style="text-align: right" footerText="#{analyseDepenseController.roundAndFormat(analyseDepenseController.pourcentage)}"/>
+                        <p:column style="text-align: right" footerText="#{analyseDepenseController.formatMoneyAmount(analyseDepenseController.valeurJanv)}" />
+                        <p:column style="text-align: right" footerText="#{analyseDepenseController.formatMoneyAmount(analyseDepenseController.valeurFev)}" />
+                        <p:column style="text-align: right" footerText="#{analyseDepenseController.formatMoneyAmount(analyseDepenseController.valeurMars)}" />
+                        <p:column style="text-align: right" footerText="#{analyseDepenseController.formatMoneyAmount(analyseDepenseController.valeurAvr)}" />
+                        <p:column style="text-align: right" footerText="#{analyseDepenseController.formatMoneyAmount(analyseDepenseController.valeurMai)}" />
+                        <p:column style="text-align: right" footerText="#{analyseDepenseController.formatMoneyAmount(analyseDepenseController.valeurJuin)}" />
+                        <p:column style="text-align: right" footerText="#{analyseDepenseController.formatMoneyAmount(analyseDepenseController.valeurJuil)}" />
+                        <p:column style="text-align: right" footerText="#{analyseDepenseController.formatMoneyAmount(analyseDepenseController.valeurAout)}" />
+                        <p:column style="text-align: right" footerText="#{analyseDepenseController.formatMoneyAmount(analyseDepenseController.valeurSept)}" />
+                        <p:column style="text-align: right" footerText="#{analyseDepenseController.formatMoneyAmount(analyseDepenseController.valeurOct)}" />
+                        <p:column style="text-align: right" footerText="#{analyseDepenseController.formatMoneyAmount(analyseDepenseController.valeurNov)}" />
+                        <p:column style="text-align: right" footerText="#{analyseDepenseController.formatMoneyAmount(analyseDepenseController.valeurDec)}" />
                     </p:row>
                 </p:columnGroup>
 

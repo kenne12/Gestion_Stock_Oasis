@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
@@ -310,7 +311,7 @@ public class Utilitaires {
         DateTime dateDebut = new DateTime("" + (date1.getYear() + 1900) + "-" + (date1.getMonth() + 1) + "-" + date1.getDate() + "");
         DateTime dateFin = new DateTime("" + (date2.getYear() + 1900) + "-" + (date2.getMonth() + 1) + "-" + date2.getDate() + "");
 
-        return  Days.daysBetween(dateDebut, dateFin).getDays();
+        return Days.daysBetween(dateDebut, dateFin).getDays();
     }
 
     public static List<Lot> filterNotPeremptLot(List<Lot> lots) {
@@ -336,34 +337,31 @@ public class Utilitaires {
     }
 
     public static List<Magasin> returMagasinByUser(MagasinFacadeLocal magasinFacadeLocal, UtilisateurmagasinFacadeLocal umfl, Personnel personnel) {
-        
-        List<Utilisateurmagasin> listUtilisateurMagasin = umfl.findByIdutilisateur(SessionMBean.getUserAccount().getIdutilisateur());        
+
+        List<Utilisateurmagasin> listUtilisateurMagasin = umfl.findByIdutilisateur(SessionMBean.getUserAccount().getIdutilisateur());
         List<Magasin> listGetByUser = new ArrayList<>();
-        
-        
-        listUtilisateurMagasin.forEach( um->{
-                listGetByUser.add(um.getIdmagasin());
+
+        listUtilisateurMagasin.forEach(um -> {
+            listGetByUser.add(um.getIdmagasin());
         });
-        
-        
-        if(!listGetByUser.contains(personnel.getIdmagasin())){
+
+        if (!listGetByUser.contains(personnel.getIdmagasin())) {
             listGetByUser.add(personnel.getIdmagasin());
         }
-        
+
         boolean flag = false;
-        for(Magasin m : listGetByUser){
-            if(m.getCentral()){
+        for (Magasin m : listGetByUser) {
+            if (m.getCentral()) {
                 flag = true;
-               break;
+                break;
             }
         }
-        
-        if(flag){
+
+        if (flag) {
             listGetByUser.clear();
             listGetByUser.addAll(magasinFacadeLocal.findAllRange(personnel.getIdmagasin().getParametrage().getId()));
         }
-       
-        
+
         /*List<Magasin> magasins = magasinFacadeLocal.findAllRange(personnel.getIdmagasin().getParametrage().getId());
         List<Magasin> listMagasin = new ArrayList();
         listMagasin.add(personnel.getIdmagasin());
@@ -384,13 +382,13 @@ public class Utilitaires {
     }
 
     public static List<Projet> searchProjetctByMagasin(ProjetFacadeLocal pfl, List<Magasin> magasins) {
-        List projets = new ArrayList();
-        
-        for (Magasin m : magasins) {
-            if (!m.getCentral()) {
-                projets.addAll(pfl.findByIdmagasin(m.getIdmagasin()));
-            }
-        }
-        return projets;
+
+        List<Projet> list = new ArrayList<>();
+        magasins.stream().filter((line) -> !line.getCentral())
+                .forEach(line -> {
+                    list.addAll(pfl.findByIdmagasin(line.getIdmagasin()));
+                });
+
+        return list;
     }
 }

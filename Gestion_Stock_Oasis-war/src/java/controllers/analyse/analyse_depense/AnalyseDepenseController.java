@@ -76,18 +76,18 @@ public class AnalyseDepenseController extends AbstractAnalyseDepenseController i
         try {
             this.initAmount();
             analyseRDs.clear();
-            if (this.magasin == null) {
+            if (this.magasin.getIdmagasin() == null || this.magasin.getIdmagasin() == 0) {
                 JsfUtil.addErrorMessage("Veuillez selectionner un magasin");
                 RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
                 return;
             }
-            if (annee == null) {
+            if (annee.getIdannee() == null || annee.getIdannee() == 0) {
                 JsfUtil.addErrorMessage("Veuillez selectionner un exercice");
                 RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
                 return;
             }
-            //annee = anneeFacadeLocal.find(annee.getIdannee());
-            //magasin = magasinFacadeLocal.find(magasin.getIdmagasin());
+            annee = anneeFacadeLocal.find(annee.getIdannee());
+            magasin = magasinFacadeLocal.find(magasin.getIdmagasin());
 
             lignelivraisonfournisseurs = lignelivraisonfournisseurFacadeLocal.findByIdMagasin(magasin.getIdmagasin(), annee.getDateDebut(), annee.getDateFin());
             List<AnneeMois> listMois = anneeMoisFacadeLocal.findByAnnee(annee.getIdannee());
@@ -197,8 +197,16 @@ public class AnalyseDepenseController extends AbstractAnalyseDepenseController i
         }
     }
 
-    public String formatMoney(double montant) {
-        return JsfUtil.formaterStringMoney(montant);
+    public String formatMoney(double value) {
+        return JsfUtil.formaterStringMoney(value);
+    }
+    
+    public String formatMoneyAmount(Double value) {
+        return JsfUtil.formaterStringMoney(value.intValue());
+    }
+    
+    public String roundAndFormat(double value) {
+        return JsfUtil.formaterStringMoney(Math.ceil(value));
     }
 
     public void print() {
