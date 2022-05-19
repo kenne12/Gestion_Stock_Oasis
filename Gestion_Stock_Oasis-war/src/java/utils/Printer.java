@@ -17,9 +17,9 @@ public class Printer {
 
     private static ResourceBundle rs = ResourceBundle.getBundle("langues/langue", FacesContext.getCurrentInstance().getViewRoot().getLocale());
     private static JasperPrint jasperPrint;
-    private static String user = "postgres";
-    private static String password = "batrapi";
-    public static String driver = "org.postgresql.Driver";
+    private static final String user = "postgres";
+    private static final String password = "batrapi";
+    private static String driver = "org.postgresql.Driver";
     private static String url = "jdbc:postgresql://localhost:5432/stock_db_oasis";
     public static Connection con;
 

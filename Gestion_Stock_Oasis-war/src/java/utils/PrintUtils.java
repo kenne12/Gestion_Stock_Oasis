@@ -59,12 +59,16 @@ public class PrintUtils {
     public static PdfPCell createPdfPCell(String sCell, int colspan, int position, Font font) {
         PdfPCell cell = new PdfPCell(new Paragraph(sCell, font));
         cell.setColspan(colspan);
-        if (position == 1) {
-            cell.setHorizontalAlignment(0);
-        } else if (position == 2) {
-            cell.setHorizontalAlignment(1);
-        } else {
-            cell.setHorizontalAlignment(2);
+        switch (position) {
+            case 1:
+                cell.setHorizontalAlignment(0);
+                break;
+            case 2:
+                cell.setHorizontalAlignment(1);
+                break;
+            default:
+                cell.setHorizontalAlignment(2);
+                break;
         }
         return cell;
     }
@@ -72,36 +76,48 @@ public class PrintUtils {
     public static PdfPCell createPdfPCell(String sCell, int colspan, int position) {
         PdfPCell cell = new PdfPCell(new Paragraph(sCell));
         cell.setColspan(colspan);
-        if (position == 1) {
-            cell.setHorizontalAlignment(0);
-        } else if (position == 2) {
-            cell.setHorizontalAlignment(1);
-        } else {
-            cell.setHorizontalAlignment(2);
+        switch (position) {
+            case 1:
+                cell.setHorizontalAlignment(0);
+                break;
+            case 2:
+                cell.setHorizontalAlignment(1);
+                break;
+            default:
+                cell.setHorizontalAlignment(2);
+                break;
         }
         return cell;
     }
 
     public static PdfPCell createPdfPCell(String sCell, int position, Font font) {
         PdfPCell cell = new PdfPCell(new Paragraph(sCell, font));
-        if (position == 1) {
-            cell.setHorizontalAlignment(0);
-        } else if (position == 2) {
-            cell.setHorizontalAlignment(1);
-        } else {
-            cell.setHorizontalAlignment(2);
+        switch (position) {
+            case 1:
+                cell.setHorizontalAlignment(0);
+                break;
+            case 2:
+                cell.setHorizontalAlignment(1);
+                break;
+            default:
+                cell.setHorizontalAlignment(2);
+                break;
         }
         return cell;
     }
 
     public static PdfPCell createPdfPCell(String sCell, int position, Font font, int borderLeft, int borderRight, int borderTop, int borderBottom) {
         PdfPCell cell = new PdfPCell(new Paragraph(sCell, font));
-        if (position == 1) {
-            cell.setHorizontalAlignment(0);
-        } else if (position == 2) {
-            cell.setHorizontalAlignment(1);
-        } else {
-            cell.setHorizontalAlignment(2);
+        switch (position) {
+            case 1:
+                cell.setHorizontalAlignment(0);
+                break;
+            case 2:
+                cell.setHorizontalAlignment(1);
+                break;
+            default:
+                cell.setHorizontalAlignment(2);
+                break;
         }
         cell.setBorderWidthLeft(borderLeft);
         cell.setBorderWidthRight(borderRight);
@@ -113,12 +129,16 @@ public class PrintUtils {
     public static PdfPCell createPdfPCell(String sCell, int position, int colspan, Font font, int borderLeft, int borderRight, int borderTop, int borderBottom) {
         PdfPCell cell = new PdfPCell(new Paragraph(sCell, font));
         cell.setColspan(colspan);
-        if (position == 1) {
-            cell.setHorizontalAlignment(0);
-        } else if (position == 2) {
-            cell.setHorizontalAlignment(1);
-        } else {
-            cell.setHorizontalAlignment(2);
+        switch (position) {
+            case 1:
+                cell.setHorizontalAlignment(0);
+                break;
+            case 2:
+                cell.setHorizontalAlignment(1);
+                break;
+            default:
+                cell.setHorizontalAlignment(2);
+                break;
         }
         cell.setBorderWidthLeft(borderLeft);
         cell.setBorderWidthRight(borderRight);
@@ -131,12 +151,16 @@ public class PrintUtils {
         PdfPCell cell = new PdfPCell(new Paragraph(sCell, font));
         cell.setColspan(colspan);
         cell.setRowspan(rowspan);
-        if (position == 1) {
-            cell.setHorizontalAlignment(0);
-        } else if (position == 2) {
-            cell.setHorizontalAlignment(1);
-        } else {
-            cell.setHorizontalAlignment(2);
+        switch (position) {
+            case 1:
+                cell.setHorizontalAlignment(0);
+                break;
+            case 2:
+                cell.setHorizontalAlignment(1);
+                break;
+            default:
+                cell.setHorizontalAlignment(2);
+                break;
         }
         cell.setBorderWidthLeft(borderLeft);
         cell.setBorderWidthRight(borderRight);
@@ -147,12 +171,16 @@ public class PrintUtils {
 
     public static PdfPCell createPdfPCell(String sCell, int position) {
         PdfPCell cell = new PdfPCell(new Paragraph(sCell));
-        if (position == 1) {
-            cell.setHorizontalAlignment(0);
-        } else if (position == 2) {
-            cell.setHorizontalAlignment(1);
-        } else {
-            cell.setHorizontalAlignment(2);
+        switch (position) {
+            case 1:
+                cell.setHorizontalAlignment(0);
+                break;
+            case 2:
+                cell.setHorizontalAlignment(1);
+                break;
+            default:
+                cell.setHorizontalAlignment(2);
+                break;
         }
         return cell;
     }
@@ -264,11 +292,11 @@ public class PrintUtils {
             /* 283 */ rapport.add(table);
             /* 284 */ rapport.close();
         } catch (DocumentException ex) {
-            /* 287 */ Logger.getLogger(PrintUtils.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PrintUtils.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException ex) {
-            /* 289 */ Logger.getLogger(PrintUtils.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PrintUtils.class.getName()).log(Level.SEVERE, null, ex);
         }
-        /* 291 */ return fileName;
+        return fileName;
     }
 
     public static String printProductReport(List<Article> articles) {
@@ -325,17 +353,18 @@ public class PrintUtils {
     public static String printGeneralStockReport(List<Article> articles) {
         String fileName = "";
         try {
-            /* 411 */ Date date = new Date();
-            /* 412 */ SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-            /* 413 */ fileName = "Fiche_stock_general" + sdf.format(date) + ".pdf";
-            /* 414 */ Document rapport = new Document();
-            /* 415 */ PdfWriter.getInstance(rapport, new FileOutputStream(Utilitaires.path + "/reports/stock/" + fileName));
-            /* 416 */ rapport.open();
-            /* 417 */ float[] widths = {0.5F, 1.5F, 2.9F, 1.0F, 0.8F, 1.2F};
-            /* 418 */ PdfPTable table = new PdfPTable(widths);
-            /* 419 */ table.setWidthPercentage(100.0F);
+            Date date = Date.from(Instant.now());
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            fileName = "Fiche_stock_general" + sdf.format(date) + ".pdf";
+            Document rapport = new Document();
+            PdfWriter.getInstance(rapport, new FileOutputStream(Utilitaires.path + "/reports/stock/" + fileName));
+            rapport.open();
 
-            /* 421 */ Paragraph entreprise = new Paragraph("FREDY BUSINESS", new Font(Font.FontFamily.TIMES_ROMAN, 14.0F, 1));
+            float[] widths = {0.5F, 1.5F, 2.9F, 1.0F, 0.8F, 1.2F};
+            PdfPTable table = new PdfPTable(widths);
+            table.setWidthPercentage(100.0F);
+
+            Paragraph entreprise = new Paragraph("FREDY BUSINESS", new Font(Font.FontFamily.TIMES_ROMAN, 14.0F, 1));
             /* 422 */ entreprise.setAlignment(1);
             /* 423 */ rapport.add(entreprise);
 
@@ -547,7 +576,6 @@ public class PrintUtils {
 
             Double total = 0.0;
             int quantite = 0;
-            int compteur = 1;
 
             table.addCell(createPdfPCell("Totaux", 4, 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0)));
             table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(quantite), 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE)));

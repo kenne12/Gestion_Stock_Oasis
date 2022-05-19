@@ -57,10 +57,7 @@ public class Utilitaires {
             return false;
         }
 
-        if ((new Date().after(lot.getDateperemption())) || (new Date().equals(lot.getDateperemption()))) {
-            return true;
-        }
-        return false;
+        return (new Date().after(lot.getDateperemption())) || (new Date().equals(lot.getDateperemption()));
     }
 
     public static String getExtension(String nomFichier) {
@@ -199,7 +196,7 @@ public class Utilitaires {
 
     public static Double arrondiNDecimales(double x, int n) {
         double pow = Math.pow(10.0D, n);
-        return Double.valueOf(Math.floor(x * pow) / pow);
+        return Math.floor(x * pow) / pow;
     }
 
     public static String formatPrenomMaj(String prenom) {
@@ -226,10 +223,7 @@ public class Utilitaires {
         if (SessionMBean.getAccess().contains((1L))) {
             return true;
         }
-        if (SessionMBean.getAccess().contains(menu)) {
-            return true;
-        }
-        return false;
+        return SessionMBean.getAccess().contains(menu);
     }
 
     public static boolean isDayClosed() {
@@ -240,10 +234,7 @@ public class Utilitaires {
     }
 
     public static boolean checkBenefice(double prix_achat, double prix_vente) {
-        if (prix_vente >= prix_achat) {
-            return true;
-        }
-        return false;
+        return prix_vente >= prix_achat;
     }
 
     public static String genererCodeDemande(String code, Long nextPayement) {
@@ -319,8 +310,7 @@ public class Utilitaires {
         DateTime dateDebut = new DateTime("" + (date1.getYear() + 1900) + "-" + (date1.getMonth() + 1) + "-" + date1.getDate() + "");
         DateTime dateFin = new DateTime("" + (date2.getYear() + 1900) + "-" + (date2.getMonth() + 1) + "-" + date2.getDate() + "");
 
-        Integer nbjr = Integer.valueOf(Days.daysBetween(dateDebut, dateFin).getDays());
-        return nbjr;
+        return  Days.daysBetween(dateDebut, dateFin).getDays();
     }
 
     public static List<Lot> filterNotPeremptLot(List<Lot> lots) {
@@ -395,6 +385,7 @@ public class Utilitaires {
 
     public static List<Projet> searchProjetctByMagasin(ProjetFacadeLocal pfl, List<Magasin> magasins) {
         List projets = new ArrayList();
+        
         for (Magasin m : magasins) {
             if (!m.getCentral()) {
                 projets.addAll(pfl.findByIdmagasin(m.getIdmagasin()));

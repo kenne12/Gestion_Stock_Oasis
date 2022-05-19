@@ -93,7 +93,7 @@ public class JsfUtil {
     }
 
     public static String formaterStringMoney(Long valeur) {
-        String chaine = Long.toString(valeur.longValue());
+        String chaine = Long.toString(valeur);
         if (chaine == null) {
             return null;
         }
@@ -114,7 +114,7 @@ public class JsfUtil {
     }
 
     public static String formaterStringMoney(Integer valeur) {
-        String chaine = Integer.toString(valeur.intValue());
+        String chaine = Integer.toString(valeur);
         if (chaine == null) {
             return null;
         }

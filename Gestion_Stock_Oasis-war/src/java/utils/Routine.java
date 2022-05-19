@@ -39,9 +39,9 @@ public class Routine {
     }
 
     public void feedBack(String type, String icon, String msg) {
-        /*  54 */ this.titleNotify = localizeMessage(type);
-        /*  55 */ this.iconMessage = icon;
-        /*  56 */ this.message = msg;
+        this.titleNotify = localizeMessage(type);
+        this.iconMessage = icon;
+        this.message = msg;
     }
 
     public String convert(String value) {
@@ -60,88 +60,88 @@ public class Routine {
             this.progressLabel = "0%";
         }
         if (operation.equals("progress")) {
-            /*  76 */ this.progress = state;
-            /*  77 */ this.progressLabel = (state + "%");
+            this.progress = state;
+            this.progressLabel = (state + "%");
         }
         if (operation.equals("close")) {
-            /*  80 */ this.showProcessus = "false";
-            /*  81 */ this.showProgress = "false";
+            this.showProcessus = "false";
+            this.showProgress = "false";
         }
     }
 
     public void stopConverse() {
-        /*  86 */ this.converse = "false";
+        this.converse = "false";
     }
 
     public String getTitleNotify() {
-        /*  90 */ return this.titleNotify;
+        return this.titleNotify;
     }
 
     public void setTitleNotify(String titleNotify) {
-        /*  94 */ this.titleNotify = titleNotify;
+        this.titleNotify = titleNotify;
     }
 
     public String getMessage() {
-        /*  98 */ return this.message;
+        return this.message;
     }
 
     public void setMessage(String message) {
-        /* 102 */ this.message = message;
+        this.message = message;
     }
 
     public String getIconMessage() {
-        /* 106 */ return this.iconMessage;
+        return this.iconMessage;
     }
 
     public void setIconMessage(String iconMessage) {
-        /* 110 */ this.iconMessage = iconMessage;
+        this.iconMessage = iconMessage;
     }
 
     public String getProcessus() {
-        /* 114 */ return this.processus;
+        return this.processus;
     }
 
     public void setProcessus(String processus) {
-        /* 118 */ this.processus = processus;
+        this.processus = processus;
     }
 
     public String getShowProcessus() {
-        /* 122 */ return this.showProcessus;
+        return this.showProcessus;
     }
 
     public void setShowProcessus(String showProcessus) {
-        /* 126 */ this.showProcessus = showProcessus;
+        this.showProcessus = showProcessus;
     }
 
     public String getProgress() {
-        /* 130 */ return this.progress;
+        return this.progress;
     }
 
     public void setProgress(String progress) {
-        /* 134 */ this.progress = progress;
+        this.progress = progress;
     }
 
     public String getProgressLabel() {
-        /* 138 */ return this.progressLabel;
+        return this.progressLabel;
     }
 
     public void setProgressLabel(String progressLabel) {
-        /* 142 */ this.progressLabel = progressLabel;
+        this.progressLabel = progressLabel;
     }
 
     public String getShowProgress() {
-        /* 146 */ return this.showProgress;
+        return this.showProgress;
     }
 
     public void setShowProgress(String showProgress) {
-        /* 150 */ this.showProgress = showProgress;
+        this.showProgress = showProgress;
     }
 
     public String getConverse() {
-        /* 154 */ return this.converse;
+        return this.converse;
     }
 
     public void setConverse(String converse) {
-        /* 158 */ this.converse = converse;
+        this.converse = converse;
     }
 }

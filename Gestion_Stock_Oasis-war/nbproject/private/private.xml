@@ -3,16 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/kenne/NetBeansProjects/Gestion_Stock_Oasis/Gestion_Stock_Oasis-war/web/operation/stock/crud/Creer.xhtml</file>
-            <file>file:/home/kenne/NetBeansProjects/Gestion_Stock_Oasis/Gestion_Stock_Oasis-war/src/java/langues/langue_fr.properties</file>
-            <file>file:/home/kenne/NetBeansProjects/Gestion_Stock_Oasis/Gestion_Stock_Oasis-war/src/java/controllers/sortie_directe/SortiedirectController.java</file>
-            <file>file:/home/kenne/NetBeansProjects/Gestion_Stock_Oasis/Gestion_Stock_Oasis-war/web/operation/vente/crud/Lister.xhtml</file>
+            <file>file:/home/kenne/NetBeansProjects/Gestion_Stock_Oasis/Gestion_Stock_Oasis-war/web/parametre/produit/crud/Lister.xhtml</file>
+            <file>file:/home/kenne/NetBeansProjects/Gestion_Stock_Oasis/Gestion_Stock_Oasis-war/web/parametre/produit/crud/Creer.xhtml</file>
             <file>file:/home/kenne/NetBeansProjects/Gestion_Stock_Oasis/Gestion_Stock_Oasis-war/web/operation/vente/crud/Creer.xhtml</file>
-            <file>file:/home/kenne/NetBeansProjects/Gestion_Stock_Oasis/Gestion_Stock_Oasis-war/src/java/controllers/entree_directe/EntreedirecteController.java</file>
-            <file>file:/home/kenne/NetBeansProjects/Gestion_Stock_Oasis/Gestion_Stock_Oasis-war/web/operation/stock/crud/Lister.xhtml</file>
-            <file>file:/home/kenne/NetBeansProjects/Gestion_Stock_Oasis/Gestion_Stock_Oasis-war/web/operation/vente/crud/Action.xhtml</file>
-            <file>file:/home/kenne/NetBeansProjects/Gestion_Stock_Oasis/Gestion_Stock_Oasis-war/web/operation/stock/crud/Addarticle.xhtml</file>
-            <file>file:/home/kenne/NetBeansProjects/Gestion_Stock_Oasis/Gestion_Stock_Oasis-war/web/operation/vente/crud/Addarticle.xhtml</file>
+            <file>file:/home/kenne/NetBeansProjects/Gestion_Stock_Oasis/Gestion_Stock_Oasis-war/web/analyse/stock_par_magasin/crud/Lister.xhtml</file>
+            <file>file:/home/kenne/NetBeansProjects/Gestion_Stock_Oasis/Gestion_Stock_Oasis-war/src/java/utils/PrintUtils.java</file>
+            <file>file:/home/kenne/NetBeansProjects/Gestion_Stock_Oasis/Gestion_Stock_Oasis-war/src/java/controllers/produit/ArticleController.java</file>
+            <file>file:/home/kenne/NetBeansProjects/Gestion_Stock_Oasis/Gestion_Stock_Oasis-war/web/analyse/mvt_par_magasin/crud/Action.xhtml</file>
+            <file>file:/home/kenne/NetBeansProjects/Gestion_Stock_Oasis/Gestion_Stock_Oasis-war/src/java/controllers/analyse/stock_par_magasin/StockReportController.java</file>
+            <file>file:/home/kenne/NetBeansProjects/Gestion_Stock_Oasis/Gestion_Stock_Oasis-war/web/analyse/stock_par_magasin/crud/Action.xhtml</file>
         </group>
     </open-files>
 </project-private>

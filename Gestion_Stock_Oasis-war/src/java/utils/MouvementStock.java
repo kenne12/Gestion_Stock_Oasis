@@ -13,42 +13,42 @@ public class MouvementStock {
     private int quantiteOut;
 
     public Famille getFamille() {
-        /* 25 */ return this.famille;
+        return this.famille;
     }
 
     public void setFamille(Famille famille) {
-        /* 29 */ this.famille = famille;
+        this.famille = famille;
     }
 
     public Article getArticle() {
-        /* 33 */ return this.article;
+        return this.article;
     }
 
     public void setArticle(Article article) {
-        /* 37 */ this.article = article;
+        this.article = article;
     }
 
     public Lot getLot() {
-        /* 41 */ return this.lot;
+        return this.lot;
     }
 
     public void setLot(Lot lot) {
-        /* 45 */ this.lot = lot;
+        this.lot = lot;
     }
 
     public int getQuantiteIn() {
-        /* 49 */ return this.quantiteIn;
+        return this.quantiteIn;
     }
 
     public void setQuantiteIn(int quantiteIn) {
-        /* 53 */ this.quantiteIn = quantiteIn;
+        this.quantiteIn = quantiteIn;
     }
 
     public int getQuantiteOut() {
-        /* 57 */ return this.quantiteOut;
+        return this.quantiteOut;
     }
 
     public void setQuantiteOut(int quantiteOut) {
-        /* 61 */ this.quantiteOut = quantiteOut;
+        this.quantiteOut = quantiteOut;
     }
 }

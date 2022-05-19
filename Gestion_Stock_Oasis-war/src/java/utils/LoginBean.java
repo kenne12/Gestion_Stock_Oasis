@@ -6,7 +6,6 @@ import entities.Journee;
 import entities.Livraisonclient;
 import entities.Livraisonfournisseur;
 import entities.Magasin;
-import entities.Menu;
 import entities.Privilege;
 import entities.Transfert;
 import entities.Utilisateur;
@@ -111,14 +110,23 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
     public void initPrivilegeMap() {
         HttpSession session = SessionMBean.getSession();
         List allAccess = new ArrayList();
-        for (Menu m : this.menuFacadeLocal.findAll()) {
+        this.menuFacadeLocal.findAll().stream()
+                .map((m) -> m.getRessource().split(";")).forEachOrdered((menus) -> {
+            for (String temp : menus) {
+                if (!allAccess.contains(temp)) {
+                    allAccess.add(temp);
+                }
+            }
+        });
+
+        /*for (Menu m : this.menuFacadeLocal.findAll()) {
             String[] menus = m.getRessource().split(";");
             for (String temp : menus) {
                 if (!allAccess.contains(temp)) {
                     allAccess.add(temp);
                 }
             }
-        }
+        }*/
         session.setAttribute("allAccess", allAccess);
     }
 
@@ -127,15 +135,17 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
         List accesses = new ArrayList();
         List access = new ArrayList();
 
-        for (Privilege p : privilegesTemp) {
+        privilegesTemp.stream().map((p) -> {
             accesses.add(Long.valueOf(p.getIdmenu().getIdmenu()));
-            String[] menus = p.getIdmenu().getRessource().split(";");
+            return p;
+        }).map((p) -> p.getIdmenu().getRessource().split(";")).forEachOrdered((menus) -> {
             for (String temp : menus) {
                 if (!access.contains(temp)) {
                     access.add(temp);
                 }
             }
-        }
+        });
+
         session.setAttribute("accesses", accesses);
         session.setAttribute("access", access);
     }
@@ -235,10 +245,12 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
     }
 
     private void closeTransfert(List<Transfert> transferts) {
-        for (Transfert t : transferts) {
+        transferts.stream().map((t) -> {
             t.setComptabilise(true);
+            return t;
+        }).forEachOrdered((t) -> {
             transfertFacadeLocal.edit(t);
-        }
+        });
     }
 
     public void closeSession() {
@@ -248,15 +260,19 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
             journee.setHeureFermetture(Date.from(Instant.now()));
             journeeFacadeLocal.edit(journee);
 
-            for (Livraisonclient l : livraisonclients) {
+            livraisonclients.stream().map((l) -> {
                 l.setComptabilise(true);
+                return l;
+            }).forEachOrdered((l) -> {
                 livraisonclientFacadeLocal.edit(l);
-            }
+            });
 
-            for (Livraisonfournisseur l : livraisonfournisseurFs) {
+            livraisonfournisseurFs.stream().map((l) -> {
                 l.setComptabilise(true);
+                return l;
+            }).forEachOrdered((l) -> {
                 livraisonfournisseurFacadeLocal.edit(l);
-            }
+            });
 
             this.closeTransfert(transfertSortants);
 
@@ -272,9 +288,8 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
     private void sommeTransfert(String mode, List<Transfert> transferts, Journee journee) {
         double montant = 0;
         if (!transferts.isEmpty()) {
-            for (Transfert t : transferts) {
-                montant += t.getMontanttotal();
-            }
+            montant = transferts.stream().map((t) -> t.getMontanttotal())
+                    .reduce(montant, (accumulator, _item) -> accumulator + _item);
         }
         if (mode.equals("sortant")) {
             journee.setTransfertSortant(montant);
@@ -286,10 +301,8 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
     private void sommeApprovisionnement(List<Livraisonfournisseur> livraisonfournisseurs, Journee journee) {
         journee.setMontantVendu(0);
         if (!livraisonfournisseurs.isEmpty()) {
-            double total = 0;
-            for (Livraisonfournisseur l : livraisonfournisseurs) {
-                total += l.getMontant();
-            }
+            double total = livraisonfournisseurs.stream()
+                    .mapToDouble(item -> item.getMontant()).sum();
             journee.setMontantEntre(total);
         }
     }
@@ -457,12 +470,10 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
                 series1.setLabel(m.getNom());
 
                 for (Journee j : journeeFacadeLocal.findByIdmagasinTwoDates(m.getIdmagasin(), mois.getDateDebut(), mois.getDateFin())) {
-                    Integer somme = 0;
-                    List<Livraisonclient> livraisonclients = livraisonclientFacadeLocal.findByIdmagasinAndDate(m.getIdmagasin(), j.getDateJour());
-                    for (Livraisonclient l : livraisonclients) {
-                        somme += (int) l.getMontantTtc();
-                    }
-                    series1.set(sdf.format(j.getDateJour()), somme);
+                    List<Livraisonclient> list = livraisonclientFacadeLocal.findByIdmagasinAndDate(m.getIdmagasin(), j.getDateJour());
+
+                    Double var = list.stream().mapToDouble(line -> line.getMontantTtc()).sum();
+                    series1.set(sdf.format(j.getDateJour()), var.intValue());
                 }
                 model.addSeries((ChartSeries) series1);
             }
