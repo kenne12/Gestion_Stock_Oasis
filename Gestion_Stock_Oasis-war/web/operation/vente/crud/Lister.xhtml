@@ -14,7 +14,49 @@
 
         <p:growl id="msg"/>
 
+
         <p:panel header="#{langue['Conv.ListeDes']} : #{langue.factures}">
+
+
+            <h:panelGrid id="search_zone_" columns="8">
+
+                <p:outputLabel value="Mode recherche" for="search_mode" />
+                <p:selectOneMenu required="true" id="search_mode" value="#{sortiedirectController.searchMode}">
+                    <f:selectItem itemLabel="#{langue.choisir}" itemValue=""/>                                                                          
+                    <f:selectItem itemLabel="Mois" itemValue="MOIS"/>                                                                          
+                    <f:selectItem itemLabel="Interval" itemValue="INTERVAL"/>                                                                          
+                    <f:selectItem itemLabel="Date" itemValue="DATE"/>                                                                          
+                    <p:ajax update="search_zone_, startDate , endDate , mois" listener="#{sortiedirectController.updateFiltre()}"/>
+                </p:selectOneMenu>
+
+                <p:outputLabel rendered="#{sortiedirectController.isShowFiltreMois}" value="Mois" for="mois" />
+                <p:selectOneMenu rendered="#{sortiedirectController.isShowFiltreMois}" required="true" id="mois" value="#{sortiedirectController.idMois}">
+                    <f:selectItem itemLabel="#{langue.choisir}" itemValue=""/>
+                    <f:selectItems value="#{sortiedirectController.listMois}" var="mois" itemLabel="#{mois.idmois.nom}" itemValue="#{mois.idAnneeMois}"/>                                                                             
+                    <p:ajax update="startDate , endDate" listener="#{sortiedirectController.updateDate()}"/>
+                </p:selectOneMenu>
+
+                <p:outputLabel rendered="#{sortiedirectController.isShowStartDate}"  value="Date debut" for="startDate"/>
+                <p:calendar rendered="#{sortiedirectController.isShowStartDate}" 
+                            id="startDate" value="#{sortiedirectController.startDate}" 
+                            navigator="true" required="true">
+                    <p:ajax  event="dateSelect" />
+                </p:calendar>
+
+                <p:outputLabel rendered="#{sortiedirectController.isShowEndDate}" value="Date fin" for="endDate"/>
+                <p:calendar rendered="#{sortiedirectController.isShowEndDate}" 
+                            id="endDate" value="#{sortiedirectController.endDate}"
+                            navigator="true"   required="true">
+                    <p:ajax  event="dateSelect" />
+                </p:calendar>
+
+                <p:commandButton  icon="ui-icon-search"   
+                                  value="#{langue.rechercher}" 
+                                  actionListener="#{sortiedirectController.onSearch()}"
+                                  update="datalist"/>
+            </h:panelGrid>
+
+
             <p:contextMenu id="SortieDirecteDataTableContextMenu" for="datalist">  
                 <p:menuitem value="#{langue['Conv.Creer']}" onclick="document.getElementById('actionsForm:creer').click();" icon="ui-icon-plus"/>
                 <p:menuitem value="#{langue['Conv.Detail']}" onclick="document.getElementById('actionsForm:detail').click();" icon="ui-icon-search"/>
@@ -27,7 +69,6 @@
                          rowKey="#{item.idlivraisonclient}"
                          paginator="true"
                          rows="10"
-                         style=""
                          rowsPerPageTemplate="10,20,30,40,50"
                          selectionMode="single"
                          emptyMessage="#{langue.tableau_vide}"
@@ -55,7 +96,7 @@
                     <f:facet name="header">
                         <h:outputText value="#{langue.montant}"/>
                     </f:facet>
-                    <h:outputText value="#{item.montant}">
+                    <h:outputText value="#{item.montantTtc}">
                         <f:convertNumber/>
                     </h:outputText>
                 </p:column>
@@ -64,7 +105,7 @@
                     <f:facet name="header">
                         <h:outputText value="#{langue.montant_paye}"/>
                     </f:facet>
-                    <h:outputText value="#{item.montant}">
+                    <h:outputText value="#{item.montantPaye}">
                         <f:convertNumber/>
                     </h:outputText>
                 </p:column>
@@ -101,6 +142,15 @@
                                    icon="ui-icon-alert"/>
                     </p:commandButton>
                 </p:column>
+
+                <p:columnGroup type="footer">
+                    <p:row>
+                        <p:column colspan="2" style="text-align:right" footerText="Totaux" />
+                        <p:column style="text-align: right" footerText="#{sortiedirectController.getformatTotal('total')}" />
+                        <p:column style="text-align: right" footerText="#{sortiedirectController.getformatTotal('regle')}" />
+                        <p:column colspan="2" />
+                    </p:row>
+                </p:columnGroup>
 
             </p:dataTable>
 

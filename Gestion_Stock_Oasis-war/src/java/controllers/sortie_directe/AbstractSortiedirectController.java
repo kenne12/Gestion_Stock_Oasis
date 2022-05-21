@@ -1,6 +1,7 @@
 package controllers.sortie_directe;
 
 import entities.Annee;
+import entities.AnneeMois;
 import entities.Client;
 import entities.Famille;
 import entities.Lignelivraisonclient;
@@ -9,10 +10,12 @@ import entities.Magasin;
 import entities.Magasinlot;
 import entities.Mvtstock;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.transaction.UserTransaction;
+import sessions.AnneeMoisFacadeLocal;
 import sessions.ClientFacadeLocal;
 import sessions.FamilleFacadeLocal;
 import sessions.LignelivraisonclientFacadeLocal;
@@ -76,6 +79,16 @@ public class AbstractSortiedirectController {
 
     protected Annee annee = SessionMBean.getAnnee();
 
+    protected Date startDate = new Date();
+    protected Date endDate = new Date();
+
+    protected String searchMode;
+
+    @EJB
+    protected AnneeMoisFacadeLocal anneeMoisFacadeLocal;
+    protected Integer idMois;
+    protected List<AnneeMois> listMois = new ArrayList<>();
+
     @EJB
     protected MouchardFacadeLocal mouchardFacadeLocal;
     protected Routine routine = new Routine();
@@ -85,6 +98,10 @@ public class AbstractSortiedirectController {
     protected Boolean consulter = true;
     protected Boolean imprimer = true;
     protected Boolean supprimer = true;
+
+    protected boolean isShowFiltreMois;
+    protected boolean isShowStartDate;
+    protected boolean isShowEndDate;
 
     protected String fileName = "";
     protected String mode = "";
@@ -191,7 +208,70 @@ public class AbstractSortiedirectController {
     public Annee getAnnee() {
         return annee;
     }
-    
-    
+
+    public List<AnneeMois> getListMois() throws Exception {
+        this.listMois = anneeMoisFacadeLocal.findByAnnee(SessionMBean.getAnnee().getIdannee());
+        return listMois;
+    }
+
+    public void setListMois(List<AnneeMois> listMois) {
+        this.listMois = listMois;
+    }
+
+    public Integer getIdMois() {
+        return idMois;
+    }
+
+    public void setIdMois(Integer idMois) {
+        this.idMois = idMois;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getSearchMode() {
+        return searchMode;
+    }
+
+    public void setSearchMode(String searchMode) {
+        this.searchMode = searchMode;
+    }
+
+    public boolean isIsShowFiltreMois() {
+        return isShowFiltreMois;
+    }
+
+    public void setIsShowFiltreMois(boolean isShowFiltreMois) {
+        this.isShowFiltreMois = isShowFiltreMois;
+    }
+
+    public boolean isIsShowStartDate() {
+        return isShowStartDate;
+    }
+
+    public void setIsShowStartDate(boolean isShowStartDate) {
+        this.isShowStartDate = isShowStartDate;
+    }
+
+    public boolean isIsShowEndDate() {
+        return isShowEndDate;
+    }
+
+    public void setIsShowEndDate(boolean isShowEndDate) {
+        this.isShowEndDate = isShowEndDate;
+    }
 
 }

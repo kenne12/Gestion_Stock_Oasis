@@ -26,13 +26,11 @@ public class AnneeMoisFacade extends AbstractFacade<AnneeMois> implements AnneeM
     @Override
     public Integer nextVal() {
         Query query = this.em.createQuery("SELECT MAX(a.idAnneeMois) FROM AnneeMois a");
-        Integer result = (Integer) query.getSingleResult();
-        if (result == null) {
-            result = (1);
-        } else {
-            result = (result + 1);
+        try {
+            return (Integer) query.getSingleResult() + 1;
+        } catch (Exception e) {
+            return 1;
         }
-        return result;
     }
 
     @Override
@@ -72,14 +70,13 @@ public class AnneeMoisFacade extends AbstractFacade<AnneeMois> implements AnneeM
         }
         return null;
     }
-    
-    
+
     @Override
     public AnneeMois findDefaultMonthByIdannee(int idAnnee) {
         List list = this.em.createQuery("SELECT a FROM AnneeMois a WHERE a.idannee.idannee=:idAnnee ORDER BY a.idmois.numero")
-        .setParameter("idAnnee", idAnnee)
+                .setParameter("idAnnee", idAnnee)
                 .getResultList();
-        
+
         if (!list.isEmpty()) {
             return (AnneeMois) list.get(0);
         }

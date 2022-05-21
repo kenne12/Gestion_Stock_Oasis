@@ -99,7 +99,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                 return;
             }
 
-            if (!Utilitaires.isAccess(33L)) {
+            if (!Utilitaires.isAccess(37L)) {
                 notifyError("acces_refuse");
                 return;
             }
@@ -455,7 +455,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                     return;
                 }
 
-                if (!Utilitaires.isAccess(33L)) {
+                if (!Utilitaires.isAccess(38L)) {
                     notifyError("acces_refuse");
                     return;
                 }
