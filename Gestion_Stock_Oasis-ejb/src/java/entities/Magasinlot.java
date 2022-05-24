@@ -8,6 +8,7 @@ package entities;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -27,29 +28,42 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Magasinlot.findAll", query = "SELECT m FROM Magasinlot m"),
-    @NamedQuery(name = "Magasinlot.findByIdmagasinlot", query = "SELECT m FROM Magasinlot m WHERE m.idmagasinlot = :idmagasinlot"),
-    @NamedQuery(name = "Magasinlot.findByQuantite", query = "SELECT m FROM Magasinlot m WHERE m.quantite = :quantite"),
-    @NamedQuery(name = "Magasinlot.findByQuantitemultiple", query = "SELECT m FROM Magasinlot m WHERE m.quantitemultiple = :quantitemultiple"),
-    @NamedQuery(name = "Magasinlot.findByUnite", query = "SELECT m FROM Magasinlot m WHERE m.unite = :unite"),
-    @NamedQuery(name = "Magasinlot.findByEtat", query = "SELECT m FROM Magasinlot m WHERE m.etat = :etat"),
-    @NamedQuery(name = "Magasinlot.findByQuantitereduite", query = "SELECT m FROM Magasinlot m WHERE m.quantitereduite = :quantitereduite"),
-    @NamedQuery(name = "Magasinlot.findByQuantitevirtuelle", query = "SELECT m FROM Magasinlot m WHERE m.quantitevirtuelle = :quantitevirtuelle"),
+    @NamedQuery(name = "Magasinlot.findAll", query = "SELECT m FROM Magasinlot m")
+    ,
+    @NamedQuery(name = "Magasinlot.findByIdmagasinlot", query = "SELECT m FROM Magasinlot m WHERE m.idmagasinlot = :idmagasinlot")
+    ,
+    @NamedQuery(name = "Magasinlot.findByQuantite", query = "SELECT m FROM Magasinlot m WHERE m.quantite = :quantite")
+    ,
+    @NamedQuery(name = "Magasinlot.findByQuantitemultiple", query = "SELECT m FROM Magasinlot m WHERE m.quantitemultiple = :quantitemultiple")
+    ,
+    @NamedQuery(name = "Magasinlot.findByUnite", query = "SELECT m FROM Magasinlot m WHERE m.unite = :unite")
+    ,
+    @NamedQuery(name = "Magasinlot.findByEtat", query = "SELECT m FROM Magasinlot m WHERE m.etat = :etat")
+    ,
+    @NamedQuery(name = "Magasinlot.findByQuantitereduite", query = "SELECT m FROM Magasinlot m WHERE m.quantitereduite = :quantitereduite")
+    ,
+    @NamedQuery(name = "Magasinlot.findByQuantitevirtuelle", query = "SELECT m FROM Magasinlot m WHERE m.quantitevirtuelle = :quantitevirtuelle")
+    ,
     @NamedQuery(name = "Magasinlot.findByQuantitesecurite", query = "SELECT m FROM Magasinlot m WHERE m.quantitesecurite = :quantitesecurite")})
 public class Magasinlot implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     private Long idmagasinlot;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    private Double quantite;
-    private Double quantitemultiple;
-    private Double unite;
+    private double quantite;
+    private double quantitemultiple;
+    private double unite;
     private Boolean etat;
-    private Double quantitereduite;
-    private Double quantitevirtuelle;
-    private Double quantitesecurite;
+    private double quantitereduite;
+    private double quantitevirtuelle;
+    private double quantitesecurite;
+    @Column(name = "prix_vente_detail")
+    private double prixVenteDetail;
+    @Column(name = "prix_vente_gros")
+    private double prixVenteGros;
     @OneToMany(mappedBy = "idmagasinlot", fetch = FetchType.LAZY)
     private List<Lignerepartitionarticle> lignerepartitionarticleList;
     @OneToMany(mappedBy = "idmagasinlot", fetch = FetchType.LAZY)
@@ -71,16 +85,18 @@ public class Magasinlot implements Serializable {
     @OneToMany(mappedBy = "idmagasinlot", fetch = FetchType.LAZY)
     private List<Lignemvtstock> lignemvtstockList;
 
-    
-    private void initConstructor(){
-        this.quantite = 0d;
-        this.quantitemultiple = 0d;
-        this.quantitereduite = 0d;
-        this.quantitevirtuelle = 0d;
-        this.quantitesecurite = 0d;
-        this.unite = 0d;    
+    private void initConstructor() {
+        this.quantite = 0;
+        this.quantitemultiple = 0;
+        this.quantitereduite = 0;
+        this.quantitevirtuelle = 0;
+        this.quantitesecurite = 0;
+        this.unite = 0;
+        this.prixVenteDetail = 0;
+        this.prixVenteGros = 0;
+        this.etat = true;
     }
-    
+
     public Magasinlot() {
         super();
         this.initConstructor();
@@ -99,27 +115,27 @@ public class Magasinlot implements Serializable {
         this.idmagasinlot = idmagasinlot;
     }
 
-    public Double getQuantite() {
+    public double getQuantite() {
         return quantite;
     }
 
-    public void setQuantite(Double quantite) {
+    public void setQuantite(double quantite) {
         this.quantite = quantite;
     }
 
-    public Double getQuantitemultiple() {
+    public double getQuantitemultiple() {
         return quantitemultiple;
     }
 
-    public void setQuantitemultiple(Double quantitemultiple) {
+    public void setQuantitemultiple(double quantitemultiple) {
         this.quantitemultiple = quantitemultiple;
     }
 
-    public Double getUnite() {
+    public double getUnite() {
         return unite;
     }
 
-    public void setUnite(Double unite) {
+    public void setUnite(double unite) {
         this.unite = unite;
     }
 
@@ -131,28 +147,44 @@ public class Magasinlot implements Serializable {
         this.etat = etat;
     }
 
-    public Double getQuantitereduite() {
+    public double getQuantitereduite() {
         return quantitereduite;
     }
 
-    public void setQuantitereduite(Double quantitereduite) {
+    public void setQuantitereduite(double quantitereduite) {
         this.quantitereduite = quantitereduite;
     }
 
-    public Double getQuantitevirtuelle() {
+    public double getQuantitevirtuelle() {
         return quantitevirtuelle;
     }
 
-    public void setQuantitevirtuelle(Double quantitevirtuelle) {
+    public void setQuantitevirtuelle(double quantitevirtuelle) {
         this.quantitevirtuelle = quantitevirtuelle;
     }
 
-    public Double getQuantitesecurite() {
+    public double getQuantitesecurite() {
         return quantitesecurite;
     }
 
-    public void setQuantitesecurite(Double quantitesecurite) {
+    public void setQuantitesecurite(double quantitesecurite) {
         this.quantitesecurite = quantitesecurite;
+    }
+
+    public double getPrixVenteDetail() {
+        return prixVenteDetail;
+    }
+
+    public void setPrixVenteDetail(double prixVenteDetail) {
+        this.prixVenteDetail = prixVenteDetail;
+    }
+
+    public double getPrixVenteGros() {
+        return prixVenteGros;
+    }
+
+    public void setPrixVenteGros(double prixVenteGros) {
+        this.prixVenteGros = prixVenteGros;
     }
 
     @XmlTransient
@@ -248,15 +280,12 @@ public class Magasinlot implements Serializable {
             return false;
         }
         Magasinlot other = (Magasinlot) object;
-        if ((this.idmagasinlot == null && other.idmagasinlot != null) || (this.idmagasinlot != null && !this.idmagasinlot.equals(other.idmagasinlot))) {
-            return false;
-        }
-        return true;
+        return !((this.idmagasinlot == null && other.idmagasinlot != null) || (this.idmagasinlot != null && !this.idmagasinlot.equals(other.idmagasinlot)));
     }
 
     @Override
     public String toString() {
         return "entities.Magasinlot[ idmagasinlot=" + idmagasinlot + " ]";
     }
-    
+
 }

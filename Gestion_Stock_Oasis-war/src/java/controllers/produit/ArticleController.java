@@ -205,6 +205,8 @@ public class ArticleController extends AbstractArticleController implements Seri
                     obj.setIdmagasin(m);
                     obj.setEtat(true);
                     obj.setUnite(this.article.getUnite());
+                    obj.setPrixVenteGros(article.getPrixunit());
+                    obj.setPrixVenteDetail(article.getPrixVenteDetail());
                     obj.setQuantitesecurite(this.article.getQuantitesecurite());
                     this.magasinarticleFacadeLocal.create(obj);
 
@@ -215,6 +217,8 @@ public class ArticleController extends AbstractArticleController implements Seri
                         obj1.setIdlot(this.lot);
                         obj1.setUnite(this.article.getUnite());
                         obj1.setEtat(true);
+                        obj1.setPrixVenteGros(article.getPrixunit());
+                        obj1.setPrixVenteDetail(article.getPrixVenteDetail());
                         obj1.setQuantitesecurite(this.article.getQuantitesecurite());
                         this.magasinlotFacadeLocal.create(obj1);
                     }
@@ -432,8 +436,7 @@ public class ArticleController extends AbstractArticleController implements Seri
             notifyFail(e);
         }
     }
-    
-    
+
     public void prepareEditLotPrice(Article item) {
         List<Lot> lots = item.getLotList();
         this.article = item;
@@ -512,7 +515,7 @@ public class ArticleController extends AbstractArticleController implements Seri
         RequestContext.getCurrentInstance().execute("PF('PhotoProduitDialog').hide()");
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("product_to_upload_photo");
     }
-    
+
     public void closeEditPriceDialog() {
         article = new Article();
 

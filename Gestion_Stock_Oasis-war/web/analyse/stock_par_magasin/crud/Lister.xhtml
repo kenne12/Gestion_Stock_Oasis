@@ -24,14 +24,14 @@
                 rowsPerPageTemplate="10,20,30,40,50"
                 rowStyleClass="#{stockReportController.checkPeremption(item.idlot).equals(true) ? 'rowColorRed' : null}">
 
-                <p:column filterBy="#{item.idmagasinarticle.idarticle.libelle}" style="width: 25%">
+                <p:column filterBy="#{item.idmagasinarticle.idarticle.libelle}" style="width: 20%">
                     <f:facet name="header">
                         <h:outputText value="#{langue.article}"/>
                     </f:facet>
                     <h:outputText value="#{item.idmagasinarticle.idarticle.libelle}"/>
                 </p:column>
 
-                <p:column filterBy="#{item.idlot.numero}" style="width: 25%">
+                <p:column filterBy="#{item.idlot.numero}" style="width: 20%">
                     <f:facet name="header">
                         <h:outputText value="#{langue.numero_lot}"/>
                     </f:facet>
@@ -60,12 +60,31 @@
 
                 <p:column style="width: 10%;text-align: right">
                     <f:facet name="header">
-                        <h:outputText value="#{langue.qte}"/>
+                        <h:outputText value="#{langue.qte} D"/>
+                    </f:facet>
+                    <h:outputText value="#{item.quantite}">
+                        <f:convertNumber/>
+                    </h:outputText>
+                </p:column>
+                
+                <p:column style="width: 10%;text-align: right">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.qte} G"/>
                     </f:facet>
                     <h:outputText value="#{item.quantitemultiple}">
                         <f:convertNumber/>
                     </h:outputText>
                 </p:column>
+                
+                <p:column style="width: 10%;text-align: right">
+                    <f:facet name="header">
+                        <h:outputText value="Total"/>
+                    </f:facet>
+                    <h:outputText value="#{item.quantitemultiple * item.idlot.idarticle.prixunit}">
+                        <f:convertNumber/>
+                    </h:outputText>
+                </p:column>
+
 
                 <p:column style="width: 10%;text-align: center">
                     <f:facet name="header">
@@ -73,6 +92,16 @@
                     </f:facet>
                     <h:selectBooleanCheckbox disabled="true" value="#{item.etat}"/>
                 </p:column>
+                
+                <p:columnGroup type="footer">
+                    <p:row>
+                        <p:column colspan="4" style="text-align:right" footerText="Totaux" />
+                        <p:column style="text-align: right" footerText="#{stockReportController.getformatQteR()}" />
+                        <p:column style="text-align: right" footerText="#{stockReportController.getformatQteG()}" />
+                        <p:column style="text-align: right" footerText="#{stockReportController.getformatMt()}" />
+                        <p:column  />
+                    </p:row>
+                </p:columnGroup>
 
             </p:dataTable>
 

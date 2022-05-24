@@ -48,11 +48,10 @@ public class AnalyseDepenseController extends AbstractAnalyseDepenseController i
     }
 
     private double getLigneLivraison(List<Lignelivraisonfournisseur> list) {
-        Double somme = 0.0;
-        for (Lignelivraisonfournisseur llf : list) {
-            somme += llf.getPrixachat() * llf.getQuantitemultiple();
+        if (list == null || list.isEmpty()) {
+            return 0;
         }
-        return somme;
+        return list.stream().mapToDouble(item -> (item.getPrixachat() * item.getQuantitemultiple())).sum();
     }
 
     private void initAmount() {
@@ -91,105 +90,106 @@ public class AnalyseDepenseController extends AbstractAnalyseDepenseController i
 
             lignelivraisonfournisseurs = lignelivraisonfournisseurFacadeLocal.findByIdMagasin(magasin.getIdmagasin(), annee.getDateDebut(), annee.getDateFin());
             List<AnneeMois> listMois = anneeMoisFacadeLocal.findByAnnee(annee.getIdannee());
-            if (!lignelivraisonfournisseurs.isEmpty()) {
-                this.montantTotal = this.getLigneLivraison(lignelivraisonfournisseurs);
-                magasinlots = magasinlotFacadeLocal.findByIdMagasin(magasin.getIdmagasin());
-
-                for (Magasinlot ml : magasinlots) {
-                    AnalyseRD a = new AnalyseRD();
-                    a.setMagasinlot(ml);
-                    a.setMontantTotal(0);
-                    a.setPourcentage(0);
-
-                    List<Lignelivraisonfournisseur> llcLots = lignelivraisonfournisseurFacadeLocal.findByIdLot(ml.getIdmagasinlot(), annee.getDateDebut(), annee.getDateFin());
-                    if (!llcLots.isEmpty()) {
-                        Double totalLot = this.getLigneLivraison(llcLots);
-                        a.setMontantTotal(totalLot);
-                        a.setPourcentage((totalLot / montantTotal) * 100);
-                        this.pourcentage += a.getPourcentage();
-                    }
-
-                    for (AnneeMois mois : listMois) {
-                        List<Lignelivraisonfournisseur> llcLotsMois = lignelivraisonfournisseurFacadeLocal.findByIdLot(ml.getIdmagasinlot(), mois.getDateDebut(), mois.getDateFin());
-                        if (!listMois.isEmpty()) {
-                            Double totalMois = this.getLigneLivraison(llcLotsMois);
-                            switch (mois.getIdmois().getIdmois()) {
-                                case 1: {
-                                    a.setValeurJanv(totalMois);
-                                    this.valeurJanv += totalMois;
-                                    break;
-                                }
-                                case 2: {
-                                    a.setValeurFev(totalMois);
-                                    this.valeurFev += totalMois;
-                                    break;
-                                }
-                                case 3: {
-                                    a.setValeurMars(totalMois);
-                                    this.valeurMars += totalMois;
-                                    break;
-                                }
-                                case 4: {
-                                    a.setValeurAvr(totalMois);
-                                    this.valeurAvr += totalMois;
-                                    break;
-                                }
-                                case 5: {
-                                    a.setValeurMai(totalMois);
-                                    this.valeurMai += totalMois;
-                                    break;
-                                }
-                                case 6: {
-                                    a.setValeurJuin(totalMois);
-                                    this.valeurJuin += totalMois;
-                                    break;
-                                }
-
-                                case 7: {
-                                    a.setValeurJuil(totalMois);
-                                    this.valeurJuil += totalMois;
-                                    break;
-                                }
-
-                                case 8: {
-                                    a.setValeurAout(totalMois);
-                                    this.valeurAout += totalMois;
-                                    break;
-                                }
-
-                                case 9: {
-                                    a.setValeurSept(totalMois);
-                                    this.valeurSept += totalMois;
-                                    break;
-                                }
-
-                                case 10: {
-                                    a.setValeurOct(totalMois);
-                                    this.valeurOct += totalMois;
-                                    break;
-                                }
-
-                                case 11: {
-                                    a.setValeurNov(totalMois);
-                                    this.valeurNov += totalMois;
-                                    break;
-                                }
-
-                                case 12: {
-                                    a.setValeurJanv(totalMois);
-                                    this.valeurDec += totalMois;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    analyseRDs.add(a);
-                }
+            if (lignelivraisonfournisseurs == null || lignelivraisonfournisseurs.isEmpty()) {
+                JsfUtil.addErrorMessage("Aucune donnée trouvée");
                 RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
                 return;
             }
-            JsfUtil.addErrorMessage("Aucune donnée trouvée");
+
+            this.montantTotal = this.getLigneLivraison(lignelivraisonfournisseurs);
+            magasinlots = magasinlotFacadeLocal.findByIdMagasin(magasin.getIdmagasin());
+
+            for (Magasinlot ml : magasinlots) {
+                AnalyseRD a = new AnalyseRD();
+                a.setMagasinlot(ml);
+
+
+                List<Lignelivraisonfournisseur> llcLots = lignelivraisonfournisseurFacadeLocal.findByIdLot(ml.getIdmagasinlot(), annee.getDateDebut(), annee.getDateFin());
+                if (!llcLots.isEmpty()) {
+                    Double totalLot = this.getLigneLivraison(llcLots);
+                    a.setMontantTotal(totalLot);
+                    a.setPourcentage((totalLot / montantTotal) * 100);
+                    this.pourcentage += a.getPourcentage();
+                }
+
+                for (AnneeMois mois : listMois) {
+                    List<Lignelivraisonfournisseur> llcLotsMois = lignelivraisonfournisseurFacadeLocal.findByIdLot(ml.getIdmagasinlot(), mois.getDateDebut(), mois.getDateFin());
+                    if (!listMois.isEmpty()) {
+                        Double totalMois = this.getLigneLivraison(llcLotsMois);
+                        switch (mois.getIdmois().getIdmois()) {
+                            case 1: {
+                                a.setValeurJanv(totalMois);
+                                this.valeurJanv += totalMois;
+                                break;
+                            }
+                            case 2: {
+                                a.setValeurFev(totalMois);
+                                this.valeurFev += totalMois;
+                                break;
+                            }
+                            case 3: {
+                                a.setValeurMars(totalMois);
+                                this.valeurMars += totalMois;
+                                break;
+                            }
+                            case 4: {
+                                a.setValeurAvr(totalMois);
+                                this.valeurAvr += totalMois;
+                                break;
+                            }
+                            case 5: {
+                                a.setValeurMai(totalMois);
+                                this.valeurMai += totalMois;
+                                break;
+                            }
+                            case 6: {
+                                a.setValeurJuin(totalMois);
+                                this.valeurJuin += totalMois;
+                                break;
+                            }
+
+                            case 7: {
+                                a.setValeurJuil(totalMois);
+                                this.valeurJuil += totalMois;
+                                break;
+                            }
+
+                            case 8: {
+                                a.setValeurAout(totalMois);
+                                this.valeurAout += totalMois;
+                                break;
+                            }
+
+                            case 9: {
+                                a.setValeurSept(totalMois);
+                                this.valeurSept += totalMois;
+                                break;
+                            }
+
+                            case 10: {
+                                a.setValeurOct(totalMois);
+                                this.valeurOct += totalMois;
+                                break;
+                            }
+
+                            case 11: {
+                                a.setValeurNov(totalMois);
+                                this.valeurNov += totalMois;
+                                break;
+                            }
+
+                            case 12: {
+                                a.setValeurJanv(totalMois);
+                                this.valeurDec += totalMois;
+                                break;
+                            }
+                        }
+                    }
+                }
+                analyseRDs.add(a);
+            }
             RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
+
         } catch (Exception e) {
             RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
             e.printStackTrace();
@@ -200,11 +200,11 @@ public class AnalyseDepenseController extends AbstractAnalyseDepenseController i
     public String formatMoney(double value) {
         return JsfUtil.formaterStringMoney(value);
     }
-    
+
     public String formatMoneyAmount(Double value) {
         return JsfUtil.formaterStringMoney(value.intValue());
     }
-    
+
     public String roundAndFormat(double value) {
         return JsfUtil.formaterStringMoney(Math.ceil(value));
     }

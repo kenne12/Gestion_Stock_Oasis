@@ -3,6 +3,7 @@ package controllers.analyse.stock_par_magasin;
 import com.google.common.io.Files;
 import entities.Article;
 import entities.Lot;
+import entities.Magasinlot;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
+import utils.JsfUtil;
 import utils.PrintUtils;
 import utils.SessionMBean;
 import utils.Utilitaires;
@@ -75,7 +77,7 @@ public class StockReportController extends AbstratStockReportController implemen
         session.setAttribute("product_to_upload_photo", item);
         RequestContext.getCurrentInstance().execute("PF('PhotoProduitDialog').show()");
     }
-    
+
     public void handleFileUpload(FileUploadEvent event) {
         try {
             if ((event.getFile() == null) || (event.getFile().getFileName() == null) || (event.getFile().getFileName().equals(""))) {
@@ -127,5 +129,32 @@ public class StockReportController extends AbstratStockReportController implemen
 
         RequestContext.getCurrentInstance().execute("PF('PhotoProduitDialog').hide()");
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("product_to_upload_photo");
+    }
+
+    public String getformatQteR() {
+        if (magasinlots == null) {
+            return "";
+        }
+        double value = magasinlots.stream()
+                .mapToDouble(Magasinlot::getQuantite).sum();
+        return JsfUtil.formaterStringMoney(value);
+    }
+
+    public String getformatQteG() {
+        if (magasinlots == null) {
+            return "";
+        }
+        double value = magasinlots.stream()
+                .mapToDouble(item -> (item.getQuantite() * item.getIdlot().getIdarticle().getUnite())).sum();
+        return JsfUtil.formaterStringMoney(value);
+    }
+
+    public String getformatMt() {
+        if (magasinlots == null) {
+            return "";
+        }
+        double value = magasinlots.stream()
+                .mapToDouble(item -> (item.getQuantite() * item.getIdlot().getIdarticle().getPrixunit())).sum();
+        return JsfUtil.formaterStringMoney(((int)value));
     }
 }

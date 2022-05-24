@@ -67,7 +67,9 @@ public class AbstratMvtMReportController {
     }
 
     public List<Magasin> getMagasins() {
-        this.magasins = Utilitaires.returMagasinByUser(this.magasinFacadeLocal, this.utilisateurmagasinFacadeLocal, SessionMBean.getUserAccount().getIdpersonnel());
+        this.magasins = Utilitaires.returMagasinByUser(this.magasinFacadeLocal,
+                this.utilisateurmagasinFacadeLocal,
+                SessionMBean.getUserAccount().getIdpersonnel());
         return this.magasins;
     }
 

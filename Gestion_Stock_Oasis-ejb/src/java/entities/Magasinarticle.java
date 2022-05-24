@@ -6,10 +6,10 @@
 package entities;
 
 import java.io.Serializable;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -29,14 +29,22 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Magasinarticle.findAll", query = "SELECT m FROM Magasinarticle m"),
-    @NamedQuery(name = "Magasinarticle.findByIdmagasinarticle", query = "SELECT m FROM Magasinarticle m WHERE m.idmagasinarticle = :idmagasinarticle"),
-    @NamedQuery(name = "Magasinarticle.findByQuantite", query = "SELECT m FROM Magasinarticle m WHERE m.quantite = :quantite"),
-    @NamedQuery(name = "Magasinarticle.findByQuantitemultiple", query = "SELECT m FROM Magasinarticle m WHERE m.quantitemultiple = :quantitemultiple"),
-    @NamedQuery(name = "Magasinarticle.findByUnite", query = "SELECT m FROM Magasinarticle m WHERE m.unite = :unite"),
-    @NamedQuery(name = "Magasinarticle.findByEtat", query = "SELECT m FROM Magasinarticle m WHERE m.etat = :etat"),
-    @NamedQuery(name = "Magasinarticle.findByQuantitereduite", query = "SELECT m FROM Magasinarticle m WHERE m.quantitereduite = :quantitereduite"),
-    @NamedQuery(name = "Magasinarticle.findByQuantitevirtuelle", query = "SELECT m FROM Magasinarticle m WHERE m.quantitevirtuelle = :quantitevirtuelle"),
+    @NamedQuery(name = "Magasinarticle.findAll", query = "SELECT m FROM Magasinarticle m")
+    ,
+    @NamedQuery(name = "Magasinarticle.findByIdmagasinarticle", query = "SELECT m FROM Magasinarticle m WHERE m.idmagasinarticle = :idmagasinarticle")
+    ,
+    @NamedQuery(name = "Magasinarticle.findByQuantite", query = "SELECT m FROM Magasinarticle m WHERE m.quantite = :quantite")
+    ,
+    @NamedQuery(name = "Magasinarticle.findByQuantitemultiple", query = "SELECT m FROM Magasinarticle m WHERE m.quantitemultiple = :quantitemultiple")
+    ,
+    @NamedQuery(name = "Magasinarticle.findByUnite", query = "SELECT m FROM Magasinarticle m WHERE m.unite = :unite")
+    ,
+    @NamedQuery(name = "Magasinarticle.findByEtat", query = "SELECT m FROM Magasinarticle m WHERE m.etat = :etat")
+    ,
+    @NamedQuery(name = "Magasinarticle.findByQuantitereduite", query = "SELECT m FROM Magasinarticle m WHERE m.quantitereduite = :quantitereduite")
+    ,
+    @NamedQuery(name = "Magasinarticle.findByQuantitevirtuelle", query = "SELECT m FROM Magasinarticle m WHERE m.quantitevirtuelle = :quantitevirtuelle")
+    ,
     @NamedQuery(name = "Magasinarticle.findByQuantitesecurite", query = "SELECT m FROM Magasinarticle m WHERE m.quantitesecurite = :quantitesecurite")})
 public class Magasinarticle implements Serializable {
 
@@ -53,6 +61,10 @@ public class Magasinarticle implements Serializable {
     private double quantitereduite;
     private double quantitevirtuelle;
     private double quantitesecurite;
+    @Column(name = "prix_vente_detail")
+    private double prixVenteDetail;
+    @Column(name = "prix_vente_gros")
+    private double prixVenteGros;
     @JoinColumn(name = "idarticle", referencedColumnName = "idarticle")
     @ManyToOne(fetch = FetchType.LAZY)
     private Article idarticle;
@@ -64,8 +76,7 @@ public class Magasinarticle implements Serializable {
     @OneToMany(mappedBy = "idmagasinarticle", fetch = FetchType.LAZY)
     private List<Magasinlot> magasinlotList;
 
-    
-    private void initConstructor(){
+    private void initConstructor() {
         this.quantitemultiple = 0;
         this.quantitereduite = 0;
         this.quantitesecurite = 0;
@@ -74,7 +85,7 @@ public class Magasinarticle implements Serializable {
         this.magasinlotList = new ArrayList<>();
         this.lignedemandeList = new ArrayList<>();
     }
-    
+
     public Magasinarticle() {
         super();
         idarticle = new Article();
@@ -165,6 +176,22 @@ public class Magasinarticle implements Serializable {
 
     public void setIdmagasin(Magasin idmagasin) {
         this.idmagasin = idmagasin;
+    }
+
+    public double getPrixVenteDetail() {
+        return prixVenteDetail;
+    }
+
+    public void setPrixVenteDetail(double prixVenteDetail) {
+        this.prixVenteDetail = prixVenteDetail;
+    }
+
+    public double getPrixVenteGros() {
+        return prixVenteGros;
+    }
+
+    public void setPrixVenteGros(double prixVenteGros) {
+        this.prixVenteGros = prixVenteGros;
     }
 
     @XmlTransient

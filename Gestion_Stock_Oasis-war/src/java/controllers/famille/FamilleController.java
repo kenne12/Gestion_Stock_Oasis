@@ -13,14 +13,14 @@ import utils.Utilitaires;
 @ManagedBean
 @ViewScoped
 public class FamilleController extends AbstractFamilleController implements Serializable {
-    
+
     public void prepareCreate() {
         try {
             if (!Utilitaires.isAccess(10L)) {
                 signalError("acces_refuse");
                 return;
             }
-            
+
             famille = new Famille();
             famille.setNom("-");
             famille.setCode(Utilitaires.genererCodeArticle("F", familleFacadeLocal.nextValByIdstructure(SessionMBean.getParametrage().getId())));
@@ -30,7 +30,7 @@ public class FamilleController extends AbstractFamilleController implements Seri
             signalException(e);
         }
     }
-    
+
     public void prepareEdit() {
         try {
             if (!Utilitaires.isAccess(10L)) {
@@ -43,7 +43,7 @@ public class FamilleController extends AbstractFamilleController implements Seri
             signalException(e);
         }
     }
-    
+
     public void create() {
         try {
             if (this.mode.equals("Create")) {
@@ -67,40 +67,40 @@ public class FamilleController extends AbstractFamilleController implements Seri
             signalException(e);
         }
     }
-    
+
     public void delete() {
         try {
             if (this.famille != null) {
-                if (!Utilitaires.isAccess(10L)) {
-                    signalError("acces_refuse");
-                    return;
-                }
-                
-                this.familleFacadeLocal.remove(this.famille);
-                
-                Utilitaires.saveOperation(this.mouchardFacadeLocal, "Suppresion de la famille de produit : " + this.famille.getNom(), SessionMBean.getUserAccount());
-                this.famille = null;
-                signalSuccess();
-            } else {
                 JsfUtil.addErrorMessage("Aucune Famille selectionnée");
+                return;
             }
+            if (!Utilitaires.isAccess(10L)) {
+                signalError("acces_refuse");
+                return;
+            }
+
+            this.familleFacadeLocal.remove(this.famille);
+
+            Utilitaires.saveOperation(this.mouchardFacadeLocal, "Suppresion de la famille de produit : " + this.famille.getNom(), SessionMBean.getUserAccount());
+            this.famille = new Famille();
+            signalSuccess();
         } catch (Exception e) {
             signalException(e);
         }
     }
-    
+
     public void signalError(String chaine) {
         RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
         this.routine.feedBack("information", "/resources/tool_images/warning.jpeg", this.routine.localizeMessage(chaine));
         RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
     }
-    
+
     public void signalSuccess() {
         RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
         this.routine.feedBack("information", "/resources/tool_images/success.png", this.routine.localizeMessage("operation_reussie"));
         RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
     }
-    
+
     public void signalException(Exception e) {
         RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
         this.routine.catchException(e, this.routine.localizeMessage("erreur_execution"));

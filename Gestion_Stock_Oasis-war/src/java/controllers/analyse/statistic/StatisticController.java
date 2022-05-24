@@ -17,7 +17,6 @@ import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.BarChartSeries;
 import org.primefaces.model.chart.CategoryAxis;
-import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
 import utils.SessionMBean;
@@ -90,30 +89,37 @@ public class StatisticController extends AbstractStatisticController implements 
 
             for (AnneeMois a : this.anneeMoises) {
 
-                Integer somme = 0;
-                List<Livraisonclient> livraisonclients = livraisonclientFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), a.getDateDebut(), a.getDateFin());
-                for (Livraisonclient l : livraisonclients) {
-                    somme += (int) l.getMontantTtc();
-                }
+                List<Livraisonclient> listLivraisons = livraisonclientFacadeLocal
+                        .findAllRange(SessionMBean.getMagasin().getIdmagasin(), a.getDateDebut(), a.getDateFin());
 
-                series1.set(a.getIdmois().getNom(), somme);
+                double sommeLivraison = this.sumLivraisons(listLivraisons);
 
-                int somme1 = 0;
-                List<Livraisonfournisseur> livraisonfournisseurs = this.livraisonfournisseurFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), a.getDateDebut(), a.getDateFin());
-                for (Livraisonfournisseur s : livraisonfournisseurs) {
-                    somme1 += s.getMontant().intValue();
-                }
-                series2.set(a.getIdmois().getNom(), somme1);
+                series1.set(a.getIdmois().getNom(), (int) sommeLivraison);
+
+                List<Livraisonfournisseur> livraisonfournisseurs = this.livraisonfournisseurFacadeLocal
+                        .findAllRange(SessionMBean.getMagasin().getIdmagasin(), a.getDateDebut(), a.getDateFin());
+
+                double sommeFournisseur = sumLivraisonFournisseurs(livraisonfournisseurs);
+
+                series2.set(a.getIdmois().getNom(), (int) sommeFournisseur);
             }
 
-            model.addSeries((ChartSeries) series1);
-            model.addSeries((ChartSeries) series2);
+            model.addSeries(series1);
+            model.addSeries(series2);
 
             return model;
         } catch (Exception e) {
             e.printStackTrace();
             return new LineChartModel();
         }
+    }
+
+    private double sumLivraisons(List<Livraisonclient> livraisonclients) {
+        return livraisonclients.stream().mapToDouble(Livraisonclient::getMontantTtc).sum();
+    }
+
+    private double sumLivraisonFournisseurs(List<Livraisonfournisseur> list) {
+        return list.stream().mapToDouble(Livraisonfournisseur::getMontant).sum();
     }
 
     private LineChartModel initCategoryModel() {
@@ -128,24 +134,22 @@ public class StatisticController extends AbstractStatisticController implements 
 
             for (AnneeMois a : this.anneeMoises) {
 
-                Integer somme = 0;
-                List<Livraisonclient> livraisonclients = this.livraisonclientFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), a.getDateDebut(), a.getDateFin());
-                for (Livraisonclient l : livraisonclients) {
-                    somme += (int) l.getMontantTtc();
-                }
+                List<Livraisonclient> listLivraisons = this.livraisonclientFacadeLocal
+                        .findAllRange(SessionMBean.getMagasin().getIdmagasin(), a.getDateDebut(), a.getDateFin());
 
-                series1.set(a.getIdmois().getNom(), somme);
+                Integer sommeLivraison = (int) this.sumLivraisons(listLivraisons);
 
-                int somme1 = 0;
-                List<Livraisonfournisseur> livraisonfournisseurs = this.livraisonfournisseurFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), a.getDateDebut(), a.getDateFin());
-                for (Livraisonfournisseur s : livraisonfournisseurs) {
-                    somme1 += s.getMontant().intValue();
-                }
-                series2.set(a.getIdmois().getNom(), somme1);
+                series1.set(a.getIdmois().getNom(), sommeLivraison);
+
+                List<Livraisonfournisseur> livraisonfournisseurs = this.livraisonfournisseurFacadeLocal
+                        .findAllRange(SessionMBean.getMagasin().getIdmagasin(), a.getDateDebut(), a.getDateFin());
+
+                int sommeFournisseur = (int) this.sumLivraisonFournisseurs(livraisonfournisseurs);
+                series2.set(a.getIdmois().getNom(), sommeFournisseur);
             }
 
-            model.addSeries((ChartSeries) series1);
-            model.addSeries((ChartSeries) series2);
+            model.addSeries(series1);
+            model.addSeries(series2);
 
             return model;
         } catch (Exception e) {
@@ -166,24 +170,21 @@ public class StatisticController extends AbstractStatisticController implements 
 
             for (AnneeMois a : this.anneeMoises) {
 
-                int somme = 0;
-                List<Livraisonclient> livraisonclients = livraisonclientFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), a.getDateDebut(), a.getDateFin());
-                for (Livraisonclient f : livraisonclients) {
-                    somme += f.getMontantTtc();
-                }
+                List<Livraisonclient> listLivraisons = livraisonclientFacadeLocal
+                        .findAllRange(SessionMBean.getMagasin().getIdmagasin(), a.getDateDebut(), a.getDateFin());
+                int sommeLivraison = (int) this.sumLivraisons(listLivraisons);
 
-                series1.set(a.getIdmois().getNom(), somme);
+                series1.set(a.getIdmois().getNom(), sommeLivraison);
 
-                int somme1 = 0;
-                List<Livraisonfournisseur> livraisonfournisseurs = this.livraisonfournisseurFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), a.getDateDebut(), a.getDateFin());
-                for (Livraisonfournisseur s : livraisonfournisseurs) {
-                    somme1 += s.getMontant().intValue();
-                }
-                series2.set(a.getIdmois().getNom(), somme1);
+                List<Livraisonfournisseur> livraisonfournisseurs = this.livraisonfournisseurFacadeLocal
+                        .findAllRange(SessionMBean.getMagasin().getIdmagasin(), a.getDateDebut(), a.getDateFin());
+
+                int sommeFournisseur = (int) sumLivraisonFournisseurs(livraisonfournisseurs);
+                series2.set(a.getIdmois().getNom(), sommeFournisseur);
             }
 
-            model.addSeries((ChartSeries) series1);
-            model.addSeries((ChartSeries) series2);
+            model.addSeries(series1);
+            model.addSeries(series2);
 
             return model;
         } catch (Exception e) {
@@ -222,22 +223,22 @@ public class StatisticController extends AbstractStatisticController implements 
                 this.livraisonclients = this.livraisonclientFacadeLocal.findAllRange();
                 ajaxHide();
                 if (!this.livraisonclients.isEmpty()) {
-                    this.imprimer = false;
-                    notifySuccess();
-                } else {
                     notifyFail();
+                    return;
                 }
+                this.imprimer = false;
+                notifySuccess();
                 return;
             }
             if (this.critere == 2) {
                 this.livraisonclients = this.livraisonclientFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), anneeMois.getDateDebut(), anneeMois.getDateFin());
                 ajaxHide();
-                if (!this.livraisonclients.isEmpty()) {
-                    this.imprimer = false;
-                    notifySuccess();
-                } else {
+                if (this.livraisonclients.isEmpty() || livraisonclients == null) {
                     notifyFail();
+                    return;
                 }
+                this.imprimer = false;
+                notifySuccess();
                 return;
             }
             if (this.critere == 3) {
@@ -275,12 +276,10 @@ public class StatisticController extends AbstractStatisticController implements 
                 notifyFail();
             }
 
-            return;
         } catch (Exception e) {
             ajaxHide();
             this.routine.catchException(e, this.routine.localizeMessage("echec_operation"));
             RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
-            return;
         }
     }
 

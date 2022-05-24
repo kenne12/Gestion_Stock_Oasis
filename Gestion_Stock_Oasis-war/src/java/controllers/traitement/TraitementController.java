@@ -121,7 +121,7 @@ public class TraitementController extends AbstractTraitementController implement
     public void prepareview() {
         try {
             if (this.livraisonclient != null) {
-                this.lignelivraisonclients = this.lignelivraisonclientFacadeLocal.findByIdlivraisonclient(this.livraisonclient.getIdlivraisonclient().longValue());
+                this.lignelivraisonclients = this.lignelivraisonclientFacadeLocal.findByIdlivraisonclient(this.livraisonclient.getIdlivraisonclient());
                 if (!this.lignelivraisonclients.isEmpty()) {
                     RequestContext.getCurrentInstance().execute("PF('LivraisonClientDetailDialog').show()");
                     return;
@@ -210,25 +210,25 @@ public class TraitementController extends AbstractTraitementController implement
                             for (Magasinlot l : lotTemp) {
                                 if (!l.getIdlot().equals(lotTemp)) {
                                     if (l.getQuantitemultiple() > 0.0D) {
-                                        /* 241 */ Lignelivraisonclient c = new Lignelivraisonclient();
-                                        /* 242 */ c.setIdlignelivraisonclient(0L);
-                                        /* 243 */ c.setIdmagasinlot(l);
-                                        /* 244 */ c.setIdlot(l.getIdlot());
-                                        /* 245 */ c.setMontant(lcc.getMontant());
-                                        /* 246 */ c.setIdunite(lcc.getIdunite());
+                                        Lignelivraisonclient c = new Lignelivraisonclient();
+                                        c.setIdlignelivraisonclient(0L);
+                                        c.setIdmagasinlot(l);
+                                        c.setIdlot(l.getIdlot());
+                                        c.setMontant(lcc.getMontant());
+                                        c.setIdunite(lcc.getIdunite());
 
                                         if (l.getQuantitemultiple() >= qteReste) {
-                                            /* 249 */ c.setQuantitemultiple(qteReste);
-                                            /* 250 */ c.setQuantite(qteReste / l.getUnite());
-                                            /* 251 */ c.setQuantitereduite(l.getQuantitemultiple() / l.getIdlot().getIdarticle().getUnite());
-                                            /* 252 */ this.lignelivraisonclients.add(c);
-                                            /* 253 */ sommeQte = sommeQte + qteReste;
-                                            /* 254 */ suffisant = true;
-                                            /* 255 */ break;
+                                            c.setQuantitemultiple(qteReste);
+                                            c.setQuantite(qteReste / l.getUnite());
+                                            c.setQuantitereduite(l.getQuantitemultiple() / l.getIdlot().getIdarticle().getUnite());
+                                            this.lignelivraisonclients.add(c);
+                                            sommeQte = sommeQte + qteReste;
+                                            suffisant = true;
+                                            break;
                                         }
                                         qteReste = (qteReste - l.getQuantitemultiple());
                                         c.setQuantitemultiple(l.getQuantitemultiple());
-                                        c.setQuantite(l.getQuantitemultiple() / l.getUnite().doubleValue());
+                                        c.setQuantite(l.getQuantitemultiple() / l.getUnite());
                                         c.setQuantitereduite(l.getQuantitemultiple() / l.getIdlot().getIdarticle().getUnite());
                                         this.lignelivraisonclients.add(c);
                                         sommeQte = sommeQte + l.getQuantitemultiple();
@@ -242,7 +242,7 @@ public class TraitementController extends AbstractTraitementController implement
                     }
                     Utilitaires.arrondiNDecimales(sommeQte / qteDemandee * 100.0D, 2);
                     ((Lignedemande) this.lignedemandes.get(conteur)).setTauxsatisfaction(Utilitaires.arrondiNDecimales(sommeQte / qteDemandee * 100.0D, 2));
-                    pourcentage = pourcentage + Utilitaires.arrondiNDecimales(sommeQte.doubleValue() / qteDemandee.doubleValue() * 100.0D, 2).doubleValue();
+                    pourcentage = pourcentage + Utilitaires.arrondiNDecimales(sommeQte / qteDemandee * 100.0D, 2);
                     conteur++;
                 }
                 this.demande.setTauxsatisfaction(pourcentage);
@@ -292,83 +292,83 @@ public class TraitementController extends AbstractTraitementController implement
                         }
                     }
 
-                    /* 327 */ String message = "";
-                    /* 328 */ updateTotal();
-                    /* 329 */ this.ut.begin();
+                    String message = "";
+                    updateTotal();
+                    this.ut.begin();
 
-                    /* 331 */ this.mvtstock.setIdmvtstock(this.mvtstockFacadeLocal.nextVal());
-                    /* 332 */ String codeMvt = "MVT";
-                    /* 333 */ codeMvt = Utilitaires.genererCodeStock(codeMvt, this.mvtstock.getIdmvtstock());
-                    /* 334 */ this.mvtstock.setCode(codeMvt);
+                    this.mvtstock.setIdmvtstock(this.mvtstockFacadeLocal.nextVal());
+                    String codeMvt = "MVT";
+                    codeMvt = Utilitaires.genererCodeStock(codeMvt, this.mvtstock.getIdmvtstock());
+                    this.mvtstock.setCode(codeMvt);
 
-                    /* 336 */ this.mvtstock.setDatemvt(this.demande.getDateeffectlivraison());
-                    /* 337 */ this.mvtstock.setClient(this.demande.getClient().getNom() + " " + this.demande.getClient().getPrenom());
-                    /* 338 */ this.mvtstock.setFournisseur(" ");
-                    /* 339 */ this.mvtstock.setMagasin(" ");
-                    /* 340 */ this.mvtstock.setType(" ");
-                    /* 341 */ this.mvtstockFacadeLocal.create(this.mvtstock);
+                    this.mvtstock.setDatemvt(this.demande.getDateeffectlivraison());
+                    this.mvtstock.setClient(this.demande.getClient().getNom() + " " + this.demande.getClient().getPrenom());
+                    this.mvtstock.setFournisseur(" ");
+                    this.mvtstock.setMagasin(" ");
+                    this.mvtstock.setType(" ");
+                    this.mvtstockFacadeLocal.create(this.mvtstock);
 
-                    /* 343 */ String code = "LIV";
-                    /* 344 */ this.livraisonclient.setIdlivraisonclient(this.livraisonclientFacadeLocal.nextValue());
-                    /* 345 */ code = Utilitaires.genererCodeDemande(code, this.livraisonclient.getIdlivraisonclient());
-                    /* 346 */ this.livraisonclient.setCode(code);
-                    /* 347 */ this.livraisonclient.setMontant(this.total);
-                    /* 348 */ this.livraisonclient.setLivraisondirecte(false);
-                    /* 349 */ this.livraisonclient.setDatelivraison(this.demande.getDateeffectlivraison());
-                    /* 350 */ this.livraisonclient.setIddemande(this.demande);
-                    /* 351 */ this.livraisonclient.setClient(this.demande.getClient());
-                    /* 352 */ this.livraisonclient.setIdmvtstock(this.mvtstock);
-                    /* 353 */ this.livraisonclientFacadeLocal.create(this.livraisonclient);
+                    String code = "LIV";
+                    this.livraisonclient.setIdlivraisonclient(this.livraisonclientFacadeLocal.nextValue());
+                    code = Utilitaires.genererCodeDemande(code, this.livraisonclient.getIdlivraisonclient());
+                    this.livraisonclient.setCode(code);
+                    this.livraisonclient.setMontant(this.total);
+                    this.livraisonclient.setLivraisondirecte(false);
+                    this.livraisonclient.setDatelivraison(this.demande.getDateeffectlivraison());
+                    this.livraisonclient.setIddemande(this.demande);
+                    this.livraisonclient.setClient(this.demande.getClient());
+                    this.livraisonclient.setIdmvtstock(this.mvtstock);
+                    this.livraisonclientFacadeLocal.create(this.livraisonclient);
 
                     for (Lignelivraisonclient llc : this.lignelivraisonclients) {
                         llc.setIdlignelivraisonclient(this.lignelivraisonclientFacadeLocal.nextVal());
                         llc.setIdlivraisonclient(this.livraisonclient);
                         this.lignelivraisonclientFacadeLocal.create(llc);
 
-                        /* 360 */ Lignedemande ldTemp = searchByMagasinLotInLigneDemande(llc.getIdmagasinlot());
+                        Lignedemande ldTemp = searchByMagasinLotInLigneDemande(llc.getIdmagasinlot());
 
-                        /* 362 */ Magasinarticle maTemp = this.magasinarticleFacadeLocal.find(llc.getIdmagasinlot().getIdmagasinarticle().getIdmagasinarticle());
-                        /* 363 */ maTemp.setQuantite((maTemp.getQuantite() - llc.getQuantite()));
-                        /* 364 */ maTemp.setQuantitemultiple((maTemp.getQuantitemultiple() - llc.getQuantitemultiple()));
-                        /* 365 */ maTemp.setQuantitereduite((maTemp.getQuantitereduite() - llc.getQuantitereduite()));
-                        /* 366 */ maTemp.setQuantitevirtuelle((maTemp.getQuantitevirtuelle() - ldTemp.getQuantitemultiple()));
-                        /* 367 */ this.magasinarticleFacadeLocal.edit(maTemp);
+                        Magasinarticle maTemp = this.magasinarticleFacadeLocal.find(llc.getIdmagasinlot().getIdmagasinarticle().getIdmagasinarticle());
+                        maTemp.setQuantite((maTemp.getQuantite() - llc.getQuantite()));
+                        maTemp.setQuantitemultiple((maTemp.getQuantitemultiple() - llc.getQuantitemultiple()));
+                        maTemp.setQuantitereduite((maTemp.getQuantitereduite() - llc.getQuantitereduite()));
+                        maTemp.setQuantitevirtuelle((maTemp.getQuantitevirtuelle() - ldTemp.getQuantitemultiple()));
+                        this.magasinarticleFacadeLocal.edit(maTemp);
 
-                        /* 369 */ Magasinlot mlTemp = this.magasinlotFacadeLocal.find(llc.getIdmagasinlot().getIdmagasinlot());
-                        /* 370 */ mlTemp.setQuantite((mlTemp.getQuantite() - llc.getQuantite()));
-                        /* 371 */ mlTemp.setQuantitemultiple((mlTemp.getQuantitemultiple() - llc.getQuantitemultiple()));
-                        /* 372 */ mlTemp.setQuantitereduite((mlTemp.getQuantitereduite() - llc.getQuantitereduite()));
-                        /* 373 */ this.magasinlotFacadeLocal.edit(mlTemp);
+                        Magasinlot mlTemp = this.magasinlotFacadeLocal.find(llc.getIdmagasinlot().getIdmagasinlot());
+                        mlTemp.setQuantite((mlTemp.getQuantite() - llc.getQuantite()));
+                        mlTemp.setQuantitemultiple((mlTemp.getQuantitemultiple() - llc.getQuantitemultiple()));
+                        mlTemp.setQuantitereduite((mlTemp.getQuantitereduite() - llc.getQuantitereduite()));
+                        this.magasinlotFacadeLocal.edit(mlTemp);
 
-                        /* 375 */ Lignemvtstock lmvts = new Lignemvtstock();
-                        /* 376 */ lmvts.setIdlignemvtstock(this.lignemvtstockFacadeLocal.nextVal());
-                        /* 377 */ lmvts.setIdmvtstock(this.mvtstock);
-                        /* 378 */ lmvts.setIdlot(llc.getIdmagasinlot().getIdlot());
-                        /* 379 */ lmvts.setQtesortie(llc.getQuantitemultiple());
-                        /* 380 */ lmvts.setQteentree(0.0);
-                        /* 381 */ lmvts.setReste(mlTemp.getQuantitemultiple());
-                        /* 382 */ lmvts.setIdmagasinlot(llc.getIdmagasinlot());
-                        /* 383 */ lmvts.setUnite(llc.getUnite());
-                        /* 384 */ lmvts.setMagasin(" ");
-                        /* 385 */ lmvts.setClient(this.demande.getClient().getNom() + " " + this.demande.getClient().getPrenom());
-                        /* 386 */ lmvts.setFournisseur(" ");
-                        /* 387 */ lmvts.setType("SORTIE");
-                        /* 388 */ this.lignemvtstockFacadeLocal.create(lmvts);
+                        Lignemvtstock lmvts = new Lignemvtstock();
+                        lmvts.setIdlignemvtstock(this.lignemvtstockFacadeLocal.nextVal());
+                        lmvts.setIdmvtstock(this.mvtstock);
+                        lmvts.setIdlot(llc.getIdmagasinlot().getIdlot());
+                        lmvts.setQtesortie(llc.getQuantitemultiple());
+                        lmvts.setQteentree(0.0);
+                        lmvts.setReste(mlTemp.getQuantitemultiple());
+                        lmvts.setIdmagasinlot(llc.getIdmagasinlot());
+                        lmvts.setUnite(llc.getUnite());
+                        lmvts.setMagasin(" ");
+                        lmvts.setClient(this.demande.getClient().getNom() + " " + this.demande.getClient().getPrenom());
+                        lmvts.setFournisseur(" ");
+                        lmvts.setType("SORTIE");
+                        this.lignemvtstockFacadeLocal.create(lmvts);
                     }
                     this.demande.setValidee(true);
-                    /* 391 */ this.demandeFacadeLocal.edit(this.demande);
-                    /* 392 */ Utilitaires.saveOperation(this.mouchardFacadeLocal, "Validation de la demande  N° : " + this.livraisonclient.getIddemande().getCode(), SessionMBean.getUserAccount());
+                    this.demandeFacadeLocal.edit(this.demande);
+                    Utilitaires.saveOperation(this.mouchardFacadeLocal, "Validation de la demande  N° : " + this.livraisonclient.getIddemande().getCode(), SessionMBean.getUserAccount());
 
-                    /* 394 */ this.ut.commit();
-                    /* 395 */ this.demande = new Demande();
-                    /* 396 */ this.lignedemandes.clear();
-                    /* 397 */ this.lignelivraisonclients.clear();
-                    /* 398 */ this.detail = (this.supprimer = this.modifier = this.imprimer = this.imprimer2 = true);
-                    /* 399 */ JsfUtil.addSuccessMessage(message);
+                    this.ut.commit();
+                    this.demande = new Demande();
+                    this.lignedemandes.clear();
+                    this.lignelivraisonclients.clear();
+                    this.detail = (this.supprimer = this.modifier = this.imprimer = this.imprimer2 = true);
+                    JsfUtil.addSuccessMessage(message);
 
-                    /* 401 */ notifySuccess();
-                    /* 402 */ RequestContext.getCurrentInstance().execute("PF('LivraisonClientCreateDialog').hide()");
-                    /* 403 */ this.demandes_1 = this.demandeFacadeLocal.findAllRange();
+                    notifySuccess();
+                    RequestContext.getCurrentInstance().execute("PF('LivraisonClientCreateDialog').hide()");
+                    this.demandes_1 = this.demandeFacadeLocal.findAllRange();
                 } else {
                     notifyError("liste_article_vide");
                 }
@@ -378,7 +378,7 @@ public class TraitementController extends AbstractTraitementController implement
                 this.demandes.clear();
                 this.demande = new Demande();
                 this.livraisonclient = null;
-                this.supprimer = (this.modifier = this.imprimer = Boolean.valueOf(true));
+                this.supprimer = (this.modifier = this.imprimer = true);
 
                 notifySuccess();
                 RequestContext.getCurrentInstance().execute("PF('LignelivraisonclientCreateDialog').hide()");
@@ -411,99 +411,99 @@ public class TraitementController extends AbstractTraitementController implement
                     if (!temp.isEmpty()) {
                         for (Lignelivraisonclient llc : temp) {
 
-                            /* 451 */ llc.setIdmagasinlot(this.magasinlotFacadeLocal.find(llc.getIdmagasinlot().getIdmagasinlot()));
+                            llc.setIdmagasinlot(this.magasinlotFacadeLocal.find(llc.getIdmagasinlot().getIdmagasinlot()));
 
-                            /* 453 */ llc.getIdmagasinlot().setQuantite((llc.getIdmagasinlot().getQuantite() + llc.getQuantite()));
-                            /* 454 */ llc.getIdmagasinlot().setQuantitemultiple((llc.getIdmagasinlot().getQuantitemultiple() + llc.getQuantitemultiple()));
-                            /* 455 */ llc.getIdmagasinlot().setQuantitereduite((llc.getIdmagasinlot().getQuantitereduite() + llc.getQuantitereduite()));
-                            /* 456 */ llc.getIdmagasinlot().setQuantitevirtuelle((llc.getIdmagasinlot().getQuantitevirtuelle() + llc.getQuantitemultiple()));
+                            llc.getIdmagasinlot().setQuantite((llc.getIdmagasinlot().getQuantite() + llc.getQuantite()));
+                            llc.getIdmagasinlot().setQuantitemultiple((llc.getIdmagasinlot().getQuantitemultiple() + llc.getQuantitemultiple()));
+                            llc.getIdmagasinlot().setQuantitereduite((llc.getIdmagasinlot().getQuantitereduite() + llc.getQuantitereduite()));
+                            llc.getIdmagasinlot().setQuantitevirtuelle((llc.getIdmagasinlot().getQuantitevirtuelle() + llc.getQuantitemultiple()));
 
-                            /* 458 */ llc.getIdmagasinlot().getIdmagasinarticle().setQuantite((llc.getIdmagasinlot().getIdmagasinarticle().getQuantite() + llc.getQuantite()));
-                            /* 459 */ llc.getIdmagasinlot().getIdmagasinarticle().setQuantitemultiple((llc.getIdmagasinlot().getIdmagasinarticle().getQuantitemultiple() + llc.getQuantitemultiple()));
-                            /* 460 */ llc.getIdmagasinlot().getIdmagasinarticle().setQuantitereduite((llc.getIdmagasinlot().getIdmagasinarticle().getQuantitereduite() + llc.getQuantitereduite()));
+                            llc.getIdmagasinlot().getIdmagasinarticle().setQuantite((llc.getIdmagasinlot().getIdmagasinarticle().getQuantite() + llc.getQuantite()));
+                            llc.getIdmagasinlot().getIdmagasinarticle().setQuantitemultiple((llc.getIdmagasinlot().getIdmagasinarticle().getQuantitemultiple() + llc.getQuantitemultiple()));
+                            llc.getIdmagasinlot().getIdmagasinarticle().setQuantitereduite((llc.getIdmagasinlot().getIdmagasinarticle().getQuantitereduite() + llc.getQuantitereduite()));
 
-                            /* 463 */ this.magasinlotFacadeLocal.edit(llc.getIdmagasinlot());
-                            /* 464 */ this.magasinarticleFacadeLocal.edit(llc.getIdmagasinlot().getIdmagasinarticle());
+                            this.magasinlotFacadeLocal.edit(llc.getIdmagasinlot());
+                            this.magasinarticleFacadeLocal.edit(llc.getIdmagasinlot().getIdmagasinarticle());
 
-                            /* 466 */ this.lignelivraisonclientFacadeLocal.remove(llc);
+                            this.lignelivraisonclientFacadeLocal.remove(llc);
                         }
                     }
                     Lignelivraisonclient llc;
-                    /* 469 */ this.livraisonclientFacadeLocal.remove(this.livraisonclient);
+                    this.livraisonclientFacadeLocal.remove(this.livraisonclient);
 
-                    /* 471 */ this.demande = this.livraisonclient.getIddemande();
+                    this.demande = this.livraisonclient.getIddemande();
 
-                    /* 473 */ this.demande.setValidee(false);
-                    /* 474 */ this.demande.setTauxsatisfaction(0.0);
-                    /* 475 */ this.demandeFacadeLocal.edit(this.demande);
+                    this.demande.setValidee(false);
+                    this.demande.setTauxsatisfaction(0.0);
+                    this.demandeFacadeLocal.edit(this.demande);
 
                     List<Lignemvtstock> lmvt = this.lignemvtstockFacadeLocal.findByIdmvt(this.livraisonclient.getIdmvtstock().getIdmvtstock());
                     for (Lignemvtstock l : lmvt) {
                         this.lignemvtstockFacadeLocal.remove(l);
                     }
 
-                    /* 482 */ this.mvtstockFacadeLocal.remove(this.livraisonclient.getIdmvtstock());
+                    this.mvtstockFacadeLocal.remove(this.livraisonclient.getIdmvtstock());
 
-                    /* 484 */ Utilitaires.saveOperation(this.mouchardFacadeLocal, "Annulation de validation de la demande : " + this.livraisonclient.getCode(), SessionMBean.getUserAccount());
-                    /* 485 */ this.ut.commit();
+                    Utilitaires.saveOperation(this.mouchardFacadeLocal, "Annulation de validation de la demande : " + this.livraisonclient.getCode(), SessionMBean.getUserAccount());
+                    this.ut.commit();
 
-                    /* 487 */ this.livraisonclient = null;
-                    /* 488 */ this.demande = null;
-                    /* 489 */ this.supprimer = (this.modifier = this.imprimer = this.detail = this.imprimer2 = true);
-                    /* 490 */ notifySuccess();
-                    /* 491 */ this.demandes_1 = this.demandeFacadeLocal.findAllRange();
+                    this.livraisonclient = null;
+                    this.demande = null;
+                    this.supprimer = (this.modifier = this.imprimer = this.detail = this.imprimer2 = true);
+                    notifySuccess();
+                    this.demandes_1 = this.demandeFacadeLocal.findAllRange();
                 } else {
                     notifyError("vente_directe");
                 }
-            } /* 496 */ else {
+            } else {
                 notifyError("not_row_selected");
             }
         } catch (Exception e) {
-            /* 499 */ notifyFail(e);
+            notifyFail(e);
         }
     }
 
     public void initPrinter(Livraisonclient l) {
-        /* 504 */ this.livraisonclient = l;
-        /* 505 */ print();
+        this.livraisonclient = l;
+        print();
     }
 
     public void initPrinterBon(Livraisonclient l) {
-        /* 509 */ this.livraisonclient = l;
-        /* 510 */ printBonLivraison();
+        this.livraisonclient = l;
+        printBonLivraison();
     }
 
     public void initEdit(Livraisonclient l) {
-        /* 514 */ this.livraisonclient = l;
-        /* 515 */ prepareEdit();
+        this.livraisonclient = l;
+        prepareEdit();
     }
 
     public void initViewV(Demande d) {
-        /* 519 */ Livraisonclient lc = this.livraisonclientFacadeLocal.findByIddemande(d.getIddemande().longValue());
-        /* 520 */ this.livraisonclient = lc;
-        /* 521 */ prepareview();
+        Livraisonclient lc = this.livraisonclientFacadeLocal.findByIddemande(d.getIddemande());
+        this.livraisonclient = lc;
+        prepareview();
     }
 
     public void initView(Livraisonclient l) {
-        /* 525 */ this.livraisonclient = l;
-        /* 526 */ prepareview();
+        this.livraisonclient = l;
+        prepareview();
     }
 
     public void initViewD(Demande d) {
-        /* 530 */ this.demande = d;
-        /* 531 */ prepareviewD();
+        this.demande = d;
+        prepareviewD();
     }
 
     public void initTreatD(Demande d) {
-        /* 535 */ this.demande = d;
-        /* 536 */ prepareCreate();
-        /* 537 */ selectCommande();
-        /* 538 */ RequestContext.getCurrentInstance().execute("PF('LivraisonClientCreateDialog').show()");
+        this.demande = d;
+        prepareCreate();
+        selectCommande();
+        RequestContext.getCurrentInstance().execute("PF('LivraisonClientCreateDialog').show()");
     }
 
     public void initDelete(Livraisonclient l) {
-        /* 542 */ this.livraisonclient = l;
-        /* 543 */ delete();
+        this.livraisonclient = l;
+        delete();
     }
 
     public void print() {
@@ -511,16 +511,16 @@ public class TraitementController extends AbstractTraitementController implement
             this.livraisonclient = this.livraisonclientFacadeLocal.findByIddemande(this.demande.getIddemande());
 
             if (!Utilitaires.isAccess(42L)) {
-                /* 552 */ notifyError("acces_refuse");
-                /* 553 */ this.livraisonclient = null;
-                /* 554 */ return;
+                notifyError("acces_refuse");
+                this.livraisonclient = null;
+                return;
             }
 
             if (this.livraisonclient != null) {
-                /* 558 */ this.printDialogTitle = this.routine.localizeMessage("livraisonclient");
-                /* 559 */ Map map = new HashMap();
-                /* 560 */ map.put("idlivraisonclient", this.livraisonclient.getIdlivraisonclient());
-                /* 561 */ Printer.print("/reports/ireport/fiche_sortie_materiel.jasper", map);
+                this.printDialogTitle = this.routine.localizeMessage("livraisonclient");
+                Map map = new HashMap();
+                map.put("idlivraisonclient", this.livraisonclient.getIdlivraisonclient());
+                Printer.print("/reports/ireport/fiche_sortie_materiel.jasper", map);
             } else {
                 notifyError("not_row_selected");
             }
@@ -601,7 +601,7 @@ public class TraitementController extends AbstractTraitementController implement
             boolean trouve = false;
             this.ut.begin();
 
-            Lignedemande lcc =  this.lignedemandes.get(index);
+            Lignedemande lcc = this.lignedemandes.get(index);
 
             this.lignedemandes.remove(index);
 

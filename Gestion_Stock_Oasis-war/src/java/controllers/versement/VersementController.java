@@ -20,7 +20,6 @@ public class VersementController extends AbstractVersementController implements 
         try {
             if (!Utilitaires.isAccess(28L)) {
                 notifyError("acces_refuse");
-
                 return;
             }
             this.mode = "Create";

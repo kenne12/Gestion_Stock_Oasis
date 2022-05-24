@@ -14,10 +14,29 @@ import entities.Magasinlot;
 public class AnalyseRD {
 
     public AnalyseRD() {
+        this.init();
     }
 
     public AnalyseRD(Magasinlot magasinlot) {
         this.magasinlot = magasinlot;
+        this.init();
+    }
+
+    private void init() {
+        this.valeurJanv = 0;
+        this.valeurFev = 0;
+        this.valeurMars = 0;
+        this.valeurAvr = 0;
+        this.valeurMai = 0;
+        this.valeurJuin = 0;
+        this.valeurJuil = 0;
+        this.valeurAout = 0;
+        this.valeurSept = 0;
+        this.valeurOct = 0;
+        this.valeurNov = 0;
+        this.valeurDec = 0;
+        this.montantTotal = 0;
+        this.pourcentage = 0;
     }
 
     private Magasinlot magasinlot;
