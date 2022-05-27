@@ -62,6 +62,12 @@ public class Lignelivraisonfournisseur implements Serializable {
     @Column(name = "prix_achat_detail")
     private double prixAchatDetail;
 
+    @Column(name = "prix_vente")
+    private double prixVente;
+
+    @Column(name = "prix_vente_detail")
+    private double prixVenteDetail;
+
     @JoinColumn(name = "idlignecommandefournisseur", referencedColumnName = "idlignecommandefournisseur")
     @ManyToOne(fetch = FetchType.LAZY)
     private Lignecommandefournisseur idlignecommandefournisseur;
@@ -88,6 +94,9 @@ public class Lignelivraisonfournisseur implements Serializable {
 
     private void initConstructor() {
         this.idunite = new Unite();
+        this.prixVente = 0;
+        this.prixVenteDetail = 0;
+        this.prixAchatDetail = 0;
     }
 
     public Lignelivraisonfournisseur(Long idlignelivraisonfournisseur) {
@@ -168,6 +177,22 @@ public class Lignelivraisonfournisseur implements Serializable {
 
     public Lignecommandefournisseur getIdlignecommandefournisseur() {
         return idlignecommandefournisseur;
+    }
+
+    public double getPrixVente() {
+        return prixVente;
+    }
+
+    public void setPrixVente(double prixVente) {
+        this.prixVente = prixVente;
+    }
+
+    public double getPrixVenteDetail() {
+        return prixVenteDetail;
+    }
+
+    public void setPrixVenteDetail(double prixVenteDetail) {
+        this.prixVenteDetail = prixVenteDetail;
     }
 
     public void setIdlignecommandefournisseur(Lignecommandefournisseur idlignecommandefournisseur) {

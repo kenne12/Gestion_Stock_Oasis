@@ -57,7 +57,7 @@ public class Magasinarticle implements Serializable {
     private double quantite;
     private double quantitemultiple;
     private double unite;
-    private Boolean etat;
+    private boolean etat;
     private double quantitereduite;
     private double quantitevirtuelle;
     private double quantitesecurite;
@@ -84,6 +84,7 @@ public class Magasinarticle implements Serializable {
         this.unite = 0;
         this.magasinlotList = new ArrayList<>();
         this.lignedemandeList = new ArrayList<>();
+        this.etat = true;
     }
 
     public Magasinarticle() {
@@ -130,11 +131,11 @@ public class Magasinarticle implements Serializable {
         this.unite = unite;
     }
 
-    public Boolean getEtat() {
+    public boolean getEtat() {
         return etat;
     }
 
-    public void setEtat(Boolean etat) {
+    public void setEtat(boolean etat) {
         this.etat = etat;
     }
 

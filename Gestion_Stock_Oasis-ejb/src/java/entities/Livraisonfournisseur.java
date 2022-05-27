@@ -32,12 +32,18 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Livraisonfournisseur.findAll", query = "SELECT l FROM Livraisonfournisseur l"),
-    @NamedQuery(name = "Livraisonfournisseur.findByIdlivraisonfournisseur", query = "SELECT l FROM Livraisonfournisseur l WHERE l.idlivraisonfournisseur = :idlivraisonfournisseur"),
-    @NamedQuery(name = "Livraisonfournisseur.findByDatelivraison", query = "SELECT l FROM Livraisonfournisseur l WHERE l.datelivraison = :datelivraison"),
-    @NamedQuery(name = "Livraisonfournisseur.findByMontant", query = "SELECT l FROM Livraisonfournisseur l WHERE l.montant = :montant"),
-    @NamedQuery(name = "Livraisonfournisseur.findByRepartie", query = "SELECT l FROM Livraisonfournisseur l WHERE l.repartie = :repartie"),
-    @NamedQuery(name = "Livraisonfournisseur.findByCode", query = "SELECT l FROM Livraisonfournisseur l WHERE l.code = :code"),
+    @NamedQuery(name = "Livraisonfournisseur.findAll", query = "SELECT l FROM Livraisonfournisseur l")
+    ,
+    @NamedQuery(name = "Livraisonfournisseur.findByIdlivraisonfournisseur", query = "SELECT l FROM Livraisonfournisseur l WHERE l.idlivraisonfournisseur = :idlivraisonfournisseur")
+    ,
+    @NamedQuery(name = "Livraisonfournisseur.findByDatelivraison", query = "SELECT l FROM Livraisonfournisseur l WHERE l.datelivraison = :datelivraison")
+    ,
+    @NamedQuery(name = "Livraisonfournisseur.findByMontant", query = "SELECT l FROM Livraisonfournisseur l WHERE l.montant = :montant")
+    ,
+    @NamedQuery(name = "Livraisonfournisseur.findByRepartie", query = "SELECT l FROM Livraisonfournisseur l WHERE l.repartie = :repartie")
+    ,
+    @NamedQuery(name = "Livraisonfournisseur.findByCode", query = "SELECT l FROM Livraisonfournisseur l WHERE l.code = :code")
+    ,
     @NamedQuery(name = "Livraisonfournisseur.findByLivraisondirecte", query = "SELECT l FROM Livraisonfournisseur l WHERE l.livraisondirecte = :livraisondirecte")})
 public class Livraisonfournisseur implements Serializable {
 
@@ -51,6 +57,8 @@ public class Livraisonfournisseur implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     private Double montant;
     private Boolean repartie;
+    @Column(name = "modification_cout")
+    private boolean modificationCout;
     @Size(max = 254)
     private String code;
     private Boolean livraisondirecte;
@@ -75,6 +83,12 @@ public class Livraisonfournisseur implements Serializable {
     private boolean comptabilise;
 
     public Livraisonfournisseur() {
+        this.__constructor();
+    }
+
+    private void __constructor() {
+        this.modificationCout = true;
+        this.montant = 0.0;
     }
 
     public Livraisonfournisseur(Long idlivraisonfournisseur) {
@@ -175,6 +189,14 @@ public class Livraisonfournisseur implements Serializable {
 
     public void setComptabilise(boolean comptabilise) {
         this.comptabilise = comptabilise;
+    }
+
+    public boolean isModificationCout() {
+        return modificationCout;
+    }
+
+    public void setModificationCout(boolean modificationCout) {
+        this.modificationCout = modificationCout;
     }
 
     @XmlTransient

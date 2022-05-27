@@ -106,10 +106,10 @@ public class Lot implements Serializable {
 
     public Lot() {
         idarticle = new Article();
-        this.init();
+        this.__init_constructor();
     }
 
-    private void init() {
+    private void __init_constructor() {
         quantitemultiple = 0;
         unitesortie = 0;
         quantitereduite = 0;
@@ -119,11 +119,12 @@ public class Lot implements Serializable {
         prixachat = 0;
         prixunitaire = 0;
         quantite = 0;
-        
     }
 
     public Lot(Long idlot) {
         this.idlot = idlot;
+        this.idarticle = new Article();
+        this.__init_constructor();
     }
 
     public Long getIdlot() {

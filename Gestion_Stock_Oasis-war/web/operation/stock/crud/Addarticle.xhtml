@@ -107,19 +107,41 @@
                                     <p:message for="date_peremption"/>
 
                                     <p:outputLabel value="Mode" for="mode"/>
-                                    <p:selectOneMenu required="true" id="mode" filter="true" filterMatchMode="contains" value="#{entreedirecteController.lignelivraisonfournisseur.modeVente}">
+                                    <p:selectOneMenu disabled="true"  required="true" id="mode" filter="true" filterMatchMode="contains" value="#{entreedirecteController.lignelivraisonfournisseur.modeVente}">
                                         <f:selectItem itemLabel="VENTE_EN_GROS" itemValue="VENTE_EN_GROS"/>
                                         <f:selectItem itemLabel="VENTE_EN_DETAIL" itemValue="VENTE_EN_DETAIL"/>
                                         <p:ajax update="cu,qt,qpu,quantite,mt,unite" listener="#{entreedirecteController.updatePrixGrosAndDetail()}"/>
                                     </p:selectOneMenu>
                                     <p:message for="mode"/>
 
-                                    <p:outputLabel value="#{langue.prix_unitaire}" for="cu" />
+                                    <p:outputLabel value="#{langue.prix_unitaire} G" for="cu" />
                                     <p:inputText id="cu" required="true" style="width: 100px" value="#{entreedirecteController.lignelivraisonfournisseur.prixachat}">
                                         <f:convertNumber />
-                                        <p:ajax event="keyup" update="quantite,mt" listener="#{entreedirecteController.updateTotaux()}"/>
+                                        <p:ajax event="keyup" update="quantite,mt,cu_vente,cu_achat_d,cu_vente_d" listener="#{entreedirecteController.updateTotaux()}"/>
                                     </p:inputText>
                                     <p:message for="cu"/>
+                                    
+                                    
+                                    <p:outputLabel value="Prix Vente G" for="cu_vente" />
+                                    <p:inputText id="cu_vente" required="true" style="width: 100px" value="#{entreedirecteController.lignelivraisonfournisseur.prixVente}">
+                                        <f:convertNumber />
+                                        <p:ajax event="keyup" update="cu_vente_d" listener="#{entreedirecteController.updateCoutVente()}"/>
+                                    </p:inputText>
+                                    <p:message for="cu_vente"/>
+                                    
+                                    <p:outputLabel value="Prix Achat D" for="cu_achat_d" />
+                                    <p:inputText id="cu_achat_d" required="true" style="width: 100px" value="#{entreedirecteController.lignelivraisonfournisseur.prixAchatDetail}">
+                                        <f:convertNumber />
+                                        <p:ajax event="keyup" update="quantite,mt" />
+                                    </p:inputText>
+                                    <p:message for="cu_achat_d" />
+                                    
+                                    <p:outputLabel value="Prix Vente D" for="cu_vente_d" />
+                                    <p:inputText id="cu_vente_d" required="true" style="width: 100px" value="#{entreedirecteController.lignelivraisonfournisseur.prixVenteDetail}">
+                                        <f:convertNumber />
+                                        <p:ajax event="keyup" update="quantite,mt" />
+                                    </p:inputText>
+                                    <p:message for="cu_vente_d" />
 
                                     <p:outputLabel value="#{langue.unite}" for="unite"/>
                                     <h:panelGroup>

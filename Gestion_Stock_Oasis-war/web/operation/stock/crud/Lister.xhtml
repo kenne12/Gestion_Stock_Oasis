@@ -30,8 +30,8 @@
                          rowsPerPageTemplate="10,20,30,40,50"
                          selectionMode="single"
                          emptyMessage="#{langue.tableau_vide}"
-                         selection="#{entreedirecteController.livraisonfournisseur}"
-                         >
+                         selection="#{entreedirecteController.livraisonfournisseur}">
+                         
 
                 <p:ajax event="rowSelect" update=":StockListerForm:StockDataTableContextMenu,:actionsForm"/>
                 <p:ajax event="rowUnselect" update=":StockListerForm:StockDataTableContextMenu,:actionsForm"/>

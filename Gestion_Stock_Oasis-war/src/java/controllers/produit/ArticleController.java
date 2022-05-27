@@ -198,7 +198,6 @@ public class ArticleController extends AbstractArticleController implements Seri
                 }
 
                 for (Magasin m : selectedMagasins) {
-
                     Magasinarticle obj = new Magasinarticle();
                     obj.setIdmagasinarticle(this.magasinarticleFacadeLocal.nextVal());
                     obj.setIdarticle(this.article);
@@ -253,8 +252,8 @@ public class ArticleController extends AbstractArticleController implements Seri
                 Utilitaires.saveOperation(this.mouchardFacadeLocal, "Modification de l'article : " + this.article.getLibelle() + " Ancienne quantité : " + p.getQuantitestock() + " ; Nouvelle quantité : " + this.article.getQuantitestock(), SessionMBean.getUserAccount());
                 this.ut.commit();
 
-                for (Magasin m : selectedMagasins) {
-                    Magasinarticle ma = this.magasinarticleFacadeLocal.findByIdmagasinIdarticle(m.getIdmagasin().intValue(), this.article.getIdarticle().longValue());
+                selectedMagasins.forEach((m) -> {
+                    Magasinarticle ma = this.magasinarticleFacadeLocal.findByIdmagasinIdarticle(m.getIdmagasin(), this.article.getIdarticle());
                     if (ma == null) {
                         ma = new Magasinarticle();
                         ma.setIdmagasinarticle(this.magasinarticleFacadeLocal.nextVal());
@@ -262,9 +261,11 @@ public class ArticleController extends AbstractArticleController implements Seri
                         ma.setIdarticle(this.article);
                         ma.setEtat(true);
                         ma.setUnite(this.article.getUnite());
+                        ma.setPrixVenteDetail(article.getPrixVenteDetail());
+                        ma.setPrixVenteGros(article.getPrixunit());
                         this.magasinarticleFacadeLocal.create(ma);
                     }
-                }
+                });
 
                 this.modifier = this.supprimer = this.detail = true;
                 article = new Article();
@@ -545,7 +546,9 @@ public class ArticleController extends AbstractArticleController implements Seri
 
     private void redirect(String link) {
         try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + link);
+            FacesContext.getCurrentInstance()
+                    .getExternalContext()
+                    .redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + link);
         } catch (Exception e) {
         }
     }
