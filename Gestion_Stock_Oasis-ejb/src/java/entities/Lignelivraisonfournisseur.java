@@ -18,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -84,6 +85,11 @@ public class Lignelivraisonfournisseur implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     private Unite idunite;
 
+    private double prix;
+
+    @Transient
+    private double qtyNotConverted;
+
     @Column(name = "mode_vente", length = 15)
     @Enumerated(EnumType.STRING)
     private ModeEntreSorti modeVente;
@@ -97,6 +103,8 @@ public class Lignelivraisonfournisseur implements Serializable {
         this.prixVente = 0;
         this.prixVenteDetail = 0;
         this.prixAchatDetail = 0;
+        this.prixachat = 0;
+        this.montantTotal = 0;
     }
 
     public Lignelivraisonfournisseur(Long idlignelivraisonfournisseur) {
@@ -193,6 +201,22 @@ public class Lignelivraisonfournisseur implements Serializable {
 
     public void setPrixVenteDetail(double prixVenteDetail) {
         this.prixVenteDetail = prixVenteDetail;
+    }
+
+    public double getPrix() {
+        return prix;
+    }
+
+    public void setPrix(double prix) {
+        this.prix = prix;
+    }
+
+    public double getQtyNotConverted() {
+        return qtyNotConverted;
+    }
+
+    public void setQtyNotConverted(double qtyNotConverted) {
+        this.qtyNotConverted = qtyNotConverted;
     }
 
     public void setIdlignecommandefournisseur(Lignecommandefournisseur idlignecommandefournisseur) {

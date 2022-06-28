@@ -106,6 +106,7 @@ public class AbstractEntreedirecteController {
 
     protected Double total = 0d;
 
+    //protected double qty = 0;
     protected boolean perempted = false;
 
     protected Boolean detail = true;
@@ -143,7 +144,8 @@ public class AbstractEntreedirecteController {
     }
 
     public List<Fournisseur> getFournisseurs() {
-        this.fournisseurs = this.fournisseurFacadeLocal.findByIdstructure(SessionMBean.getParametrage().getId());
+        this.fournisseurs = this.fournisseurFacadeLocal
+                .findByIdstructure(SessionMBean.getParametrage().getId());
         return this.fournisseurs;
     }
 
@@ -205,7 +207,8 @@ public class AbstractEntreedirecteController {
     }
 
     public List<Famille> getFamilles() {
-        this.familles = this.familleFacadeLocal.findAllRange(SessionMBean.getMagasin().getParametrage().getId());
+        this.familles = this.familleFacadeLocal
+                .findAllRange(SessionMBean.getMagasin().getParametrage().getId());
         return this.familles;
     }
 

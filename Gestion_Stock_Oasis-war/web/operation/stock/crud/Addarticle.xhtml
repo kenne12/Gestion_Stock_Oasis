@@ -107,7 +107,7 @@
                                     <p:message for="date_peremption"/>
 
                                     <p:outputLabel value="Mode" for="mode"/>
-                                    <p:selectOneMenu disabled="true"  required="true" id="mode" filter="true" filterMatchMode="contains" value="#{entreedirecteController.lignelivraisonfournisseur.modeVente}">
+                                    <p:selectOneMenu required="true" id="mode" filter="true" filterMatchMode="contains" value="#{entreedirecteController.lignelivraisonfournisseur.modeVente}">
                                         <f:selectItem itemLabel="VENTE_EN_GROS" itemValue="VENTE_EN_GROS"/>
                                         <f:selectItem itemLabel="VENTE_EN_DETAIL" itemValue="VENTE_EN_DETAIL"/>
                                         <p:ajax update="cu,qt,qpu,quantite,mt,unite" listener="#{entreedirecteController.updatePrixGrosAndDetail()}"/>
@@ -120,22 +120,22 @@
                                         <p:ajax event="keyup" update="quantite,mt,cu_vente,cu_achat_d,cu_vente_d" listener="#{entreedirecteController.updateTotaux()}"/>
                                     </p:inputText>
                                     <p:message for="cu"/>
-                                    
-                                    
+
+
                                     <p:outputLabel value="Prix Vente G" for="cu_vente" />
                                     <p:inputText id="cu_vente" required="true" style="width: 100px" value="#{entreedirecteController.lignelivraisonfournisseur.prixVente}">
                                         <f:convertNumber />
                                         <p:ajax event="keyup" update="cu_vente_d" listener="#{entreedirecteController.updateCoutVente()}"/>
                                     </p:inputText>
                                     <p:message for="cu_vente"/>
-                                    
+
                                     <p:outputLabel value="Prix Achat D" for="cu_achat_d" />
                                     <p:inputText id="cu_achat_d" required="true" style="width: 100px" value="#{entreedirecteController.lignelivraisonfournisseur.prixAchatDetail}">
                                         <f:convertNumber />
                                         <p:ajax event="keyup" update="quantite,mt" />
                                     </p:inputText>
                                     <p:message for="cu_achat_d" />
-                                    
+
                                     <p:outputLabel value="Prix Vente D" for="cu_vente_d" />
                                     <p:inputText id="cu_vente_d" required="true" style="width: 100px" value="#{entreedirecteController.lignelivraisonfournisseur.prixVenteDetail}">
                                         <f:convertNumber />
@@ -145,7 +145,7 @@
 
                                     <p:outputLabel value="#{langue.unite}" for="unite"/>
                                     <h:panelGroup>
-                                        <p:selectOneMenu required="true" id="unite" filter="true" value="#{entreedirecteController.lignelivraisonfournisseur.idunite.idunite}">
+                                        <p:selectOneMenu disabled="true" required="true" id="unite" filter="true" value="#{entreedirecteController.lignelivraisonfournisseur.idunite.idunite}">
                                             <f:selectItem itemLabel="#{langue.choisir}" itemValue=""/>
                                             <f:selectItems value="#{entreedirecteController.unites}" var="unit" itemLabel="#{unit.libelle}" itemValue="#{unit.idunite}"/>
                                             <p:ajax />
@@ -156,13 +156,21 @@
                                     </h:panelGroup>
                                     <p:message for="unite"/>
 
-                                    <p:outputLabel value="#{langue.quantite}" for="quantite"/>
-                                    <p:inputText required="true" id="quantite" style="width: 75px" value="#{entreedirecteController.lignelivraisonfournisseur.quantite}">                                
+
+                                    <p:outputLabel value="#{langue.quantite}" for="quantite_1"/>
+                                    <p:inputText required="true" id="quantite_1" style="width: 75px" value="#{entreedirecteController.lignelivraisonfournisseur.qtyNotConverted}">                                
+                                        <p:ajax event="keyup" update="mt,qt,quantite" listener="#{entreedirecteController.updateData()}"/>
+                                    </p:inputText>
+                                    <p:message for="quantite_1"/>
+
+                                    <p:outputLabel value="#{langue.quantite} D" for="quantite"/>
+                                    <p:inputText disabled="true" required="true" id="quantite" style="width: 75px" value="#{entreedirecteController.lignelivraisonfournisseur.quantite}">                                
                                         <p:ajax event="keyup" update="mt,qt" listener="#{entreedirecteController.updateTotaux()}"/>
                                     </p:inputText>
                                     <p:message for="quantite"/>
 
-                                    <p:outputLabel value="#{langue.quantite_totale}" for="qt" />
+
+                                    <p:outputLabel value="#{langue.quantite_totale} M" for="qt" />
                                     <p:inputText id="qt" disabled="true" required="true" style="width: 75px" value="#{entreedirecteController.lignelivraisonfournisseur.quantitemultiple}">
                                         <f:convertNumber/>
                                         <p:ajax event="keyup" />
@@ -182,8 +190,12 @@
                             <p:separator />
 
                             <center>
-                                <p:commandButton style="color: red" icon="ui-icon-close" value="#{langue.annuler}" oncomplete="PF('AddarticleCreateDialog').hide()" partialSubmit="true"/>
-                                <p:commandButton actionListener="#{entreedirecteController.addProduit()}" icon="ui-icon-plus" value="#{langue.ajouter}" update="display,:StockCreateForm,:notify1,:StockListerForm:msg"/>                        
+                                <p:commandButton style="color: red" icon="ui-icon-close" value="#{langue.annuler}" 
+                                                 oncomplete="PF('AddarticleCreateDialog').hide()" partialSubmit="true"/>
+                                
+                                <p:commandButton actionListener="#{entreedirecteController.addProduit()}" 
+                                                 icon="ui-icon-plus" value="#{langue.ajouter}" 
+                                                 update="display,:StockCreateForm,:notify1,:StockListerForm:msg"/>                        
                             </center>
 
                         </div>

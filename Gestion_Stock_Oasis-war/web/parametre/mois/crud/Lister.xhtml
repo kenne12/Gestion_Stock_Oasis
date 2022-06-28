@@ -27,7 +27,7 @@
                          selectionMode="single"
                          selection="#{moisController.anneeMois}">
 
-                <p:ajax event="rowSelect"   update=":MoisListerForm:MoisDataTableContextMenu, :actionsForm"/>
+                <p:ajax event="rowSelect" update=":MoisListerForm:MoisDataTableContextMenu, :actionsForm"/>
                 <p:ajax event="rowUnselect" update=":MoisListerForm:MoisDataTableContextMenu, :actionsForm"/>
                 <p:ajax event="rowDblselect" onsuccess="document.getElementById('AccesListerForm:viewButton').click();"/>
 
@@ -74,7 +74,7 @@
                     <f:facet name="header">
                         <h:outputText value="#{langue.etat}"/>
                     </f:facet>
-                    <h:outputText value="#{item.etat eq true ? langue.actif : langue.inactif}"/>
+                    <h:selectBooleanCheckbox value="#{item.etat}" disabled="true" />
                 </p:column> 
 
             </p:dataTable>

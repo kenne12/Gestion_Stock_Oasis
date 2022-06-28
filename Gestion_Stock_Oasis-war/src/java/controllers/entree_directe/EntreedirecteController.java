@@ -27,7 +27,7 @@ import utils.Utilitaires;
 @ManagedBean
 @ViewScoped
 public class EntreedirecteController extends AbstractEntreedirecteController implements Serializable {
-    
+
     @PostConstruct
     private void init() {
         this.magasins = SessionMBean.getMagasins();
@@ -35,22 +35,22 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                 .findAllRange(SessionMBean.getMagasin().getIdmagasin(),
                         SessionMBean.getMois().getDateDebut(), SessionMBean.getMois().getDateFin(), true);
     }
-    
+
     public void prepareCreate() {
         try {
-            
+
             if (Utilitaires.isDayClosed()) {
                 notifyError("journee_cloturee");
                 return;
             }
-            
+
             if (!Utilitaires.isAccess(33L)) {
                 notifyError("acces_refuse");
                 return;
             }
-            
+
             this.mode = "Create";
-            
+
             this.article = new Article();
             this.fournisseur = new Fournisseur();
             this.fournisseurToSave = new Fournisseur();
@@ -63,18 +63,17 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
             notifyFail(e);
         }
     }
-    
+
     public void prepareCreateCommande() {
         this.lignelivraisonfournisseur = new Lignelivraisonfournisseur();
         this.lot = new Lot(0l);
         magasinlot = new Magasinlot(0l);
         this.magasinarticle = new Magasinarticle();
-        this.lignelivraisonfournisseur.setPrixachat(0.0);
-        this.lignelivraisonfournisseur.setMontantTotal(0);
+        this.lignelivraisonfournisseur.setQtyNotConverted(1);
         this.libelle_article = "-";
         perempted = false;
     }
-    
+
     public void filterProductByMagasin() {
         try {
             this.magasins.clear();
@@ -85,25 +84,25 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
             e.printStackTrace();
         }
     }
-    
+
     public void prepareEdit() {
         try {
-            
+
             if (Utilitaires.isDayClosed()) {
                 notifyError("journee_cloturee");
                 return;
             }
-            
+
             if (!this.livraisonfournisseur.getLivraisondirecte()) {
                 notifyError("livraison_directe");
                 return;
             }
-            
+
             if (!Utilitaires.isAccess(37L)) {
                 notifyError("acces_refuse");
                 return;
             }
-            
+
             this.mode = "Edit";
             if (this.livraisonfournisseur != null) {
                 this.lignelivraisonfournisseurs = this.lignelivraisonfournisseurFacadeLocal.findByIdlivraison(this.livraisonfournisseur.getIdlivraisonfournisseur());
@@ -118,7 +117,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
             notifyFail(e);
         }
     }
-    
+
     public void prepareview() {
         try {
             if (this.livraisonfournisseur != null) {
@@ -135,7 +134,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
             e.printStackTrace();
         }
     }
-    
+
     public void selectProduct() {
         perempted = false;
         if (this.magasinarticle != null) {
@@ -144,21 +143,21 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
             if (article.getPerissable()) {
                 perempted = true;
             }
-            
+
+            this.lignelivraisonfournisseur.setQtyNotConverted(1);
+
             lignelivraisonfournisseur.setUnite(magasinarticle.getUnite());
             lignelivraisonfournisseur.setIdunite(magasinarticle.getIdarticle().getIdunite());
             lignelivraisonfournisseur.setQuantite(1d);
             lignelivraisonfournisseur.setQuantitemultiple(magasinarticle.getUnite());
+
             lignelivraisonfournisseur.setPrixachat(magasinarticle.getIdarticle().getCoutachat());
             lignelivraisonfournisseur.setPrixVente(magasinarticle.getIdarticle().getPrixunit());
-            if (magasinarticle.getPrixVenteDetail() == 0) {
-                lignelivraisonfournisseur.setPrixVenteDetail(magasinarticle.getIdarticle().getPrixVenteDetail());
-            }
-            
+            lignelivraisonfournisseur.setPrixVenteDetail(magasinarticle.getIdarticle().getPrixVenteDetail());
             lignelivraisonfournisseur.setPrixAchatDetail(magasinarticle.getIdarticle().getPrixAchatDetail());
-            
+
             this.lignelivraisonfournisseur.setModeVente(ModeEntreSorti.VENTE_EN_GROS);
-            
+
             magasinlots = magasinlotFacadeLocal.findByIdMagasinIdArticle(this.magasinarticle.getIdmagasinarticle());
             if (!magasinlots.isEmpty()) {
                 magasinlot = magasinlots.get(magasinlots.size() - 1);
@@ -173,12 +172,12 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
             }
         }
     }
-    
+
     public void generateLotNumber() {
         try {
             if (this.magasinarticle != null) {
                 List<Lot> listLot = lotFacadeLocal.findByArticle(magasinarticle.getIdarticle().getIdarticle());
-                
+
                 String numero = "Lot_" + magasinarticle.getIdarticle().getCode() + "_";
                 if (!listLot.isEmpty()) {
                     numero += "" + (listLot.size() + 1);
@@ -197,7 +196,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
             e.printStackTrace();
         }
     }
-    
+
     public void filterProduit() {
         try {
             this.articles.clear();
@@ -210,23 +209,31 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
             e.printStackTrace();
         }
     }
-    
+
+    private void setPrice(Lignelivraisonfournisseur llf) {
+        if (llf.getModeVente().equals(ModeEntreSorti.VENTE_EN_DETAIL)) {
+            llf.setPrix(llf.getPrixAchatDetail());
+        } else {
+            llf.setPrix(llf.getPrixachat());
+        }
+    }
+
     public void create() {
         try {
-            
+
             if (this.mode.equals("Create")) {
                 if (!this.lignelivraisonfournisseurs.isEmpty()) {
-                    calculTotal();
+                    this.calculTotal();
                     this.fournisseur = this.fournisseurFacadeLocal.find(this.fournisseur.getIdfournisseur());
-                    
+
                     this.ut.begin();
-                    
+
                     this.mvtstock = new Mvtstock();
                     this.mvtstock.setIdmvtstock(this.mvtstockFacadeLocal.nextVal());
                     String codeMvt = "MVT";
                     Long nextMvt = this.mvtstock.getIdmvtstock();
                     codeMvt = Utilitaires.genererCodeStock(codeMvt, nextMvt);
-                    
+
                     this.mvtstock.setCode(codeMvt);
                     this.mvtstock.setClient(" ");
                     this.mvtstock.setFournisseur(this.fournisseur.getNom());
@@ -234,11 +241,11 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                     this.mvtstock.setMagasin(" ");
                     this.mvtstock.setDatemvt(this.livraisonfournisseur.getDatelivraison());
                     this.mvtstockFacadeLocal.create(this.mvtstock);
-                    
+
                     String code = "S-" + SessionMBean.getAnnee().getNom() + "-" + SessionMBean.getMois().getIdmois().getNom().toUpperCase().substring(0, 3);
                     Long nextStock = livraisonfournisseurFacadeLocal.nextVal(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getMois());
                     code = Utilitaires.genererCodeStock(code, nextStock);
-                    
+
                     this.livraisonfournisseur.setCode(code);
                     this.livraisonfournisseur.setIdfournisseur(this.fournisseur);
                     this.livraisonfournisseur.setMontant(this.total);
@@ -250,6 +257,10 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                     this.livraisonfournisseurFacadeLocal.create(this.livraisonfournisseur);
                     double qteAvant = 0;
                     for (Lignelivraisonfournisseur llf : this.lignelivraisonfournisseurs) {
+
+                        // set price for bill
+                        this.setPrice(llf);
+
                         Lot lotTemp = this.lotFacadeLocal.findByCode(llf.getIdmagasinlot().getIdmagasinarticle().getIdarticle().getIdarticle(), llf.getIdlot().getNumero());
                         Double resteMvt = 0d;
                         boolean createLot = false;
@@ -266,7 +277,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                             lotTemp.setUnitesortie(1.0);
                             lotTemp.setQuantitevirtuelle(0.0);
                             this.lotFacadeLocal.create(lotTemp);
-                            
+
                             Magasinlot ml = llf.getIdmagasinlot();
                             ml.setIdmagasinlot(this.magasinlotFacadeLocal.nextVal());
                             ml.setIdlot(lotTemp);
@@ -279,7 +290,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                             ml.setPrixVenteDetail(llf.getPrixVenteDetail());
                             ml.setEtat(true);
                             this.magasinlotFacadeLocal.create(ml);
-                            
+
                             llf.setIdlot(lotTemp);
                             llf.setIdmagasinlot(ml);
                             resteMvt = llf.getQuantitereduite();
@@ -298,10 +309,10 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                                 ml.setQuantitemultiple(llf.getQuantitemultiple());
                                 ml.setQuantitereduite(llf.getQuantitereduite());
                                 ml.setUnite(lotTemp.getIdarticle().getUnite());
-                                
+
                                 ml.setPrixVenteGros(llf.getPrixVente());
                                 ml.setPrixVenteDetail(llf.getPrixVenteDetail());
-                                
+
                                 ml.setQuantitevirtuelle(0.0);
                                 ml.setEtat(true);
                                 this.magasinlotFacadeLocal.create(ml);
@@ -310,18 +321,18 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                                 qteAvant = mlTemp1.getQuantitereduite();
                             }
                         }
-                        
+
                         llf.setIdlignelivraisonfournisseur(this.lignelivraisonfournisseurFacadeLocal.nextVal());
                         llf.setIdlivraisonfournisseur(this.livraisonfournisseur);
                         this.lignelivraisonfournisseurFacadeLocal.create(llf);
-                        
+
                         Magasinarticle maTemp = this.magasinarticleFacadeLocal.find(llf.getIdmagasinlot().getIdmagasinarticle().getIdmagasinarticle());
                         maTemp.setQuantite((maTemp.getQuantite() + llf.getQuantitereduite()));
                         maTemp.setQuantitemultiple((maTemp.getQuantitemultiple() + llf.getQuantitemultiple()));
                         maTemp.setQuantitereduite((maTemp.getQuantitereduite() + llf.getQuantitereduite()));
                         maTemp.setPrixVenteGros(llf.getPrixVente());
                         maTemp.setPrixVenteDetail(llf.getPrixVenteDetail());
-                        
+
                         this.magasinarticleFacadeLocal.edit(maTemp);
                         if (livraisonfournisseur.isModificationCout()) {
                             Article articleToUpdate = maTemp.getIdarticle();
@@ -331,34 +342,34 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                             articleToUpdate.setPrixAchatDetail(llf.getPrixAchatDetail());
                             articleFacadeLocal.edit(articleToUpdate);
                         }
-                        
+
                         if (createLot) {
                             Magasinlot mlTemp = this.magasinlotFacadeLocal.find(llf.getIdmagasinlot().getIdmagasinlot());
                             mlTemp.setQuantitemultiple((mlTemp.getQuantitemultiple() + llf.getQuantitemultiple()));
                             mlTemp.setQuantite((mlTemp.getQuantite() + llf.getQuantitereduite()));
                             mlTemp.setQuantitereduite((mlTemp.getQuantitereduite() + llf.getQuantitereduite()));
-                            
+
                             if (livraisonfournisseur.isModificationCout()) {
                                 mlTemp.setPrixVenteGros(llf.getPrixVente());
                                 mlTemp.setPrixVenteDetail(llf.getPrixVenteDetail());
-                                
+
                                 Lot lotToUpdate = mlTemp.getIdlot();
                                 lotToUpdate.setPrixachat(llf.getPrixachat());
                                 lotToUpdate.setPrixunitaire(llf.getPrixVente());
                                 lotFacadeLocal.edit(lotToUpdate);
                             }
-                            
+
                             this.magasinlotFacadeLocal.edit(mlTemp);
                             resteMvt = mlTemp.getQuantitereduite();
                         }
-                        
+
                         Lignemvtstock lmvts = new Lignemvtstock();
                         lmvts.setIdlignemvtstock(this.lignemvtstockFacadeLocal.nextVal());
                         lmvts.setIdmvtstock(this.mvtstock);
                         lmvts.setIdlot(llf.getIdlot());
                         lmvts.setIdmagasinlot(llf.getIdmagasinlot());
                         lmvts.setQteentree(llf.getQuantite());
-                        
+
                         lmvts.setQtesortie(0.0);
                         lmvts.setQteAvant(qteAvant);
                         lmvts.setReste(resteMvt);
@@ -369,10 +380,10 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                         lmvts.setLignelivraisonfournisseur(llf);
                         this.lignemvtstockFacadeLocal.create(lmvts);
                     }
-                    
+
                     Utilitaires.saveOperation(this.mouchardFacadeLocal, "Enregistrement de l'entrée du stock N° : ", SessionMBean.getUserAccount());
                     this.ut.commit();
-                    
+
                     this.livraisonfournisseurs = this.livraisonfournisseurFacadeLocal
                             .findAllRange(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getMois().getDateDebut(), SessionMBean.getMois().getDateFin(), true);
                     this.livraisonfournisseur = new Livraisonfournisseur();
@@ -385,32 +396,32 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
             }
             if (this.livraisonfournisseur != null) {
                 Livraisonfournisseur s1 = this.livraisonfournisseurFacadeLocal.find(this.livraisonfournisseur.getIdlivraisonfournisseur());
-                
+
                 this.fournisseur = this.fournisseurFacadeLocal.find(this.fournisseur.getIdfournisseur());
                 this.livraisonfournisseur.setIdfournisseur(this.fournisseur);
                 this.livraisonfournisseur.setMontant(this.total);
                 calculTotal();
                 this.ut.begin();
-                
+
                 this.livraisonfournisseurFacadeLocal.edit(this.livraisonfournisseur);
                 if (!this.lignelivraisonfournisseurs.isEmpty()) {
                     for (Lignelivraisonfournisseur llf : this.lignelivraisonfournisseurs) {
                         if (llf.getIdlignelivraisonfournisseur() != 0L) {
                             Lignelivraisonfournisseur llfOld = this.lignelivraisonfournisseurFacadeLocal.find(llf.getIdlignelivraisonfournisseur());
                             if (!Objects.equals(llf.getQuantite(), llfOld.getQuantite())) {
-                                
+
                                 Magasinarticle ma = this.magasinarticleFacadeLocal.find(llfOld.getIdmagasinlot().getIdmagasinarticle().getIdmagasinarticle());
                                 ma.setQuantite((ma.getQuantite() - llfOld.getQuantitereduite()) + llf.getQuantitereduite());
                                 ma.setQuantitemultiple((ma.getQuantitemultiple() - llfOld.getQuantitemultiple()) + llf.getQuantitemultiple());
                                 ma.setQuantitereduite((ma.getQuantitereduite() - llfOld.getQuantitereduite()) + llf.getQuantitereduite());
                                 this.magasinarticleFacadeLocal.edit(ma);
-                                
+
                                 Magasinlot ml = this.magasinlotFacadeLocal.find(llfOld.getIdmagasinlot().getIdmagasinlot());
                                 ml.setQuantite((ml.getQuantite() - llfOld.getQuantitereduite()) + llf.getQuantitereduite());
                                 ml.setQuantitemultiple((ml.getQuantitemultiple() - llfOld.getQuantitemultiple()) + llf.getQuantitemultiple());
                                 ml.setQuantitereduite((ml.getQuantitereduite() - llfOld.getQuantitereduite()) + llf.getQuantitereduite());
                                 this.magasinlotFacadeLocal.edit(ml);
-                                
+
                                 Lignemvtstock lmvts = lignemvtstockFacadeLocal.findByIdmvtIdLot(livraisonfournisseur.getIdmvtstock().getIdmvtstock(), llf.getIdlot().getIdlot());
                                 lmvts.setQtesortie(llf.getQuantitereduite());
                                 if (llf.getQuantitemultiple() > llfOld.getQuantitemultiple()) {
@@ -427,19 +438,19 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                             llf.setIdlignelivraisonfournisseur(this.lignelivraisonfournisseurFacadeLocal.nextVal());
                             llf.setIdlivraisonfournisseur(this.livraisonfournisseur);
                             this.lignelivraisonfournisseurFacadeLocal.create(llf);
-                            
+
                             Magasinarticle ma = this.magasinarticleFacadeLocal.find(llf.getIdmagasinlot().getIdmagasinarticle().getIdmagasinarticle());
                             ma.setQuantite((ma.getQuantite() - llf.getQuantitereduite()) + llf.getQuantitereduite());
                             ma.setQuantitemultiple((ma.getQuantitemultiple() - llf.getQuantitemultiple()) + llf.getQuantitemultiple());
                             ma.setQuantitereduite((ma.getQuantitereduite() - llf.getQuantitereduite()) + llf.getQuantitereduite());
                             this.magasinarticleFacadeLocal.edit(ma);
-                            
+
                             Magasinlot mlTemp = this.magasinlotFacadeLocal.find(llf.getIdmagasinlot().getIdmagasinlot());
                             mlTemp.setQuantitemultiple((mlTemp.getQuantitemultiple() + llf.getQuantitemultiple()));
                             mlTemp.setQuantite((mlTemp.getQuantite() + llf.getQuantitereduite()));
                             mlTemp.setQuantitereduite((mlTemp.getQuantitereduite() + llf.getQuantitereduite()));
                             this.magasinlotFacadeLocal.edit(mlTemp);
-                            
+
                             Lignemvtstock lmvts = new Lignemvtstock();
                             lmvts.setIdlignemvtstock(this.lignemvtstockFacadeLocal.nextVal());
                             lmvts.setIdmvtstock(this.mvtstock);
@@ -459,7 +470,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                     Utilitaires.saveOperation(this.mouchardFacadeLocal, "Modification de l'entrée en stock N° : " + this.livraisonfournisseur.getCode() + " ; Ancien Montant : " + s1.getMontant() + " Nouveau montant : " + this.livraisonfournisseur.getMontant(), SessionMBean.getUserAccount());
                     this.livraisonfournisseurs = this.livraisonfournisseurFacadeLocal
                             .findAllRange(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getAnnee().getDateDebut(), SessionMBean.getAnnee().getDateFin(), true);
-                    
+
                     this.ut.commit();
                     notifySuccess();
                     RequestContext.getCurrentInstance().execute("PF('StockCreateDialog').hide()");
@@ -473,7 +484,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
             notifyFail(ex);
         }
     }
-    
+
     public void createFournisseur() {
         fournisseurToSave.setIdfournisseur(fournisseurFacadeLocal.nextVal());
         fournisseurToSave.setMagasin(SessionMBean.getMagasin());
@@ -482,50 +493,50 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
         this.fournisseur = fournisseurToSave;
         RequestContext.getCurrentInstance().execute("PF('FournisseurCreerDialog').hide()");
     }
-    
+
     public void delete() {
         try {
             if (this.livraisonfournisseur != null) {
-                
+
                 if (Utilitaires.isDayClosed()) {
                     notifyError("journee_cloturee");
                     return;
                 }
-                
+
                 if (!Utilitaires.isAccess(38L)) {
                     notifyError("acces_refuse");
                     return;
                 }
-                
+
                 this.ut.begin();
                 List<Lignelivraisonfournisseur> temp = this.lignelivraisonfournisseurFacadeLocal.findByIdlivraison(this.livraisonfournisseur.getIdlivraisonfournisseur());
                 for (Lignelivraisonfournisseur llf : temp) {
                     Magasinarticle maTemp = this.magasinarticleFacadeLocal.find(llf.getIdmagasinlot().getIdmagasinarticle().getIdmagasinarticle());
-                    maTemp.setQuantite((maTemp.getQuantite() - llf.getQuantitereduite()));
+                    maTemp.setQuantite((maTemp.getQuantite() - llf.getQuantite()));
                     maTemp.setQuantitemultiple((maTemp.getQuantitemultiple() - llf.getQuantitemultiple()));
                     maTemp.setQuantitereduite((maTemp.getQuantitereduite() - llf.getQuantitereduite()));
                     this.magasinarticleFacadeLocal.edit(maTemp);
-                    
+
                     Magasinlot mlTemp = this.magasinlotFacadeLocal.find(llf.getIdmagasinlot().getIdmagasinlot());
-                    mlTemp.setQuantite((mlTemp.getQuantite() - llf.getQuantitereduite()));
+                    mlTemp.setQuantite((mlTemp.getQuantite() - llf.getQuantite()));
                     mlTemp.setQuantitemultiple((mlTemp.getQuantitemultiple() - llf.getQuantitemultiple()));
                     mlTemp.setQuantitereduite((mlTemp.getQuantitereduite() - llf.getQuantitereduite()));
                     this.magasinlotFacadeLocal.edit(mlTemp);
-                    
+
                     this.lignelivraisonfournisseurFacadeLocal.remove(llf);
                 }
-                
+
                 livraisonfournisseurFacadeLocal.remove(this.livraisonfournisseur);
                 lignemvtstockFacadeLocal.deleteByIdmvt(this.livraisonfournisseur.getIdmvtstock().getIdmvtstock());
                 this.mvtstockFacadeLocal.remove(this.livraisonfournisseur.getIdmvtstock());
-                
+
                 Utilitaires.saveOperation(this.mouchardFacadeLocal, "Annulation de l'entrée directe en stock : " + this.livraisonfournisseur.getCode() + " Montant : " + this.livraisonfournisseur.getMontant(), SessionMBean.getUserAccount());
                 this.ut.commit();
                 livraisonfournisseurs.remove(livraisonfournisseur);
-                
+
                 this.livraisonfournisseur = new Livraisonfournisseur();
                 //this.livraisonfournisseurs = this.livraisonfournisseurFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getAnnee().getDateDebut(), SessionMBean.getAnnee().getDateFin(), true);
-                notifySuccess();
+                this.notifySuccess();
                 return;
             }
             notifyError("not_row_selected");
@@ -533,14 +544,14 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
             notifyFail(e);
         }
     }
-    
+
     public void print() {
         try {
             if (!Utilitaires.isAccess(46L)) {
                 notifyError("acces_refuse");
                 return;
             }
-            
+
             if (this.livraisonfournisseur != null) {
                 livraisonfournisseur.setLignelivraisonfournisseurList(lignelivraisonfournisseurFacadeLocal.findByIdlivraison(livraisonfournisseur.getIdlivraisonfournisseur()));
                 fileName = PrintUtils.printStock(livraisonfournisseur);
@@ -552,42 +563,42 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
             notifyFail(e);
         }
     }
-    
+
     public void initPrinter(Livraisonfournisseur l) {
         this.livraisonfournisseur = l;
         print();
     }
-    
+
     public void initEdit(Livraisonfournisseur l) {
         this.livraisonfournisseur = l;
         prepareEdit();
     }
-    
+
     public void initView(Livraisonfournisseur l) {
         this.livraisonfournisseur = l;
         prepareview();
     }
-    
+
     public void initDelete(Livraisonfournisseur l) {
         this.livraisonfournisseur = l;
         delete();
     }
-    
+
     public void addProduit() {
         try {
             Lignelivraisonfournisseur l = this.lignelivraisonfournisseur;
             l.setIdlignelivraisonfournisseur(0L);
-            
+
             if (!magasinlot.getIdmagasinlot().equals(0l)) {
                 magasinlot = magasinlotFacadeLocal.find(magasinlot.getIdmagasinlot());
                 this.lot = magasinlot.getIdlot();
             }
-            
+
             Lot lotTemp = this.lot;
             this.lot.setPrixunitaire(lotTemp.getPrixachat());
             lotTemp.setIdarticle(this.magasinarticle.getIdarticle());
             l.setIdlot(lotTemp);
-            
+
             Magasinlot ml = new Magasinlot();
             Magasinarticle ma = this.magasinarticle;
             if (!magasinlot.getIdmagasinlot().equals(0l)) {
@@ -595,7 +606,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
             } else {
                 ml.setIdmagasinarticle(ma);
             }
-            
+
             l.setIdmagasinlot(ml);
             boolean drapeau = false;
             for (Lignelivraisonfournisseur llf : this.lignelivraisonfournisseurs) {
@@ -604,15 +615,16 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                     break;
                 }
             }
-            
+
             if (drapeau) {
                 notifyError("article_existant_dans_le_tableau");
                 return;
             }
-            
+
+            this.setPrice(l);
             this.lignelivraisonfournisseurs.add(l);
             this.total = calculTotal();
-            
+
             this.lignelivraisonfournisseur = new Lignelivraisonfournisseur();
             this.article = new Article();
             RequestContext.getCurrentInstance().execute("PF('AddarticleCreateDialog').hide()");
@@ -621,7 +633,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
             notifyFail(e);
         }
     }
-    
+
     public void removeProduit(Lignelivraisonfournisseur lignelivraisonfournisseur) {
         try {
             int i = 0;
@@ -631,19 +643,19 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                         this.lignelivraisonfournisseurFacadeLocal.remove(llf);
                         this.livraisonfournisseur.setMontant((this.livraisonfournisseur.getMontant() - this.livraisonfournisseur.getMontant() * llf.getQuantite()));
                         this.livraisonfournisseurFacadeLocal.edit(this.livraisonfournisseur);
-                        
+
                         Magasinarticle maTemp = this.magasinarticleFacadeLocal.find(llf.getIdmagasinlot().getIdmagasinarticle().getIdmagasinarticle());
                         maTemp.setQuantite((maTemp.getQuantite() - llf.getQuantitereduite()));
                         maTemp.setQuantitemultiple((maTemp.getQuantitemultiple() - llf.getQuantitemultiple()));
                         maTemp.setQuantitereduite((maTemp.getQuantitereduite() - llf.getQuantitereduite()));
                         this.magasinarticleFacadeLocal.edit(maTemp);
-                        
+
                         Magasinlot mlTemp = this.magasinlotFacadeLocal.find(llf.getIdmagasinlot().getIdmagasinlot());
                         mlTemp.setQuantite((mlTemp.getQuantite() - llf.getQuantitereduite()));
                         mlTemp.setQuantitemultiple((mlTemp.getQuantitemultiple() - llf.getQuantitemultiple()));
                         mlTemp.setQuantitereduite((mlTemp.getQuantitereduite() - llf.getQuantitereduite()));
                     }
-                    
+
                     this.lignelivraisonfournisseurs.remove(i);
                     break;
                 }
@@ -655,22 +667,23 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
             notifyFail(e);
         }
     }
-    
+
     private Double calculTotal() {
-        Double resultat = 0d;
+        double resultat = 0d;
         if (!this.lignelivraisonfournisseurs.isEmpty()) {
             int i = 0;
             for (Lignelivraisonfournisseur llf : lignelivraisonfournisseurs) {
                 if (llf.getModeVente().equals(ModeEntreSorti.VENTE_EN_GROS)) {
-                    lignelivraisonfournisseurs.get(i).setQuantitemultiple(llf.getQuantite() * llf.getUnite());
-                    lignelivraisonfournisseurs.get(i).setQuantitereduite((this.lignelivraisonfournisseurs.get(i).getQuantitemultiple() / llf.getIdlot().getIdarticle().getUnite()));
+                    //lignelivraisonfournisseurs.get(i).setQuantitemultiple(llf.getQuantite() * llf.getUnite());
+                    //lignelivraisonfournisseurs.get(i).setQuantitereduite((this.lignelivraisonfournisseurs.get(i).getQuantitemultiple() / llf.getIdlot().getIdarticle().getUnite()));
                     lignelivraisonfournisseur.setMontantTotal(llf.getPrixachat() * llf.getQuantite());
-                    resultat += (llf.getPrixachat() * llf.getQuantite());
+
+                    resultat += lignelivraisonfournisseur.getMontantTotal();
                 } else {
-                    lignelivraisonfournisseurs.get(i).setQuantitemultiple(llf.getQuantite());
-                    lignelivraisonfournisseurs.get(i).setQuantitereduite(((this.lignelivraisonfournisseurs.get(i)).getQuantitemultiple() / llf.getIdlot().getIdarticle().getUnite()));
-                    lignelivraisonfournisseur.setMontantTotal(llf.getPrixachat() * llf.getQuantitemultiple());
-                    resultat += (llf.getPrixachat() * llf.getQuantitemultiple());
+                    //lignelivraisonfournisseurs.get(i).setQuantitemultiple(llf.getQuantite());
+                    //lignelivraisonfournisseurs.get(i).setQuantitereduite(((this.lignelivraisonfournisseurs.get(i)).getQuantitemultiple() / llf.getIdlot().getIdarticle().getUnite()));
+                    lignelivraisonfournisseur.setMontantTotal(llf.getPrixAchatDetail() * llf.getQuantitemultiple());
+                    resultat += lignelivraisonfournisseur.getMontantTotal();
                 }
                 i++;
             }
@@ -678,7 +691,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
         this.livraisonfournisseur.setMontant(resultat);
         return resultat;
     }
-    
+
     public void updateTotal() {
         try {
             this.total = calculTotal();
@@ -686,25 +699,64 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
             e.printStackTrace();
         }
     }
-    
+
+    public void updateTableLine(Lignelivraisonfournisseur llf) {
+        if (llf.getModeVente().equals(ModeEntreSorti.VENTE_EN_DETAIL)) {
+            llf.setQuantitemultiple(llf.getQtyNotConverted());
+            llf.setQuantite(llf.getQtyNotConverted());
+            llf.setQuantitereduite(llf.getQtyNotConverted() / llf.getIdmagasinlot().getIdmagasinarticle().getIdarticle().getUnite());
+            llf.setMontantTotal(llf.getQtyNotConverted() * llf.getPrix());
+            llf.setPrixAchatDetail(llf.getPrix());
+        } else {
+            llf.setQuantitemultiple(llf.getUnite() * llf.getQtyNotConverted());
+            llf.setQuantitereduite(llf.getQtyNotConverted());
+            llf.setQuantite(llf.getQtyNotConverted());
+            llf.setPrixachat(llf.getPrix());
+            llf.setMontantTotal(llf.getPrix() * llf.getQtyNotConverted());
+        }
+
+        this.total = calculTotal();
+    }
+
     public void updateCoutVente() {
         if (lignelivraisonfournisseur.getPrixVente() != 0) {
             lignelivraisonfournisseur.setPrixVenteDetail(lignelivraisonfournisseur.getPrixVente() / magasinarticle.getIdarticle().getUnite());
         }
     }
-    
+
+    public void updateData() {
+        this.update(lignelivraisonfournisseur);
+    }
+
+    public void update(Lignelivraisonfournisseur llf) {
+        if (llf.getModeVente().equals(ModeEntreSorti.VENTE_EN_DETAIL)) {
+            llf.setQuantitemultiple(lignelivraisonfournisseur.getQtyNotConverted());
+
+            llf.setQuantitereduite(lignelivraisonfournisseur.getQtyNotConverted() / magasinarticle.getUnite());
+            llf.setQuantite(llf.getQuantitereduite());
+            llf.setMontantTotal(llf.getPrixAchatDetail() * lignelivraisonfournisseur.getQtyNotConverted());
+        } else {
+
+            llf.setQuantite(lignelivraisonfournisseur.getQtyNotConverted());
+            llf.setQuantitemultiple(llf.getQuantite() * llf.getUnite());
+            llf.setMontantTotal(llf.getPrixachat() * lignelivraisonfournisseur.getQtyNotConverted());
+            llf.setQuantitereduite(lignelivraisonfournisseur.getQtyNotConverted());
+            llf.setMontantTotal(llf.getPrixachat() * lignelivraisonfournisseur.getQtyNotConverted());
+        }
+    }
+
     public void updateTotaux() {
         try {
             double montantTotal = 0d;
-            
+
             if (lignelivraisonfournisseur.getPrixachat() != 0) {
                 lignelivraisonfournisseur.setPrixVente(lignelivraisonfournisseur.getPrixachat());
-                
+
                 lignelivraisonfournisseur.setPrixAchatDetail(lignelivraisonfournisseur.getPrixachat() / magasinarticle.getIdarticle().getUnite());
-                
+
                 lignelivraisonfournisseur.setPrixVenteDetail(lignelivraisonfournisseur.getPrixVente() / magasinarticle.getIdarticle().getUnite());
             }
-            
+
             if (this.lignelivraisonfournisseur.getQuantite() != 0) {
                 if (this.lignelivraisonfournisseur.getUnite() != 0) {
                     this.lignelivraisonfournisseur.setQuantitemultiple(this.lignelivraisonfournisseur.getQuantite() * this.lignelivraisonfournisseur.getUnite());
@@ -722,8 +774,32 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
             e.printStackTrace();
         }
     }
-    
+
     public void updatePrixGrosAndDetail() {
+        if (magasinarticle != null) {
+
+            if (lignelivraisonfournisseur.getModeVente().equals(ModeEntreSorti.VENTE_EN_GROS)) {
+
+                lignelivraisonfournisseur.setUnite(magasinarticle.getIdarticle().getUnite());
+                lignelivraisonfournisseur.setQuantitemultiple(magasinarticle.getIdarticle().getUnite());
+
+                lignelivraisonfournisseur.setIdunite(magasinarticle.getIdarticle().getIdunite());
+
+                lignelivraisonfournisseur.setQuantitereduite(lignelivraisonfournisseur.getQuantitemultiple() / magasinarticle.getIdarticle().getUnite());
+                lignelivraisonfournisseur.setMontantTotal(lignelivraisonfournisseur.getPrixachat() * lignelivraisonfournisseur.getQuantitereduite());
+            } else {
+                lignelivraisonfournisseur.setUnite(1d);
+
+                lignelivraisonfournisseur.setQuantitemultiple(lignelivraisonfournisseur.getQuantite());
+                lignelivraisonfournisseur.setQuantitereduite(lignelivraisonfournisseur.getQuantitemultiple() / magasinarticle.getIdarticle().getUnite());
+                lignelivraisonfournisseur.setQuantite(lignelivraisonfournisseur.getQuantitereduite());
+                lignelivraisonfournisseur.setMontantTotal(lignelivraisonfournisseur.getPrixAchatDetail() * lignelivraisonfournisseur.getQuantitemultiple());
+                lignelivraisonfournisseur.setIdunite(uniteFacadeLocal.find(magasinarticle.getIdarticle().getIdUniteDetail()));
+            }
+        }
+    }
+
+    /*public void updatePrixGrosAndDetail() {
         if (magasinarticle != null) {
             if (lignelivraisonfournisseur.getModeVente().equals(ModeEntreSorti.VENTE_EN_GROS)) {
                 lignelivraisonfournisseur.setPrixachat(magasinarticle.getIdarticle().getCoutachat());
@@ -743,8 +819,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                 lignelivraisonfournisseur.setMontantTotal(lignelivraisonfournisseur.getPrixachat() * lignelivraisonfournisseur.getQuantitemultiple());
             }
         }
-    }
-    
+    }*/
     public void updatedata() {
         try {
             if (this.article.getIdarticle() != null) {
@@ -753,7 +828,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                 this.lot = new Lot();
                 this.lot.setQuantite(0.0);
                 this.lignelivraisonfournisseur.setPrixachat(0.0);
-                
+
                 this.lots = this.lotFacadeLocal.findByArticle(this.article.getIdarticle(), this.article.getPerissable());
                 if (this.lots.size() == 1) {
                     this.lot = (this.lots.get(0));
@@ -765,7 +840,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
             e.printStackTrace();
         }
     }
-    
+
     public void updatedataLot() {
         try {
             if (this.lot != null) {
@@ -776,19 +851,19 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
             e.printStackTrace();
         }
     }
-    
+
     public void notifyError(String message) {
         RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
         this.routine.feedBack("avertissement", "/resources/tool_images/warning.jpeg", this.routine.localizeMessage(message));
         RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
     }
-    
+
     public void notifySuccess() {
         RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
         this.routine.feedBack("information", "/resources/tool_images/success.png", this.routine.localizeMessage("operation_reussie"));
         RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
     }
-    
+
     public void notifyFail(Exception e) {
         RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
         this.routine.catchException(e, this.routine.localizeMessage("echec_operation"));

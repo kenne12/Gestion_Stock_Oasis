@@ -43,8 +43,13 @@
                         <p:outputLabel id="total_1" value="#{entreedirecteController.total}">                               
                             <f:convertNumber />
                         </p:outputLabel>
-                        <p:commandButton icon="fa fa-calculator" value="#{langue.calculer}" actionListener="#{entreedirecteController.updateTotal()}" update=":StockCreateForm:info_1,:StockCreateForm:info_2" partialSubmit="true"/>
-                        <p:commandButton icon="ui-icon-plus" value="#{langue.ajouter_un_article}"  actionListener="#{entreedirecteController.prepareCreateCommande()}" oncomplete="PF('AddarticleCreateDialog').show()" update=":AddarticleCreateForm,:AddarticleCreateForm:"/>
+                        <p:commandButton icon="fa fa-calculator" value="#{langue.calculer}" 
+                                         actionListener="#{entreedirecteController.updateTotal()}" 
+                                         update=":StockCreateForm:info_1,:StockCreateForm:info_2" partialSubmit="true"/>
+                        
+                        <p:commandButton icon="ui-icon-plus" value="#{langue.ajouter_un_article}" 
+                                         actionListener="#{entreedirecteController.prepareCreateCommande()}" 
+                                         oncomplete="PF('AddarticleCreateDialog').show()" update=":AddarticleCreateForm,:AddarticleCreateForm:"/>
                     </p:panelGrid>
 
                     <p:separator style="width: 98%;margin-left: 1%;color: red;"/>
@@ -64,61 +69,70 @@
                                  resizableColumns="true">
 
                         <f:facet name="header"> 
-                            <h:outputText value="#{langue.liste_des_elements}"/>
+                            <h:outputText value="#{langue.liste_des_produits}"/>
                         </f:facet> 
 
-                        <p:column style="width: 32%" filterBy="#{item.idlot.idarticle.libelle}" >
+                        <p:column style="width: 23%" filterBy="#{item.idlot.idarticle.libelle}" >
                             <f:facet name="header">
                                 <h:outputText value="#{langue.article}"/>
                             </f:facet>
                             <h:outputText value="#{item.idlot.idarticle.libelle}"/>
                         </p:column>
 
-                        <p:column style="width: 16%" filterBy="#{item.idlot.numero}">
+                        <p:column style="width: 13%" filterBy="#{item.idlot.numero}">
                             <f:facet name="header">
                                 <h:outputText value="#{langue.lot}"/>
                             </f:facet>
                             <h:outputText value="#{item.idlot.numero}"/>
                         </p:column>
-                      
+                        
+                        
+                        <p:column style="width: 10%" >
+                            <f:facet name="header">
+                                <h:outputText value="Mode"/>
+                            </f:facet>
+                            <h:outputText value="#{item.modeVente}"/>
+                        </p:column>
+
                         <p:column filterBy="#{item.prixachat}" style="width: 9%;text-align: center" headerText="#{langue.p_u}">
                             <p:cellEditor>
                                 <f:facet name="output">
-                                    <h:outputText value="#{item.prixachat}" >
+                                    <h:outputText value="#{item.prix}" >
                                         <f:convertNumber />
                                     </h:outputText>    
                                 </f:facet>
                                 <f:facet name="input">
-                                    <p:inputText required="true" value="#{item.prixachat}">
+                                    <p:inputText required="true" value="#{item.prix}">
                                         <f:convertNumber />
-                                        <p:ajax event="keyup" listener="#{entreedirecteController.updateTotal()}" update=":StockCreateForm:info_1,:StockCreateForm:info_2"/>
+                                        <p:ajax  listener="#{entreedirecteController.updateTableLine(item)}"
+                                                update=":StockCreateForm:info_1,:StockCreateForm:info_2,datalist"/>
                                     </p:inputText>
                                 </f:facet>
                             </p:cellEditor>
                         </p:column>
-                        
-                        
+
 
                         <p:column style="width: 7%;text-align: center" headerText="#{langue.qte}">
                             <p:cellEditor>
                                 <f:facet name="output">
-                                    <h:outputText value="#{item.quantite}"/>
+                                    <h:outputText value="#{item.qtyNotConverted}"/>
                                 </f:facet>
                                 <f:facet name="input">
-                                    <p:inputText required="true" value="#{item.quantite}">                                             
-                                        <p:ajax event="keyup" listener="#{entreedirecteController.updateTotal()}" update=":StockCreateForm:info_1,:StockCreateForm:info_2"/>
+                                    <p:inputText required="true" value="#{item.qtyNotConverted}">                                             
+                                        <p:ajax listener="#{entreedirecteController.updateTableLine(item)}"
+                                                update=":StockCreateForm:info_1,:StockCreateForm:info_2,datalist"/>
                                     </p:inputText>
                                 </f:facet>
                             </p:cellEditor>
                         </p:column>
 
-                        <p:column style="width: 15%;text-align: center" headerText="#{langue.unite}">
+                        <p:column style="width: 11%;text-align: center" headerText="#{langue.unite}">
                             <p:cellEditor>
                                 <f:facet name="output">
                                     <h:outputText value="#{item.idunite.libelle}"/>
                                 </f:facet>
                                 <f:facet name="input">
-                                    <p:selectOneMenu value="#{item.idunite}" converter="uniteConverter" >
+                                    <p:selectOneMenu disabled="true" value="#{item.idunite}" converter="uniteConverter" >
                                         <f:selectItems value="#{entreedirecteController.unites}" var="unit" itemLabel="#{unit.libelle}" itemValue="#{unit}" />
                                         <p:ajax />
                                     </p:selectOneMenu>
@@ -126,7 +140,7 @@
                             </p:cellEditor>
                         </p:column>
 
-                        <p:column style="width: 8%;text-align: center" >
+                        <p:column style="width: 6%;text-align: center" >
                             <f:facet name="header">
                                 <h:outputText value="U"/>
                             </f:facet>
@@ -135,11 +149,20 @@
                             </h:outputText>  
                         </p:column>
 
-                        <p:column style="width: 8%;text-align: center" >
+                        <p:column style="width: 6%;text-align: center" >
                             <f:facet name="header">
                                 <h:outputText value="#{langue.q_t}"/>
                             </f:facet>
                             <h:outputText value="#{item.quantitemultiple}">
+                                <f:convertNumber />
+                            </h:outputText>  
+                        </p:column>
+                        
+                        <p:column style="width: 10%;text-align: right" >
+                            <f:facet name="header">
+                                <h:outputText value="Total"/>
+                            </f:facet>
+                            <h:outputText value="#{item.montantTotal}">
                                 <f:convertNumber />
                             </h:outputText>  
                         </p:column>
@@ -149,7 +172,8 @@
                                 <h:outputText value=""/>
                             </f:facet>
                             <p:commandButton icon="ui-icon-trash">
-                                <p:ajax event="click" listener="#{entreedirecteController.removeProduit(item)}" update="datalist,:StockCreateForm:info_1,:StockCreateForm:info_2,:StockListerForm:msg"/>
+                                <p:ajax event="click" listener="#{entreedirecteController.removeProduit(item)}" 
+                                        update="datalist,:StockCreateForm:info_1,:StockCreateForm:info_2,:StockListerForm:msg"/>
                             </p:commandButton>
                         </p:column>
 
@@ -163,8 +187,13 @@
                         <p:outputLabel id="total_2" value="#{entreedirecteController.total}">                               
                             <f:convertNumber />
                         </p:outputLabel>
-                        <p:commandButton icon="fa fa-calculator" value="#{langue.calculer}" actionListener="#{entreedirecteController.updateTotal()}" update=":StockCreateForm:info_1,:StockCreateForm:info_2" partialSubmit="true"/>
-                        <p:commandButton icon="ui-icon-plus" value="#{langue.ajouter_un_article}"  actionListener="#{entreedirecteController.prepareCreateCommande()}" oncomplete="PF('AddarticleCreateDialog').show()" update=":AddarticleCreateForm"/>
+                        <p:commandButton icon="fa fa-calculator" value="#{langue.calculer}" 
+                                         actionListener="#{entreedirecteController.updateTotal()}" update=":StockCreateForm:info_1,:StockCreateForm:info_2"
+                                         partialSubmit="true"/>
+                        
+                        <p:commandButton icon="ui-icon-plus" value="#{langue.ajouter_un_article}"  
+                                         actionListener="#{entreedirecteController.prepareCreateCommande()}"
+                                         oncomplete="PF('AddarticleCreateDialog').show()" update=":AddarticleCreateForm"/>
 
                     </p:panelGrid>
 
@@ -173,7 +202,9 @@
                     <p:separator/>
 
                     <center>                      
-                        <p:commandButton style="color: red;" icon="ui-icon-close" value="#{langue.annuler}" oncomplete="PF('StockCreateDialog').hide()" partialSubmit="true"/>
+                        <p:commandButton style="color: red;" icon="ui-icon-close" value="#{langue.annuler}" 
+                                         oncomplete="PF('StockCreateDialog').hide()" partialSubmit="true"/>
+                        
                         <p:commandButton actionListener="#{entreedirecteController.create()}" icon="ui-icon-check"                                     
                                          value="#{langue.enregistrer}" update="display,:StockListerForm:datalist,:actionsForm,:notify1"                                      
                                          onclick="PF('AjaxNotifyDialog').show()" />
