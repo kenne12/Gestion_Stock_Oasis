@@ -1,5 +1,6 @@
 package controllers.entree_directe;
 
+import entities.AnneeMois;
 import entities.Article;
 import entities.Famille;
 import entities.Fournisseur;
@@ -12,10 +13,12 @@ import entities.Magasinlot;
 import entities.Mvtstock;
 import entities.Unite;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.transaction.UserTransaction;
+import sessions.AnneeMoisFacadeLocal;
 import sessions.ArticleFacadeLocal;
 import sessions.FamilleFacadeLocal;
 import sessions.FournisseurFacadeLocal;
@@ -96,6 +99,11 @@ public class AbstractEntreedirecteController {
     protected Mvtstock mvtstock = new Mvtstock();
 
     @EJB
+    protected AnneeMoisFacadeLocal anneeMoisFacadeLocal;
+    protected Integer idMois;
+    protected List<AnneeMois> listMois = new ArrayList<>();
+
+    @EJB
     protected LignemvtstockFacadeLocal lignemvtstockFacadeLocal;
 
     @EJB
@@ -106,7 +114,15 @@ public class AbstractEntreedirecteController {
 
     protected Double total = 0d;
 
-    //protected double qty = 0;
+    protected Date startDate = new Date();
+    protected Date endDate = new Date();
+
+    protected String searchMode;
+
+    protected boolean isShowFiltreMois;
+    protected boolean isShowStartDate;
+    protected boolean isShowEndDate;
+
     protected boolean perempted = false;
 
     protected Boolean detail = true;
@@ -299,6 +315,71 @@ public class AbstractEntreedirecteController {
 
     public boolean isPerempted() {
         return perempted;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getSearchMode() {
+        return searchMode;
+    }
+
+    public void setSearchMode(String searchMode) {
+        this.searchMode = searchMode;
+    }
+
+    public Integer getIdMois() {
+        return idMois;
+    }
+
+    public void setIdMois(Integer idMois) {
+        this.idMois = idMois;
+    }
+
+    public List<AnneeMois> getListMois() throws Exception {
+        this.listMois = anneeMoisFacadeLocal.findByAnnee(SessionMBean.getAnnee().getIdannee());
+        return listMois;
+    }
+
+    public void setListMois(List<AnneeMois> listMois) {
+        this.listMois = listMois;
+    }
+
+    public boolean isIsShowFiltreMois() {
+        return isShowFiltreMois;
+    }
+
+    public void setIsShowFiltreMois(boolean isShowFiltreMois) {
+        this.isShowFiltreMois = isShowFiltreMois;
+    }
+
+    public boolean isIsShowStartDate() {
+        return isShowStartDate;
+    }
+
+    public void setIsShowStartDate(boolean isShowStartDate) {
+        this.isShowStartDate = isShowStartDate;
+    }
+
+    public boolean isIsShowEndDate() {
+        return isShowEndDate;
+    }
+
+    public void setIsShowEndDate(boolean isShowEndDate) {
+        this.isShowEndDate = isShowEndDate;
     }
 
 }

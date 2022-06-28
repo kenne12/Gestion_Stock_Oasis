@@ -15,6 +15,47 @@
         <p:growl id="msg"/>
 
         <p:panel header="#{langue['Conv.ListeDes']} : APPROVISIONNEMENT EN STOCK">
+
+
+            <h:panelGrid id="search_zone_" columns="8">
+
+                <p:outputLabel value="Mode recherche" for="search_mode" />
+                <p:selectOneMenu required="true" id="search_mode" value="#{entreedirecteController.searchMode}">
+                    <f:selectItem itemLabel="#{langue.choisir}" itemValue=""/>                                                                          
+                    <f:selectItem itemLabel="Mois" itemValue="MOIS"/>                                                                          
+                    <f:selectItem itemLabel="Interval" itemValue="INTERVAL"/>                                                                          
+                    <f:selectItem itemLabel="Date" itemValue="DATE"/>                                                                          
+                    <p:ajax update="search_zone_, startDate , endDate , mois" listener="#{entreedirecteController.updateFiltre()}"/>
+                </p:selectOneMenu>
+
+                <p:outputLabel rendered="#{entreedirecteController.isShowFiltreMois}" value="Mois" for="mois" />
+                <p:selectOneMenu rendered="#{entreedirecteController.isShowFiltreMois}" required="true" id="mois" value="#{entreedirecteController.idMois}">
+                    <f:selectItem itemLabel="#{langue.choisir}" itemValue=""/>
+                    <f:selectItems value="#{entreedirecteController.listMois}" var="mois" itemLabel="#{mois.idmois.nom}" itemValue="#{mois.idAnneeMois}"/>                                                                             
+                    <p:ajax update="startDate , endDate" listener="#{entreedirecteController.updateDate()}"/>
+                </p:selectOneMenu>
+
+                <p:outputLabel rendered="#{entreedirecteController.isShowStartDate}"  value="Date debut" for="startDate"/>
+                <p:calendar rendered="#{entreedirecteController.isShowStartDate}" 
+                            id="startDate" value="#{entreedirecteController.startDate}" 
+                            navigator="true" required="true">
+                    <p:ajax  event="dateSelect" />
+                </p:calendar>
+
+                <p:outputLabel rendered="#{entreedirecteController.isShowEndDate}" value="Date fin" for="endDate"/>
+                <p:calendar rendered="#{entreedirecteController.isShowEndDate}" 
+                            id="endDate" value="#{entreedirecteController.endDate}"
+                            navigator="true"   required="true">
+                    <p:ajax  event="dateSelect" />
+                </p:calendar>
+
+                <p:commandButton  icon="ui-icon-search"   
+                                  value="#{langue.rechercher}" 
+                                  actionListener="#{entreedirecteController.onSearch()}"
+                                  update="datalist"/>
+            </h:panelGrid>
+
+
             <p:contextMenu id="StockDataTableContextMenu" for="datalist">  
                 <p:menuitem value="#{langue['Conv.Creer']}" onclick="document.getElementById('actionsForm:creer').click();" icon="ui-icon-plus"/>
                 <p:menuitem value="#{langue['Conv.Detail']}" onclick="document.getElementById('actionsForm:detail').click();" icon="ui-icon-search"/>
@@ -31,7 +72,7 @@
                          selectionMode="single"
                          emptyMessage="#{langue.tableau_vide}"
                          selection="#{entreedirecteController.livraisonfournisseur}">
-                         
+
 
                 <p:ajax event="rowSelect" update=":StockListerForm:StockDataTableContextMenu,:actionsForm"/>
                 <p:ajax event="rowUnselect" update=":StockListerForm:StockDataTableContextMenu,:actionsForm"/>
@@ -89,6 +130,14 @@
                                    icon="ui-icon-alert"/>
                     </p:commandButton>
                 </p:column>
+                
+                <p:columnGroup type="footer">
+                    <p:row>
+                        <p:column colspan="2" style="text-align:right" footerText="Totaux" />
+                        <p:column style="text-align: right" footerText="#{entreedirecteController.getformatTotal('total')}" />
+                        <p:column colspan="2" />
+                    </p:row>
+                </p:columnGroup>
 
             </p:dataTable>
 
