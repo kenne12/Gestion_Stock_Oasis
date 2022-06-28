@@ -1,9 +1,11 @@
 package controllers.entree_directe;
 
+import entities.AnneeMois;
 import entities.Article;
 import entities.Fournisseur;
 import entities.Lignelivraisonfournisseur;
 import entities.Lignemvtstock;
+import entities.Livraisonclient;
 import entities.Livraisonfournisseur;
 import entities.Lot;
 import entities.Magasinarticle;
@@ -12,12 +14,14 @@ import entities.Mvtstock;
 import enumeration.ModeEntreSorti;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 import org.primefaces.context.RequestContext;
 import utils.JsfUtil;
 import utils.PrintUtils;
@@ -25,12 +29,18 @@ import utils.SessionMBean;
 import utils.Utilitaires;
 
 @ManagedBean
-@ViewScoped
+@SessionScoped
 public class EntreedirecteController extends AbstractEntreedirecteController implements Serializable {
 
     @PostConstruct
     private void init() {
         this.magasins = SessionMBean.getMagasins();
+        this.searchMode = "MOIS";
+        this.filtre(this.searchMode);
+        this.reload();
+    }
+
+    public void reload() {
         this.livraisonfournisseurs = this.livraisonfournisseurFacadeLocal
                 .findAllRange(SessionMBean.getMagasin().getIdmagasin(),
                         SessionMBean.getMois().getDateDebut(), SessionMBean.getMois().getDateFin(), true);
@@ -78,7 +88,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
         try {
             this.magasins.clear();
             if (this.magasin.getIdmagasin() != null) {
-                this.magasinarticles = this.magasinarticleFacadeLocal.findByIdmagasinProductIsActif(this.magasin.getIdmagasin(), true);
+                magasinarticles = magasinarticleFacadeLocal.findByIdmagasinProductIsActif(this.magasin.getIdmagasin(), true);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -400,7 +410,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                 this.fournisseur = this.fournisseurFacadeLocal.find(this.fournisseur.getIdfournisseur());
                 this.livraisonfournisseur.setIdfournisseur(this.fournisseur);
                 this.livraisonfournisseur.setMontant(this.total);
-                calculTotal();
+                this.calculTotal();
                 this.ut.begin();
 
                 this.livraisonfournisseurFacadeLocal.edit(this.livraisonfournisseur);
@@ -852,6 +862,61 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
         }
     }
 
+    public void updateFiltre() {
+        this.filtre(this.searchMode);
+    }
+
+    private void filtre(String option) {
+        this.isShowEndDate = false;
+        this.isShowStartDate = false;
+        this.isShowFiltreMois = false;
+        switch (searchMode) {
+            case "MOIS":
+                this.isShowFiltreMois = true;
+                break;
+            case "INTERVAL":
+                this.isShowStartDate = true;
+                this.isShowEndDate = true;
+                break;
+            case "DATE":
+                this.isShowStartDate = true;
+                break;
+        }
+    }
+
+    public void updateDate() {
+        startDate = null;
+        endDate = null;
+        if (this.idMois != null) {
+            Optional<AnneeMois> value = this.listMois.stream()
+                    .filter(item -> item.getIdAnneeMois().equals(idMois)).findAny();
+
+            if (value.isPresent()) {
+                startDate = value.get().getDateDebut();
+                endDate = value.get().getDateFin();
+            }
+        }
+    }
+
+    public void onSearch() {
+        this.livraisonfournisseurs = new ArrayList<>();
+        switch (searchMode) {
+            case "MOIS":
+                livraisonfournisseurs = livraisonfournisseurFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), startDate, endDate);
+                break;
+            case "INTERVAL":
+                livraisonfournisseurs = livraisonfournisseurFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), startDate, endDate);
+                break;
+            case "DATE":
+                livraisonfournisseurs = livraisonfournisseurFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), startDate);
+                break;
+        }
+
+        if (livraisonfournisseurs == null || livraisonfournisseurs.isEmpty()) {
+            JsfUtil.addWarningMessage("Aucune donnée retrouvée");
+        }
+    }
+
     public void notifyError(String message) {
         RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
         this.routine.feedBack("avertissement", "/resources/tool_images/warning.jpeg", this.routine.localizeMessage(message));
@@ -868,5 +933,13 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
         RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
         this.routine.catchException(e, this.routine.localizeMessage("echec_operation"));
         RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
+    }
+
+    public String getformatTotal(String option) {
+        if (option.equals("total")) {
+            double value = livraisonfournisseurs.stream().mapToDouble(Livraisonfournisseur::getMontant).sum();
+            return JsfUtil.formaterStringMoney((int)value);
+        }
+        return "";
     }
 }
