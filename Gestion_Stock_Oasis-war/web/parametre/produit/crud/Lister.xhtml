@@ -38,62 +38,64 @@
                     <h:graphicImage height="30" width="30" value="/photos/products/#{item.photo}"/>
                 </p:column>
 
-                <p:column style="width: 17%; text-align: left; word-break: break-all" filterBy="#{item.idfamille.nom}" filterMatchMode="contains">
+                <p:column style="width: 20%; text-align: left; word-break: break-all" filterBy="#{item.idfamille.nom}" filterMatchMode="contains">
                     <f:facet name="header">
                         <h:outputText value="#{langue.categorie}"/>
                     </f:facet>
                     <h:outputText value="#{item.idfamille.nom}"/>
                 </p:column>
 
-                <p:column style="width: 20%; text-align: left" filterBy="#{item.libelle}" filterMatchMode="contains">
+                <p:column style="width: 21%; text-align: left" filterBy="#{item.libelle}" filterMatchMode="contains">
                     <f:facet name="header">
                         <h:outputText value="#{langue.libelle}"/>
                     </f:facet>
                     <h:outputText value="#{item.libelle}"/>
                 </p:column>
 
-                <p:column style="width: 13%; text-align: left" filterBy="#{item.code}" filterMatchMode="contains">
+                <p:column style="width: 15%; text-align: left" filterBy="#{item.code}" filterMatchMode="contains">
                     <f:facet name="header">
                         <h:outputText value="#{langue.code}"/>
                     </f:facet>
                     <h:outputText value="#{item.code}"/>
                 </p:column>
 
-                <p:column style="width: 8%;" filterBy="#{item.coutachat}">
+                <p:column style="width: 6%;" filterBy="#{item.coutachat}">
                     <f:facet name="header">
-                        <h:outputText value="#{langue.prix_achat}"/>
+                        <h:outputText value="Prix A G"/>
                     </f:facet>
                     <h:outputText value="#{item.coutachat}">
                         <f:convertNumber/>
                     </h:outputText>
                 </p:column>
 
-                <p:column style="width: 8%;" filterBy="#{item.prixunit}">
+                <p:column style="width: 6%;" filterBy="#{item.prixAchatDetail}">
                     <f:facet name="header">
-                        <h:outputText value="#{langue.prix_vente}"/>
+                        <h:outputText value="Prix A D"/>
+                    </f:facet>
+                    <h:outputText value="#{item.prixAchatDetail}">
+                        <f:convertNumber/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column style="width: 6%;" filterBy="#{item.prixunit}">
+                    <f:facet name="header">
+                        <h:outputText value="Prix V G"/>
                     </f:facet>
                     <h:outputText value="#{item.prixunit}">
                         <f:convertNumber/>
                     </h:outputText>
                 </p:column>
 
-                <p:column style="width: 6% ;">
+
+                <p:column style="width: 6%;" filterBy="#{item.prixVenteDetail}">
                     <f:facet name="header">
-                        <h:outputText value="#{langue.quantite}"/>
+                        <h:outputText value="#{langue.prix_vente}"/>
                     </f:facet>
-                    <h:outputText value="#{item.quantitestock}">
+                    <h:outputText value="#{item.prixVenteDetail}">
                         <f:convertNumber/>
                     </h:outputText>
                 </p:column>
 
-                <p:column style="width: 6% ;">
-                    <f:facet name="header">
-                        <h:outputText value="#{langue.stock_critic}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.quantitealerte}">
-                        <f:convertNumber/>
-                    </h:outputText>
-                </p:column>
 
                 <p:column style="width: 5%">
                     <f:facet name="header">
@@ -102,17 +104,20 @@
                     <h:selectBooleanCheckbox disabled="true" value="#{item.etat}"/>
                 </p:column>
 
-                <p:column style="width: 7%;text-align: center" >
+                <p:column style="width: 10%;text-align: center" >
                     <f:facet name="header">
                         <h:outputText value="#{langue.action}"/>
                     </f:facet>
 
                     <p:commandButton icon="ui-icon-image">
-                        <p:ajax event="click" listener="#{articleController.prepareUploadPhoto(item)}" update=":PhotoProduitForm,:notify1"/>
+                        <p:ajax event="click" listener="#{articleController.prepareUploadPhoto(item)}" 
+                                update=":PhotoProduitForm,:notify1" />
                     </p:commandButton>
-                    
-                    <p:commandButton icon="ui-icon-image" rendered="false">
-                        <p:ajax event="click" listener="#{articleController.prepareEditLotPrice(item)}" update=":EditPriceProduitForm,:notify1"/>
+
+                    <p:commandButton icon="ui-icon-pencil" >
+                        <p:ajax event="click" listener="#{articleController.prepareEditPrice(item)}"
+                                update=":EditPriceProduitForm,:notify1"/> 
+                        <f:setPropertyActionListener value="#{item}" target="#{articleController.article}" />
                     </p:commandButton>
 
                 </p:column>

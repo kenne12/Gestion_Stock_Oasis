@@ -5,6 +5,8 @@ import entities.Famille;
 import entities.Fournisseur;
 import entities.Lot;
 import entities.Magasin;
+import entities.Magasinarticle;
+import entities.Magasinlot;
 import entities.Unite;
 import java.util.ArrayList;
 import java.util.List;
@@ -88,6 +90,12 @@ public class AbstractArticleController {
 
     @EJB
     protected LignemvtstockFacadeLocal lignemvtstockFacadeLocal;
+
+    protected List<Magasinarticle> magasinarticles = new ArrayList<>();
+    
+    @EJB
+    protected MagasinlotFacadeLocal magasinlotFacadeLocal1;
+    protected List<Magasinlot> magasinlots = new ArrayList<>();
 
     protected String chemin_replicated_images = SessionMBean.getParametrage().getRepertoireLogo();
     protected String filename = "";
@@ -357,6 +365,22 @@ public class AbstractArticleController {
 
     public List<Lot> getLots() {
         return lots;
+    }
+
+    public List<Magasinarticle> getMagasinarticles() {
+        return magasinarticles;
+    }
+
+    public void setMagasinarticles(List<Magasinarticle> magasinarticles) {
+        this.magasinarticles = magasinarticles;
+    }
+
+    public List<Magasinlot> getMagasinlots() {
+        return magasinlots;
+    }
+
+    public void setMagasinlots(List<Magasinlot> magasinlots) {
+        this.magasinlots = magasinlots;
     }
 
 }

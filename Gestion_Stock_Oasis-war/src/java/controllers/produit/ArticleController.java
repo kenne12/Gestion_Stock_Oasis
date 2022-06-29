@@ -196,10 +196,9 @@ public class ArticleController extends AbstractArticleController implements Seri
                     lot.setNumero(this.article.getCode());
                     lotFacadeLocal.create(this.lot);
                 }
-                
-                selectedMagasins.clear();
-                selectedMagasins.add(SessionMBean.getMagasin());
 
+                //selectedMagasins.clear();
+                //selectedMagasins.add(SessionMBean.getMagasin());
                 for (Magasin m : selectedMagasins) {
                     Magasinarticle obj = new Magasinarticle();
                     obj.setIdmagasinarticle(this.magasinarticleFacadeLocal.nextVal());
@@ -441,10 +440,91 @@ public class ArticleController extends AbstractArticleController implements Seri
         }
     }
 
-    public void prepareEditLotPrice(Article item) {
-        List<Lot> lots = item.getLotList();
-        this.article = item;
+    public void initInitialLotPrice(Magasinlot item) {
+        item.setPrixVenteDetail(item.getIdlot().getIdarticle().getPrixVenteDetail());
+        item.setPrixVenteGros(item.getIdlot().getIdarticle().getPrixunit());
+    }
+
+    public void initInitialArticlePrice(Magasinarticle item) {
+        item.setPrixVenteDetail(item.getIdarticle().getPrixVenteDetail());
+        item.setPrixVenteGros(item.getIdarticle().getPrixunit());
+    }
+
+    public void initInitialPrice(String option) {
+
+        if (option.equals("lot")) {
+            magasinlots.forEach(item -> {
+
+                if (item.getPrixVenteGros() == 0 || item.getPrixVenteDetail() == 0) {
+                    item.setPrixVenteDetail(item.getIdmagasinarticle().getIdarticle().getPrixVenteDetail());
+                    item.setPrixVenteGros(item.getIdmagasinarticle().getIdarticle().getPrixunit());
+                }
+            });
+
+            System.err.println("lot size" + magasinlots.size());
+        }
+
+        if (option.equals("article")) {
+            magasinarticles.forEach(item -> {
+                if (item.getPrixVenteDetail() == 0 || item.getPrixVenteGros() == 0) {
+                    item.setPrixVenteDetail(item.getIdarticle().getPrixVenteDetail());
+                    item.setPrixVenteGros(item.getIdarticle().getPrixunit());
+                }
+
+            });
+            System.err.println("article size" + magasinarticles.size());
+        }
+    }
+
+    public void prepareEditPrice(Article item) {
+        //List<Lot> lots = item.getLotList();
+        magasinlots.clear();
+        magasinlots.addAll(magasinlotFacadeLocal.findByIdArticle(item.getIdarticle()));
+
+        magasinarticles.clear();
+        magasinarticles.addAll(item.getMagasinarticleList());
+
         RequestContext.getCurrentInstance().execute("PF('EditPriceProduitDialog').show()");
+    }
+
+    private void editListLot() {
+        System.err.println("magasin lots " + magasinlots.size());
+        magasinlots.forEach(item -> {
+            magasinlotFacadeLocal.edit(item);
+        });
+    }
+
+    private void editListArticle() {
+        magasinarticles.forEach(item -> {
+            magasinarticleFacadeLocal.edit(item);
+        });
+    }
+
+    public void editPrice(String option) {
+
+        switch (option) {
+            case "total": {
+                editListLot();
+                editListArticle();
+                break;
+            }
+
+            case "lot": {
+                editListLot();
+                break;
+            }
+
+            case "article": {
+                editListArticle();
+                break;
+            }
+        }
+
+        magasinlots.clear();
+        magasinarticles.clear();
+        article = new Article();
+        article.setIdUniteDetail(0);
+        //RequestContext.getCurrentInstance().execute("PF('EditPriceProduitDialog').hide()");
     }
 
     public void prepareUploadPhoto(Article item) {
@@ -522,8 +602,15 @@ public class ArticleController extends AbstractArticleController implements Seri
 
     public void closeEditPriceDialog() {
         article = new Article();
-
+        article.setIdUniteDetail(0);
+        magasinarticles.clear();
+        magasinlots.clear();
+        this.deactiveButton();
         RequestContext.getCurrentInstance().execute("PF('EditPriceProduitDialog').hide()");
+    }
+
+    private void deactiveButton() {
+        modifier = supprimer = detail = true;
     }
 
     public void synchronisePicture() {
@@ -554,5 +641,9 @@ public class ArticleController extends AbstractArticleController implements Seri
                     .redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + link);
         } catch (Exception e) {
         }
+    }
+
+    public void nothing() {
+        System.err.println("void");
     }
 }

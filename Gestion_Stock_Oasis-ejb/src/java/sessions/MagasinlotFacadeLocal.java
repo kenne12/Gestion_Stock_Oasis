@@ -14,41 +14,43 @@ public interface MagasinlotFacadeLocal {
 
     public void remove(Magasinlot magasinlot);
 
-    public Magasinlot find(Object id);
+    Magasinlot find(Object id);
 
-    public List<Magasinlot> findAll();
+    List<Magasinlot> findAll();
 
-    public List<Magasinlot> findRange(int[] range);
+    List<Magasinlot> findRange(int[] range);
 
-    public int count();
+    int count();
 
-    public Long nextVal();
+    Long nextVal();
 
-    public List<Magasinlot> findByArticleIsavailable(int idmagasin, long idarticle, boolean order, Date date) throws Exception;
+    List<Magasinlot> findByArticleIsavailable(int idmagasin, long idarticle, boolean order, Date date) throws Exception;
 
-    public Magasinlot findByIdmagasinIdlot(int idmagasin, long idlot);
+    Magasinlot findByIdmagasinIdlot(int idmagasin, long idlot);
 
-    public List<Magasinlot> findByIdMagasin(int idMagasin);
+    List<Magasinlot> findByIdMagasin(int idMagasin);
 
-    public List<Magasinlot> findByIdmagasinEtatIsTrue(int idMagasin);
+    List<Magasinlot> findByIdmagasinEtatIsTrue(int idMagasin);
 
-    public List<Magasinlot> findByIdlot(long idLot);
+    List<Magasinlot> findByIdlot(long idLot);
 
-    public List<Magasinlot> findByIdmagasinNotPerempt(int idmagasin, boolean perissable, Date date) throws Exception;
+    List<Magasinlot> findByIdmagasinNotPerempt(int idmagasin, boolean perissable, Date date) throws Exception;
 
-    public List<Magasinlot> findAllPeremptedEtatIsTrue(int idMagasin, Date date) throws Exception;
+    List<Magasinlot> findAllPeremptedEtatIsTrue(int idMagasin, Date date) throws Exception;
 
-    public void removeAllByIdarticle(long idmagasin);
+    void removeAllByIdarticle(long idmagasin);
 
-    public List<Magasinlot> findAllEtatIsTrue(int idmagasin) throws Exception;
+    List<Magasinlot> findAllEtatIsTrue(int idmagasin) throws Exception;
 
-    public List<Magasinlot> findByArticleIsavailable(int idmagasin, long idarticle);
+    List<Magasinlot> findByArticleIsavailable(int idmagasin, long idarticle);
 
-    public List<Magasinlot> findByIdmagasinQtyNotNull(int idmagasin);
+    List<Magasinlot> findByIdmagasinQtyNotNull(int idmagasin);
 
-    public List<Magasinlot> findByIdMagasinIdArticle(long idMagasinArticle);
+    List<Magasinlot> findByIdMagasinIdArticle(long idMagasinArticle);
 
-    public List<Magasinlot> findByIdMagasinAndEtatGtZero(int idMagasin, boolean etat);
+    List<Magasinlot> findByIdMagasinAndEtatGtZero(int idMagasin, boolean etat);
 
-    public List<Magasinlot> findByIdmagasinAndFamilleAndEtatGtzero(int idMagasin, long idFamille, boolean etat);
+    List<Magasinlot> findByIdmagasinAndFamilleAndEtatGtzero(int idMagasin, long idFamille, boolean etat);
+
+    List<Magasinlot> findByIdArticle(long idArticle);
 }

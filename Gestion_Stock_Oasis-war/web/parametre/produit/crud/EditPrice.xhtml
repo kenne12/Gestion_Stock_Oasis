@@ -14,80 +14,238 @@
                   appendTo="@(body)"
                   width="70%"
                   closable="false"
-                  header="#{langue.ajouter_photo}" 
-                  closeOnEscape="false">
+                  header="FORMULAIRE D'EDITION DES PRIX" 
+                  closeOnEscape="false"
+                  height="500px">
 
-            <h:form id="EditPriceProduitForm" enctype="multipart/form-data">
+            <h:form id="EditPriceProduitForm" >
                 <p:growl id="messages" showDetail="true"/>
 
-                <div class="row">
-                    <div class="col-md-8">
+                <p:messages id="growl" closable="true">
+                    <p:effect type="pulsate" event="load" delay="50" />
+                </p:messages>
 
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                Edition des prix magasin
-                            </div>
 
-                            <div class="panel-body">
+                <p:panel header="EDITION DES LOTS">
 
-                                <p:dataTable id="datalist" 
-                                             value="#{articleController.lots}" 
-                                             var="item"                             
-                                             paginator="true"
-                                             editable="true" 
-                                             rowKey="#{item.idlot}"
-                                             rows="#{articleController.lots.size()}"                                 
-                                             style="width: 98%;margin-left: 1%"
-                                             rowIndexVar="index"
-                                             emptyMessage="#{langue.tableau_vide}"
-                                             widgetVar="fonctionTable"
-                                             draggableColumns="true"
-                                             resizableColumns="true">
 
-                                    <f:facet name="header"> 
-                                        <h:outputText value="#{langue.element_de_facture}"/>
-                                    </f:facet> 
+                    <center>
+                        <p:commandButton class="ml-5" value="#{langue.fermer}" actionListener="#{articleController.closeEditPriceDialog()}" 
+                                         update=":actionsForm, :ArticleListerForm" 
+                                         oncomplete="PF('EditPriceProduitLotDialog').hide()" />
 
-                                    <p:column style="width: 30%" filterBy="#{item.idarticle.libelle}" filterMatchMode="contains" >
-                                        <f:facet name="header">
-                                            <h:outputText value="#{langue.article}"/>
-                                        </f:facet>
-                                        <h:outputText value="#{item.idarticle.libelle}"/>
-                                    </p:column>
+                        <p:commandButton icon="ui-icon-refresh" value="Importer"
+                                         actionListener="#{articleController.initInitialPrice('lot')}"
+                                         update="EditPriceProduitForm,messages" />
 
-                                    <p:column style="width: 29%" filterBy="#{item.numero}" filterMatchMode="contains" >
-                                        <f:facet name="header">
-                                            <h:outputText value="#{langue.lot}"/>
-                                        </f:facet>
-                                        <h:outputText value="#{item.numero}"/>
-                                    </p:column>
+                        <p:commandButton value="Valider P" actionListener="#{articleController.editPrice('lot')}"
+                                         update=":ArticleListerForm,growl" />
 
-                                    <p:column style="width: 10%;text-align: right" headerText="#{langue.pu}">
-                                        <p:cellEditor>
-                                            <f:facet name="output">
-                                                <h:outputText value="#{item.prixachat}" >
-                                                    <f:convertNumber />
-                                                </h:outputText>    
-                                            </f:facet>
-                                            <f:facet name="input">
-                                                <p:inputText required="true" value="#{item.prixunitaire}">
-                                                    <f:convertNumber />
-                                                    <p:ajax event="keyup"/>
-                                                </p:inputText>
-                                            </f:facet>
-                                        </p:cellEditor>
-                                    </p:column>
+                        <p:commandButton value="Valider T" actionListener="#{articleController.editPrice('total')}"
+                                         update=":ArticleListerForm,growl" />
+                    </center>
 
-                                    
-                                </p:dataTable>
 
-                                <br />
+                    <p:dataTable id="datalist_" 
+                                 value="#{articleController.magasinlots}" 
+                                 var="list"                             
+                                 paginator="true"
+                                 editable="true" 
+                                 editMode="cell"
+                                 rowKey="#{list.idmagasinlot}"
+                                 rows="#{articleController.magasinlots.size()}"                                 
+                                 style="width: 98%;margin-left: 1%;margin-top: 5px"
+                                 rowIndexVar="index"
+                                 emptyMessage="#{langue.tableau_vide}"
+                                 widgetVar="fonctionTable"
+                                 draggableColumns="true"
+                                 resizableColumns="true">
 
-                                <p:commandButton value="#{langue.fermer}" actionListener="#{articleController.closeEditPriceDialog()}" update=":actionsForm, :ArticleListerForm" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                        <f:facet name="header"> 
+                            <h:outputText value="ITEMS"/>
+                        </f:facet> 
+
+                        <p:column style="width: 25%" filterBy="#{list.idlot.idarticle.libelle}" filterMatchMode="contains" >
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.article}"/>
+                            </f:facet>
+                            <h:outputText value="#{list.idlot.idarticle.libelle}"/>
+                        </p:column>
+
+
+                        <p:column style="width: 20%" filterBy="#{list.idlot.numero}" filterMatchMode="contains" >
+                            <f:facet name="header">
+                                <h:outputText value="Lot"/>
+                            </f:facet>
+                            <h:outputText value="#{list.idlot.numero}"/>
+                        </p:column>
+
+
+                        <p:column style="width: 20%" filterBy="#{list.idmagasinarticle.idmagasin.nom}" filterMatchMode="contains"  >
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.magasin}"/>
+                            </f:facet>
+                            <h:outputText value="#{list.idmagasinarticle.idmagasin.nom}"/>
+                        </p:column>
+
+
+                        <p:column style="width: 10%" >
+                            <f:facet name="header">
+                                <h:outputText value="Prix Gros"/>
+                            </f:facet>
+                            <h:inputText value="#{list.prixVenteGros}" style="width: 100%" >
+                                <p:ajax event="keyup" />
+                            </h:inputText>
+                        </p:column>
+
+                        <p:column style="width: 10%" >
+                            <f:facet name="header">
+                                <h:outputText value="Prix Vente"/>
+                            </f:facet>
+                            <h:inputText value="#{list.prixVenteDetail}" style="width: 100%" >
+
+                                <p:ajax event="keyup" />
+
+                            </h:inputText>
+                        </p:column>
+
+
+                        <p:column style="width: 5%;text-align: center" >
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.etat}"/>
+                            </f:facet>
+                            <h:selectBooleanCheckbox value="#{list.etat}" >
+                                <p:ajax />
+                            </h:selectBooleanCheckbox>
+                        </p:column>
+
+                        <p:column style="width: 5%;text-align: center" >
+                            <f:facet name="header">
+                                <h:outputText value="Action"/>
+                            </f:facet>
+                            <p:commandButton icon="ui-icon-refresh" >
+                                <p:ajax listener="#{articleController.initInitialLotPrice(list)}" />
+                            </p:commandButton>                     
+                        </p:column>
+
+                    </p:dataTable>
+
+                    <br/>
+
+                    <center>
+                        <p:commandButton class="ml-5" value="#{langue.fermer}" actionListener="#{articleController.closeEditPriceDialog()}" 
+                                         update=":actionsForm, :ArticleListerForm" oncomplete="PF('EditPriceProduitLotDialog').hide()" />
+
+                        <p:commandButton icon="ui-icon-refresh" value="Importer"
+                                         actionListener="#{articleController.initInitialPrice('lot')}"
+                                         update="EditPriceProduitForm,messages" />
+
+                        <p:commandButton value="Valider P" actionListener="#{articleController.editPrice('lot')}"
+                                         update=":ArticleListerForm,growl" />
+
+                        <p:commandButton value="Valider T" actionListener="#{articleController.editPrice('total')}"
+                                         update=":ArticleListerForm,growl" />
+                    </center>
+
+                </p:panel>
+
+
+                <p:separator />
+
+                <p:panel header="EDITION PAR MAGASIN" id="datalist">
+
+                    <p:dataTable  
+                        value="#{articleController.magasinarticles}" 
+                        var="item"                             
+                        paginator="true"
+                        editable="true" 
+                        editMode="cell"
+                        rowKey="#{item.idmagasinarticle}"
+                        rows="#{articleController.magasinarticles.size()}"                                 
+                        style="width: 98%;margin-left: 1%"
+                        rowIndexVar="index"
+                        emptyMessage="#{langue.tableau_vide}"
+                        widgetVar="fonctionTable"
+                        draggableColumns="true"
+                        resizableColumns="true">
+
+                        <f:facet name="header"> 
+                            <h:outputText value="ITEMS"/>
+                        </f:facet> 
+
+                        <p:column style="width: 30%" filterBy="#{item.idarticle.libelle}" filterMatchMode="contains" >
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.article}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idarticle.libelle}"/>
+                        </p:column>
+
+
+                        <p:column style="width: 30%" filterBy="#{item.idmagasin.nom}" filterMatchMode="contains"  >
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.magasin}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idmagasin.nom}"/>
+                        </p:column>
+
+
+                        <p:column style="width: 15%" >
+                            <f:facet name="header">
+                                <h:outputText value="Prix Gros"/>
+                            </f:facet>
+                            <h:inputText value="#{item.prixVenteGros}" style="width: 100%" >
+                                <p:ajax event="keyup" />
+                            </h:inputText>
+                        </p:column>
+
+                        <p:column style="width: 15%" >
+                            <f:facet name="header">
+                                <h:outputText value="Prix Vente"/>
+                            </f:facet>
+                            <h:inputText value="#{item.prixVenteDetail}" style="width: 100%" >
+                                <p:ajax event="keyup" />
+                            </h:inputText>
+                        </p:column>
+
+                        <p:column style="width: 5%;text-align: center" >
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.etat}"/>
+                            </f:facet>
+                            <h:selectBooleanCheckbox value="#{item.etat}" >
+                                <p:ajax />
+                            </h:selectBooleanCheckbox>
+                        </p:column>
+
+                        <p:column style="width: 5%;text-align: center" >
+                            <f:facet name="header">
+                                <h:outputText value="Action"/>
+                            </f:facet>
+                            <p:commandButton icon="ui-icon-refresh" >
+                                <p:ajax listener="#{articleController.initInitialArticlePrice(item)}" />
+                            </p:commandButton>                     
+                        </p:column>
+
+                    </p:dataTable>
+
+                    <br />
+
+                    <center>
+                        <p:commandButton value="#{langue.fermer}" actionListener="#{articleController.closeEditPriceDialog()}"
+                                         update=":actionsForm, :ArticleListerForm" 
+                                         oncomplete="PF('EditPriceProduitLotDialog').hide()"/>
+
+                        <p:commandButton icon="ui-icon-refresh" value="Importer"
+                                         actionListener="#{articleController.initInitialPrice('article')}"
+                                         update="EditPriceProduitForm,messages" />
+
+                        <p:commandButton value="Valider P" actionListener="#{articleController.editPrice('article')}"
+                                         update=":ArticleListerForm,growl" />
+
+                        <p:commandButton value="Valider T" actionListener="#{articleController.editPrice('total')}"
+                                         update=":ArticleListerForm,growl" />
+                    </center>
+
+                </p:panel>
 
             </h:form>
 
