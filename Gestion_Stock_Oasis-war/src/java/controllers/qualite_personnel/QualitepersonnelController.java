@@ -16,52 +16,52 @@ public class QualitepersonnelController extends AbstractQualitepersonnelControll
 
     public void prepareCreate() {
         try {
-            /*  35 */ if (!Utilitaires.isAccess(13L)) {
-                /*  36 */ signalError("acces_refuse");
-                /*  37 */ return;
+            if (!Utilitaires.isAccess(13L)) {
+                signalError("acces_refuse");
+                return;
             }
-            /*  39 */ this.mode = "Create";
-            /*  40 */ this.qualite = new Qualite();
-            /*  41 */ this.laboratoire = new Laboratoire();
-            /*  42 */ RequestContext.getCurrentInstance().execute("PF('QualiteCreerDialog').show()");
+            this.mode = "Create";
+            this.qualite = new Qualite();
+            this.laboratoire = new Laboratoire();
+            RequestContext.getCurrentInstance().execute("PF('QualiteCreerDialog').show()");
         } catch (Exception e) {
-            /*  44 */ signalException(e);
+            signalException(e);
         }
     }
 
     public void prepareEdit() {
         try {
-            /*  50 */ if (!Utilitaires.isAccess(13L)) {
-                /*  51 */ signalError("acces_refuse");
-                /*  52 */ return;
+            if (!Utilitaires.isAccess(13L)) {
+                signalError("acces_refuse");
+                return;
             }
-            /*  54 */ this.mode = "Edit";
-            /*  55 */ RequestContext.getCurrentInstance().execute("PF('QualiteCreerDialog').show()");
+            this.mode = "Edit";
+            RequestContext.getCurrentInstance().execute("PF('QualiteCreerDialog').show()");
         } catch (Exception e) {
-            /*  57 */ signalException(e);
+            signalException(e);
         }
     }
 
     public void create() {
         try {
-            /*  63 */ if (this.mode.equals("Create")) {
-                /*  65 */ this.qualite.setIdqualite(this.qualiteFacadeLocal.nextVal());
-                /*  66 */ this.qualiteFacadeLocal.create(this.qualite);
-                /*  67 */ Utilitaires.saveOperation(this.mouchardFacadeLocal, "Enregistrement de la qualité du personnel : " + this.qualite.getNom(), SessionMBean.getUserAccount());
-                /*  68 */ this.qualite = null;
-                /*  69 */ RequestContext.getCurrentInstance().execute("PF('QualiteCreerDialog').hide()");
-                /*  70 */ signalSuccess();
-            } /*  72 */ else if (this.qualite != null) {
-                /*  73 */ this.qualiteFacadeLocal.edit(this.qualite);
-                /*  74 */ this.qualite = null;
-                /*  75 */ this.modifier = (this.supprimer = true);
-                /*  76 */ RequestContext.getCurrentInstance().execute("PF('QualiteCreerDialog').hide()");
-                /*  77 */ signalSuccess();
+            if (this.mode.equals("Create")) {
+                this.qualite.setIdqualite(this.qualiteFacadeLocal.nextVal());
+                this.qualiteFacadeLocal.create(this.qualite);
+                Utilitaires.saveOperation(this.mouchardFacadeLocal, "Enregistrement de la qualité du personnel : " + this.qualite.getNom(), SessionMBean.getUserAccount());
+                this.qualite = null;
+                RequestContext.getCurrentInstance().execute("PF('QualiteCreerDialog').hide()");
+                signalSuccess();
+            } else if (this.qualite != null) {
+                this.qualiteFacadeLocal.edit(this.qualite);
+                this.qualite = null;
+                this.modifier = (this.supprimer = true);
+                RequestContext.getCurrentInstance().execute("PF('QualiteCreerDialog').hide()");
+                signalSuccess();
             } else {
-                /*  79 */ JsfUtil.addErrorMessage("Aucun qualite selectionné");
+                JsfUtil.addErrorMessage("Aucun qualite selectionné");
             }
         } catch (Exception e) {
-            /*  83 */ signalException(e);
+            signalException(e);
         }
     }
 
@@ -69,35 +69,35 @@ public class QualitepersonnelController extends AbstractQualitepersonnelControll
         try {
             if (this.qualite != null) {
                 if (!Utilitaires.isAccess((13L))) {
-                    /*  92 */ signalError("acces_refuse");
-                    /*  93 */ return;
+                    signalError("acces_refuse");
+                    return;
                 }
 
-                /*  96 */ this.qualiteFacadeLocal.remove(this.qualite);
-                /*  97 */ this.modifier = (this.supprimer = true);
-                /*  98 */ Utilitaires.saveOperation(this.mouchardFacadeLocal, "Suppresion de la qualité du personnel : " + this.qualite.getNom(), SessionMBean.getUserAccount());
-                /*  99 */ this.qualite = null;
-                /* 100 */ signalSuccess();
+                this.qualiteFacadeLocal.remove(this.qualite);
+                this.modifier = (this.supprimer = true);
+                Utilitaires.saveOperation(this.mouchardFacadeLocal, "Suppresion de la qualité du personnel : " + this.qualite.getNom(), SessionMBean.getUserAccount());
+                this.qualite = null;
+                signalSuccess();
             } else {
-                /* 102 */ JsfUtil.addErrorMessage("Aucune Qualite selectionnée");
+                JsfUtil.addErrorMessage("Aucune Qualite selectionnée");
             }
         } catch (Exception e) {
-            /* 105 */ signalException(e);
+            signalException(e);
         }
     }
 
     public void signalError(String chaine) {
-        /* 110 */ this.routine.feedBack("information", "/resources/tool_images/warning.jpeg", this.routine.localizeMessage(chaine));
-        /* 111 */ RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
+        this.routine.feedBack("information", "/resources/tool_images/warning.jpeg", this.routine.localizeMessage(chaine));
+        RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
     }
 
     public void signalSuccess() {
-        /* 115 */ this.routine.feedBack("information", "/resources/tool_images/success.png", this.routine.localizeMessage("operation_reussie"));
-        /* 116 */ RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
+        this.routine.feedBack("information", "/resources/tool_images/success.png", this.routine.localizeMessage("operation_reussie"));
+        RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
     }
 
     public void signalException(Exception e) {
-        /* 120 */ this.routine.catchException(e, this.routine.localizeMessage("erreur_execution"));
-        /* 121 */ RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
+        this.routine.catchException(e, this.routine.localizeMessage("erreur_execution"));
+        RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
     }
 }

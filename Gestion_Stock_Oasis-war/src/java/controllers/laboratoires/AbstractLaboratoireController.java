@@ -28,27 +28,27 @@ public class AbstractLaboratoireController {
     protected String mode = "";
 
     public Boolean getDetail() {
-        /* 41 */ return this.detail;
+        return this.detail;
     }
 
     public void setDetail(Boolean detail) {
-        /* 45 */ this.detail = detail;
+        this.detail = detail;
     }
 
     public Boolean getModifier() {
-        /* 49 */ return this.modifier;
+        return this.modifier;
     }
 
     public void setModifier(Boolean modifier) {
-        /* 53 */ this.modifier = modifier;
+        this.modifier = modifier;
     }
 
     public Boolean getConsulter() {
-        /* 57 */ return this.consulter;
+        return this.consulter;
     }
 
     public void setConsulter(Boolean consulter) {
-        /* 61 */ this.consulter = consulter;
+        this.consulter = consulter;
     }
 
     public Boolean getImprimer() {

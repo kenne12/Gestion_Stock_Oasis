@@ -7,8 +7,6 @@ import entities.Lignedemande;
 import entities.Magasinarticle;
 import entities.Unite;
 import java.io.Serializable;
-import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import javax.annotation.PostConstruct;

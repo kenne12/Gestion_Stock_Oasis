@@ -20,7 +20,8 @@
                     <h:panelGrid columns="3" columnClasses ="column">
 
                         <p:outputLabel value="#{langue.article}" for="produit"/>
-                        <p:selectOneMenu filter="true" filterMatchMode="contains" id="produit" value="#{lotController.article.idarticle}" required="true" disabled="#{lotController.disableProduct}">
+                        <p:selectOneMenu filter="true" filterMatchMode="contains" id="produit" 
+                                         value="#{lotController.article.idarticle}" required="true" disabled="#{lotController.disableProduct}">
                             <f:selectItem itemLabel="#{langue.choisir}" itemValue="0"/>
                             <f:selectItems value="#{lotController.articles}" var="item" itemLabel="#{item.libelle}" itemValue="#{item.idarticle}"/>
                             <p:ajax update="prix_achat,prix_vente" listener="#{lotController.updateData()}"/>
@@ -40,7 +41,8 @@
                         <p:message for="prix_achat"/>
 
                         <p:outputLabel value="#{langue.prix_vente}" for="prix_vente" />
-                        <p:inputText id="prix_vente" value="#{lotController.lot.prixunitaire}" required="true" requiredMessage="#{langue.valeur_obligatoire}">
+                        <p:inputText id="prix_vente" value="#{lotController.lot.prixunitaire}" 
+                                     required="true" requiredMessage="#{langue.valeur_obligatoire}">
                             <p:ajax/>   
                         </p:inputText>
                         <p:message for="prix_vente"/>
@@ -52,7 +54,8 @@
                         <p:message for="date_fab"/>
 
                         <p:outputLabel value="#{langue.date_peremption}" for="date_peremp" />
-                        <p:calendar id="date_peremp" value="#{lotController.lot.dateperemption}" style="width: 300px" navigator="true" required="#{lotController.dateRequired}" >
+                        <p:calendar id="date_peremp" value="#{lotController.lot.dateperemption}"
+                                    style="width: 300px" navigator="true" required="#{lotController.dateRequired}" >
                             <p:ajax/>   
                         </p:calendar>
                         <p:message for="date_peremp"/>
@@ -69,7 +72,8 @@
                                      update="display,:LotListerForm:datalist,:notify1" 
                                      onclick="PF('AjaxNotifyDialog').show()" icon="ui-icon-check"/>
 
-                    <p:commandButton style="float: left" value="#{langue.annuler}" oncomplete="PF('LotCreerDialog').hide()" icon="ui-icon-close"/>
+                    <p:commandButton style="float: left" value="#{langue.annuler}" 
+                                     oncomplete="PF('LotCreerDialog').hide()" icon="ui-icon-close"/>
                 </h:panelGroup>  
 
             </h:form>

@@ -103,11 +103,7 @@ public class AbstractInventaireGlobalController {
     public Boolean getModifier() {
         try {
             if (this.inventaire != null) {
-                if (this.inventaire.getEtat()) {
-                    this.modifier = true;
-                } else {
-                    this.modifier = false;
-                }
+                this.modifier = this.inventaire.getEtat();
             } else {
                 this.modifier = true;
             }

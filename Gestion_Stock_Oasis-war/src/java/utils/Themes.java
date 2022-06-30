@@ -9,7 +9,7 @@ import javax.faces.bean.SessionScoped;
 
 @ManagedBean(name = "themes")
 @SessionScoped
-public class themes implements Serializable {
+public class Themes implements Serializable {
 
     List<String> themes;
 

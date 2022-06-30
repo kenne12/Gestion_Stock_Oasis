@@ -341,7 +341,8 @@ public class TransfertController extends AbstractTransertController implements S
                         lmvts.setQteAvant(qteAvant);
                         this.lignemvtstockFacadeLocal.create(lmvts);
 
-                        Magasinlot ml = this.magasinlotFacadeLocal.findByIdmagasinIdlot(this.magasinCible.getIdmagasin().intValue(), ltt.getIdmagasinlot().getIdlot().getIdlot().longValue());
+                        Magasinlot ml = this.magasinlotFacadeLocal
+                                .findByIdmagasinIdlot(this.magasinCible.getIdmagasin(), ltt.getIdmagasinlot().getIdlot().getIdlot());
                         if (ml != null) {
                             qteAvant = ml.getQuantitemultiple();
                             ml.setIdmagasinarticle(this.magasinarticleFacadeLocal.find(ml.getIdmagasinarticle().getIdmagasinarticle()));
@@ -369,7 +370,8 @@ public class TransfertController extends AbstractTransertController implements S
                             lmvt.setQteAvant(qteAvant);
                             this.lignemvtstockFacadeLocal.create(lmvt);
                         } else {
-                            Magasinarticle ma = this.magasinarticleFacadeLocal.findByIdmagasinIdarticle(this.magasinCible.getIdmagasin().intValue(), ltt.getIdmagasinlot().getIdlot().getIdarticle().getIdarticle().longValue());
+                            Magasinarticle ma = this.magasinarticleFacadeLocal.
+                                    findByIdmagasinIdarticle(this.magasinCible.getIdmagasin(), ltt.getIdmagasinlot().getIdlot().getIdarticle().getIdarticle());
                             if (ma == null) {
                                 ma = new Magasinarticle();
                                 ma.setIdmagasinarticle(this.magasinarticleFacadeLocal.nextVal());
@@ -457,9 +459,9 @@ public class TransfertController extends AbstractTransertController implements S
                 this.ut.begin();
 
                 List<Lignemvtstock> lmvt = this.lignemvtstockFacadeLocal.findByIdmvt(this.transfert.getIdmvtstock().getIdmvtstock());
-                for (Lignemvtstock l : lmvt) {
+                lmvt.forEach((l) -> {
                     this.lignemvtstockFacadeLocal.remove(l);
-                }
+                });
                 Lignemvtstock l;
                 List<Lignetransfert> listLigneTransfert = this.lignetransfertFacadeLocal.findByIdTransfert(this.transfert.getIdtransfert());
                 for (Lignetransfert lt : listLigneTransfert) {
@@ -477,7 +479,7 @@ public class TransfertController extends AbstractTransertController implements S
                     mlTemp.setQuantitereduite((mlTemp.getQuantitereduite() + lt.getQuantitereduite()));
                     this.magasinlotFacadeLocal.edit(mlTemp);
 
-                    Magasinlot ml = this.magasinlotFacadeLocal.findByIdmagasinIdlot(this.transfert.getIdmagasincible().intValue(), lt.getIdmagasinlot().getIdlot().getIdlot().longValue());
+                    Magasinlot ml = this.magasinlotFacadeLocal.findByIdmagasinIdlot(this.transfert.getIdmagasincible(), lt.getIdmagasinlot().getIdlot().getIdlot());
                     if (ml != null) {
                         Magasinarticle ma1 = ml.getIdmagasinarticle();
 
@@ -500,7 +502,7 @@ public class TransfertController extends AbstractTransertController implements S
                 this.ut.commit();
 
                 this.transfert = null;
-                this.supprimer = (this.modifier = this.imprimer = this.detail = Boolean.valueOf(true));
+                this.supprimer = (this.modifier = this.imprimer = this.detail = true);
                 notifySuccess();
             } else {
                 notifyError("not_row_selected");

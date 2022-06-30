@@ -152,22 +152,22 @@ public class LivraisonFournisseurController extends AbstractLivraisonFournisseur
                 this.commandefournisseur.setDateeffectlivraison(new Date());
                 int conteur = 0;
                 for (Lignecommandefournisseur lcf : this.lignecommandefournisseurs) {
-                    List lotTemps = this.lotFacadeLocal.findByArticleRangeDesc(lcf.getIdarticle().getIdarticle(), lcf.getIdarticle().getPerissable().booleanValue());
+                    List lotTemps = this.lotFacadeLocal.findByArticleRangeDesc(lcf.getIdarticle().getIdarticle(), lcf.getIdarticle().getPerissable());
 
-                    /* 172 */ Lignelivraisonfournisseur object = new Lignelivraisonfournisseur();
-                    /* 173 */ object.setIdlignelivraisonfournisseur(0l);
+                    Lignelivraisonfournisseur object = new Lignelivraisonfournisseur();
+                    object.setIdlignelivraisonfournisseur(0l);
 
-                    /* 175 */ object.setIdlot((Lot) lotTemps.get(0));
-                    /* 176 */ object.setQuantite(lcf.getQuantite());
-                    /* 177 */ object.setUnite(lcf.getUnite());
-                    /* 178 */ object.setPrixachat(object.getIdlot().getPrixachat());
-                    /* 179 */ object.setQuantitemultiple(lcf.getQuantitemultiple());
-                    /* 180 */ object.setQuantitereduite(lcf.getQuantitereduite());
-                    /* 181 */ object.setIdunite(lcf.getIdunite());
+                    object.setIdlot((Lot) lotTemps.get(0));
+                    object.setQuantite(lcf.getQuantite());
+                    object.setUnite(lcf.getUnite());
+                    object.setPrixachat(object.getIdlot().getPrixachat());
+                    object.setQuantitemultiple(lcf.getQuantitemultiple());
+                    object.setQuantitereduite(lcf.getQuantitereduite());
+                    object.setIdunite(lcf.getIdunite());
 
-                    /* 183 */ this.lignelivraisonfournisseurs.add(object);
-                    /* 184 */ this.lignelivraisonfournisseurs.get(conteur).setTauxsatisfaction(0d);
-                    /* 185 */ conteur++;
+                    this.lignelivraisonfournisseurs.add(object);
+                    this.lignelivraisonfournisseurs.get(conteur).setTauxsatisfaction(0d);
+                    conteur++;
                 }
                 this.commandefournisseur.setTauxsatisfaction((0.0D));
                 updateTotal();
@@ -186,33 +186,33 @@ public class LivraisonFournisseurController extends AbstractLivraisonFournisseur
                     message = "";
                     updateTotal();
 
-                    /* 208 */ this.mvtstock.setIdmvtstock(this.mvtstockFacadeLocal.nextVal());
-                    /* 209 */ String codeMvt = "MVT";
-                    /* 210 */ Long nextMvt = this.mvtstock.getIdmvtstock();
-                    /* 211 */ codeMvt = Utilitaires.genererCodeStock(codeMvt, nextMvt);
-                    /* 212 */ this.mvtstock.setCode(codeMvt);
-                    /* 213 */ this.mvtstock.setDatemvt(this.commandefournisseur.getDateeffectlivraison());
-                    /* 214 */ this.mvtstock.setType(" ");
-                    /* 215 */ this.mvtstock.setClient(" ");
-                    /* 216 */ this.mvtstock.setMagasin(" ");
-                    /* 217 */ this.mvtstock.setFournisseur(this.commandefournisseur.getIdfournisseur().getNom());
+                    this.mvtstock.setIdmvtstock(this.mvtstockFacadeLocal.nextVal());
+                    String codeMvt = "MVT";
+                    Long nextMvt = this.mvtstock.getIdmvtstock();
+                    codeMvt = Utilitaires.genererCodeStock(codeMvt, nextMvt);
+                    this.mvtstock.setCode(codeMvt);
+                    this.mvtstock.setDatemvt(this.commandefournisseur.getDateeffectlivraison());
+                    this.mvtstock.setType(" ");
+                    this.mvtstock.setClient(" ");
+                    this.mvtstock.setMagasin(" ");
+                    this.mvtstock.setFournisseur(this.commandefournisseur.getIdfournisseur().getNom());
 
-                    /* 219 */ this.ut.begin();
+                    this.ut.begin();
 
-                    /* 221 */ this.mvtstockFacadeLocal.create(this.mvtstock);
+                    this.mvtstockFacadeLocal.create(this.mvtstock);
 
-                    /* 223 */ this.livraisonfournisseur.setIdlivraisonfournisseur(this.livraisonfournisseurFacadeLocal.nextVal());
-                    /* 224 */ Long nextLiv = this.livraisonfournisseur.getIdlivraisonfournisseur();
-                    /* 225 */ String codeLivraison = "LIV";
-                    /* 226 */ codeLivraison = Utilitaires.genererCodeStock(codeLivraison, nextLiv);
-                    /* 227 */ this.livraisonfournisseur.setCode(codeLivraison);
+                    this.livraisonfournisseur.setIdlivraisonfournisseur(this.livraisonfournisseurFacadeLocal.nextVal());
+                    Long nextLiv = this.livraisonfournisseur.getIdlivraisonfournisseur();
+                    String codeLivraison = "LIV";
+                    codeLivraison = Utilitaires.genererCodeStock(codeLivraison, nextLiv);
+                    this.livraisonfournisseur.setCode(codeLivraison);
 
-                    /* 229 */ this.livraisonfournisseur.setIdlivraisonfournisseur(this.livraisonfournisseurFacadeLocal.nextVal());
-                    /* 230 */ this.livraisonfournisseur.setMontant(this.total);
-                    /* 231 */ this.livraisonfournisseur.setIdfournisseur(this.fournisseur);
-                    /* 232 */ this.livraisonfournisseur.setLivraisondirecte((false));
-                    /* 233 */ this.livraisonfournisseur.setDatelivraison(this.commandefournisseur.getDateeffectlivraison());
-                    /* 234 */ this.livraisonfournisseur.setIdcommandefournisseur(this.commandefournisseur);
+                    this.livraisonfournisseur.setIdlivraisonfournisseur(this.livraisonfournisseurFacadeLocal.nextVal());
+                    this.livraisonfournisseur.setMontant(this.total);
+                    this.livraisonfournisseur.setIdfournisseur(this.fournisseur);
+                    this.livraisonfournisseur.setLivraisondirecte((false));
+                    this.livraisonfournisseur.setDatelivraison(this.commandefournisseur.getDateeffectlivraison());
+                    this.livraisonfournisseur.setIdcommandefournisseur(this.commandefournisseur);
                     this.livraisonfournisseur.setIdUtilisateur(SessionMBean.getUserAccount().getIdutilisateur());
                     this.livraisonfournisseur.setIdmvtstock(this.mvtstock);
 
@@ -360,30 +360,30 @@ public class LivraisonFournisseurController extends AbstractLivraisonFournisseur
                             this.lignelivraisonfournisseurFacadeLocal.remove(sp);
                         }
                     }
-                    /* 381 */ this.livraisonfournisseurFacadeLocal.remove(this.livraisonfournisseur);
+                    this.livraisonfournisseurFacadeLocal.remove(this.livraisonfournisseur);
 
-                    /* 383 */ this.commandefournisseur = this.commandefournisseurFacadeLocal.find(this.livraisonfournisseur.getIdcommandefournisseur().getIdcommandefournisseur());
+                    this.commandefournisseur = this.commandefournisseurFacadeLocal.find(this.livraisonfournisseur.getIdcommandefournisseur().getIdcommandefournisseur());
 
-                    /* 385 */ this.commandefournisseur.setLivre((false));
-                    /* 386 */ this.commandefournisseur.setCode("-");
-                    /* 387 */ this.commandefournisseur.setTauxsatisfaction((0.0D));
-                    /* 388 */ this.commandefournisseurFacadeLocal.edit(this.commandefournisseur);
+                    this.commandefournisseur.setLivre((false));
+                    this.commandefournisseur.setCode("-");
+                    this.commandefournisseur.setTauxsatisfaction((0.0D));
+                    this.commandefournisseurFacadeLocal.edit(this.commandefournisseur);
 
-                    /* 390 */ Mvtstock mTemp = this.livraisonfournisseur.getIdmvtstock();
+                    Mvtstock mTemp = this.livraisonfournisseur.getIdmvtstock();
 
                     List<Lignemvtstock> lmvt = this.lignemvtstockFacadeLocal.findByIdmvt(mTemp.getIdmvtstock());
                     for (Lignemvtstock l : lmvt) {
                         this.lignemvtstockFacadeLocal.remove(l);
                     }
-                    /* 396 */ this.mvtstockFacadeLocal.remove(mTemp);
+                    this.mvtstockFacadeLocal.remove(mTemp);
 
-                    /* 398 */ Utilitaires.saveOperation(this.mouchardFacadeLocal, "Annulation de livraison fournisseur : " + this.livraisonfournisseur.getCode() + " ; Montant : " + this.livraisonfournisseur.getMontant() + " Fournisseur : " + this.livraisonfournisseur.getIdcommandefournisseur().getIdfournisseur().getNom(), SessionMBean.getUserAccount());
-                    /* 399 */ this.ut.commit();
+                    Utilitaires.saveOperation(this.mouchardFacadeLocal, "Annulation de livraison fournisseur : " + this.livraisonfournisseur.getCode() + " ; Montant : " + this.livraisonfournisseur.getMontant() + " Fournisseur : " + this.livraisonfournisseur.getIdcommandefournisseur().getIdfournisseur().getNom(), SessionMBean.getUserAccount());
+                    this.ut.commit();
 
-                    /* 401 */ this.livraisonfournisseur = null;
-                    /* 402 */ this.commandefournisseur = new Commandefournisseur();
-                    /* 403 */ this.supprimer = (this.modifier = this.imprimer = this.detail = (true));
-                    /* 404 */ notifySuccess();
+                    this.livraisonfournisseur = null;
+                    this.commandefournisseur = new Commandefournisseur();
+                    this.supprimer = (this.modifier = this.imprimer = this.detail = (true));
+                    notifySuccess();
                 } else {
                     notifyError(this.mode);
                 }
@@ -396,23 +396,23 @@ public class LivraisonFournisseurController extends AbstractLivraisonFournisseur
     }
 
     public void initPrinter(Livraisonfournisseur l) {
-        /* 418 */ this.livraisonfournisseur = l;
-        /* 419 */ print();
+        this.livraisonfournisseur = l;
+        print();
     }
 
     public void initEdit(Livraisonfournisseur l) {
-        /* 423 */ this.livraisonfournisseur = l;
-        /* 424 */ prepareEdit();
+        this.livraisonfournisseur = l;
+        prepareEdit();
     }
 
     public void initView(Livraisonfournisseur l) {
-        /* 428 */ this.livraisonfournisseur = l;
-        /* 429 */ prepareview();
+        this.livraisonfournisseur = l;
+        prepareview();
     }
 
     public void initDelete(Livraisonfournisseur l) {
-        /* 433 */ this.livraisonfournisseur = l;
-        /* 434 */ delete();
+        this.livraisonfournisseur = l;
+        delete();
     }
 
     public void print() {
@@ -524,19 +524,19 @@ public class LivraisonFournisseurController extends AbstractLivraisonFournisseur
     }
 
     public void notifyError(String message) {
-        /* 556 */ this.routine.feedBack("avertissement", "/resources/tool_images/warning.jpeg", this.routine.localizeMessage(message));
-        /* 557 */ RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
+        this.routine.feedBack("avertissement", "/resources/tool_images/warning.jpeg", this.routine.localizeMessage(message));
+        RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
     }
 
     public void notifySuccess() {
-        /* 561 */ RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
-        /* 562 */ this.routine.feedBack("information", "/resources/tool_images/success.png", this.routine.localizeMessage("operation_reussie"));
-        /* 563 */ RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
+        RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
+        this.routine.feedBack("information", "/resources/tool_images/success.png", this.routine.localizeMessage("operation_reussie"));
+        RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
     }
 
     public void notifyFail(Exception e) {
-        /* 567 */ RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
-        /* 568 */ this.routine.catchException(e, this.routine.localizeMessage("echec_operation"));
-        /* 569 */ RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
+        RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
+        this.routine.catchException(e, this.routine.localizeMessage("echec_operation"));
+        RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
     }
 }

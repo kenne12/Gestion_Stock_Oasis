@@ -14,48 +14,48 @@ public class Solde {
     }
 
     public Solde(Personnel personnel, Integer montantVerse, Integer montantRetire) {
-        /* 27 */ this.personnel = personnel;
-        /* 28 */ this.montantVerse = montantVerse;
-        /* 29 */ this.montantRetire = montantRetire;
+        this.personnel = personnel;
+        this.montantVerse = montantVerse;
+        this.montantRetire = montantRetire;
     }
 
     public Personnel getPersonnel() {
-        /* 33 */ return this.personnel;
+        return this.personnel;
     }
 
     public void setPersonnel(Personnel personnel) {
-        /* 37 */ this.personnel = personnel;
+        this.personnel = personnel;
     }
 
     public Integer getMontantVerse() {
-        /* 41 */ return this.montantVerse;
+        return this.montantVerse;
     }
 
     public void setMontantVerse(Integer montantVerse) {
-        /* 45 */ this.montantVerse = montantVerse;
+        this.montantVerse = montantVerse;
     }
 
     public Integer getMontantRetire() {
-        /* 49 */ return this.montantRetire;
+        return this.montantRetire;
     }
 
     public void setMontantRetire(Integer montantRetire) {
-        /* 53 */ this.montantRetire = montantRetire;
+        this.montantRetire = montantRetire;
     }
 
     public Integer getCarnet() {
-        /* 57 */ return this.carnet;
+        return this.carnet;
     }
 
     public void setCarnet(Integer carnet) {
-        /* 61 */ this.carnet = carnet;
+        this.carnet = carnet;
     }
 
     public Integer getCommission() {
-        /* 65 */ return this.commission;
+        return this.commission;
     }
 
     public void setCommission(Integer commission) {
-        /* 69 */ this.commission = commission;
+        this.commission = commission;
     }
 }

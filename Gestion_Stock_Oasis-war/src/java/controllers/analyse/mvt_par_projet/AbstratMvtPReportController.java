@@ -49,28 +49,28 @@ public class AbstratMvtPReportController {
     }
 
     public Date getDateFin() {
-        /* 63 */ return this.dateFin;
+        return this.dateFin;
     }
 
     public void setDateFin(Date dateFin) {
-        /* 67 */ this.dateFin = dateFin;
+        this.dateFin = dateFin;
     }
 
     public Projet getProjet() {
-        /* 71 */ return this.projet;
+        return this.projet;
     }
 
     public void setProjet(Projet projet) {
-        /* 75 */ this.projet = projet;
+        this.projet = projet;
     }
 
     public List<Projet> getProjets() {
-        /* 79 */ List list = Utilitaires.returMagasinByUser(this.magasinFacadeLocal, this.utilisateurmagasinFacadeLocal, SessionMBean.getUserAccount().getIdpersonnel());
-        /* 80 */ this.projets = Utilitaires.searchProjetctByMagasin(this.projetFacadeLocal, list);
-        /* 81 */ return this.projets;
+        List list = Utilitaires.returMagasinByUser(this.magasinFacadeLocal, this.utilisateurmagasinFacadeLocal, SessionMBean.getUserAccount().getIdpersonnel());
+        this.projets = Utilitaires.searchProjetctByMagasin(this.projetFacadeLocal, list);
+        return this.projets;
     }
 
     public void setProjets(List<Projet> projets) {
-        /* 85 */ this.projets = projets;
+        this.projets = projets;
     }
 }

@@ -31,7 +31,6 @@ public class LotFacade extends AbstractFacade<Lot> implements LotFacadeLocal {
         } catch (Exception e) {
             return 1L;
         }
-
     }
 
     @Override
@@ -48,6 +47,13 @@ public class LotFacade extends AbstractFacade<Lot> implements LotFacadeLocal {
     public List<Lot> findAllRange(int idStructure, boolean perissable) {
         Query query = this.em.createQuery("SELECT l FROM Lot l WHERE l.idarticle.perissable=:perissable AND l.idarticle.parametrage.id=:id ORDER BY l.idarticle.libelle, l.numero");
         query.setParameter("perissable", perissable).setParameter("id", idStructure);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Lot> findAllRange(int idStructure) {
+        Query query = this.em.createQuery("SELECT l FROM Lot l WHERE l.idarticle.parametrage.id=:id ORDER BY l.idarticle.libelle, l.numero");
+        query.setParameter("id", idStructure);
         return query.getResultList();
     }
 

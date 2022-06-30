@@ -88,6 +88,7 @@ public class Livraisonclient implements Serializable {
     @Column(name = "montantht")
     private double montantHt;
     private double marge;
+    private double benefice;
     @Column(name = "avance_initiale")
     private double avanceInitiale;
 
@@ -254,6 +255,14 @@ public class Livraisonclient implements Serializable {
         this.marge = marge;
     }
 
+    public double getBenefice() {
+        return benefice;
+    }
+
+    public void setBenefice(double benefice) {
+        this.benefice = benefice;
+    }
+
     public double getAvanceInitiale() {
         return avanceInitiale;
     }
@@ -337,9 +346,40 @@ public class Livraisonclient implements Serializable {
         return true;
     }
 
+    /*public void compute_marge_benefit() {
+        this.marge = 0;
+        this.benefice = 0;
+        if (!this.lignelivraisonclientList.isEmpty()) {
+            this.lignelivraisonclientList.forEach(item -> {
+                item.compute_benef_marge();
+                this.marge += item.getMarge();
+                this.benefice += item.getBenefice();
+            });
+        }
+    }*/
+
+    /*public void computeTotalHt() {
+        this.montant = this.lignelivraisonclientList.stream().mapToDouble(Lignelivraisonclient::getMontant).sum();
+    }*/
+
+    /*public void computeTotals() {
+        try {
+            this.compute_marge_benefit();
+            this.computeTotalHt();
+
+            this.montantRemise = ((this.montant * tauxRemise) / 100);
+            this.montantHt = this.montant - this.montantRemise;
+            this.montantTva = ((this.montantHt * this.tauxTva) / 100);
+            this.setMontantTtc(this.getMontantTva() + this.getMontantHt());
+            //this.livraisonclient.setMarge(livraisonclient.getMarge() - ((livraisonclient.getMarge() * livraisonclient.getTauxRemise()) / 100));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }*/
+
     @Override
     public String toString() {
-        return "Livraisonclient{" + "idlivraisonclient=" + idlivraisonclient + ", livraisondirecte=" + livraisondirecte + ", montant=" + montant + ", code=" + code + ", datelivraison=" + datelivraison + ", iddemande=" + iddemande + ", idmagasin=" + idmagasin + ", idmvtstock=" + idmvtstock + ", lignelivraisonclientList=" + lignelivraisonclientList + ", client=" + client + ", tauxTva=" + tauxTva + ", montantTva=" + montantTva + ", montantTtc=" + montantTtc + ", tauxRemise=" + tauxRemise + ", montantRemise=" + montantRemise + ", montantHt=" + montantHt + ", marge=" + marge + ", avanceInitiale=" + avanceInitiale + ", modePayement=" + modePayement + ", montantPaye=" + montantPaye + ", comptabilise=" + comptabilise + ", reste=" + reste + ", paye=" + paye + ", idUtilisateur=" + idUtilisateur + '}';
+        return "Livraisonclient{" + "idlivraisonclient=" + idlivraisonclient + ", livraisondirecte=" + livraisondirecte + ", montant=" + montant + ", code=" + code + ", datelivraison=" + datelivraison + ", iddemande=" + iddemande + ", idmagasin=" + idmagasin + ", idmvtstock=" + idmvtstock + ", lignelivraisonclientList=" + lignelivraisonclientList + ", client=" + client + ", tauxTva=" + tauxTva + ", montantTva=" + montantTva + ", montantTtc=" + montantTtc + ", tauxRemise=" + tauxRemise + ", montantRemise=" + montantRemise + ", montantHt=" + montantHt + ", marge=" + marge + ", benefice=" + benefice + ", avanceInitiale=" + avanceInitiale + ", modePayement=" + modePayement + ", montantPaye=" + montantPaye + ", comptabilise=" + comptabilise + ", reste=" + reste + ", paye=" + paye + ", idUtilisateur=" + idUtilisateur + '}';
     }
 
 }

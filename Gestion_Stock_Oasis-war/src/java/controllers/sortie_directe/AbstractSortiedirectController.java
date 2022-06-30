@@ -15,6 +15,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.transaction.UserTransaction;
+import service.StockOutputService;
 import sessions.AnneeMoisFacadeLocal;
 import sessions.ClientFacadeLocal;
 import sessions.FamilleFacadeLocal;
@@ -92,6 +93,8 @@ public class AbstractSortiedirectController {
     @EJB
     protected MouchardFacadeLocal mouchardFacadeLocal;
     protected Routine routine = new Routine();
+
+    protected StockOutputService stockOutputService = new StockOutputService();
 
     protected Boolean detail = true;
     protected Boolean modifier = true;

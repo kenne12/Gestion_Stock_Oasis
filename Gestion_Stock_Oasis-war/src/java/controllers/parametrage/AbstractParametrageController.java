@@ -49,11 +49,7 @@ public class AbstractParametrageController {
 
     public Boolean getSession() {
         try {
-            if (SessionMBean.getSession1()) {
-                this.session = false;
-            } else {
-                this.session = true;
-            }
+            this.session = !SessionMBean.getSession1();
         } catch (Exception e) {
             e.printStackTrace();
         }

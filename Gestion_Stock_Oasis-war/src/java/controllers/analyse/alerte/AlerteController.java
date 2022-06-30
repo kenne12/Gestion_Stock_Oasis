@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -62,23 +63,21 @@ public class AlerteController extends AbstractAlerteController implements Serial
     }
 
     public List<Magasinlot> filterLotByMagasin(Magasin m) {
-        List list = new ArrayList();
-        for (Magasinlot ml : this.magasinlot_peremps) {
-            if (ml.getIdmagasinarticle().getIdmagasin().equals(m)) {
-                list.add(ml);
-            }
-        }
-        return list;
+        List<Magasinlot> list = new ArrayList();
+        list.addAll(magasinlot_alert);
+        return list.stream()
+                .filter(item -> item.getIdmagasinarticle().getIdmagasin().getIdmagasin().equals(m.getIdmagasin()))
+                .collect(Collectors.toList());
+
     }
 
     public List<Magasinarticle> filterArticleByMagasin(Magasin m) {
-        List list = new ArrayList();
-        for (Magasinarticle ma : this.magasinarticle_alert) {
-            if (ma.getIdmagasin().equals(m)) {
-                list.add(ma);
-            }
-        }
-        return list;
+        List<Magasinarticle> list = new ArrayList();
+        list.addAll(magasinarticle_alert);
+        return list.stream()
+                .filter(item -> item.getIdmagasin().getIdmagasin().equals(m.getIdmagasin()))
+                .collect(Collectors.toList());
+
     }
 
     public void openAlertPeremptionDialog() {

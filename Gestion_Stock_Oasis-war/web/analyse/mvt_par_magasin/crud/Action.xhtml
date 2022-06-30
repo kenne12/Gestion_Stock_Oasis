@@ -12,9 +12,9 @@
 
             <br/>
             <center>
-                                
+
                 <h:panelGrid columns="10">
-                    
+
                     <p:outputLabel value="#{langue.magasin}"/>
                     <p:selectOneMenu filter="true" value="#{mvtMReportController.magasin.idmagasin}">
                         <f:selectItem itemLabel="#{langue.choisir}" itemValue="" />
@@ -26,19 +26,25 @@
 
                     <p:outputLabel value="#{langue.dateFin}"/>
                     <p:calendar value="#{mvtMReportController.dateFin}" navigator="true" pattern="dd/MM/yyyy" />
-                    
+
                     <p:commandButton id="recherche"
                                      value="#{langue.recherche}" actionListener="#{mvtMReportController.search()}"
-                                     update=":StockListerForm,imprimer"/>
+                                     update=":StockListerForm,imprimer,imprimer_2"/>
 
                     <p:commandButton id="imprimer" icon="ui-icon-print"
                                      onclick="PF('AjaxNotifyDialog').show()"
                                      disabled="#{mvtMReportController.printStateBtn}"
-                                     value="#{langue['Conv.Imprimer']}" actionListener="#{mvtMReportController.printStock()}"
+                                     value="#{langue['Conv.Imprimer']}" actionListener="#{mvtMReportController.printMvt()}"
                                      update=":StockImprimerForm" />
-                    
+
+                    <p:commandButton id="imprimer_2" icon="ui-icon-print"
+                                     onclick="PF('AjaxNotifyDialog').show()"
+                                     disabled="#{mvtMReportController.printStateBtn}"
+                                     value="#{langue['Conv.Imprimer']} - Benef" actionListener="#{mvtMReportController.printMvtWithBenefit()}"
+                                     update=":StockImprimerForm" />
+
                 </h:panelGrid> 
-                                                              
+
             </center>
         </div>
 

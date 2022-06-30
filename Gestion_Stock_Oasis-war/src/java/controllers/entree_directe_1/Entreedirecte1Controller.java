@@ -96,8 +96,8 @@ public class Entreedirecte1Controller extends AbstractEntreedirecte1Controller i
                 this.fournisseur = this.livraisonfournisseur.getIdfournisseur();
                 this.total = this.livraisonfournisseur.getMontant();
                 this.mvtstock = this.livraisonfournisseur.getIdmvtstock();
-                /* 115 */ RequestContext.getCurrentInstance().execute("PF('StockCreateDialog').show()");
-                /* 116 */ return;
+                RequestContext.getCurrentInstance().execute("PF('StockCreateDialog').show()");
+                return;
             }
             notifyError("not_row_selected");
         } catch (Exception e) {
@@ -474,23 +474,23 @@ public class Entreedirecte1Controller extends AbstractEntreedirecte1Controller i
     }
 
     public void initPrinter(Livraisonfournisseur l) {
-        /* 465 */ this.livraisonfournisseur = l;
-        /* 466 */ print();
+        this.livraisonfournisseur = l;
+        print();
     }
 
     public void initEdit(Livraisonfournisseur l) {
-        /* 470 */ this.livraisonfournisseur = l;
-        /* 471 */ prepareEdit();
+        this.livraisonfournisseur = l;
+        prepareEdit();
     }
 
     public void initView(Livraisonfournisseur l) {
-        /* 475 */ this.livraisonfournisseur = l;
-        /* 476 */ prepareview();
+        this.livraisonfournisseur = l;
+        prepareview();
     }
 
     public void initDelete(Livraisonfournisseur l) {
-        /* 480 */ this.livraisonfournisseur = l;
-        /* 481 */ delete();
+        this.livraisonfournisseur = l;
+        delete();
     }
 
     public void addProduit() {
@@ -541,20 +541,20 @@ public class Entreedirecte1Controller extends AbstractEntreedirecte1Controller i
             for (Lignelivraisonfournisseur llf : this.lignelivraisonfournisseurs) {
                 if (llf.getIdlot().getIdlot().equals(lignelivraisonfournisseur.getIdlot().getIdlot())) {
                     if (llf.getIdlignelivraisonfournisseur() != 0L) {
-                        /* 537 */ this.lignelivraisonfournisseurFacadeLocal.remove(llf);
-                        /* 538 */ this.livraisonfournisseur.setMontant((this.livraisonfournisseur.getMontant() - this.livraisonfournisseur.getMontant() * llf.getQuantite()));
-                        /* 539 */ this.livraisonfournisseurFacadeLocal.edit(this.livraisonfournisseur);
+                        this.lignelivraisonfournisseurFacadeLocal.remove(llf);
+                        this.livraisonfournisseur.setMontant((this.livraisonfournisseur.getMontant() - this.livraisonfournisseur.getMontant() * llf.getQuantite()));
+                        this.livraisonfournisseurFacadeLocal.edit(this.livraisonfournisseur);
 
-                        /* 541 */ Magasinarticle maTemp = this.magasinarticleFacadeLocal.find(llf.getIdmagasinlot().getIdmagasinarticle().getIdmagasinarticle());
-                        /* 542 */ maTemp.setQuantite((maTemp.getQuantite() - llf.getQuantite()));
-                        /* 543 */ maTemp.setQuantitemultiple((maTemp.getQuantitemultiple() - llf.getQuantite() * llf.getUnite()));
-                        /* 544 */ maTemp.setQuantitereduite((maTemp.getQuantitereduite() - llf.getQuantitereduite()));
-                        /* 545 */ this.magasinarticleFacadeLocal.edit(maTemp);
+                        Magasinarticle maTemp = this.magasinarticleFacadeLocal.find(llf.getIdmagasinlot().getIdmagasinarticle().getIdmagasinarticle());
+                        maTemp.setQuantite((maTemp.getQuantite() - llf.getQuantite()));
+                        maTemp.setQuantitemultiple((maTemp.getQuantitemultiple() - llf.getQuantite() * llf.getUnite()));
+                        maTemp.setQuantitereduite((maTemp.getQuantitereduite() - llf.getQuantitereduite()));
+                        this.magasinarticleFacadeLocal.edit(maTemp);
 
-                        /* 547 */ Magasinlot mlTemp = this.magasinlotFacadeLocal.find(llf.getIdmagasinlot().getIdmagasinlot());
-                        /* 548 */ mlTemp.setQuantite((mlTemp.getQuantite() - llf.getQuantite()));
-                        /* 549 */ mlTemp.setQuantitemultiple((mlTemp.getQuantitemultiple() - llf.getQuantitemultiple()));
-                        /* 550 */ mlTemp.setQuantitereduite((mlTemp.getQuantitereduite() - llf.getQuantitereduite()));
+                        Magasinlot mlTemp = this.magasinlotFacadeLocal.find(llf.getIdmagasinlot().getIdmagasinlot());
+                        mlTemp.setQuantite((mlTemp.getQuantite() - llf.getQuantite()));
+                        mlTemp.setQuantitemultiple((mlTemp.getQuantitemultiple() - llf.getQuantitemultiple()));
+                        mlTemp.setQuantitereduite((mlTemp.getQuantitereduite() - llf.getQuantitereduite()));
                     }
 
                     this.lignelivraisonfournisseurs.remove(i);
@@ -613,18 +613,17 @@ public class Entreedirecte1Controller extends AbstractEntreedirecte1Controller i
         try {
             if (this.article.getIdarticle() != null) {
                 this.famille = this.article.getIdfamille();
-                /* 608 */ this.unite = this.article.getIdunite();
-                /* 609 */ this.lignelivraisonfournisseur.setUnite(this.article.getUnite());
-                /* 610 */ this.lot = new Lot();
-                /* 611 */ this.lot.setQuantite(0.0D);
-                /* 612 */ this.lignelivraisonfournisseur.setPrixachat(0.0D);
+                this.unite = this.article.getIdunite();
+                this.lignelivraisonfournisseur.setUnite(this.article.getUnite());
+                this.lot = new Lot();
+                this.lot.setQuantite(0.0D);
+                this.lignelivraisonfournisseur.setPrixachat(0.0D);
 
-                /* 614 */ this.lots = this.lotFacadeLocal.findByArticle(this.article.getIdarticle(), this.article.getPerissable());
+                this.lots = this.lotFacadeLocal.findByArticle(this.article.getIdarticle(), this.article.getPerissable());
                 if (this.lots.size() == 1) {
                     this.lot = ((Lot) this.lots.get(0));
                     this.lignelivraisonfournisseur.setPrixachat(this.lot.getPrixachat());
                     this.lignelivraisonfournisseur.setUnite(this.lot.getIdarticle().getUnite());
-                    return;
                 }
             }
         } catch (Exception e) {
@@ -639,25 +638,25 @@ public class Entreedirecte1Controller extends AbstractEntreedirecte1Controller i
                 this.lignelivraisonfournisseur.setUnite(this.lot.getIdarticle().getUnite());
             }
         } catch (Exception e) {
-            /* 634 */ e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
     public void notifyError(String message) {
-        /* 639 */ RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
-        /* 640 */ this.routine.feedBack("avertissement", "/resources/tool_images/warning.jpeg", this.routine.localizeMessage(message));
-        /* 641 */ RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
+        RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
+        this.routine.feedBack("avertissement", "/resources/tool_images/warning.jpeg", this.routine.localizeMessage(message));
+        RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
     }
 
     public void notifySuccess() {
-        /* 645 */ RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
-        /* 646 */ this.routine.feedBack("information", "/resources/tool_images/success.png", this.routine.localizeMessage("operation_reussie"));
-        /* 647 */ RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
+        RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
+        this.routine.feedBack("information", "/resources/tool_images/success.png", this.routine.localizeMessage("operation_reussie"));
+        RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
     }
 
     public void notifyFail(Exception e) {
-        /* 651 */ RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
-        /* 652 */ this.routine.catchException(e, this.routine.localizeMessage("echec_operation"));
-        /* 653 */ RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
+        RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
+        this.routine.catchException(e, this.routine.localizeMessage("echec_operation"));
+        RequestContext.getCurrentInstance().execute("PF('NotifyDialog1').show()");
     }
 }

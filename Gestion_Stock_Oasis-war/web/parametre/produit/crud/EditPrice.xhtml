@@ -12,11 +12,11 @@
                   widgetVar="EditPriceProduitDialog" 
                   modal="true" resizable="false"
                   appendTo="@(body)"
-                  width="70%"
+                  width="80%"
                   closable="false"
                   header="FORMULAIRE D'EDITION DES PRIX" 
                   closeOnEscape="false"
-                  height="500px">
+                  height="600px">
 
             <h:form id="EditPriceProduitForm" >
                 <p:growl id="messages" showDetail="true"/>
@@ -30,7 +30,7 @@
 
 
                     <center>
-                        <p:commandButton class="ml-5" value="#{langue.fermer}" actionListener="#{articleController.closeEditPriceDialog()}" 
+                        <p:commandButton value="#{langue.fermer}" actionListener="#{articleController.closeEditPriceDialog()}" 
                                          update=":actionsForm, :ArticleListerForm" 
                                          oncomplete="PF('EditPriceProduitLotDialog').hide()" />
 
@@ -91,7 +91,7 @@
 
                         <p:column style="width: 10%" >
                             <f:facet name="header">
-                                <h:outputText value="Prix Gros"/>
+                                <h:outputText value="Prix V Gros"/>
                             </f:facet>
                             <h:inputText value="#{list.prixVenteGros}" style="width: 100%" >
                                 <p:ajax event="keyup" />
@@ -100,7 +100,7 @@
 
                         <p:column style="width: 10%" >
                             <f:facet name="header">
-                                <h:outputText value="Prix Vente"/>
+                                <h:outputText value="Prix V D"/>
                             </f:facet>
                             <h:inputText value="#{list.prixVenteDetail}" style="width: 100%" >
 
@@ -133,7 +133,7 @@
                     <br/>
 
                     <center>
-                        <p:commandButton class="ml-5" value="#{langue.fermer}" actionListener="#{articleController.closeEditPriceDialog()}" 
+                        <p:commandButton value="#{langue.fermer}" actionListener="#{articleController.closeEditPriceDialog()}" 
                                          update=":actionsForm, :ArticleListerForm" oncomplete="PF('EditPriceProduitLotDialog').hide()" />
 
                         <p:commandButton icon="ui-icon-refresh" value="Importer"
@@ -191,7 +191,7 @@
 
                         <p:column style="width: 15%" >
                             <f:facet name="header">
-                                <h:outputText value="Prix Gros"/>
+                                <h:outputText value="Prix V Gros"/>
                             </f:facet>
                             <h:inputText value="#{item.prixVenteGros}" style="width: 100%" >
                                 <p:ajax event="keyup" />
@@ -200,7 +200,7 @@
 
                         <p:column style="width: 15%" >
                             <f:facet name="header">
-                                <h:outputText value="Prix Vente"/>
+                                <h:outputText value="Prix V D"/>
                             </f:facet>
                             <h:inputText value="#{item.prixVenteDetail}" style="width: 100%" >
                                 <p:ajax event="keyup" />

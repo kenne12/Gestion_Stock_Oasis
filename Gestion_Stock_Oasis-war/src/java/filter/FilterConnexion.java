@@ -55,11 +55,11 @@ public class FilterConnexion implements Filter, Serializable {
     }
 
     public FilterConfig getFilterConfig() {
-        /*  94 */ return this.filterConfig;
+        return this.filterConfig;
     }
 
     public void setFilterConfig(FilterConfig filterConfig) {
-        /* 103 */ this.filterConfig = filterConfig;
+        this.filterConfig = filterConfig;
     }
 
     @Override
@@ -79,10 +79,10 @@ public class FilterConnexion implements Filter, Serializable {
         if (this.filterConfig == null) {
             return "FilterConnexion()";
         }
-        /* 136 */ StringBuffer sb = new StringBuffer("FilterConnexion(");
-        /* 137 */ sb.append(this.filterConfig);
-        /* 138 */ sb.append(")");
-        /* 139 */ return sb.toString();
+        StringBuffer sb = new StringBuffer("FilterConnexion(");
+        sb.append(this.filterConfig);
+        sb.append(")");
+        return sb.toString();
     }
 
     private void sendProcessingError(Throwable t, ServletResponse response) {
@@ -90,17 +90,17 @@ public class FilterConnexion implements Filter, Serializable {
 
         if ((stackTrace != null) && (!stackTrace.equals(""))) {
             try {
-                /* 147 */ response.setContentType("text/html");
-                /* 148 */ PrintStream ps = new PrintStream(response.getOutputStream());
-                /* 149 */ PrintWriter pw = new PrintWriter(ps);
-                /* 150 */ pw.print("<html>\n<head>\n<title>Error</title>\n</head>\n<body>\n");
+                response.setContentType("text/html");
+                PrintStream ps = new PrintStream(response.getOutputStream());
+                PrintWriter pw = new PrintWriter(ps);
+                pw.print("<html>\n<head>\n<title>Error</title>\n</head>\n<body>\n");
 
-                /* 153 */ pw.print("<h1>The resource did not process correctly</h1>\n<pre>\n");
-                /* 154 */ pw.print(stackTrace);
-                /* 155 */ pw.print("</pre></body>\n</html>");
-                /* 156 */ pw.close();
-                /* 157 */ ps.close();
-                /* 158 */ response.getOutputStream().close();
+                pw.print("<h1>The resource did not process correctly</h1>\n<pre>\n");
+                pw.print(stackTrace);
+                pw.print("</pre></body>\n</html>");
+                pw.close();
+                ps.close();
+                response.getOutputStream().close();
             } catch (Exception localException) {
             }
         } else {
@@ -117,12 +117,12 @@ public class FilterConnexion implements Filter, Serializable {
     public static String getStackTrace(Throwable t) {
         String stackTrace = null;
         try {
-            /* 175 */ StringWriter sw = new StringWriter();
-            /* 176 */ PrintWriter pw = new PrintWriter(sw);
-            /* 177 */ t.printStackTrace(pw);
-            /* 178 */ pw.close();
-            /* 179 */ sw.close();
-            /* 180 */ stackTrace = sw.getBuffer().toString();
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            t.printStackTrace(pw);
+            pw.close();
+            sw.close();
+            stackTrace = sw.getBuffer().toString();
         } catch (Exception localException) {
         }
         return stackTrace;

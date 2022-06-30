@@ -36,39 +36,39 @@ public class AbstractMagasinController {
     protected String mode = "";
 
     public Boolean getDetail() {
-        /*  48 */ return this.detail;
+        return this.detail;
     }
 
     public void setDetail(Boolean detail) {
-        /*  52 */ this.detail = detail;
+        this.detail = detail;
     }
 
     public Boolean getModifier() {
-        /*  56 */ return this.modifier;
+        return this.modifier;
     }
 
     public void setModifier(Boolean modifier) {
-        /*  60 */ this.modifier = modifier;
+        this.modifier = modifier;
     }
 
     public Boolean getConsulter() {
-        /*  64 */ return this.consulter;
+        return this.consulter;
     }
 
     public void setConsulter(Boolean consulter) {
-        /*  68 */ this.consulter = consulter;
+        this.consulter = consulter;
     }
 
     public Boolean getImprimer() {
-        /*  72 */ return this.imprimer;
+        return this.imprimer;
     }
 
     public void setImprimer(Boolean imprimer) {
-        /*  76 */ this.imprimer = imprimer;
+        this.imprimer = imprimer;
     }
 
     public Boolean getSupprimer() {
-        /*  80 */ return this.supprimer;
+        return this.supprimer;
     }
 
     public void setSupprimer(Boolean supprimer) {

@@ -19,23 +19,23 @@ public interface ArticleFacadeLocal {
 
     public List<Article> findRange(int[] arrayOfInt);
 
-    public int count();
+    int count();
 
-    public Long nextVal();
+    Long nextVal();
 
-    public Long nextValByIdstructure(int idStructure);
+    Long nextValByIdstructure(int idStructure);
 
-    public List<Article> findAllRange(int idStructure);
+    List<Article> findAllRange(int idStructure);
 
-    public Article findByCode(int idStructure, String code);
+    Article findByCode(int idStructure, String code);
 
-    public List<Article> findByPerissable(int idStructure, boolean perrissable);
+    List<Article> findByPerissable(int idStructure, boolean perrissable);
 
-    public List<Article> findByFamille(long idfamille) throws Exception;
+    List<Article> findByFamille(long idfamille) throws Exception;
 
-    public List<Article> findByFamille(long idfamille, boolean positif) throws Exception;
+    List<Article> findByFamille(long idfamille, boolean positif) throws Exception;
 
-    public List<Article> findAllRange(int idStructure, boolean etat);
+    List<Article> findAllRange(int idStructure, boolean etat);
 
-    public List<Article> findByEtatQuantityPositif(int idStructure, boolean etat) throws Exception;
+    List<Article> findByEtatQuantityPositif(int idStructure, boolean etat) throws Exception;
 }

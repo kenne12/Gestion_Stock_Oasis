@@ -95,7 +95,7 @@ public class AbstractLotController {
     }
 
     public List<Lot> getLots() {
-        this.lots = this.lotFacadeLocal.findAllRange(SessionMBean.getMagasin().getParametrage().getId(), true);
+        this.lots = this.lotFacadeLocal.findAllRange(SessionMBean.getMagasin().getParametrage().getId());
         return this.lots;
     }
 

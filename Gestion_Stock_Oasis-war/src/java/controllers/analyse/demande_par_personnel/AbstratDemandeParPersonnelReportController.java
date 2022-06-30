@@ -37,27 +37,27 @@ public class AbstratDemandeParPersonnelReportController {
     }
 
     public void setDateFin(Date dateFin) {
-        /* 48 */ this.dateFin = dateFin;
+        this.dateFin = dateFin;
     }
 
     public Personnel getPersonnel() {
-        /* 52 */ return this.personnel;
+        return this.personnel;
     }
 
     public void setPersonnel(Personnel personnel) {
-        /* 56 */ this.personnel = personnel;
+        this.personnel = personnel;
     }
 
     public List<Personnel> getPersonnels() {
-        /* 60 */ this.personnels = this.personnelFacadeLocal.findByIdStructure(SessionMBean.getParametrage().getId());
-        /* 61 */ return this.personnels;
+        this.personnels = this.personnelFacadeLocal.findByIdStructure(SessionMBean.getParametrage().getId());
+        return this.personnels;
     }
 
     public List<Demande> getDemandes() {
-        /* 69 */ return this.demandes;
+        return this.demandes;
     }
 
     public void setDemandes(List<Demande> demandes) {
-        /* 73 */ this.demandes = demandes;
+        this.demandes = demandes;
     }
 }

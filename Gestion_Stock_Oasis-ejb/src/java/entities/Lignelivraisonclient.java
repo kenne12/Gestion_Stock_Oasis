@@ -60,6 +60,7 @@ public class Lignelivraisonclient implements Serializable {
     private double prixUnitaire;
     private double quantitereduite;
     private double marge;
+    private double benefice;
     @Column(name = "prixachat")
     private double prixAchat;
     @Column(name = "prixvente")
@@ -192,6 +193,14 @@ public class Lignelivraisonclient implements Serializable {
         this.marge = marge;
     }
 
+    public double getBenefice() {
+        return benefice;
+    }
+
+    public void setBenefice(double benefice) {
+        this.benefice = benefice;
+    }
+
     public double getPrixAchat() {
         return prixAchat;
     }
@@ -239,6 +248,26 @@ public class Lignelivraisonclient implements Serializable {
     @Override
     public String toString() {
         return "Lignelivraisonclient{" + "idlignelivraisonclient=" + idlignelivraisonclient + ", quantite=" + quantite + ", tauxsatisfaction=" + tauxsatisfaction + ", quantitemultiple=" + quantitemultiple + ", unite=" + unite + ", montant=" + montant + ", prixUnitaire=" + prixUnitaire + ", quantitereduite=" + quantitereduite + ", marge=" + marge + ", prixAchat=" + prixAchat + ", prixVente=" + prixVente + ", idlivraisonclient=" + idlivraisonclient + ", idlot=" + idlot + ", idmagasinlot=" + idmagasinlot + ", idunite=" + idunite + ", modeVente=" + modeVente + '}';
+    }
+
+    public void compute_benef_marge() {
+        double diff_marge = (prixUnitaire - prixVente);
+        double diff_benef = (prixVente - prixAchat);
+        if (modeVente.equals(ModeEntreSorti.VENTE_EN_DETAIL)) {
+            marge = diff_marge * quantitemultiple;
+            benefice = (diff_benef * quantitemultiple);
+        } else {
+            marge = diff_marge * quantitereduite;
+            benefice = diff_benef * quantitereduite;
+        }
+
+        if (marge < 0) {
+            marge = 0;
+        }
+
+        if (benefice < 0) {
+            benefice = 0;
+        }
     }
 
 }

@@ -127,7 +127,7 @@ public class FilterPrivellege
     }
 
     public void log(String msg) {
-        /* 187 */ this.filterConfig.getServletContext().log(msg);
+        this.filterConfig.getServletContext().log(msg);
     }
 
     public String getPropertyValue(String key) {

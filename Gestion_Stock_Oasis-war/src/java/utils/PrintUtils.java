@@ -31,7 +31,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -1282,6 +1281,159 @@ public class PrintUtils {
                 }
                 conteur++;
             }
+
+            rapport.close();
+        } catch (DocumentException ex) {
+            Logger.getLogger(utils.PrintUtils.class.getName()).log(Level.SEVERE, (String) null, (Throwable) ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(utils.PrintUtils.class.getName()).log(Level.SEVERE, (String) null, ex);
+        }
+        return fileName;
+    }
+
+    public static String printMouvementMensuelWithBenefit(List<Lignemvtstock> ligneMvtStocks, List<Article> produits, Parametrage parametrage, String title, String nom_fichier) {
+        String fileName = "";
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+            fileName = nom_fichier;
+            Document rapport = new Document();
+            PdfWriter.getInstance(rapport, new FileOutputStream(Utilitaires.path + "/reports/facture/" + fileName));
+            rapport.open();
+
+            createEntete(rapport, parametrage);
+
+            int conteur = 0;
+
+            double totalMarge = 0;
+            for (Article p : produits) {
+
+                List<Lignemvtstock> ligne = filterMvtStock(p, ligneMvtStocks);
+                if (!ligne.isEmpty()) {
+
+                    ligneMvtStocks.removeAll(ligne);
+
+                    Paragraph titre = new Paragraph("FICHE DE STOCK N° : " + (conteur + 1), new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 1));
+                    titre.setAlignment(1);
+                    rapport.add(titre);
+
+                    rapport.add(new Paragraph(" ", new Font(Font.FontFamily.TIMES_ROMAN, 9.0F, 0)));
+
+                    float[] widthsEntete = {1.4F, 3.0F, 3.0F, 1.4F};
+                    PdfPTable tableEntete = new PdfPTable(widthsEntete);
+                    tableEntete.setWidthPercentage(100.0F);
+
+                    tableEntete.addCell(createPdfPCell("Nom(DCI)", 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+                    tableEntete.addCell(createPdfPCell("" + p.getLibelle(), 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+                    tableEntete.addCell(createPdfPCell("CMM", 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+                    tableEntete.addCell(createPdfPCell("--", 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+
+                    tableEntete.addCell(createPdfPCell("Dosage", 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+                    tableEntete.addCell(createPdfPCell("", 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+                    tableEntete.addCell(createPdfPCell("Niveau Maximum", 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+                    tableEntete.addCell(createPdfPCell("--", 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+
+                    tableEntete.addCell(createPdfPCell("Forme", 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+                    tableEntete.addCell(createPdfPCell("", 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+                    tableEntete.addCell(createPdfPCell("Niveau Minimum", 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+                    tableEntete.addCell(createPdfPCell("--", 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+
+                    tableEntete.addCell(createPdfPCell("Conditionnement", 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+                    tableEntete.addCell(createPdfPCell("--", 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+                    tableEntete.addCell(createPdfPCell("Stock de sécurité", 3, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+                    tableEntete.addCell(createPdfPCell("--", 1, new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0), 0, 0, 0, 0));
+
+                    rapport.add(tableEntete);
+
+                    rapport.add(new Paragraph(" ", new Font(Font.FontFamily.TIMES_ROMAN, 7.0F, 0)));
+
+                    float[] widths = {1.5F, 2.1F, 1.2f, 1.2F, 2.0F, 1.2F, 2.0F, 1.4F, 1.3F};
+                    PdfPTable table = new PdfPTable(widths);
+                    table.setWidthPercentage(100.0F);
+
+                    rapport.add(new Paragraph("MOUVEMENTS DE STOCK", new Font(Font.FontFamily.TIMES_ROMAN, 9.0F, 0)));
+                    rapport.add(new Paragraph(" ", new Font(Font.FontFamily.TIMES_ROMAN, 7.0F, 0)));
+
+                    Font font_11_title = new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0);
+
+                    table.addCell(createPdfPCell("Date", 2, font_11_title));
+                    table.addCell(createPdfPCell("Numéro de lot", 2, font_11_title));
+
+                    table.addCell(createPdfPCell("Qte A", 2, font_11_title));
+
+                    table.addCell(createPdfPCell("Qte E", 2, font_11_title));
+                    table.addCell(createPdfPCell("Provenance", 2, font_11_title));
+                    table.addCell(createPdfPCell("Qté S", 2, font_11_title));
+                    table.addCell(createPdfPCell("Destination", 2, font_11_title));
+                    table.addCell(createPdfPCell("Reste", 2, font_11_title));
+                    table.addCell(createPdfPCell("Bénef", 2, font_11_title));
+
+                    Font font_10 = new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0);
+
+                    double margeByProduct = 0;
+                    for (Lignemvtstock item : ligne) {
+
+                        table.addCell(createPdfPCell("" + sdf.format(item.getIdmvtstock().getDatemvt()), 1, 2, font_10));
+                        table.addCell(createPdfPCell("" + item.getIdlot().getNumero(), 1, 2, font_10));
+
+                        table.addCell(createPdfPCell("" + item.getQteAvant(), 2, font_10));
+
+                        if (item.getQteentree() == 0d) {
+                            table.addCell(createPdfPCell(" ", 2, font_10));
+                            table.addCell(createPdfPCell(" ", 2, font_10));
+                        } else {
+                            table.addCell(createPdfPCell("" + item.getLignelivraisonfournisseur().getQuantitemultiple(), 1, 2, font_10));
+                            table.addCell(createPdfPCell(" " + item.getFournisseur().toLowerCase(), 1, 2, font_10));
+                        }
+
+                        if (item.getQtesortie() == 0d) {
+                            table.addCell(createPdfPCell(" ", 2, font_10));
+                            table.addCell(createPdfPCell(" ", 2, font_10));
+                        } else {
+                            table.addCell(createPdfPCell(" " + item.getLignelivraisonclient().getQuantitemultiple(), 1, 2, font_10));
+                            String destination = item.getClient().contains("null") ? item.getClient().replace("null", "") : item.getClient();
+                            table.addCell(createPdfPCell(" " + destination.toLowerCase(), 1, 2, font_10));
+                        }
+
+                        table.addCell(createPdfPCell(" " + item.getReste(), 2, font_10));
+
+                        if (item.getQtesortie() == 0) {
+                            table.addCell(createPdfPCell(" ", 2, font_10));
+                        } else {
+                            if (item.getLignelivraisonclient().getMarge() == 0) {
+                                table.addCell(createPdfPCell(" ", 2, font_10));
+                            } else {
+                                double margeValue = item.getLignelivraisonclient().getMarge();
+                                table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(margeValue), 1, 3, font_10));
+                                margeByProduct += margeValue;
+                            }
+                        }
+                    }
+                    table.addCell(createPdfPCell(" Sous total ", 8, 3, font_10));
+                    if (margeByProduct > 0) {
+                        table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(margeByProduct), 1, 3, font_10));
+                    } else {
+                        table.addCell(createPdfPCell(" ", 1, 3, font_10));
+                    }
+                    rapport.add(table);
+                    if ((conteur + 1) < produits.size()) {
+                        rapport.newPage();
+                    }
+                    totalMarge += margeByProduct;
+                }
+                conteur++;
+            }
+
+            float[] widths = {1.5F, 2.1F, 1.2f, 1.2F, 2.0F, 1.2F, 2.0F, 1.4F, 1.3F};
+            PdfPTable tableEnd = new PdfPTable(widths);
+            tableEnd.setWidthPercentage(100.0F);
+
+            Font font_10 = new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0);
+            tableEnd.addCell(createPdfPCell(" ", 9, 3, font_10));
+            tableEnd.addCell(createPdfPCell(" Grand total ", 8, 3, font_10));
+            tableEnd.addCell(createPdfPCell("  " + JsfUtil.formaterStringMoney(totalMarge), 1, 3, font_10));
+
+            rapport.add(tableEnd);
 
             rapport.close();
         } catch (DocumentException ex) {

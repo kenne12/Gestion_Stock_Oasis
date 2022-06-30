@@ -24,34 +24,36 @@ public interface LotFacadeLocal {
 
     public Long nextVal();
 
-    public List<Lot> findAllRange();
+    List<Lot> findAllRange();
 
-    public List<Lot> findAllRangeEtatIsTrue();
+    List<Lot> findAllRangeEtatIsTrue();
 
-    public List<Lot> findAllRange(int idStructure, boolean perissable);
+    List<Lot> findAllRange(int idStructure, boolean perissable);
 
-    public Lot findByCode(long idarticle, String numero);
+    List<Lot> findAllRange(int idStructure);
 
-    public Lot findByCode(int idStructure, String numero);
+    Lot findByCode(long idarticle, String numero);
 
-    public List<Lot> findByArticle1(Long idarticle, boolean order, Date paramDate)
+    Lot findByCode(int idStructure, String numero);
+
+    List<Lot> findByArticle1(Long idarticle, boolean order, Date paramDate)
             throws Exception;
 
-    public List<Lot> findByArticle(Long idarticle, boolean order)
+    List<Lot> findByArticle(Long idarticle, boolean order)
             throws Exception;
 
-    public List<Lot> findByArticle(Long idacrticle);
+    List<Lot> findByArticle(Long idacrticle);
 
-    public List<Lot> findByArticleRangeDesc(Long idarticle, boolean paramBoolean)
+    List<Lot> findByArticleRangeDesc(Long idarticle, boolean paramBoolean)
             throws Exception;
 
-    public List<Lot> findByArticle(Long idarticle, boolean paramBoolean, Date date)
+    List<Lot> findByArticle(Long idarticle, boolean paramBoolean, Date date)
             throws Exception;
 
-    public List<Lot> findByArticle(Long idarticle, boolean paramBoolean1, Date date, boolean paramBoolean2)
+    List<Lot> findByArticle(Long idarticle, boolean paramBoolean1, Date date, boolean paramBoolean2)
             throws Exception;
 
-    public List<Lot> findAllPeremptionIsActif(int idStructure, Date date);
-    
-    public void deleteByIdarticle(long idarticle);
+    List<Lot> findAllPeremptionIsActif(int idStructure, Date date);
+
+    void deleteByIdarticle(long idarticle);
 }

@@ -202,7 +202,7 @@
                                             </h:selectBooleanCheckbox>
                                         </h:panelGrid>
                                         
-                                        <p:selectManyCheckbox rendered="false" id="grid" value="#{articleController.selectedMagasins}" layout="grid" columns="1" converter="magasinConverter" required="true">
+                                        <p:selectManyCheckbox rendered="true" id="grid" value="#{articleController.selectedMagasins}" layout="grid" columns="1" converter="magasinConverter" required="true">
                                             <f:selectItems value="#{articleController.magasins}" var="item" itemLabel="#{item.nom}" itemValue="#{item}" />
                                         </p:selectManyCheckbox>
                                     </center>

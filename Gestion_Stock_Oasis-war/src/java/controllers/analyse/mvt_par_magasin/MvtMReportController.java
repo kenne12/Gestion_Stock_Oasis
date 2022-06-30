@@ -27,7 +27,28 @@ public class MvtMReportController extends AbstratMvtMReportController implements
         }
     }
 
-    public void printStock() {
+    public void printMvtWithBenefit() {
+        try {
+            if (magasin.getIdmagasin() != null) {
+
+                magasin = magasinFacadeLocal.find(magasin.getIdmagasin());
+                List<Article> articles = articleFacadeLocal.findAllRange(SessionMBean.getParametrage().getId());
+
+                String titre = "FICHE DES MOUVEMENTS DU STOCK";
+
+                this.fileName = "fiche_mvt_stock_" + magasin.getNom() + ".pdf";
+
+                fileName = PrintUtils.printMouvementMensuelWithBenefit(lignemvtstocks, articles, SessionMBean.getParametrage(), titre, fileName);
+
+                RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
+                RequestContext.getCurrentInstance().execute("PF('StockImprimerDialog').show()");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void printMvt() {
         try {
             if (magasin.getIdmagasin() != null) {
 
