@@ -460,8 +460,7 @@ public class ArticleController extends AbstractArticleController implements Seri
                     item.setPrixVenteGros(item.getIdmagasinarticle().getIdarticle().getPrixunit());
                 }
             });
-
-            System.err.println("lot size" + magasinlots.size());
+            JsfUtil.addSuccessMessage("Prix importés avec succès");
         }
 
         if (option.equals("article")) {
@@ -472,23 +471,22 @@ public class ArticleController extends AbstractArticleController implements Seri
                 }
 
             });
-            System.err.println("article size" + magasinarticles.size());
+
+            JsfUtil.addSuccessMessage("Prix importés avec succès");
         }
     }
 
     public void prepareEditPrice(Article item) {
-        //List<Lot> lots = item.getLotList();
         magasinlots.clear();
         magasinlots.addAll(magasinlotFacadeLocal.findByIdArticle(item.getIdarticle()));
 
         magasinarticles.clear();
-        magasinarticles.addAll(item.getMagasinarticleList());
+        magasinarticles.addAll(magasinarticleFacadeLocal.findByIdarticle(item.getIdarticle()));
 
         RequestContext.getCurrentInstance().execute("PF('EditPriceProduitDialog').show()");
     }
 
     private void editListLot() {
-        System.err.println("magasin lots " + magasinlots.size());
         magasinlots.forEach(item -> {
             magasinlotFacadeLocal.edit(item);
         });
@@ -520,11 +518,7 @@ public class ArticleController extends AbstractArticleController implements Seri
             }
         }
 
-        magasinlots.clear();
-        magasinarticles.clear();
-        article = new Article();
-        article.setIdUniteDetail(0);
-        //RequestContext.getCurrentInstance().execute("PF('EditPriceProduitDialog').hide()");
+        JsfUtil.addSuccessMessage("Les données sont modifiées avec succès");
     }
 
     public void prepareUploadPhoto(Article item) {
@@ -592,7 +586,6 @@ public class ArticleController extends AbstractArticleController implements Seri
     }
 
     public void closeUploadDialog() {
-
         article = new Article();
         article.setIdUniteDetail(0l);
 

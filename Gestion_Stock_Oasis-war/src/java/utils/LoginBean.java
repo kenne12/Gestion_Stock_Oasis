@@ -152,9 +152,16 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
 
     private void filterDate(Date date) {
         for (AnneeMois a : this.anneeMoises) {
+
             try {
-                if ((a.getDateDebut().equals(date) || a.getDateDebut().before(date)) && (a.getDateFin().equals(date) || a.getDateFin().after(date))) {
+                /*if ((a.getDateDebut().equals(date) || a.getDateDebut().before(date)) && (a.getDateFin().equals(date) || a.getDateFin().after(date))) {
                     this.anneeMois = a;
+                    break;
+                }*/
+
+                if ((a.getDateDebut().before(date) || a.getDateDebut().equals(date)) && (a.getDateFin().after(date) || a.getDateFin().equals(date))) {
+                    this.anneeMois = a;
+                    //this.annee = a.getIdannee();
                     break;
                 }
             } catch (Exception exception) {

@@ -26,7 +26,7 @@
                 </p:messages>
 
 
-                <p:panel header="EDITION DES LOTS">
+                <p:panel header="EDITION DES LOTS" id="datalist_">
 
 
                     <center>
@@ -36,30 +36,33 @@
 
                         <p:commandButton icon="ui-icon-refresh" value="Importer"
                                          actionListener="#{articleController.initInitialPrice('lot')}"
-                                         update="EditPriceProduitForm,messages" />
+                                         disabled="#{!(articleController.magasinlots.size() gt 0)}"
+                                         update="datalist_ , messages" />
 
                         <p:commandButton value="Valider P" actionListener="#{articleController.editPrice('lot')}"
-                                         update=":ArticleListerForm,growl" />
+                                         disabled="#{!(articleController.magasinlots.size() gt 0)}"
+                                         update="datalist_ , messages" />
 
                         <p:commandButton value="Valider T" actionListener="#{articleController.editPrice('total')}"
-                                         update=":ArticleListerForm,growl" />
+                                         disabled="#{!(articleController.magasinlots.size() gt 0)}"
+                                         update="datalist_ , datalist , messages" />
                     </center>
 
 
-                    <p:dataTable id="datalist_" 
-                                 value="#{articleController.magasinlots}" 
-                                 var="list"                             
-                                 paginator="true"
-                                 editable="true" 
-                                 editMode="cell"
-                                 rowKey="#{list.idmagasinlot}"
-                                 rows="#{articleController.magasinlots.size()}"                                 
-                                 style="width: 98%;margin-left: 1%;margin-top: 5px"
-                                 rowIndexVar="index"
-                                 emptyMessage="#{langue.tableau_vide}"
-                                 widgetVar="fonctionTable"
-                                 draggableColumns="true"
-                                 resizableColumns="true">
+                    <p:dataTable id="data_1"
+                        value="#{articleController.magasinlots}" 
+                        var="list"                             
+                        paginator="true"
+                        editable="true" 
+                        editMode="cell"
+                        rowKey="#{list.idmagasinlot}"
+                        rows="#{articleController.magasinlots.size()}"                                 
+                        style="width: 98%;margin-left: 1%;margin-top: 5px"
+                        rowIndexVar="index"
+                        emptyMessage="#{langue.tableau_vide}"
+                        widgetVar="fonctionTable"
+                        draggableColumns="true"
+                        resizableColumns="true">
 
                         <f:facet name="header"> 
                             <h:outputText value="ITEMS"/>
@@ -72,7 +75,6 @@
                             <h:outputText value="#{list.idlot.idarticle.libelle}"/>
                         </p:column>
 
-
                         <p:column style="width: 20%" filterBy="#{list.idlot.numero}" filterMatchMode="contains" >
                             <f:facet name="header">
                                 <h:outputText value="Lot"/>
@@ -80,14 +82,12 @@
                             <h:outputText value="#{list.idlot.numero}"/>
                         </p:column>
 
-
                         <p:column style="width: 20%" filterBy="#{list.idmagasinarticle.idmagasin.nom}" filterMatchMode="contains"  >
                             <f:facet name="header">
                                 <h:outputText value="#{langue.magasin}"/>
                             </f:facet>
                             <h:outputText value="#{list.idmagasinarticle.idmagasin.nom}"/>
                         </p:column>
-
 
                         <p:column style="width: 10%" >
                             <f:facet name="header">
@@ -103,12 +103,9 @@
                                 <h:outputText value="Prix V D"/>
                             </f:facet>
                             <h:inputText value="#{list.prixVenteDetail}" style="width: 100%" >
-
                                 <p:ajax event="keyup" />
-
                             </h:inputText>
                         </p:column>
-
 
                         <p:column style="width: 5%;text-align: center" >
                             <f:facet name="header">
@@ -123,8 +120,8 @@
                             <f:facet name="header">
                                 <h:outputText value="Action"/>
                             </f:facet>
-                            <p:commandButton icon="ui-icon-refresh" >
-                                <p:ajax listener="#{articleController.initInitialLotPrice(list)}" />
+                            <p:commandButton icon="ui-icon-refresh"  >
+                                <p:ajax event="click" listener="#{articleController.initInitialLotPrice(list)}" update="data_1" />
                             </p:commandButton>                     
                         </p:column>
 
@@ -138,13 +135,16 @@
 
                         <p:commandButton icon="ui-icon-refresh" value="Importer"
                                          actionListener="#{articleController.initInitialPrice('lot')}"
-                                         update="EditPriceProduitForm,messages" />
+                                         disabled="#{!(articleController.magasinlots.size() gt 0)}"
+                                         update="datalist_ , messages" />
 
                         <p:commandButton value="Valider P" actionListener="#{articleController.editPrice('lot')}"
-                                         update=":ArticleListerForm,growl" />
+                                         disabled="#{!(articleController.magasinlots.size() gt 0)}"
+                                         update="datalist_ , growl" />
 
                         <p:commandButton value="Valider T" actionListener="#{articleController.editPrice('total')}"
-                                         update=":ArticleListerForm,growl" />
+                                         disabled="#{!(articleController.magasinlots.size() gt 0)}"
+                                         update="datalist_ ,datalist, growl" />
                     </center>
 
                 </p:panel>
@@ -154,7 +154,7 @@
 
                 <p:panel header="EDITION PAR MAGASIN" id="datalist">
 
-                    <p:dataTable  
+                    <p:dataTable id="data_2"
                         value="#{articleController.magasinarticles}" 
                         var="item"                             
                         paginator="true"
@@ -221,7 +221,7 @@
                                 <h:outputText value="Action"/>
                             </f:facet>
                             <p:commandButton icon="ui-icon-refresh" >
-                                <p:ajax listener="#{articleController.initInitialArticlePrice(item)}" />
+                                <p:ajax event="click" listener="#{articleController.initInitialArticlePrice(item)}" update="data_2" />
                             </p:commandButton>                     
                         </p:column>
 
@@ -236,13 +236,16 @@
 
                         <p:commandButton icon="ui-icon-refresh" value="Importer"
                                          actionListener="#{articleController.initInitialPrice('article')}"
-                                         update="EditPriceProduitForm,messages" />
+                                         disabled="#{!(articleController.magasinarticles.size() gt 0)}"
+                                         update="datalist , messages" />
 
                         <p:commandButton value="Valider P" actionListener="#{articleController.editPrice('article')}"
-                                         update=":ArticleListerForm,growl" />
+                                         disabled="#{!(articleController.magasinarticles.size() gt 0)}"
+                                         update="datalist , messages" />
 
                         <p:commandButton value="Valider T" actionListener="#{articleController.editPrice('total')}"
-                                         update=":ArticleListerForm,growl" />
+                                         disabled="#{!(articleController.magasinarticles.size() gt 0)}"
+                                         update="datalist , datalist_ ,  messages" />
                     </center>
 
                 </p:panel>
