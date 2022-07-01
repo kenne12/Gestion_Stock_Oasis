@@ -1590,4 +1590,87 @@ public class PrintUtils {
         }
         return fileName;
     }
+
+    public static String printPeriodicOutput(List<Livraisonclient> livraisonclients, String periode) {
+        String fileName = "";
+        try {
+            Date date = Date.from(Instant.now());
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            fileName = "Rapport_Recette_" + periode + ".pdf";
+            Document rapport = new Document();
+            PdfWriter.getInstance(rapport, new FileOutputStream(Utilitaires.path + "/reports/vente/" + fileName));
+            rapport.open();
+            float[] widths = {0.6F, 2.0F, 1.5f, 1.0f, 1.5f, 1.0f, 1.0f};
+            PdfPTable table = new PdfPTable(widths);
+            table.setWidthPercentage(100f);
+
+            createEntete(rapport, SessionMBean.getParametrage());
+
+            rapport.add(new Paragraph(" "));
+
+            Paragraph titre = new Paragraph("RAPPORT PERIODIQUE DES RECETTES " + periode.toUpperCase(), new Font(Font.FontFamily.TIMES_ROMAN, 14.0F, 5));
+            titre.setAlignment(1);
+            rapport.add(titre);
+
+            Paragraph periode_ = new Paragraph("Imprimé le : " + sdf.format(date), new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 2));
+            periode_.setAlignment(1);
+            rapport.add(periode_);
+
+            rapport.add(new Paragraph(" "));
+
+            Font font_title_11 = new Font(Font.FontFamily.TIMES_ROMAN, 11.0F, 0);
+
+            table.addCell(createPdfPCell("N°", 2, font_title_11));
+            table.addCell(createPdfPCell("Date", 2, font_title_11));
+            table.addCell(createPdfPCell("Montant ht", 2, font_title_11));
+            table.addCell(createPdfPCell("Remise", 2, font_title_11));
+            table.addCell(createPdfPCell("Montant ttc", 2, font_title_11));
+            table.addCell(createPdfPCell("Marge", 2, font_title_11));
+            table.addCell(createPdfPCell("Benéf", 2, font_title_11));
+
+            int compteur = 1;
+
+            double totalTtc = 0d;
+            double totalMarge = 0d;
+            double totalBenef = 0d;
+            double totalRemise = 0d;
+            double totalHt = 0d;
+
+            Font font_line_10 = new Font(Font.FontFamily.TIMES_ROMAN, 10.0F, 0);
+            for (Livraisonclient item : livraisonclients) {
+                totalTtc += item.getMontantTtc();
+                totalMarge += item.getMarge();
+                totalBenef += item.getBenefice();
+                totalRemise += item.getMontantRemise();
+                totalHt += item.getMontantHt();
+
+                table.addCell(createPdfPCell("" + compteur, 2, font_line_10));
+                table.addCell(createPdfPCell("" + sdf.format(item.getDatelivraison()), 2, font_line_10));
+                table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(((int) item.getMontantHt())), 3, font_line_10));
+                table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(((int) item.getMontantRemise())), 3, font_line_10));
+                table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(((int) item.getMontantTtc())), 3, font_line_10));
+                table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(((int) item.getMarge())), 3, font_line_10));
+                table.addCell(createPdfPCell("" + JsfUtil.formaterStringMoney(((int) item.getBenefice())), 3, font_line_10));
+
+                compteur++;
+            }
+
+            Font font_title_12 = new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0, BaseColor.BLUE);
+
+            table.addCell(createPdfPCell("Totaux", 2, 3, new Font(Font.FontFamily.TIMES_ROMAN, 12.0F, 0)));
+
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(((int) totalHt)), 3, font_title_12));
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(((int) totalRemise)), 3, font_title_12));
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(((int) totalTtc)), 3, font_title_12));
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(((int) totalMarge)), 3, font_title_12));
+            table.addCell(createPdfPCell(" " + JsfUtil.formaterStringMoney(((int) totalBenef)), 3, font_title_12));
+            rapport.add((Element) table);
+            rapport.close();
+        } catch (DocumentException ex) {
+            Logger.getLogger(utils.PrintUtils.class.getName()).log(Level.SEVERE, (String) null, (Throwable) ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(utils.PrintUtils.class.getName()).log(Level.SEVERE, (String) null, ex);
+        }
+        return fileName;
+    }
 }

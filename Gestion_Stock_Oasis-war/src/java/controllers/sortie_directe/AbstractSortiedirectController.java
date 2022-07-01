@@ -109,12 +109,14 @@ public class AbstractSortiedirectController {
     protected String fileName = "";
     protected String mode = "";
 
+    protected String directory = "";
+
     public Livraisonclient getLivraisonclient() {
         return this.livraisonclient;
     }
 
     public void setLivraisonclient(Livraisonclient livraisonclient) {
-        this.modifier = this.supprimer = this.detail = this.imprimer = livraisonclient == null;
+        this.modifier = this.supprimer = this.detail = livraisonclient == null;
         this.livraisonclient = livraisonclient;
     }
 
@@ -275,6 +277,10 @@ public class AbstractSortiedirectController {
 
     public void setIsShowEndDate(boolean isShowEndDate) {
         this.isShowEndDate = isShowEndDate;
+    }
+
+    public String getDirectory() {
+        return directory;
     }
 
 }

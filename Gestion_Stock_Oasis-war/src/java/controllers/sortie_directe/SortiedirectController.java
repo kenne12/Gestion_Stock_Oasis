@@ -274,7 +274,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
                 this.livraisonclients = this.livraisonclientFacadeLocal
                         .findByIdmagasinAndDate(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getDateOuverture());
                 this.livraisonclient = new Livraisonclient();
-                this.supprimer = this.modifier = this.imprimer = detail = true;
+                this.supprimer = this.modifier = this.detail = true;
                 JsfUtil.addSuccessMessage(message);
                 notifySuccess();
             } else if (this.livraisonclient != null) {
@@ -356,7 +356,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
                 this.livraisonclients = this.livraisonclientFacadeLocal
                         .findAllRange(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getMois().getDateDebut(), SessionMBean.getMois().getDateFin());
                 this.livraisonclient = new Livraisonclient();
-                this.supprimer = this.modifier = this.imprimer = this.detail = true;
+                this.supprimer = this.modifier = this.detail = true;
 
                 notifySuccess();
                 RequestContext.getCurrentInstance().execute("PF('SortieDirecteCreateDialog').hide()");
@@ -426,7 +426,8 @@ public class SortiedirectController extends AbstractSortiedirectController imple
 
                     this.ut.begin();
 
-                    List<Lignelivraisonclient> temp = this.lignelivraisonclientFacadeLocal.findByIdlivraisonclient(this.livraisonclient.getIdlivraisonclient());
+                    List<Lignelivraisonclient> temp = this.lignelivraisonclientFacadeLocal
+                            .findByIdlivraisonclient(this.livraisonclient.getIdlivraisonclient());
                     if (!temp.isEmpty()) {
                         for (Lignelivraisonclient llc : temp) {
 
@@ -452,7 +453,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
                     //this.livraisonclients = this.livraisonclientFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getMois().getDateDebut(), SessionMBean.getMois().getDateFin());
                     Utilitaires.saveOperation(this.mouchardFacadeLocal, "Annulation de la facture : " + this.livraisonclient.getCode() + " Montant : " + this.livraisonclient.getMontant() + " Client : " + this.livraisonclient.getClient().getNom() + " " + this.livraisonclient.getClient().getPrenom(), SessionMBean.getUserAccount());
                     this.livraisonclient = new Livraisonclient();
-                    this.supprimer = this.modifier = this.imprimer = true;
+                    this.supprimer = this.modifier = this.detail = true;
                     notifySuccess();
                 } else {
                     notifyError("vente_effectuee_par_lignelivraisonclient");
@@ -467,7 +468,7 @@ public class SortiedirectController extends AbstractSortiedirectController imple
 
     public void initPrinter(Livraisonclient l) {
         this.livraisonclient = l;
-        print();
+        printBIll();
     }
 
     public void initEdit(Livraisonclient l) {
@@ -485,7 +486,13 @@ public class SortiedirectController extends AbstractSortiedirectController imple
         delete();
     }
 
-    public void print() {
+    public void printAll() {
+        directory = "vente";
+        fileName = PrintUtils.printPeriodicOutput(livraisonclients, "--");
+        RequestContext.getCurrentInstance().execute("PF('SortieDirecteImprimerDialog').show()");
+    }
+
+    public void printBIll() {
         try {
             if (!Utilitaires.isAccess(26L)) {
                 notifyError("acces_refuse");
@@ -494,8 +501,9 @@ public class SortiedirectController extends AbstractSortiedirectController imple
             }
 
             if (this.livraisonclient != null) {
-                List list = this.lignelivraisonclientFacadeLocal.findByIdlivraisonclient(this.livraisonclient.getIdlivraisonclient().longValue());
+                List list = this.lignelivraisonclientFacadeLocal.findByIdlivraisonclient(this.livraisonclient.getIdlivraisonclient());
                 this.livraisonclient.setLignelivraisonclientList(list);
+                directory = "facture";
                 fileName = PrintUtils.printFacture(livraisonclient, SessionMBean.getParametrage());
                 RequestContext.getCurrentInstance().execute("PF('SortieDirecteImprimerDialog').show()");
             } else {
@@ -594,7 +602,8 @@ public class SortiedirectController extends AbstractSortiedirectController imple
                 this.updateMagasinLot(llc.getIdmagasinlot(), llc.getQuantitereduite(), llc.getQuantitemultiple(), "+");
 
                 Lignemvtstock lmvts = null;
-                lmvts = ligneMvtstockFacadeLocal.findByIdmvtIdLot(livraisonclient.getIdmvtstock().getIdmvtstock(), llc.getIdlot().getIdlot(), llc.getIdlignelivraisonclient());
+                lmvts = ligneMvtstockFacadeLocal
+                        .findByIdmvtIdLot(livraisonclient.getIdmvtstock().getIdmvtstock(), llc.getIdlot().getIdlot(), llc.getIdlignelivraisonclient());
                 if (lmvts == null) {
                     lmvts = ligneMvtstockFacadeLocal.findByIdmvtIdLot(livraisonclient.getIdmvtstock().getIdmvtstock(), llc.getIdlot().getIdlot());
                 }
@@ -769,8 +778,14 @@ public class SortiedirectController extends AbstractSortiedirectController imple
         if (option.equals("total")) {
             double value = livraisonclients.stream().mapToDouble(Livraisonclient::getMontantTtc).sum();
             return JsfUtil.formaterStringMoney(value);
-        } else {
+        } else if (option.equals("regle")) {
             double value = livraisonclients.stream().mapToDouble(Livraisonclient::getMontantPaye).sum();
+            return JsfUtil.formaterStringMoney(value);
+        } else if (option.equals("ht")) {
+            double value = livraisonclients.stream().mapToDouble(Livraisonclient::getMontantHt).sum();
+            return JsfUtil.formaterStringMoney(value);
+        } else {
+            double value = livraisonclients.stream().mapToDouble(Livraisonclient::getMontantRemise).sum();
             return JsfUtil.formaterStringMoney(value);
         }
     }

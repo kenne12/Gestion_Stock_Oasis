@@ -469,7 +469,6 @@ public class ArticleController extends AbstractArticleController implements Seri
                     item.setPrixVenteDetail(item.getIdarticle().getPrixVenteDetail());
                     item.setPrixVenteGros(item.getIdarticle().getPrixunit());
                 }
-
             });
 
             JsfUtil.addSuccessMessage("Prix importés avec succès");

@@ -40,11 +40,6 @@
                            icon="ui-icon-alert"/>
             </p:commandButton>
 
-            <p:commandButton id="imprimer" icon="ui-icon-print"  
-                             value="#{langue['Conv.Imprimer']}" 
-                             actionListener="#{sortiedirectController.print()}"
-                             disabled="#{sortiedirectController.imprimer}"
-                             update=":SortieDirecteImprimerForm,:SortieDirecteImprimerDlg,:notify1"/>
             
             <p:commandButton value="Reload" actionListener="#{sortiedirectController.reload()}"
                              update=":SortieDirecteListerForm:datalist"

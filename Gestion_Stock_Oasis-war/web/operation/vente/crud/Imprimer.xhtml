@@ -16,7 +16,7 @@
 
             <h:form id="SortieDirecteImprimerForm">
 
-                <object data="#{request.contextPath}/reports/facture/#{sortiedirectController.fileName}" type="application/pdf" title="#{langue.facture}" width="1200" height="600"></object>
+                <object data="#{request.contextPath}/reports/#{sortiedirectController.directory}/#{sortiedirectController.fileName}" type="application/pdf" title="#{langue.facture}" width="1200" height="600"></object>
 
             </h:form>
 

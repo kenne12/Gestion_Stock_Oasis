@@ -5,7 +5,6 @@ import entities.Article;
 import entities.Fournisseur;
 import entities.Lignelivraisonfournisseur;
 import entities.Lignemvtstock;
-import entities.Livraisonclient;
 import entities.Livraisonfournisseur;
 import entities.Lot;
 import entities.Magasinarticle;

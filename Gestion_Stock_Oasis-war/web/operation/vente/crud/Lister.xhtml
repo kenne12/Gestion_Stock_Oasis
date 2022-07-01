@@ -46,14 +46,22 @@
                 <p:outputLabel rendered="#{sortiedirectController.isShowEndDate}" value="Date fin" for="endDate"/>
                 <p:calendar rendered="#{sortiedirectController.isShowEndDate}" 
                             id="endDate" value="#{sortiedirectController.endDate}"
-                            navigator="true"   required="true">
+                            navigator="true" required="true">
                     <p:ajax  event="dateSelect" />
                 </p:calendar>
+
 
                 <p:commandButton  icon="ui-icon-search"   
                                   value="#{langue.rechercher}" 
                                   actionListener="#{sortiedirectController.onSearch()}"
-                                  update="datalist"/>
+                                  update="datalist, imprimer"/>
+
+                <p:commandButton id="imprimer" icon="ui-icon-print"  
+                                 value="#{langue['Conv.Imprimer']}" 
+                                 actionListener="#{sortiedirectController.printAll()}"
+                                 disabled="#{sortiedirectController.livraisonclients.size() eq 0}"
+                                 update=":SortieDirecteImprimerDlg,:notify1"/>
+
             </h:panelGrid>
 
 
@@ -78,30 +86,48 @@
                 <p:ajax event="rowUnselect" update=":SortieDirecteListerForm:SortieDirecteDataTableContextMenu, :actionsForm"/>
                 <p:ajax event="rowDblselect" onsuccess="document.getElementById('SortieDirecteListerForm:viewButton').click();"/>
 
-                <p:column filterBy="#{item.client.nom} #{item.client.prenom}" filterMatchMode="contains" width="22%">
+                <p:column filterBy="#{item.client.nom} #{item.client.prenom}" filterMatchMode="contains" width="20%">
                     <f:facet name="header">
                         <h:outputText value="#{langue.client}"/>
                     </f:facet>
                     <h:outputText value="#{item.client.nom} #{item.client.prenom}"/>
                 </p:column>
 
-                <p:column filterBy="#{item.code}" filterMatchMode="contains" width="20%" style="text-align: center;">
+                <p:column filterBy="#{item.code}" filterMatchMode="contains" style="text-align: center; width: 15%">
                     <f:facet name="header">
                         <h:outputText value="#{langue.numero}"/>
                     </f:facet>
                     <h:outputText value="#{item.code}"/>
                 </p:column>  
 
-                <p:column filterBy="#{item.montant}" style="text-align: right;width: 14%">
+                <p:column filterBy="#{item.montantHt}" style="text-align: right;width: 10%">
                     <f:facet name="header">
-                        <h:outputText value="#{langue.montant}"/>
+                        <h:outputText value="#{langue.montant} Ht"/>
+                    </f:facet>
+                    <h:outputText value="#{item.montantHt}">
+                        <f:convertNumber/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column filterBy="#{item.montantRemise}" style="text-align: right;width: 10%">
+                    <f:facet name="header">
+                        <h:outputText value="Remise"/>
+                    </f:facet>
+                    <h:outputText value="#{item.montantRemise}">
+                        <f:convertNumber/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column filterBy="#{item.montant}" style="text-align: right;width: 10%">
+                    <f:facet name="header">
+                        <h:outputText value="#{langue.montant} Ttc"/>
                     </f:facet>
                     <h:outputText value="#{item.montantTtc}">
                         <f:convertNumber/>
                     </h:outputText>
                 </p:column>
 
-                <p:column filterBy="#{item.montant}" style="text-align: right;width: 14%">
+                <p:column filterBy="#{item.montant}" style="text-align: right;width: 10%">
                     <f:facet name="header">
                         <h:outputText value="#{langue.montant_paye}"/>
                     </f:facet>
@@ -119,20 +145,24 @@
                     </h:outputText>
                 </p:column>
 
-                <p:column style="width: 20%;text-align: center" >
+                <p:column style="width: 15%;text-align: center" >
                     <f:facet name="header">
                         <h:outputText value="#{langue.action}"/>
                     </f:facet>
-                    <p:commandButton icon="ui-icon-print">
-                        <p:ajax event="click" listener="#{sortiedirectController.initPrinter(item)}" update=":SortieDirecteImprimerDlg,:notify1"/>
+
+                    <p:commandButton icon="ui-icon-print" >
+                        <f:setPropertyActionListener value="#{item}" target="#{sortiedirectController.livraisonclient}"  />
+                        <p:ajax event="click" listener="#{sortiedirectController.initPrinter(item)}" update=":SortieDirecteImprimerDlg,:notify1" />
                     </p:commandButton>
 
                     <p:commandButton icon="ui-icon-pencil">
                         <p:ajax event="click" listener="#{sortiedirectController.initEdit(item)}" update=":SortieDirecteCreateForm,:notify1"/>
+                        <!--<f:setPropertyActionListener value="#{item}" target="#{sortiedirectController.livraisonclient}" />-->
                     </p:commandButton>
 
                     <p:commandButton icon="ui-icon-search">
-                        <p:ajax event="click" listener="#{sortiedirectController.initView(item)}" update=":SortieDirecteDetailDlg,:notify1"/>                      
+                        <p:ajax event="click" listener="#{sortiedirectController.initView(item)}" update=":SortieDirecteDetailDlg,:notify1"/>
+                        <!--<f:setPropertyActionListener value="#{item}" target="#{sortiedirectController.livraisonclient}" />-->
                     </p:commandButton>
 
                     <p:commandButton icon="ui-icon-trash">
@@ -140,12 +170,16 @@
                         <p:confirm header="#{langue['Titre.Dlg.Confirm']}"
                                    message="#{langue['Message.Confirm.Supprimer']}?"
                                    icon="ui-icon-alert"/>
+                        <!--<f:setPropertyActionListener value="#{item}" target="#{sortiedirectController.livraisonclient}" />-->
                     </p:commandButton>
                 </p:column>
 
                 <p:columnGroup type="footer">
                     <p:row>
                         <p:column colspan="2" style="text-align:right" footerText="Totaux" />
+
+                        <p:column style="text-align: right" footerText="#{sortiedirectController.getformatTotal('ht')}" />
+                        <p:column style="text-align: right" footerText="#{sortiedirectController.getformatTotal('remise')}" />
                         <p:column style="text-align: right" footerText="#{sortiedirectController.getformatTotal('total')}" />
                         <p:column style="text-align: right" footerText="#{sortiedirectController.getformatTotal('regle')}" />
                         <p:column colspan="2" />
