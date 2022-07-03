@@ -5,6 +5,7 @@
  */
 package entities;
 
+import enumeration.ModeComptage;
 import enumeration.ModeEntreSorti;
 import java.io.Serializable;
 import java.util.List;
@@ -81,6 +82,10 @@ public class Magasin implements Serializable {
     @Enumerated(EnumType.STRING)
     private ModeEntreSorti modeSortiDefault;
 
+    @Column(name = "mode_comptage")
+    @Enumerated(EnumType.STRING)
+    private ModeComptage modeComptage;
+
     public Magasin() {
     }
 
@@ -126,6 +131,14 @@ public class Magasin implements Serializable {
 
     public void setParametrage(Parametrage parametrage) {
         this.parametrage = parametrage;
+    }
+
+    public ModeComptage getModeComptage() {
+        return modeComptage;
+    }
+
+    public void setModeComptage(ModeComptage modeComptage) {
+        this.modeComptage = modeComptage;
     }
 
     @XmlTransient

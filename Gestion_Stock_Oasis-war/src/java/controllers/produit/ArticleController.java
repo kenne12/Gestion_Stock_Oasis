@@ -197,8 +197,8 @@ public class ArticleController extends AbstractArticleController implements Seri
                     lotFacadeLocal.create(this.lot);
                 }
 
-                //selectedMagasins.clear();
-                //selectedMagasins.add(SessionMBean.getMagasin());
+                selectedMagasins.clear();
+                selectedMagasins.add(SessionMBean.getMagasin());
                 for (Magasin m : selectedMagasins) {
                     Magasinarticle obj = new Magasinarticle();
                     obj.setIdmagasinarticle(this.magasinarticleFacadeLocal.nextVal());

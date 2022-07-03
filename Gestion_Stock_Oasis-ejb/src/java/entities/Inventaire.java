@@ -31,15 +31,23 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Inventaire.findAll", query = "SELECT i FROM Inventaire i"),
-    @NamedQuery(name = "Inventaire.findByIdinventaire", query = "SELECT i FROM Inventaire i WHERE i.idinventaire = :idinventaire"),
-    @NamedQuery(name = "Inventaire.findByCode", query = "SELECT i FROM Inventaire i WHERE i.code = :code"),
-    @NamedQuery(name = "Inventaire.findByDateinventaire", query = "SELECT i FROM Inventaire i WHERE i.dateinventaire = :dateinventaire"),
-    @NamedQuery(name = "Inventaire.findByEtat", query = "SELECT i FROM Inventaire i WHERE i.etat = :etat"),
-    @NamedQuery(name = "Inventaire.findByCentral", query = "SELECT i FROM Inventaire i WHERE i.central = :central"),
-    @NamedQuery(name = "Inventaire.findByLibelle", query = "SELECT i FROM Inventaire i WHERE i.libelle = :libelle"),
+    @NamedQuery(name = "Inventaire.findAll", query = "SELECT i FROM Inventaire i")
+    ,
+    @NamedQuery(name = "Inventaire.findByIdinventaire", query = "SELECT i FROM Inventaire i WHERE i.idinventaire = :idinventaire")
+    ,
+    @NamedQuery(name = "Inventaire.findByCode", query = "SELECT i FROM Inventaire i WHERE i.code = :code")
+    ,
+    @NamedQuery(name = "Inventaire.findByDateinventaire", query = "SELECT i FROM Inventaire i WHERE i.dateinventaire = :dateinventaire")
+    ,
+    @NamedQuery(name = "Inventaire.findByEtat", query = "SELECT i FROM Inventaire i WHERE i.etat = :etat")
+    ,
+    @NamedQuery(name = "Inventaire.findByCentral", query = "SELECT i FROM Inventaire i WHERE i.central = :central")
+    ,
+    @NamedQuery(name = "Inventaire.findByLibelle", query = "SELECT i FROM Inventaire i WHERE i.libelle = :libelle")
+    ,
     @NamedQuery(name = "Inventaire.findByAllarticle", query = "SELECT i FROM Inventaire i WHERE i.allarticle = :allarticle")})
 public class Inventaire implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -62,6 +70,8 @@ public class Inventaire implements Serializable {
     @JoinColumn(name = "idmvtstock", referencedColumnName = "idmvtstock")
     @ManyToOne(fetch = FetchType.LAZY)
     private Mvtstock idmvtstock;
+
+    private double montant;
 
     public Inventaire() {
     }
@@ -151,6 +161,25 @@ public class Inventaire implements Serializable {
         this.idmvtstock = idmvtstock;
     }
 
+    public double getMontant() {
+        return montant;
+    }
+
+    public void setMontant(double montant) {
+        this.montant = montant;
+    }
+
+    public void computeTotals() {
+        this.montant = 0;
+        if (!this.ligneinventaireList.isEmpty() || this.ligneinventaireList != null) {
+            this.montant = this.ligneinventaireList.stream().mapToDouble(this::map).sum();
+        }
+    }
+
+    public Double map(Ligneinventaire ligne) {
+        return ligne.getQuantite() > 0 ? ligne.getPrixUnitaire() * ligne.getQuantite() : 0;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -175,5 +204,5 @@ public class Inventaire implements Serializable {
     public String toString() {
         return "entities.Inventaire[ idinventaire=" + idinventaire + " ]";
     }
-    
+
 }

@@ -32,7 +32,12 @@
                         
                         <h:outputLabel value="#{langue.service}"/>
                         <h:outputLabel value="#{inventaireGlobalController.inventaire.idmagasin.nom}"/>
-
+                        
+                        <h:outputLabel value="Montant"/>
+                        <h:outputLabel value="#{inventaireGlobalController.inventaire.montant}" >
+                            <f:convertNumber />
+                        </h:outputLabel>
+                                 
                     </p:panelGrid>
 
                     <p:separator/>

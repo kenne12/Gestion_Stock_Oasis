@@ -148,35 +148,48 @@
                             <h:outputText value="#{langue.articles_inventaire}"/>
                         </f:facet> 
 
-                        <p:column style="width: 27%" filterBy="#{item.idlot.idarticle.libelle}">
+                        <p:column style="width: 22%" filterBy="#{item.idlot.idarticle.libelle}">
                             <f:facet name="header">
                                 <h:outputText value="#{langue.article}"/>
                             </f:facet>
                             <h:outputText value="#{item.idlot.idarticle.libelle}"/>
                         </p:column>
 
-                        <p:column style="width: 14%" filterBy="#{item.idlot.numero}" >
+                        <p:column style="width: 12%;text-align: center" filterBy="#{item.idlot.numero}" >
                             <f:facet name="header">
                                 <h:outputText value="#{langue.lot}"/>
                             </f:facet>
                             <h:outputText value="#{item.idlot.numero}"/>
                         </p:column>
 
-                        <p:column style="width: 8%" filterBy="#{item.qtetheorique}" >
+                        <p:column style="width: 7%" filterBy="#{item.qtetheorique}" >
                             <f:facet name="header">
-                                <h:outputText value="#{langue.qte_theorique}"/>
+                                <h:outputText value="#{langue.qte_theorique} D"/>
                             </f:facet>
-                            <h:outputText value="#{item.qtetheorique}"/>
+                            <h:outputText value="#{item.qtetheorique}">
+                                <f:convertNumber pattern="0.00" />
+                            </h:outputText>
                         </p:column>
-                        
-                        <p:column style="width: 15%;text-align: center" headerText="Mode">
+
+                        <p:column style="width: 7%" filterBy="#{item.qtetheoriqueMultiple}" >
+                            <f:facet name="header">
+                                <h:outputText value="#{langue.qte_theorique} G"/>
+                            </f:facet>
+                            <h:outputText value="#{item.qtetheoriqueMultiple}" >
+                                <f:convertNumber pattern="0.00" />
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column style="width: 13%;text-align: center" headerText="Mode">
                             <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{item.mode_comptage}"/></f:facet>
+                                <f:facet name="output">
+                                    <h:outputText value="#{item.modeComptage}"/>
+                                </f:facet>
                                 <f:facet name="input">
-                                    <h:selectOneMenu value="#{item.mode_comptage}">
-                                        <f:selectItem itemLabel="Décompte En Gros" itemValue="DECOMPTE_EN_GROS" />
-                                        <f:selectItem itemLabel="Décompte En Détail" itemValue="DECOMPTE_EN_DETAIL" />
-                                        <p:ajax update="ecart" listener="#{inventaireGlobalController.updateModeleDecompte(index)}" />
+                                    <h:selectOneMenu value="#{item.modeComptage}">
+                                        <f:selectItem itemLabel="COMPTAGE EN GROS" itemValue="DECOMPTE_EN_GROS" />
+                                        <f:selectItem itemLabel="COMPTAGE EN DETAIL" itemValue="DECOMPTE_EN_DETAIL" />
+                                        <p:ajax update="ecart,datalist1" listener="#{inventaireGlobalController.updateModeleDecompte(index)}" />
                                     </h:selectOneMenu>                                   
                                 </f:facet>
                             </p:cellEditor>
@@ -184,23 +197,29 @@
 
                         <p:column style="width: 8%;text-align: center" headerText="#{langue.qte_physique}">
                             <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{item.qtephysique}"/></f:facet>
+                                <f:facet name="output">
+                                    <h:outputText value="#{item.quantite}" >
+                                        <f:convertNumber pattern="0.00" />
+                                    </h:outputText>
+                                </f:facet>
                                 <f:facet name="input">
                                     <p:inputText required="true" disabled="#{inventaireGlobalController.editQuantite}" value="#{item.quantite}">                                             
-                                        <p:ajax event="keyup" listener="#{inventaireGlobalController.updateEcart(index)}" update="ecart"/>
+                                        <p:ajax listener="#{inventaireGlobalController.updateEcart(index)}" update="ecart"/>
                                     </p:inputText>
                                 </f:facet>
                             </p:cellEditor>
                         </p:column>
 
-                        <p:column style="width: 8%" filterBy="#{item.ecart}" >
+                        <p:column style="width: 6%" >
                             <f:facet name="header">
                                 <h:outputText value="#{langue.ecart}"/>
                             </f:facet>
-                            <h:outputText id="ecart" value="#{item.ecart}"/>
+                            <h:outputText id="ecart" value="#{item.ecart}">
+                                <f:convertNumber pattern="0.00" />
+                            </h:outputText>
                         </p:column>
 
-                        <p:column style="width: 17%;" headerText="#{langue.justificatif}">
+                        <p:column style="width: 13%;" headerText="#{langue.justificatif}">
                             <p:cellEditor>
                                 <f:facet name="output">
                                     <h:outputText value="#{item.observation}"/>
@@ -213,9 +232,18 @@
                             </p:cellEditor>
                         </p:column>
 
-                        <p:column style="width: 5%;text-align: center" >
+                        <p:column style="width: 8%" headerText="PU" >
                             <f:facet name="header">
-                                <h:outputText value=""/>
+                                <h:outputText value="P U"/>
+                            </f:facet>
+                            <h:outputText value="#{item.prixUnitaire}">
+                                <f:convertNumber  />
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column style="width: 4%;text-align: center" >
+                            <f:facet name="header">
+                                <h:outputText value="Action"/>
                             </f:facet>
                             <p:commandButton disabled="true" icon="ui-icon-trash">
                                 <p:ajax event="click" listener="#{inventaireGlobalController.removeProduit(index)}" update="datalist1"/>
@@ -227,8 +255,12 @@
                     <p:separator style="width: 98%;margin-left: 1%"/>
 
                     <center>                        
-                        <p:commandButton style="color: red;" icon="ui-icon-close" value="#{langue.annuler}" oncomplete="PF('InventaireCreateDialog').hide()" partialSubmit="true"/>
-                        <p:commandButton actionListener="#{inventaireGlobalController.create()}" icon="ui-icon-check" value="#{inventaireGlobalController.valideBtn}" update="display,:InventaireListerForm:datalist,:notify1" onclick="PF('AjaxNotifyDialog').show()"/>                        
+                        <p:commandButton style="color: red;" icon="ui-icon-close" value="#{langue.annuler}"
+                                         oncomplete="PF('InventaireCreateDialog').hide()" partialSubmit="true"/>
+
+                        <p:commandButton actionListener="#{inventaireGlobalController.create()}"
+                                         icon="ui-icon-check" value="#{inventaireGlobalController.valideBtn}" 
+                                         update="display,:InventaireListerForm:datalist,:notify1" onclick="PF('AjaxNotifyDialog').show()"/>                        
                     </center>
 
                 </h:panelGroup>

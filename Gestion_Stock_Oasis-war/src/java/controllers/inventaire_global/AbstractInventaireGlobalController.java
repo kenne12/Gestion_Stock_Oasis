@@ -101,31 +101,17 @@ public class AbstractInventaireGlobalController {
     }
 
     public Boolean getModifier() {
-        try {
-            if (this.inventaire != null) {
-                this.modifier = this.inventaire.getEtat();
-            } else {
-                this.modifier = true;
-            }
-        } catch (Exception e) {
-            this.modifier = true;
+        this.modifier = true;
+        if (this.inventaire != null && this.inventaire.getIdinventaire() != null) {
+            this.modifier = this.inventaire.getEtat();
         }
         return this.modifier;
     }
 
     public boolean isValider() {
-        try {
-            if (this.inventaire != null) {
-                if (this.inventaire.getEtat()) {
-                    this.valider = true;
-                } else {
-                    this.valider = false;
-                }
-            } else {
-                this.valider = true;
-            }
-        } catch (Exception e) {
-            this.valider = true;
+        this.valider = true;
+        if (this.inventaire != null && this.inventaire.getIdinventaire() != null) {
+            this.valider = this.inventaire.getEtat();
         }
         return this.valider;
     }
@@ -139,18 +125,9 @@ public class AbstractInventaireGlobalController {
     }
 
     public Boolean getSupprimer() {
-        try {
-            if (this.inventaire != null) {
-                if (this.inventaire.getEtat()) {
-                    this.supprimer = true;
-                } else {
-                    this.supprimer = false;
-                }
-            } else {
-                this.supprimer = true;
-            }
-        } catch (Exception e) {
-            this.supprimer = true;
+        this.supprimer = true;
+        if (this.inventaire != null && this.inventaire.getIdinventaire() != null) {
+            this.supprimer = this.inventaire.getEtat();
         }
         return this.supprimer;
     }
@@ -222,18 +199,9 @@ public class AbstractInventaireGlobalController {
     }
 
     public boolean isCancel() {
-        try {
-            if (this.inventaire != null) {
-                if (this.inventaire.getEtat()) {
-                    this.cancel = false;
-                } else {
-                    this.cancel = true;
-                }
-            } else {
-                this.cancel = true;
-            }
-        } catch (Exception e) {
-            this.cancel = true;
+        this.cancel = true;
+        if (this.inventaire != null && this.inventaire.getIdinventaire() != null) {
+            this.cancel = !this.inventaire.getEtat();
         }
         return this.cancel;
     }

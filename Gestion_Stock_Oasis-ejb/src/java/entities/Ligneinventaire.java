@@ -5,10 +5,13 @@
  */
 package entities;
 
+import enumeration.ModeComptage;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -26,11 +29,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Ligneinventaire.findAll", query = "SELECT l FROM Ligneinventaire l"),
-    @NamedQuery(name = "Ligneinventaire.findByIdligneinventaire", query = "SELECT l FROM Ligneinventaire l WHERE l.idligneinventaire = :idligneinventaire"),
-    @NamedQuery(name = "Ligneinventaire.findByQtetheorique", query = "SELECT l FROM Ligneinventaire l WHERE l.qtetheorique = :qtetheorique"),
-    @NamedQuery(name = "Ligneinventaire.findByQtephysique", query = "SELECT l FROM Ligneinventaire l WHERE l.qtephysique = :qtephysique"),
-    @NamedQuery(name = "Ligneinventaire.findByEcart", query = "SELECT l FROM Ligneinventaire l WHERE l.ecart = :ecart"),
+    @NamedQuery(name = "Ligneinventaire.findAll", query = "SELECT l FROM Ligneinventaire l")
+    ,
+    @NamedQuery(name = "Ligneinventaire.findByIdligneinventaire", query = "SELECT l FROM Ligneinventaire l WHERE l.idligneinventaire = :idligneinventaire")
+    ,
+    @NamedQuery(name = "Ligneinventaire.findByQtetheorique", query = "SELECT l FROM Ligneinventaire l WHERE l.qtetheorique = :qtetheorique")
+    ,
+    @NamedQuery(name = "Ligneinventaire.findByQtephysique", query = "SELECT l FROM Ligneinventaire l WHERE l.qtephysique = :qtephysique")
+    ,
+    @NamedQuery(name = "Ligneinventaire.findByEcart", query = "SELECT l FROM Ligneinventaire l WHERE l.ecart = :ecart")
+    ,
     @NamedQuery(name = "Ligneinventaire.findByObservation", query = "SELECT l FROM Ligneinventaire l WHERE l.observation = :observation")})
 public class Ligneinventaire implements Serializable {
 
@@ -40,21 +48,24 @@ public class Ligneinventaire implements Serializable {
     @NotNull
     private Long idligneinventaire;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    private Double qtetheorique;
-    private Double qtephysique;
-    private Double ecart;
+    private double qtetheorique;
+
+    @Column(name = "qtetheorique_multiple")
+    private double qtetheoriqueMultiple;
+
+    private double qtephysique;
+    @Column(name = "qtephysique_multiple")
+    private double qtephysiqueMultiple;
+    
+    private double quantite;
+
+    private double ecart;
     @Column(name = "prix_unitaire")
     private double prixUnitaire;
     @Column(name = "montant_total")
     private double montantTotal;
 
-    @Column(name = "qtetheorique_multiple")
-    private double qtetheoriqueMultiple;
-
-    @Column(name = "qtephysique_multiple")
-    private double qtephysiqueMultiple;
-
-    private double quantite;
+    
 
     @Size(max = 100)
     private String observation;
@@ -75,7 +86,8 @@ public class Ligneinventaire implements Serializable {
     private Unite idunite;
 
     @Column(name = "mode_comptage", length = 20)
-    private String mode_comptage;
+    @Enumerated(EnumType.STRING)
+    private ModeComptage modeComptage;
 
     public Ligneinventaire() {
     }
@@ -92,15 +104,15 @@ public class Ligneinventaire implements Serializable {
         this.idligneinventaire = idligneinventaire;
     }
 
-    public Double getQtetheorique() {
+    public double getQtetheorique() {
         return qtetheorique;
     }
 
-    public void setQtetheorique(Double qtetheorique) {
+    public void setQtetheorique(double qtetheorique) {
         this.qtetheorique = qtetheorique;
     }
 
-    public Double getQtephysique() {
+    public double getQtephysique() {
         return qtephysique;
     }
 
@@ -108,11 +120,11 @@ public class Ligneinventaire implements Serializable {
         this.qtephysique = qtephysique;
     }
 
-    public Double getEcart() {
+    public double getEcart() {
         return ecart;
     }
 
-    public void setEcart(Double ecart) {
+    public void setEcart(double ecart) {
         this.ecart = ecart;
     }
 
@@ -148,12 +160,12 @@ public class Ligneinventaire implements Serializable {
         this.idmagasinlot = idmagasinlot;
     }
 
-    public String getMode_comptage() {
-        return mode_comptage;
+    public ModeComptage getModeComptage() {
+        return modeComptage;
     }
 
-    public void setMode_comptage(String mode_comptage) {
-        this.mode_comptage = mode_comptage;
+    public void setModeComptage(ModeComptage modeComptage) {
+        this.modeComptage = modeComptage;
     }
 
     public double getPrixUnitaire() {

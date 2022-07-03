@@ -51,6 +51,16 @@
                             <p:ajax />
                         </p:selectOneMenu> 
                         <p:message for="ms_default"/>
+                        
+                        <p:outputLabel value="Mode Decompte Inv par defaut" for="mc_default" />
+                        <p:selectOneMenu autoWidth="false" style="width: 400px"  required="true" id="mc_default" 
+                                         value="#{magasinController.magasin.modeComptage}" requiredMessage="#{langue.valeur_obligatoire}">
+                            
+                            <f:selectItem itemLabel="DECOMPTE EN DETAIL" itemValue="DECOMPTE_EN_DETAIL"/>
+                            <f:selectItem itemLabel="DECOMPTE EN GROS" itemValue="DECOMPTE_EN_GROS"/>                                      
+                            <p:ajax />
+                        </p:selectOneMenu> 
+                        <p:message for="mc_default"/>
 
                     </h:panelGrid>
 

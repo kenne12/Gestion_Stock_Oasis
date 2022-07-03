@@ -544,7 +544,8 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
                 livraisonfournisseurs.remove(livraisonfournisseur);
 
                 this.livraisonfournisseur = new Livraisonfournisseur();
-                //this.livraisonfournisseurs = this.livraisonfournisseurFacadeLocal.findAllRange(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getAnnee().getDateDebut(), SessionMBean.getAnnee().getDateFin(), true);
+                /*this.livraisonfournisseurs = this.livraisonfournisseurFacadeLocal
+                        .findAllRange(SessionMBean.getMagasin().getIdmagasin(), SessionMBean.getAnnee().getDateDebut(), SessionMBean.getAnnee().getDateFin(), true);*/
                 this.notifySuccess();
                 return;
             }
@@ -562,7 +563,8 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
             }
 
             if (this.livraisonfournisseur != null) {
-                livraisonfournisseur.setLignelivraisonfournisseurList(lignelivraisonfournisseurFacadeLocal.findByIdlivraison(livraisonfournisseur.getIdlivraisonfournisseur()));
+                livraisonfournisseur.setLignelivraisonfournisseurList(lignelivraisonfournisseurFacadeLocal
+                        .findByIdlivraison(livraisonfournisseur.getIdlivraisonfournisseur()));
                 fileName = PrintUtils.printStock(livraisonfournisseur);
                 RequestContext.getCurrentInstance().execute("PF('StockImprimerDialog').show()");
                 return;
@@ -937,7 +939,7 @@ public class EntreedirecteController extends AbstractEntreedirecteController imp
     public String getformatTotal(String option) {
         if (option.equals("total")) {
             double value = livraisonfournisseurs.stream().mapToDouble(Livraisonfournisseur::getMontant).sum();
-            return JsfUtil.formaterStringMoney((int)value);
+            return JsfUtil.formaterStringMoney((int) value);
         }
         return "";
     }
