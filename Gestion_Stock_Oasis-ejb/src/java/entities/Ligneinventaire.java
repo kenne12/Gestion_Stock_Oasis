@@ -61,20 +61,23 @@ public class Ligneinventaire implements Serializable {
 
     private double ecart;
     @Column(name = "prix_unitaire")
+    
     private double prixUnitaire;
     @Column(name = "montant_total")
     private double montantTotal;
 
-    
 
     @Size(max = 100)
     private String observation;
+    
     @JoinColumn(name = "idinventaire", referencedColumnName = "idinventaire")
     @ManyToOne(fetch = FetchType.LAZY)
     private Inventaire idinventaire;
+    
     @JoinColumn(name = "idlot", referencedColumnName = "idlot")
     @ManyToOne(fetch = FetchType.LAZY)
     private Lot idlot;
+    
     @JoinColumn(name = "idmagasinlot", referencedColumnName = "idmagasinlot")
     @ManyToOne(fetch = FetchType.LAZY)
     private Magasinlot idmagasinlot;

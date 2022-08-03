@@ -33,42 +33,49 @@
                 <p:ajax event="rowUnselect" update=":MagasinListerForm:MagasinDataTableContextMenu,:actionsForm"/>
                 <p:ajax event="rowDblselect" onsuccess="document.getElementById('MagasinListerForm:viewButton').click();"/>
 
-                <p:column filterBy="#{item.code}" style="width: 18%">
+                <p:column filterBy="#{item.code}" style="width: 10%">
                     <f:facet name="header">
                         <h:outputText value="#{langue.code}"/>
                     </f:facet>
                     <h:outputText value="#{item.code}"/>
                 </p:column>
 
-                <p:column filterBy="#{item.nom}" style="width: 30%">
+                <p:column filterBy="#{item.nom}" style="width: 28%">
                     <f:facet name="header">
                         <h:outputText value="#{langue.nom}"/>
                     </f:facet>
                     <h:outputText value="#{item.nom}"/>
                 </p:column>
                 
-                <p:column  style="width: 15%;text-align: center">
+                <p:column  style="width: 13%;text-align: center">
                     <f:facet name="header">
                         <h:outputText value="ME Défaut"/>
                     </f:facet>
                     <h:outputText value="#{item.modeEntreDefault}"/>
                 </p:column>
                 
-                <p:column  style="width: 15%;text-align: center">
+                <p:column  style="width: 14%;text-align: center">
                     <f:facet name="header">
                         <h:outputText value="MS Défaut"/>
                     </f:facet>
                     <h:outputText value="#{item.modeSortiDefault}"/>
                 </p:column>
                 
-                <p:column style="width: 17%;text-align: center">
+                <p:column style="width: 14%;text-align: center">
                     <f:facet name="header">
                         <h:outputText value="M Comptage Défaut"/>
                     </f:facet>
                     <h:outputText value="#{item.modeComptage}"/>
                 </p:column>
                 
-                <p:column style="width: 10%;text-align: center">
+                <p:column style="width: 15%;text-align: center">
+                    <f:facet name="header">
+                        <h:outputText value="M Facture"/>
+                    </f:facet>
+                    <h:outputText value="#{item.modeleFacture}"/>
+                </p:column>
+                
+                <p:column style="width: 6%;text-align: center">
                     <f:facet name="header">
                         <h:outputText value="#{langue.central} ?"/>
                     </f:facet>

@@ -11,6 +11,7 @@ import entities.Magasinlot;
 import entities.Mvtstock;
 import enumeration.ModeEntreSorti;
 import enumeration.ModePayement;
+import enumeration.ModeleFacture;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -504,7 +505,18 @@ public class SortiedirectController extends AbstractSortiedirectController imple
                 List list = this.lignelivraisonclientFacadeLocal.findByIdlivraisonclient(this.livraisonclient.getIdlivraisonclient());
                 this.livraisonclient.setLignelivraisonclientList(list);
                 directory = "facture";
-                fileName = PrintUtils.printFacture(livraisonclient, SessionMBean.getParametrage());
+
+                switch (SessionMBean.getMagasin().getModeleFacture()) {
+                    case MODELE_A4:
+                        fileName = PrintUtils.printFacture(livraisonclient, SessionMBean.getParametrage());
+                        break;
+                    case MODELE_80_217_TRACE:
+                        fileName = PrintUtils.printFacture_format_80_217(livraisonclient, SessionMBean.getParametrage());
+                        break;
+                    case MODELE_80_217:
+                        fileName = PrintUtils.printFacture_format_80_217_(livraisonclient, SessionMBean.getParametrage());
+                        break;
+                }
                 RequestContext.getCurrentInstance().execute("PF('SortieDirecteImprimerDialog').show()");
             } else {
                 notifyError("not_row_selected");

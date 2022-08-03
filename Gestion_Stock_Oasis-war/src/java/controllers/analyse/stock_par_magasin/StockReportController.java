@@ -57,6 +57,19 @@ public class StockReportController extends AbstratStockReportController implemen
             RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
         }
     }
+    public void printFicheInventaire() {
+        try {
+            if (this.magasin.getIdmagasin() != null) {
+                fileName = PrintUtils.printFicheInventaire(magasinlots);
+                RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
+                RequestContext.getCurrentInstance().execute("PF('StockImprimerDialog').show()");
+            }
+            RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
+        } catch (Exception e) {
+            e.printStackTrace();
+            RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
+        }
+    }
 
     public void prepareUploadPhoto(Article item) {
         this.article = item;

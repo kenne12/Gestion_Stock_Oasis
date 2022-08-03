@@ -1,7 +1,9 @@
 package controllers.analyse.mvt_par_magasin;
 
 import entities.Article;
+import entities.Lignemvtstock;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -38,7 +40,9 @@ public class MvtMReportController extends AbstratMvtMReportController implements
 
                 this.fileName = "fiche_mvt_stock_" + magasin.getNom() + ".pdf";
 
-                fileName = PrintUtils.printMouvementMensuelWithBenefit(lignemvtstocks, articles, SessionMBean.getParametrage(), titre, fileName);
+                List<Lignemvtstock> linesToPrint = new ArrayList<>();
+                linesToPrint.addAll(lignemvtstocks);
+                fileName = PrintUtils.printMouvementMensuelWithBenefit(linesToPrint, articles, SessionMBean.getParametrage(), titre, fileName);
 
                 RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
                 RequestContext.getCurrentInstance().execute("PF('StockImprimerDialog').show()");
@@ -58,8 +62,11 @@ public class MvtMReportController extends AbstratMvtMReportController implements
                 String titre = "FICHE DES MOUVEMENTS DU STOCK";
 
                 this.fileName = "fiche_mvt_stock_" + magasin.getNom() + ".pdf";
+                
+                List<Lignemvtstock> linesToPrint = new ArrayList<>();
+                linesToPrint.addAll(lignemvtstocks);
 
-                fileName = PrintUtils.printMouvementMensuel(lignemvtstocks, articles, SessionMBean.getParametrage(), titre, fileName);
+                fileName = PrintUtils.printMouvementMensuel(linesToPrint, articles, SessionMBean.getParametrage(), titre, fileName);
 
                 RequestContext.getCurrentInstance().execute("PF('AjaxNotifyDialog').hide()");
                 RequestContext.getCurrentInstance().execute("PF('StockImprimerDialog').show()");

@@ -53,7 +53,11 @@ public class LoginBean extends AbstractLoginBean implements Serializable {
 
     public void login() {
         try {
+            
+            System.err.println("password : "+new ShaHash().hash(this.utilisateur.getPassword()));
+            
             this.utilisateur = this.utilisateurFacadeLocal.login(this.utilisateur.getLogin(), new ShaHash().hash(this.utilisateur.getPassword()));
+            
             if (this.utilisateur != null) {
                 if (this.utilisateur.getActif()) {
                     this.showSessionPanel = true;

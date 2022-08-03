@@ -7,6 +7,7 @@ package entities;
 
 import enumeration.ModeComptage;
 import enumeration.ModeEntreSorti;
+import enumeration.ModeleFacture;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -86,6 +87,10 @@ public class Magasin implements Serializable {
     @Enumerated(EnumType.STRING)
     private ModeComptage modeComptage;
 
+    @Column(name = "modele_facture" , length = 30)
+    @Enumerated(EnumType.STRING)
+    private ModeleFacture modeleFacture;
+
     public Magasin() {
     }
 
@@ -139,6 +144,14 @@ public class Magasin implements Serializable {
 
     public void setModeComptage(ModeComptage modeComptage) {
         this.modeComptage = modeComptage;
+    }
+
+    public ModeleFacture getModeleFacture() {
+        return modeleFacture;
+    }
+
+    public void setModeleFacture(ModeleFacture modeleFacture) {
+        this.modeleFacture = modeleFacture;
     }
 
     @XmlTransient

@@ -61,6 +61,17 @@
                             <p:ajax />
                         </p:selectOneMenu> 
                         <p:message for="mc_default"/>
+                        
+                        <p:outputLabel value="Modèle facture" for="modele_facture" />
+                        <p:selectOneMenu autoWidth="false" style="width: 400px"  required="true" id="modele_facture" 
+                                         value="#{magasinController.magasin.modeleFacture}" requiredMessage="#{langue.valeur_obligatoire}">
+                            
+                            <f:selectItem itemLabel="MODELE A4" itemValue="MODELE_A4"/>
+                            <f:selectItem itemLabel="MODELE 80 * 217" itemValue="MODELE_80_217"/>                                      
+                            <f:selectItem itemLabel="MODELE 80 * 217 TRACE" itemValue="MODELE_80_217_TRACE"/>                                      
+                            <p:ajax />
+                        </p:selectOneMenu> 
+                        <p:message for="modele_facture"/>
 
                     </h:panelGrid>
 

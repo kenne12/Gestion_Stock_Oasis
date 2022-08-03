@@ -23,12 +23,19 @@
                     
                     <p:commandButton id="recherche"
                                      value="#{langue.recherche}" actionListener="#{stockReportController.search()}"
-                                     update=":StockListerForm,imprimer" />
+                                     update=":StockListerForm,imprimer,imprimer_fi" />
 
                     <p:commandButton id="imprimer" icon="ui-icon-print"
                                      disabled="#{stockReportController.printBtnState}"
                                      onclick="PF('AjaxNotifyDialog').show()"
                                      value="#{langue['Conv.Imprimer']}" actionListener="#{stockReportController.printStock()}"
+                                     update=":StockImprimerForm" />
+                    
+                    
+                    <p:commandButton id="imprimer_fi" icon="ui-icon-print"
+                                     disabled="#{stockReportController.printBtnState}"
+                                     onclick="PF('AjaxNotifyDialog').show()"
+                                     value="#{langue['Conv.Imprimer']} - FI" actionListener="#{stockReportController.printFicheInventaire()}"
                                      update=":StockImprimerForm" />
 
                 </h:panelGrid>                              

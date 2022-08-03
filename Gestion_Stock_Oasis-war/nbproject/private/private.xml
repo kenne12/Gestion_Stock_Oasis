@@ -3,14 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/kenne/NetBeansProjects/Gestion_Stock_Oasis/Gestion_Stock_Oasis-war/src/java/controllers/inventaire_global/InventaireGlobalController.java</file>
-            <file>file:/home/kenne/NetBeansProjects/Gestion_Stock_Oasis/Gestion_Stock_Oasis-war/web/operation/stock/crud/Creer.xhtml</file>
-            <file>file:/home/kenne/NetBeansProjects/Gestion_Stock_Oasis/Gestion_Stock_Oasis-war/web/parametre/magasin/crud/Lister.xhtml</file>
-            <file>file:/home/kenne/NetBeansProjects/Gestion_Stock_Oasis/Gestion_Stock_Oasis-war/src/java/controllers/entree_directe/EntreedirecteController.java</file>
-            <file>file:/home/kenne/NetBeansProjects/Gestion_Stock_Oasis/Gestion_Stock_Oasis-war/src/java/controllers/sortie_directe/AbstractSortiedirectController.java</file>
-            <file>file:/home/kenne/NetBeansProjects/Gestion_Stock_Oasis/Gestion_Stock_Oasis-war/web/operation/inventaire-global/crud/Creer.xhtml</file>
-            <file>file:/home/kenne/NetBeansProjects/Gestion_Stock_Oasis/Gestion_Stock_Oasis-war/web/operation/inventaire-global/crud/Action.xhtml</file>
-            <file>file:/home/kenne/NetBeansProjects/Gestion_Stock_Oasis/Gestion_Stock_Oasis-war/src/java/controllers/inventaire_global/AbstractInventaireGlobalController.java</file>
+            <file>file:/home/kenne/NetBeansProjects/Gestion_Stock_Oasis/Gestion_Stock_Oasis-war/web/login.xhtml</file>
+            <file>file:/home/kenne/NetBeansProjects/Gestion_Stock_Oasis/Gestion_Stock_Oasis-war/src/java/controllers/sortie_directe/SortiedirectController.java</file>
+            <file>file:/home/kenne/NetBeansProjects/Gestion_Stock_Oasis/Gestion_Stock_Oasis-war/web/operation/vente/crud/Lister.xhtml</file>
+            <file>file:/home/kenne/NetBeansProjects/Gestion_Stock_Oasis/Gestion_Stock_Oasis-war/src/java/utils/PrintUtils.java</file>
         </group>
     </open-files>
 </project-private>
